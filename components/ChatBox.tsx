@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Send, ThumbsUp, Smile } from 'lucide-react'
-import Link from 'next/link'
+import { Smile, Paperclip, Mic, Send } from 'lucide-react'
 
 type Message = {
   id: string
@@ -11,6 +10,16 @@ type Message = {
   created_at: string
   user_id: string
   profiles: { full_name: string; username: string; avatar_url?: string | null } | null
+}
+
+function CheckMarks() {
+  return (
+    <svg viewBox="0 0 18 18" className="w-4 h-3.5 inline-block ml-1 flex-shrink-0" fill="none">
+      <path d="M1.5 9.5L6 14L11 7" stroke="#53bdeb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6 14L17 4" stroke="#53bdeb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M4 9.5L9 14" stroke="#53bdeb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
 }
 
 export default function ChatBox({
@@ -87,9 +96,9 @@ export default function ChatBox({
     const today = new Date()
     const yesterday = new Date(today)
     yesterday.setDate(today.getDate() - 1)
-    if (d.toDateString() === today.toDateString()) return 'Hoy'
-    if (d.toDateString() === yesterday.toDateString()) return 'Ayer'
-    return d.toLocaleDateString('es-DO', { weekday: 'long', day: 'numeric', month: 'long' })
+    if (d.toDateString() === today.toDateString()) return 'HOY'
+    if (d.toDateString() === yesterday.toDateString()) return 'AYER'
+    return d.toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
   }
 
   const grouped: Record<string, Message[]> = {}
@@ -100,28 +109,27 @@ export default function ChatBox({
   })
 
   return (
-    <div className="flex flex-col h-full bg-black">
-
+    <div
+      className="flex flex-col h-full relative"
+      style={{ backgroundColor: '#0b141a' }}
+    >
       {/* Mensajes */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="flex-1 overflow-y-auto px-3 py-2">
 
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full gap-3">
-            <div className="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl">
-              💬
+          <div className="flex justify-center mt-8">
+            <div className="bg-[#182229] text-slate-400 text-xs px-4 py-2 rounded-lg">
+              Los mensajes son solo visibles para los miembros 🔒
             </div>
-            <p className="text-slate-600 text-sm">Comienza la conversación</p>
           </div>
         )}
 
         {Object.entries(grouped).map(([dateKey, msgs]) => (
           <div key={dateKey}>
-
-            {/* Fecha */}
-            <div className="flex justify-center my-5">
-              <span className="text-[11px] text-slate-600 font-medium capitalize tracking-wide">
+            <div className="flex justify-center my-3">
+              <div className="bg-[#182229] text-slate-400 text-[11px] font-medium px-3 py-1 rounded-lg shadow">
                 {formatDate(msgs[0].created_at)}
-              </span>
+              </div>
             </div>
 
             {msgs.map((msg, i) => {
@@ -131,29 +139,19 @@ export default function ChatBox({
               const isFirst = !prevMsg || prevMsg.user_id !== msg.user_id
               const isLast = !nextMsg || nextMsg.user_id !== msg.user_id
 
-              const myRadius = isFirst && isLast ? 'rounded-2xl rounded-br-sm'
-                : isFirst ? 'rounded-2xl rounded-br-md'
-                : isLast ? 'rounded-2xl rounded-tr-md rounded-br-sm'
-                : 'rounded-2xl rounded-r-md'
-
-              const theirRadius = isFirst && isLast ? 'rounded-2xl rounded-bl-sm'
-                : isFirst ? 'rounded-2xl rounded-bl-md'
-                : isLast ? 'rounded-2xl rounded-tl-md rounded-bl-sm'
-                : 'rounded-2xl rounded-l-md'
-
               return (
                 <div
                   key={msg.id}
-                  className={`flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'} ${isLast ? 'mb-4' : 'mb-0.5'}`}
+                  className={`flex items-end gap-1.5 mb-0.5 ${isMe ? 'justify-end' : 'justify-start'} ${isLast ? 'mb-2' : ''}`}
                 >
                   {/* Avatar */}
-                  <div className="w-8 flex-shrink-0">
+                  <div className="w-8 flex-shrink-0 self-end mb-1">
                     {!isMe && isLast && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-slate-800">
+                      <div className="w-8 h-8 rounded-full overflow-hidden">
                         {msg.profiles?.avatar_url ? (
                           <img src={msg.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-300 font-semibold text-xs">
+                          <div className="w-full h-full bg-amber-500/30 flex items-center justify-center text-amber-400 font-semibold text-xs">
                             {msg.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
                           </div>
                         )}
@@ -161,35 +159,58 @@ export default function ChatBox({
                     )}
                   </div>
 
-                  {/* Columna burbuja */}
-                  <div className={`flex flex-col max-w-[70%] ${isMe ? 'items-end' : 'items-start'} gap-0.5`}>
+                  {/* Burbuja */}
+                  <div
+                    className="relative max-w-[65%] md:max-w-[55%]"
+                    style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.4))' }}
+                  >
+                    {/* Cola */}
+                    {isFirst && (
+                      <div
+                        className="absolute top-0 w-0 h-0"
+                        style={isMe ? {
+                          right: '-8px',
+                          borderLeft: '8px solid #005c4b',
+                          borderBottom: '8px solid transparent',
+                        } : {
+                          left: '-8px',
+                          borderRight: '8px solid #202c33',
+                          borderBottom: '8px solid transparent',
+                        }}
+                      />
+                    )}
 
-                    {/* Nombre */}
-                    {!isMe && isFirst && (
-                      <Link href={`/app/perfil/${msg.profiles?.username}`}>
-                        <p className="text-xs font-semibold text-slate-400 ml-3 mb-0.5 hover:text-white transition">
+                    {/* Contenido */}
+                    <div
+                      className="px-3 pt-1.5 pb-1"
+                      style={{
+                        backgroundColor: isMe ? '#005c4b' : '#202c33',
+                        borderRadius: isFirst
+                          ? isMe ? '8px 0px 8px 8px' : '0px 8px 8px 8px'
+                          : '8px',
+                      }}
+                    >
+                      {/* Nombre */}
+                      {!isMe && isFirst && (
+                        <p className="text-amber-400 text-xs font-semibold mb-0.5">
                           {msg.profiles?.full_name}
                         </p>
-                      </Link>
-                    )}
+                      )}
 
-                    {/* Burbuja */}
-                    <div
-                      className={`px-4 py-2.5 text-sm leading-relaxed break-words ${isMe ? myRadius : theirRadius} ${
-                        isMe
-                          ? 'bg-slate-800 text-white'
-                          : 'bg-[#1c1c1e] text-white border border-slate-800'
-                      }`}
-                    >
-                      {msg.content}
+                      {/* Texto con espacio para la hora */}
+                      <div className="relative">
+                        <p className="text-white text-sm leading-relaxed break-words">
+                          {msg.content}
+                          <span className="inline-block w-24" />
+                        </p>
+                        <div className="absolute bottom-0 right-0 flex items-center gap-1">
+                          <span className="text-[11px] text-white/50 whitespace-nowrap">
+                            {formatTime(msg.created_at)}
+                          </span>
+                          {isMe && <CheckMarks />}
+                        </div>
+                      </div>
                     </div>
-
-                    {/* Hora — solo en el último del grupo */}
-                    {isLast && (
-                      <p className={`text-[10px] text-slate-600 ${isMe ? 'mr-1' : 'ml-3'} mt-0.5`}>
-                        {formatTime(msg.created_at)}
-                      </p>
-                    )}
                   </div>
                 </div>
               )
@@ -200,41 +221,42 @@ export default function ChatBox({
         <div ref={bottomRef} />
       </div>
 
-      {/* Input — estilo Instagram DM */}
-      <div className="px-4 py-3 border-t border-slate-900">
-        <div className="flex items-center gap-3 border border-slate-800 rounded-full px-4 py-2.5 focus-within:border-slate-600 transition bg-transparent">
-
-          <button type="button" className="text-slate-600 hover:text-slate-400 transition flex-shrink-0">
-            <Smile size={20} />
+      {/* Input */}
+      <div className="flex items-end gap-2 px-2 py-2" style={{ backgroundColor: '#0b141a' }}>
+        <div
+          className="flex-1 flex items-end gap-2 rounded-3xl px-4 py-2.5 min-h-[48px]"
+          style={{ backgroundColor: '#202c33' }}
+        >
+          <button className="text-slate-400 hover:text-slate-300 transition flex-shrink-0 pb-0.5">
+            <Smile size={22} />
           </button>
-
           <input
             ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg() } }}
-            placeholder="Mensaje..."
+            placeholder="Mensaje"
             autoComplete="off"
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-slate-700 focus:outline-none"
+            className="flex-1 bg-transparent text-white text-sm placeholder:text-slate-500 focus:outline-none py-0.5"
           />
-
-          {inputValue.trim() ? (
-            <button
-              onClick={sendMsg}
-              disabled={sending}
-              className="text-blue-500 hover:text-blue-400 font-semibold text-sm flex-shrink-0 transition disabled:opacity-50"
-            >
-              Enviar
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="text-slate-600 hover:text-slate-400 transition flex-shrink-0"
-            >
-              <ThumbsUp size={20} />
+          {!inputValue && (
+            <button className="text-slate-400 hover:text-slate-300 transition flex-shrink-0 pb-0.5">
+              <Paperclip size={20} />
             </button>
           )}
         </div>
+
+        <button
+          onClick={inputValue.trim() ? sendMsg : undefined}
+          disabled={sending}
+          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition active:scale-95 disabled:opacity-50"
+          style={{ backgroundColor: '#00a884' }}
+        >
+          {inputValue.trim()
+            ? <Send size={20} className="text-white ml-0.5" />
+            : <Mic size={20} className="text-white" />
+          }
+        </button>
       </div>
     </div>
   )
