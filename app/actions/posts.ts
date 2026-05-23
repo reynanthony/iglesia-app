@@ -9,18 +9,41 @@ export async function createPost(formData: FormData) {
   if (!user) return { error: 'No autenticado' }
 
   const content = formData.get('content') as string
-  if (!content?.trim()) return { error: 'El contenido no puede estar vacío' }
+  const imageFile = formData.get('image') as File
+
+  if (!content?.trim() && (!imageFile || imageFile.size === 0)) {
+    return { error: 'Escribe algo o sube una imagen' }
+  }
+
+  let image_url: string | undefined
+
+  if (imageFile && imageFile.size > 0) {
+    const ext = imageFile.name.split('.').pop()
+    const path = `${user.id}/${Date.now()}.${ext}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('posts')
+      .upload(path, imageFile)
+
+    if (!uploadError) {
+      const { data } = supabase.storage.from('posts').getPublicUrl(path)
+      image_url = data.publicUrl
+    }
+  }
 
   const { error } = await supabase
     .from('posts')
-    .insert({ user_id: user.id, content: content.trim() })
+    .insert({
+      user_id: user.id,
+      content: content?.trim() ?? '',
+      image_url,
+    })
 
   if (error) return { error: 'No se pudo publicar' }
 
   revalidatePath('/app/feed')
   return { success: true }
 }
-
 export async function toggleLike(postId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
