@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
-import { LayoutDashboard, Users, FileText, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, Users, FileText, AlertTriangle, ArrowLeft } from 'lucide-react'
+
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -40,6 +41,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/posts" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition text-sm">
             <FileText size={16} /> Publicaciones
           </Link>
+          <Link href="/admin/reportes" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition text-sm">
+  <AlertTriangle size={16} /> Reportes
+</Link>
         </nav>
 
         <div className="p-3 border-t border-slate-800 space-y-1">

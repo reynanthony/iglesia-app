@@ -1,17 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from 'lucide-react'
-import { toggleLike, createComment } from '@/app/actions/posts'
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Flag } from 'lucide-react'
+import { toggleLike, createComment, reportPost } from '@/app/actions/posts'
 import Link from 'next/link'
+import CommentItem from '@/components/CommentItem'
 
 export default function PostCard({ post, currentUserId }: { post: any, currentUserId: string }) {
+  const [showMenu, setShowMenu] = useState(false)
+  const [reporting, setReporting] = useState(false)
+  const [reported, setReported] = useState(false)
   const [showComments, setShowComments] = useState(false)
   const [commenting, setCommenting] = useState(false)
   const [liked, setLiked] = useState(post.likes?.some((l: any) => l.user_id === currentUserId))
   const [likesCount, setLikesCount] = useState(post.likes?.length ?? 0)
 
-  const commentsCount = post.comments?.length ?? 0
+  const topLevelComments = post.comments?.filter((c: any) => !c.parent_id) ?? []
+  const totalComments = post.comments?.length ?? 0
 
   const timeAgo = (date: string) => {
     const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
@@ -41,7 +46,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   return (
     <div className="bg-black border-b border-slate-800 md:border md:rounded-xl md:mb-4 md:overflow-hidden">
 
-      {/* Header — igual que Instagram */}
+      {/* Header */}
       <div className="flex items-center justify-between px-3 py-3">
         <Link href={`/app/perfil/${post.profiles?.username}`} className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-amber-500 ring-offset-2 ring-offset-black flex-shrink-0">
@@ -58,25 +63,48 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
             <p className="text-slate-400 text-xs">@{post.profiles?.username}</p>
           </div>
         </Link>
-        <button className="text-slate-400 p-1">
-          <MoreHorizontal size={20} />
-        </button>
+
+        <div className="relative">
+          <button onClick={() => setShowMenu(!showMenu)} className="text-slate-400 p-1 hover:text-white transition">
+            <MoreHorizontal size={20} />
+          </button>
+          {showMenu && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 bg-slate-900 border border-slate-800 rounded-xl shadow-xl z-20 overflow-hidden w-44">
+                <button
+                  onClick={async () => {
+                    if (reported) return
+                    setReporting(true)
+                    setShowMenu(false)
+                    await reportPost(post.id, 'Contenido inapropiado')
+                    setReported(true)
+                    setReporting(false)
+                  }}
+                  disabled={reporting || reported}
+                  className="w-full flex items-center gap-2.5 px-4 py-3 text-sm hover:bg-slate-800 transition text-left disabled:opacity-50"
+                >
+                  <Flag size={14} className={reported ? 'text-amber-500' : 'text-slate-400'} />
+                  <span className={reported ? 'text-amber-500' : 'text-slate-300'}>
+                    {reported ? 'Reportado' : 'Reportar post'}
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Imagen si existe */}
+      {/* Imagen */}
       {post.image_url && (
         <img src={post.image_url} alt="" className="w-full object-cover" />
       )}
 
-      {/* Botones de acción — igual que Instagram */}
+      {/* Botones */}
       <div className="px-3 pt-3 pb-1 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button onClick={handleLike} className="transition active:scale-90">
-            <Heart
-              size={26}
-              className={liked ? 'text-red-500 fill-red-500' : 'text-white'}
-              strokeWidth={1.8}
-            />
+            <Heart size={26} className={liked ? 'text-red-500 fill-red-500' : 'text-white'} strokeWidth={1.8} />
           </button>
           <button onClick={() => setShowComments(!showComments)} className="transition active:scale-90">
             <MessageCircle size={26} className="text-white" strokeWidth={1.8} />
@@ -92,9 +120,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
 
       {/* Likes */}
       {likesCount > 0 && (
-        <p className="px-3 pb-1 text-sm font-semibold text-white">
-          {likesCount} {likesCount === 1 ? 'me gusta' : 'me gusta'}
-        </p>
+        <p className="px-3 pb-1 text-sm font-semibold text-white">{likesCount} me gusta</p>
       )}
 
       {/* Caption */}
@@ -108,32 +134,23 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
       </div>
 
       {/* Ver comentarios */}
-      {commentsCount > 0 && !showComments && (
-        <button
-          onClick={() => setShowComments(true)}
-          className="px-3 pb-2 text-slate-500 text-sm"
-        >
-          Ver los {commentsCount} comentarios
+      {totalComments > 0 && !showComments && (
+        <button onClick={() => setShowComments(true)} className="px-3 pb-2 text-slate-500 text-sm">
+          Ver los {totalComments} comentarios
         </button>
       )}
 
       {/* Comentarios expandidos */}
-      {showComments && post.comments?.length > 0 && (
-        <div className="px-3 pb-2 space-y-2">
-          {post.comments.map((comment: any) => (
-            <div key={comment.id} className="flex gap-2 items-start">
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-xs flex-shrink-0 mt-0.5">
-                {comment.profiles?.avatar_url ? (
-                  <img src={comment.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  comment.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'
-                )}
-              </div>
-              <p className="text-sm text-white">
-                <span className="font-semibold mr-1.5">{comment.profiles?.username}</span>
-                {comment.content}
-              </p>
-            </div>
+      {showComments && topLevelComments.length > 0 && (
+        <div className="px-3 pb-2 space-y-3">
+          {topLevelComments.map((comment: any) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              postId={post.id}
+              currentUserId={currentUserId}
+              replies={post.comments.filter((c: any) => c.parent_id === comment.id)}
+            />
           ))}
         </div>
       )}

@@ -14,15 +14,19 @@ export default async function FeedPage() {
     .single()
 
   const { data: posts } = await supabase
-    .from('posts')
-    .select(`
-      *,
-      profiles(id, full_name, username, avatar_url),
-      likes(id, user_id),
-      comments(id, content, created_at, profiles(full_name, username, avatar_url))
-    `)
-    .order('created_at', { ascending: false })
-    .limit(30)
+  .from('posts')
+  .select(`
+    *,
+    profiles(id, full_name, username, avatar_url),
+    likes(id, user_id),
+    comments(
+      id, content, created_at, parent_id,
+      profiles(full_name, username, avatar_url),
+      comment_likes(id, user_id)
+    )
+  `)
+  .order('created_at', { ascending: false })
+  .limit(30)
 
   return (
     <div className="bg-black min-h-screen">
