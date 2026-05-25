@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
-import { Home, MessageCircle, Users, LogOut, PlusSquare, User, Search } from 'lucide-react'
+import { Home, MessageCircle, Users, LogOut, PlusSquare, User, Search, Globe } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -53,6 +53,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </nav>
 
         <div className="p-4 border-t border-slate-800">
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition text-sm mb-1"
+          >
+            <Globe size={18} /> Página principal
+          </Link>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-9 h-9 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 font-bold text-sm overflow-hidden flex-shrink-0">
@@ -78,10 +84,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </aside>
 
       <header className="md:hidden fixed top-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="w-7 h-7 bg-amber-500 rounded-lg flex items-center justify-center text-sm">✝</div>
           <span className="font-bold text-sm">Mi Iglesia</span>
-        </div>
+        </Link>
         <div className="flex items-center gap-1">
           <NotificationBell userId={user.id} />
           <Link href={`/app/perfil/${profile?.username}`}>
