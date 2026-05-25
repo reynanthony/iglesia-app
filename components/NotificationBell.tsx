@@ -59,7 +59,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
   const getIcon = (type: string) => {
     if (type === 'like') return <Heart size={14} className="text-red-400 fill-red-400" />
     if (type === 'comment') return <MessageCircle size={14} className="text-blue-400" />
-    return <AlertTriangle size={14} className="text-amber-400" />
+    return <AlertTriangle size={14} className="text-[#222222]" />
   }
 
   const getText = (n: Notification) => {

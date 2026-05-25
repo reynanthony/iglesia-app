@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
-import { Home, MessageCircle, Users, LogOut, PlusSquare, User, Search, Globe } from 'lucide-react'
+import AppNav, { AppBottomNav } from '@/components/app/AppNav'
+import { Globe, LogOut, Cross } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -17,108 +18,119 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .eq('id', user.id)
     .single()
 
-  const navItems = [
-  { href: '/app/feed', icon: Home, label: 'Feed' },
-  { href: '/app/buscar', icon: Search, label: 'Buscar' },
-  { href: '/app/nuevo-post', icon: PlusSquare, label: 'Publicar' },
-  { href: '/app/chat', icon: MessageCircle, label: 'Chat' },
-  { href: '/app/oracion', icon: Users, label: 'Oracion' },
-  { href: '/app/perfil/' + profile?.username, icon: User, label: 'Perfil' },
-]
+  const profileHref = '/app/perfil/' + (profile?.username ?? '')
+  const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen" style={{ background: '#0A0A0A', color: '#F5F5F5' }}>
 
-      <aside className="hidden md:flex w-64 border-r border-slate-800 flex-col fixed h-full z-30">
-        <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-lg">✝</div>
-            <div>
-              <p className="font-bold text-sm leading-tight">Mi Iglesia</p>
-              <p className="text-slate-500 text-xs">Comunidad</p>
+      {/* ── SIDEBAR (desktop) ── */}
+      <aside
+        className="hidden md:flex w-60 flex-col fixed h-full z-30"
+        style={{ background: '#0A0A0A', borderRight: '1px solid #1A1A1A' }}
+      >
+        {/* Brand */}
+        <div className="px-5 py-6" style={{ borderBottom: '1px solid #1A1A1A' }}>
+          <Link href="/app/feed" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-[#000000] rounded-lg flex items-center justify-center text-black flex-shrink-0">
+              <Cross size={15} strokeWidth={2.5} />
             </div>
-          </div>
+            <div>
+              <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F5F5F5' }}>
+                El Manantial
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: '#4D4D4D' }}>
+                Comunidad
+              </p>
+            </div>
+          </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map(({ href, icon: Icon, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-white transition text-sm"
-            >
-              <Icon size={18} /> {label}
-            </Link>
-          ))}
-        </nav>
+        {/* Nav — client component owns icons + active state */}
+        <AppNav profileHref={profileHref} />
 
-        <div className="p-4 border-t border-slate-800">
+        {/* Footer */}
+        <div className="px-3 pb-5" style={{ borderTop: '1px solid #1A1A1A', paddingTop: '1rem' }}>
           <Link
             href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition text-sm mb-1"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#111111]"
+            style={{ color: '#4D4D4D' }}
           >
-            <Globe size={18} /> Página principal
+            <Globe size={16} />
+            <span>Página principal</span>
           </Link>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 font-bold text-sm overflow-hidden flex-shrink-0">
-                {profile?.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-                ) : (
-                  profile?.full_name?.[0]?.toUpperCase() ?? 'U'
-                )}
+
+          {/* User card */}
+          <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
+            <Link href={profileHref} className="flex-1 flex items-center gap-3 min-w-0 group">
+              <div
+                className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
+                style={{ background: 'rgba(0,0,0,0.15)', color: '#000000' }}
+              >
+                {profile?.avatar_url
+                  ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
+                  : initial}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium truncate">{profile?.full_name ?? 'Usuario'}</p>
-                <p className="text-xs text-slate-500 truncate">@{profile?.username ?? ''}</p>
+                <p className="text-[13px] font-bold truncate leading-tight group-hover:text-[#222222] transition"
+                  style={{ color: '#F5F5F5' }}>
+                  {profile?.full_name ?? 'Usuario'}
+                </p>
+                <p className="text-[11px] truncate" style={{ color: '#4D4D4D' }}>
+                  @{profile?.username ?? ''}
+                </p>
               </div>
-            </div>
+            </Link>
             <NotificationBell userId={user.id} />
+            <form action={logout}>
+              <button
+                type="submit"
+                className="p-1.5 rounded-lg transition hover:text-white"
+                style={{ color: '#4D4D4D' }}
+                title="Cerrar sesión"
+              >
+                <LogOut size={15} />
+              </button>
+            </form>
           </div>
-          <form action={logout}>
-            <button type="submit" className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition text-sm">
-              <LogOut size={16} /> Cerrar sesion
-            </button>
-          </form>
         </div>
       </aside>
 
-      <header className="md:hidden fixed top-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-amber-500 rounded-lg flex items-center justify-center text-sm">✝</div>
-          <span className="font-bold text-sm">Mi Iglesia</span>
+      {/* ── HEADER (mobile) ── */}
+      <header
+        className="md:hidden fixed top-0 left-0 right-0 z-30 px-4 py-3 flex items-center justify-between backdrop-blur-md"
+        style={{ background: 'rgba(10,10,10,0.92)', borderBottom: '1px solid #1A1A1A' }}
+      >
+        <Link href="/app/feed" className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-[#000000] rounded-lg flex items-center justify-center text-black"><Cross size={13} strokeWidth={2.5} /></div>
+          <span className="font-black text-sm tracking-tight" style={{ color: '#F5F5F5' }}>El Manantial</span>
         </Link>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <NotificationBell userId={user.id} />
-          <Link href={`/app/perfil/${profile?.username}`}>
-            <div className="w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 font-bold text-sm overflow-hidden">
-              {profile?.avatar_url ? (
-                <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-              ) : (
-                profile?.full_name?.[0]?.toUpperCase() ?? 'U'
-              )}
+          <Link href={profileHref}>
+            <div
+              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
+              style={{ background: 'rgba(0,0,0,0.15)', color: '#000000' }}
+            >
+              {profile?.avatar_url
+                ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
+                : initial}
             </div>
           </Link>
         </div>
       </header>
 
-      <main className="md:ml-64 pb-20 md:pb-0 pt-14 md:pt-0">
+      {/* ── MAIN ── */}
+      <main className="md:ml-60 pb-20 md:pb-0 pt-14 md:pt-0">
         {children}
       </main>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur border-t border-slate-800">
-        <div className="flex items-center justify-around px-2 py-2">
-          {navItems.map(({ href, icon: Icon, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl text-slate-400 hover:text-amber-400 transition"
-            >
-              <Icon size={20} />
-              <span className="text-[9px]">{label}</span>
-            </Link>
-          ))}
-        </div>
+      {/* ── BOTTOM NAV (mobile) ── */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-30 backdrop-blur-md"
+        style={{ background: 'rgba(10,10,10,0.95)', borderTop: '1px solid #1A1A1A' }}
+      >
+        <AppBottomNav profileHref={profileHref} />
       </nav>
 
     </div>

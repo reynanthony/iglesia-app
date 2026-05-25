@@ -51,7 +51,7 @@ export default async function AdminPage() {
 
   const stats = [
     { label: 'Usuarios', value: totalUsers ?? 0, icon: Users, color: 'text-blue-400', bg: 'bg-blue-400/10', change: '+12%' },
-    { label: 'Publicaciones', value: totalPosts ?? 0, icon: FileText, color: 'text-amber-400', bg: 'bg-amber-400/10', change: '+8%' },
+    { label: 'Publicaciones', value: totalPosts ?? 0, icon: FileText, color: 'text-[#222222]', bg: 'bg-[#222222]/10', change: '+8%' },
     { label: 'Mensajes', value: totalMessages ?? 0, icon: MessageCircle, color: 'text-green-400', bg: 'bg-green-400/10', change: '+24%' },
     { label: 'Likes totales', value: totalLikes ?? 0, icon: TrendingUp, color: 'text-pink-400', bg: 'bg-pink-400/10', change: '+16%' },
     { label: 'Salas creadas', value: totalRooms ?? 0, icon: Mic, color: 'text-purple-400', bg: 'bg-purple-400/10', change: '+2%' },
@@ -90,12 +90,12 @@ export default async function AdminPage() {
         <AdminChart
           title="Nuevos usuarios (7 dias)"
           data={usersByDay ?? []}
-          color="#60a5fa"
+          color="#000000"
         />
         <AdminChart
           title="Nuevas publicaciones (7 dias)"
           data={postsByDay ?? []}
-          color="#f59e0b"
+          color="#000000"
         />
       </div>
 

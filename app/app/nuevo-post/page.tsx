@@ -63,7 +63,7 @@ export default function NuevoPostPage() {
               name="content"
               rows={4}
               placeholder="Comparte una reflexion, versiculo, testimonio..."
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500 resize-none"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500 resize-none"
             />
           </div>
 
@@ -86,7 +86,7 @@ export default function NuevoPostPage() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="w-full border border-dashed border-slate-700 hover:border-amber-500/50 rounded-xl py-6 flex flex-col items-center gap-2 text-slate-500 hover:text-amber-500 transition"
+              className="w-full border border-dashed border-slate-700 hover:border-[#000000]/50 rounded-xl py-6 flex flex-col items-center gap-2 text-slate-500 hover:text-[#000000] transition"
             >
               <ImageIcon size={24} />
               <span className="text-sm">Agregar imagen</span>
@@ -113,7 +113,7 @@ export default function NuevoPostPage() {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="flex items-center gap-2 text-slate-400 hover:text-amber-500 text-sm transition"
+              className="flex items-center gap-2 text-slate-400 hover:text-[#000000] text-sm transition"
             >
               <ImageIcon size={16} />
               {fileName ? fileName : 'Foto'}
@@ -129,7 +129,7 @@ export default function NuevoPostPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
+                className="px-5 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
               >
                 {loading ? 'Publicando...' : 'Publicar'}
               </button>

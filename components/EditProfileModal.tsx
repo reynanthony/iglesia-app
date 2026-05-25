@@ -64,7 +64,7 @@ export default function EditProfileModal({ profile }: { profile: any }) {
               <div className="flex flex-col items-center gap-3">
                 <div
                   onClick={() => fileRef.current?.click()}
-                  className="w-24 h-24 rounded-full overflow-hidden bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-3xl cursor-pointer hover:opacity-80 transition relative"
+                  className="w-24 h-24 rounded-full overflow-hidden bg-[#000000]/20 flex items-center justify-center text-[#000000] font-bold text-3xl cursor-pointer hover:opacity-80 transition relative"
                 >
                   {preview || profile.avatar_url ? (
                     <img src={preview ?? profile.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -92,7 +92,7 @@ export default function EditProfileModal({ profile }: { profile: any }) {
                   name="full_name"
                   defaultValue={profile.full_name}
                   required
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition"
                 />
               </div>
 
@@ -103,7 +103,7 @@ export default function EditProfileModal({ profile }: { profile: any }) {
                   defaultValue={profile.bio ?? ''}
                   rows={3}
                   placeholder="Cuéntanos sobre ti..."
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition resize-none placeholder:text-slate-500"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition resize-none placeholder:text-slate-500"
                 />
               </div>
 
@@ -124,7 +124,7 @@ export default function EditProfileModal({ profile }: { profile: any }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
+                  className="flex-1 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
                 >
                   {loading ? 'Guardando...' : 'Guardar'}
                 </button>

@@ -48,7 +48,7 @@ export default function CommentItem({
       <div className="flex gap-2 items-start group">
 
         {/* Avatar */}
-        <div className="w-6 h-6 rounded-full overflow-hidden bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-xs flex-shrink-0 mt-0.5">
+        <div className="w-6 h-6 rounded-full overflow-hidden bg-[#000000]/20 flex items-center justify-center text-[#000000] font-bold text-xs flex-shrink-0 mt-0.5">
           {comment.profiles?.avatar_url ? (
             <img src={comment.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -94,12 +94,12 @@ export default function CommentItem({
                 placeholder={`Responder a @${comment.profiles?.username}...`}
                 required
                 autoFocus
-                className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500 transition"
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#000000] transition"
               />
               <button
                 type="submit"
                 disabled={replying}
-                className="text-amber-500 font-semibold text-xs disabled:opacity-50"
+                className="text-[#000000] font-semibold text-xs disabled:opacity-50"
               >
                 {replying ? '...' : 'Enviar'}
               </button>

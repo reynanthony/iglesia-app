@@ -151,7 +151,7 @@ export default function ChatBox({
                         {msg.profiles?.avatar_url ? (
                           <img src={msg.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full bg-amber-500/30 flex items-center justify-center text-amber-400 font-semibold text-xs">
+                          <div className="w-full h-full bg-[#3B6FA0]/30 flex items-center justify-center text-[#2F5D8C] font-semibold text-xs">
                             {msg.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
                           </div>
                         )}
@@ -192,7 +192,7 @@ export default function ChatBox({
                     >
                       {/* Nombre */}
                       {!isMe && isFirst && (
-                        <p className="text-amber-400 text-xs font-semibold mb-0.5">
+                        <p className="text-[#2F5D8C] text-xs font-semibold mb-0.5">
                           {msg.profiles?.full_name}
                         </p>
                       )}

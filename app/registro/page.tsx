@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { register } from '@/app/actions/auth'
 import Link from 'next/link'
+import { Cross, ArrowRight, AlertCircle } from 'lucide-react'
 
 export default function RegistroPage() {
   const [error, setError] = useState('')
@@ -21,80 +22,79 @@ export default function RegistroPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl">✝</span>
+    <main className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0A0A0A' }}>
+      <div className="w-full max-w-sm">
+
+        {/* Brand mark */}
+        <div className="text-center mb-10">
+          <div className="w-14 h-14 bg-[#000000] rounded-2xl flex items-center justify-center mx-auto mb-5 text-black">
+            <Cross size={22} strokeWidth={2.5} />
           </div>
-          <h1 className="text-white text-2xl font-bold">Crear cuenta</h1>
-          <p className="text-slate-400 text-sm mt-1">Únete a la comunidad</p>
+          <h1 className="font-black text-2xl tracking-tight" style={{ color: '#F5F5F5' }}>
+            Crear cuenta
+          </h1>
+          <p className="text-sm mt-1.5" style={{ color: '#4D4D4D' }}>
+            Únete a la comunidad de El Manantial
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-slate-300 text-sm block mb-1.5">Nombre completo</label>
-            <input
-              name="full_name"
-              type="text"
-              required
-              placeholder="Juan Pérez"
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
-            />
-          </div>
-          <div>
-            <label className="text-slate-300 text-sm block mb-1.5">Nombre de usuario</label>
-            <input
-              name="username"
-              type="text"
-              required
-              placeholder="juanperez"
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
-            />
-          </div>
-          <div>
-            <label className="text-slate-300 text-sm block mb-1.5">Correo electrónico</label>
-            <input
-              name="email"
-              type="email"
-              required
-              placeholder="tu@correo.com"
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
-            />
-          </div>
-          <div>
-            <label className="text-slate-300 text-sm block mb-1.5">Contraseña</label>
-            <input
-              name="password"
-              type="password"
-              required
-              placeholder="••••••••"
-              minLength={6}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
-            />
-          </div>
+          {[
+            { name: 'full_name',  label: 'Nombre completo',    type: 'text',     placeholder: 'Juan Pérez' },
+            { name: 'username',   label: 'Nombre de usuario',  type: 'text',     placeholder: 'juanperez' },
+            { name: 'email',      label: 'Correo electrónico', type: 'email',    placeholder: 'tu@correo.com' },
+            { name: 'password',   label: 'Contraseña',         type: 'password', placeholder: '••••••••', minLength: 6 },
+          ].map(({ name, label, type, placeholder, minLength }) => (
+            <div key={name}>
+              <label className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2.5" style={{ color: '#8A8A8A' }}>
+                {label}
+              </label>
+              <input
+                name={name}
+                type={type}
+                required
+                placeholder={placeholder}
+                minLength={minLength}
+                className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition"
+                style={{
+                  background: '#161614',
+                  border: '1px solid #1A1A1A',
+                  color: '#F5F5F5',
+                }}
+              />
+            </div>
+          ))}
 
           {error && (
-            <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
-              {error}
-            </p>
+            <div className="flex items-center gap-3 rounded-xl px-4 py-3"
+              style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
+              <AlertCircle size={14} style={{ color: '#f87171', flexShrink: 0 }} />
+              <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
+            </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold rounded-xl py-3 text-sm transition"
+            className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.2em] rounded-xl px-6 py-4 transition disabled:opacity-50"
+            style={{ background: '#000000', color: '#0A0A0A' }}
           >
-            {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+            {loading ? 'Creando cuenta…' : (
+              <>
+                Crear cuenta
+                <ArrowRight size={13} />
+              </>
+            )}
           </button>
         </form>
 
-        <p className="text-center text-slate-500 text-sm mt-6">
+        <p className="text-center text-sm mt-8" style={{ color: '#4D4D4D' }}>
           ¿Ya tienes cuenta?{' '}
-          <Link href="/login" className="text-amber-500 hover:text-amber-400">
+          <Link href="/login" className="font-bold transition hover:text-[#000000]" style={{ color: '#000000' }}>
             Inicia sesión
           </Link>
         </p>
+
       </div>
     </main>
   )

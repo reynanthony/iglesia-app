@@ -2,6 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Search } from 'lucide-react'
 
+const roleBadge: Record<string, { bg: string; text: string; label: string }> = {
+  admin:     { bg: 'rgba(239,68,68,0.10)',  text: '#f87171',  label: 'Admin' },
+  pastor:    { bg: 'rgba(0,0,0,0.10)', text: '#111111',  label: 'Pastor' },
+  moderador: { bg: 'rgba(0,0,0,0.10)', text: '#000000',  label: 'Mod' },
+  lider:     { bg: 'rgba(128,128,128,0.10)',  text: '#888888',  label: 'Líder' },
+}
+
 export default async function BuscarPage({
   searchParams,
 }: {
@@ -11,71 +18,115 @@ export default async function BuscarPage({
   const supabase = await createClient()
 
   let users: any[] = []
-
   if (q && q.trim().length > 0) {
     const { data } = await supabase
       .from('profiles')
       .select('id, full_name, username, avatar_url, bio, role')
       .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`)
       .limit(20)
-
     users = data ?? []
   }
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-6">
-      <h1 className="text-xl font-bold mb-5">Buscar</h1>
+    <div style={{ background: '#0A0A0A', minHeight: '100vh' }}>
+      <div className="max-w-xl mx-auto px-4 py-10">
 
-      {/* Buscador */}
-      <form method="GET" className="mb-6">
-        <div className="flex items-center gap-3 bg-slate-900 border border-slate-800 focus-within:border-amber-500/50 rounded-2xl px-4 py-3 transition">
-          <Search size={18} className="text-slate-500 flex-shrink-0" />
-          <input
-            name="q"
-            defaultValue={q ?? ''}
-            placeholder="Buscar personas..."
-            autoComplete="off"
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-slate-600 focus:outline-none"
-          />
+        {/* Header */}
+        <div className="mb-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3" style={{ color: '#4D4D4D' }}>
+            — Comunidad
+          </p>
+          <h1 className="font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F5F5F5' }}>
+            Buscar personas.
+          </h1>
         </div>
-      </form>
 
-      {/* Resultados */}
-      {q && users.length === 0 && (
-        <div className="text-center py-16 text-slate-500">
-          <p className="text-3xl mb-3">🔍</p>
-          <p className="text-sm">Sin resultados para "{q}"</p>
-        </div>
-      )}
-
-      <div className="space-y-2">
-        {users.map((user) => (
-          <Link
-            key={user.id}
-            href={`/app/perfil/${user.username}`}
-            className="flex items-center gap-3 p-4 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl transition"
+        {/* Buscador */}
+        <form method="GET" className="mb-8">
+          <div
+            className="flex items-center gap-3 rounded-2xl px-5 py-4 transition"
+            style={{
+              background: '#161614',
+              border: '1px solid #1A1A1A',
+              outline: 'none',
+            }}
           >
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
-              {user.avatar_url ? (
-                <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-300 font-bold">
-                  {user.full_name?.[0]?.toUpperCase() ?? 'U'}
-                </div>
-              )}
+            <Search size={16} style={{ color: '#4D4D4D', flexShrink: 0 }} />
+            <input
+              name="q"
+              defaultValue={q ?? ''}
+              placeholder="Nombre o @usuario..."
+              autoComplete="off"
+              autoFocus
+              className="flex-1 bg-transparent text-sm focus:outline-none"
+              style={{ color: '#F5F5F5' }}
+            />
+          </div>
+        </form>
+
+        {/* Sin resultados */}
+        {q && users.length === 0 && (
+          <div className="text-center py-20">
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ background: '#161614', border: '1px solid #1A1A1A' }}>
+              <Search size={20} style={{ color: '#4D4D4D' }} />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm">{user.full_name}</p>
-              <p className="text-slate-500 text-xs">@{user.username}</p>
-              {user.bio && (
-                <p className="text-slate-400 text-xs mt-0.5 truncate">{user.bio}</p>
-              )}
+            <p className="font-bold" style={{ color: '#8A8A8A' }}>Sin resultados para "{q}"</p>
+          </div>
+        )}
+
+        {/* Sin query */}
+        {!q && (
+          <div className="text-center py-16">
+            <p className="text-sm" style={{ color: '#4D4D4D' }}>Escribe un nombre o @usuario para buscar</p>
+          </div>
+        )}
+
+        {/* Resultados */}
+        {users.length > 0 && (
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: '#4D4D4D' }}>
+              {users.length} resultado{users.length !== 1 ? 's' : ''}
+            </p>
+            <div className="space-y-px rounded-2xl overflow-hidden" style={{ background: '#1A1A1A' }}>
+              {users.map((user) => {
+                const badge = roleBadge[user.role]
+                return (
+                  <Link
+                    key={user.id}
+                    href={`/app/perfil/${user.username}`}
+                    className="flex items-center gap-4 px-5 py-4 transition group"
+                    style={{ background: '#161614' }}
+                  >
+                    <div
+                      className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
+                      style={{ background: 'rgba(0,0,0,0.10)', color: '#000000' }}
+                    >
+                      {user.avatar_url
+                        ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
+                        : user.full_name?.[0]?.toUpperCase() ?? 'U'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm truncate transition" style={{ color: '#F5F5F5' }}>
+                        {user.full_name}
+                      </p>
+                      <p className="text-[12px] truncate" style={{ color: '#4D4D4D' }}>@{user.username}</p>
+                    </div>
+                    {badge && (
+                      <span
+                        className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg flex-shrink-0"
+                        style={{ background: badge.bg, color: badge.text }}
+                      >
+                        {badge.label}
+                      </span>
+                    )}
+                  </Link>
+                )
+              })}
             </div>
-            <span className="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded-full capitalize flex-shrink-0">
-              {user.role}
-            </span>
-          </Link>
-        ))}
+          </div>
+        )}
+
       </div>
     </div>
   )

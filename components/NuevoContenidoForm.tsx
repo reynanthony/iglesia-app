@@ -84,7 +84,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
                   onClick={() => setType(value)}
                   className={'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition ' + (
                     type === value
-                      ? 'bg-amber-500 text-slate-950'
+                      ? 'bg-[#000000] text-slate-950'
                       : 'bg-slate-800 text-slate-400 hover:text-white'
                   )}
                 >
@@ -102,7 +102,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
               name="title"
               required
               placeholder="Titulo del contenido..."
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500"
             />
           </div>
 
@@ -113,7 +113,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
               name="body"
               rows={5}
               placeholder="Escribe el contenido aqui..."
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500 resize-none"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500 resize-none"
             />
           </div>
 
@@ -125,7 +125,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
                 name="video_url"
                 type="url"
                 placeholder="https://youtube.com/watch?v=..."
-                className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
+                className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500"
               />
             </div>
           )}
@@ -146,7 +146,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="w-full border border-dashed border-slate-700 hover:border-amber-500/50 rounded-xl py-5 flex items-center justify-center gap-2 text-slate-500 hover:text-amber-500 transition text-sm"
+              className="w-full border border-dashed border-slate-700 hover:border-[#000000]/50 rounded-xl py-5 flex items-center justify-center gap-2 text-slate-500 hover:text-[#000000] transition text-sm"
             >
               <ImageIcon size={18} /> Agregar imagen (opcional)
             </button>
@@ -177,7 +177,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
+              className="px-5 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
             >
               {loading ? 'Publicando...' : 'Publicar'}
             </button>

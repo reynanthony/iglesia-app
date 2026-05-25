@@ -17,8 +17,8 @@ export default async function AdminReportesPage() {
   return (
     <div className="p-8">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-9 h-9 bg-amber-500/10 rounded-xl flex items-center justify-center">
-          <AlertTriangle size={18} className="text-amber-500" />
+        <div className="w-9 h-9 bg-[#000000]/10 rounded-xl flex items-center justify-center">
+          <AlertTriangle size={18} className="text-[#000000]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold">Reportes</h1>
@@ -38,7 +38,7 @@ export default async function AdminReportesPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-[#000000]/10 text-[#000000] px-2 py-0.5 rounded-full">
                       Reportado por @{report.reporter?.username}
                     </span>
                     <span className="text-xs text-slate-600">

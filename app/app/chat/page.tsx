@@ -14,7 +14,7 @@ export default async function ChatPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-56px)] md:h-screen">
       <div className="border-b border-slate-800 px-5 py-4 flex-shrink-0 flex items-center gap-3">
-        <div className="w-9 h-9 bg-amber-500/10 rounded-xl flex items-center justify-center">
+        <div className="w-9 h-9 bg-[#000000]/10 rounded-xl flex items-center justify-center">
           <span className="text-lg">💬</span>
         </div>
         <div>

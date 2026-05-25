@@ -39,7 +39,7 @@ export default function NuevaSalaPage() {
               type="text"
               required
               placeholder="Ej: Oración de intercesión"
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500"
             />
           </div>
           <div>
@@ -48,7 +48,7 @@ export default function NuevaSalaPage() {
               name="description"
               rows={3}
               placeholder="¿De qué se trata esta sesión de oración?"
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition placeholder:text-slate-500 resize-none"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500 resize-none"
             />
           </div>
 
@@ -65,7 +65,7 @@ export default function NuevaSalaPage() {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
+              className="px-5 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
             >
               {loading ? 'Creando...' : 'Crear sala'}
             </button>

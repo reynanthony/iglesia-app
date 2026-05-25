@@ -38,11 +38,11 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
               <div
                 key={participant.identity}
                 className={`bg-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 transition ${
-                  isSpeaking ? 'ring-2 ring-amber-500' : ''
+                  isSpeaking ? 'ring-2 ring-[#000000]' : ''
                 }`}
               >
                 <div className={`w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold transition ${
-                  isSpeaking ? 'bg-amber-500 text-slate-950' : 'bg-slate-700 text-slate-300'
+                  isSpeaking ? 'bg-[#000000] text-slate-950' : 'bg-slate-700 text-slate-300'
                 }`}>
                   {participant.name?.[0]?.toUpperCase() ?? 'U'}
                 </div>
@@ -99,7 +99,7 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string, roomNa
       <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-3">
         <p className="text-3xl">🙏</p>
         <p className="font-medium">Saliste de la sala</p>
-        <a href="/app/oracion" className="text-amber-500 hover:text-amber-400 text-sm">
+        <a href="/app/oracion" className="text-[#000000] hover:text-[#222222] text-sm">
           Volver a salas
         </a>
       </div>

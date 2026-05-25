@@ -49,7 +49,7 @@ export default async function AdminUsuariosPage({
             const href = qs ? '/admin/usuarios?' + qs : '/admin/usuarios'
             const isActive = role === r || (!role && r === 'todos')
             const base = 'px-3 py-2 rounded-xl text-xs font-medium capitalize transition '
-            const active = 'bg-amber-500 text-slate-950'
+            const active = 'bg-[#000000] text-slate-950'
             const inactive = 'bg-slate-900 border border-slate-800 text-slate-400 hover:border-slate-600'
             return (
               <a key={r} href={href} className={base + (isActive ? active : inactive)}>

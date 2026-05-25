@@ -50,7 +50,7 @@ export default async function MinistryPage({
           </Link>
           <div>
             {ministry.parent && (
-              <Link href={'/app/ministerios/' + ministry.parent.slug} className="text-xs text-slate-500 hover:text-amber-400 transition mb-1 block">
+              <Link href={'/app/ministerios/' + ministry.parent.slug} className="text-xs text-slate-500 hover:text-[#222222] transition mb-1 block">
                 {ministry.parent.name} /
               </Link>
             )}
@@ -72,7 +72,7 @@ export default async function MinistryPage({
         {canPost && (
           <Link
             href={'/app/ministerios/' + slug + '/nuevo'}
-            className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold px-4 py-2 rounded-xl text-sm transition flex-shrink-0"
+            className="flex items-center gap-2 bg-[#000000] hover:bg-[#222222] text-slate-950 font-semibold px-4 py-2 rounded-xl text-sm transition flex-shrink-0"
           >
             <Plus size={16} /> Publicar
           </Link>
@@ -83,8 +83,8 @@ export default async function MinistryPage({
       {pinnedContent.length > 0 && (
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <Pin size={14} className="text-amber-500" />
-            <p className="text-xs text-amber-500 font-semibold uppercase tracking-wide">Anclado</p>
+            <Pin size={14} className="text-[#000000]" />
+            <p className="text-xs text-[#000000] font-semibold uppercase tracking-wide">Anclado</p>
           </div>
           <div className="space-y-3">
             {pinnedContent.map((item: any) => (

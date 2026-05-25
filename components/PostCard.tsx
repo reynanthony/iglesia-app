@@ -49,11 +49,11 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-3">
         <Link href={`/app/perfil/${post.profiles?.username}`} className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-amber-500 ring-offset-2 ring-offset-black flex-shrink-0">
+          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-[#000000] ring-offset-2 ring-offset-black flex-shrink-0">
             {post.profiles?.avatar_url ? (
               <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-sm">
+              <div className="w-full h-full bg-[#000000]/20 flex items-center justify-center text-[#000000] font-bold text-sm">
                 {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
               </div>
             )}
@@ -84,8 +84,8 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                   disabled={reporting || reported}
                   className="w-full flex items-center gap-2.5 px-4 py-3 text-sm hover:bg-slate-800 transition text-left disabled:opacity-50"
                 >
-                  <Flag size={14} className={reported ? 'text-amber-500' : 'text-slate-400'} />
-                  <span className={reported ? 'text-amber-500' : 'text-slate-300'}>
+                  <Flag size={14} className={reported ? 'text-[#000000]' : 'text-slate-400'} />
+                  <span className={reported ? 'text-[#000000]' : 'text-slate-300'}>
                     {reported ? 'Reportado' : 'Reportar post'}
                   </span>
                 </button>
@@ -170,7 +170,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           <button
             type="submit"
             disabled={commenting}
-            className="text-amber-500 font-semibold text-sm disabled:opacity-50"
+            className="text-[#000000] font-semibold text-sm disabled:opacity-50"
           >
             Publicar
           </button>

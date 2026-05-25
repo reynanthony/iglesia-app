@@ -1,119 +1,235 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
-const pillars = [
-  { n: '01', title: 'Visión', desc: 'Ser una iglesia que impacte nuestra ciudad y nación con el amor transformador de Jesucristo.' },
-  { n: '02', title: 'Misión', desc: 'Hacer discípulos de todas las naciones, enseñando a guardar todo lo que Cristo mandó.' },
-  { n: '03', title: 'Valores', desc: 'Fe, amor, integridad, servicio y comunidad son los pilares que guían todo lo que hacemos.' },
+const stats = [
+  { value: '2008', label: 'Fundados' },
+  { value: '500+', label: 'Familias' },
+  { value: '3',    label: 'Generaciones' },
+  { value: '12+',  label: 'Ministerios' },
 ]
 
 const beliefs = [
-  { title: 'La Biblia', desc: 'Creemos que la Biblia es la Palabra inspirada de Dios, autoridad final para fe y práctica cristiana.' },
-  { title: 'La salvación', desc: 'La salvación es por gracia mediante la fe en Jesucristo, no por obras humanas.' },
-  { title: 'La iglesia', desc: 'La iglesia es el cuerpo de Cristo, llamada a servir, adorar y hacer discípulos en toda la tierra.' },
-  { title: 'La misión', desc: 'Cada creyente es llamado a llevar el mensaje de salvación a su comunidad y al mundo.' },
+  { n: '01', title: 'La Biblia',    desc: 'La Palabra inspirada de Dios, autoridad final para la fe y la práctica cristiana.' },
+  { n: '02', title: 'La salvación', desc: 'Por gracia mediante la fe en Jesucristo, no por obras humanas.' },
+  { n: '03', title: 'La iglesia',   desc: 'El cuerpo de Cristo, llamada a servir, adorar y hacer discípulos en toda la tierra.' },
+  { n: '04', title: 'La misión',    desc: 'Cada creyente llamado a llevar el mensaje de salvación a su comunidad y al mundo.' },
 ]
 
 export default function NosotrosPage() {
   return (
     <div>
 
-      {/* HERO */}
-      <section className="bg-zinc-950 border-b border-zinc-800">
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-36 md:pb-28">
-          <div className="flex items-start gap-4 mb-12">
-            <div className="w-0.5 h-12 bg-amber-500 flex-shrink-0" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 leading-relaxed">
-              Quiénes somos<br />Nuestra historia
+      {/* ═══════════════════════════════════════
+          HERO — split asimétrico: texto + año
+      ═══════════════════════════════════════ */}
+      <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-end" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+
+        {/* Año fundación — número decorativo derecha */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
+          <span className="font-black text-[#111111] leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(18rem, 40vw, 38rem)', opacity: 0.04, lineHeight: 1, paddingRight: '1rem' }}>
+            08
+          </span>
+        </div>
+
+        {/* Glow izquierda */}
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 55% 70% at 10% 60%, rgba(0,0,0,0.07), transparent 65%)' }} />
+
+        <div className="relative max-w-6xl mx-auto w-full px-6 pb-20 pt-32 md:pt-40">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-5 mb-14">
+              <div className="w-12 h-px bg-[#000000]" />
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
+                Quiénes somos · Desde 2008
+              </p>
+            </div>
+            <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
+              style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)', lineHeight: 0.85 }}>
+              Somos<br />El Manan-<br />
+              <em className="text-[#000000]">tial.</em>
+            </h1>
+            <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
+              Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.
             </p>
           </div>
-          <h1 className="text-[4.5rem] sm:text-[6.5rem] md:text-[9rem] font-black leading-[0.88] tracking-tighter text-white mb-10 max-w-3xl">
-            Nuestra<br />historia.
-          </h1>
-          <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
-            Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.
-          </p>
+        </div>
+
+        {/* Stats strip */}
+        <div className="relative border-t border-[#111111]/[0.08]">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#111111]/[0.08]">
+              {stats.map(({ value, label }) => (
+                <div key={label} className="px-8 py-7 first:pl-0">
+                  <p className="font-black text-[#111111] tracking-tighter leading-none mb-1"
+                    style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>{value}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#111111]/45">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* HISTORIA */}
-      <section className="bg-white border-b border-zinc-100">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-            <div className="lg:col-span-4">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Nuestros inicios</p>
+      {/* ═══════════════════════════════════════
+          HISTORIA — editorial + foto collage
+      ═══════════════════════════════════════ */}
+      <section className="bg-card border-b border-edge">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-36">
+
+          {/* Pullquote editorial */}
+          <div className="border-l-2 border-[#000000] pl-8 mb-20 max-w-3xl">
+            <p className="font-display font-black text-ink tracking-tight leading-snug"
+              style={{ fontSize: 'clamp(1.5rem, 4vw, 2.8rem)' }}>
+              "No somos un edificio. Somos una familia que se reúne, crece y sirve juntos."
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mt-6">
+              — Fundadores de El Manantial
+            </p>
+          </div>
+
+          {/* Foto collage placeholder 3 paneles */}
+          <div className="grid grid-cols-12 gap-4 mb-20">
+            <div className="col-span-7 rounded-2xl overflow-hidden bg-[#EBEBEB]" style={{ minHeight: 320 }}>
+              <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 320 }}>
+                Foto comunidad
+              </div>
             </div>
-            <div className="lg:col-span-8">
-              <p className="text-2xl md:text-3xl font-black text-zinc-900 leading-snug tracking-tight mb-8 max-w-2xl">
-                Iglesia El Manantial nació de un grupo de creyentes con el sueño de ver una comunidad donde el amor de Dios fluyera libremente.
+            <div className="col-span-5 grid grid-rows-2 gap-4">
+              <div className="rounded-2xl overflow-hidden bg-[#F4F4F4]" style={{ minHeight: 152 }}>
+                <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 152 }}>
+                  Foto servicio
+                </div>
+              </div>
+              <div className="rounded-2xl overflow-hidden bg-[#EBEBEB]" style={{ minHeight: 152 }}>
+                <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 152 }}>
+                  Foto jóvenes
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Texto historia 2 columnas */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-4xl">
+            <div className="space-y-5 text-base text-ink-2 leading-relaxed">
+              <p>
+                Iglesia El Manantial nació en 2008 de un grupo de creyentes que soñaban con una comunidad donde el amor de Dios se viviera de manera auténtica y transformadora.
               </p>
-              <div className="space-y-5 text-sm text-zinc-500 leading-relaxed max-w-xl">
-                <p>
-                  A lo largo de los años hemos crecido como familia, viendo milagros, restauraciones y cientos de vidas transformadas por el poder del evangelio.
-                </p>
-                <p>
-                  Hoy somos una iglesia vibrante, con ministerios para todas las edades y un corazón apasionado por servir a nuestra comunidad. Cada domingo celebramos juntos la bondad de Dios y nos comprometemos a seguir siendo una comunidad de gracia y verdad.
-                </p>
-                <p>
-                  Creemos que la iglesia no es un edificio sino una familia, y cada persona que entra a El Manantial encuentra un hogar espiritual donde puede crecer, servir y ser amado tal como es.
-                </p>
-              </div>
+              <p>
+                A lo largo de los años hemos crecido como familia, viendo milagros, restauraciones y cientos de vidas transformadas por el poder del evangelio.
+              </p>
+            </div>
+            <div className="space-y-5 text-base text-ink-2 leading-relaxed">
+              <p>
+                Hoy somos una iglesia vibrante, con ministerios para todas las edades y un corazón apasionado por servir a nuestra comunidad.
+              </p>
+              <p>
+                Creemos que cada persona que entra a El Manantial encuentra más que una congregación: encuentra un hogar espiritual.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* VISIÓN, MISIÓN, VALORES */}
-      <section className="bg-zinc-50 border-b border-zinc-100">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="flex items-end justify-between mb-12 border-b border-zinc-200 pb-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Lo que nos mueve</p>
+      {/* ═══════════════════════════════════════
+          VISIÓN + MISIÓN — tipografía grande
+      ═══════════════════════════════════════ */}
+      <section className="bg-muted border-b border-edge overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-36">
+
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-ink-3 mb-16">— Lo que nos mueve</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-edge rounded-2xl overflow-hidden border border-edge">
+
+            <div className="bg-muted p-12 md:p-16 hover:bg-card transition">
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#000000]/70 mb-6">Visión</p>
+              <p className="font-display font-black text-ink tracking-tight leading-tight"
+                style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>
+                Ser una iglesia que impacte nuestra ciudad y nación.
+              </p>
+            </div>
+
+            <div className="bg-muted p-12 md:p-16 hover:bg-card transition border-t md:border-t-0 md:border-l border-edge">
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#000000]/70 mb-6">Misión</p>
+              <p className="font-display font-black text-ink tracking-tight leading-tight"
+                style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>
+                Hacer discípulos que lleven el amor de Cristo a toda la tierra.
+              </p>
+            </div>
+
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200 border border-zinc-200">
-            {pillars.map(({ n, title, desc }) => (
-              <div key={n} className="p-8 md:p-10">
-                <span className="text-[10px] font-bold text-zinc-300 tracking-widest block mb-8">{n}</span>
-                <h3 className="text-2xl font-black text-zinc-900 tracking-tight mb-4">{title}</h3>
-                <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>
+
+          {/* Valores — fila con números */}
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-edge border border-edge rounded-2xl overflow-hidden">
+            {['Fe', 'Amor', 'Integridad', 'Servicio', 'Comunidad'].map((v, i) => (
+              <div key={v} className="bg-card px-7 py-6 hover:bg-muted transition flex flex-col gap-2">
+                <span className="text-[9px] font-bold text-ink-3 tracking-widest">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-black text-ink text-lg">{v}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* LO QUE CREEMOS */}
-      <section className="bg-white border-b border-zinc-100">
+      {/* ═══════════════════════════════════════
+          LO QUE CREEMOS — lista numerada
+      ═══════════════════════════════════════ */}
+      <section className="bg-card border-b border-edge">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="flex items-end justify-between mb-12 border-b border-zinc-200 pb-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Fundamentos de fe</p>
+          <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Fundamentos de fe</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-zinc-100">
-            {beliefs.map(({ title, desc }) => (
-              <div key={title} className="bg-white p-8 hover:bg-zinc-50 transition">
-                <h3 className="text-base font-black text-zinc-900 mb-3">{title}</h3>
-                <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>
+
+          <div className="space-y-px bg-edge rounded-2xl overflow-hidden border border-edge">
+            {beliefs.map(({ n, title, desc }) => (
+              <div key={n} className="bg-card hover:bg-muted transition p-8 md:p-10 flex gap-8 md:gap-14 items-start group">
+                <span className="text-[10px] font-bold text-ink-3 tracking-widest flex-shrink-0 mt-1">{n}</span>
+                <div className="flex-1">
+                  <h3 className="text-xl md:text-2xl font-black text-ink tracking-tight mb-3 group-hover:text-[#222222] transition">{title}</h3>
+                  <p className="text-sm text-ink-2 leading-relaxed max-w-xl">{desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-amber-500">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-900/50 mb-8">— Únete a nosotros</p>
-            <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-black">
-              Eres parte<br />de esta<br />historia.
-            </h2>
-          </div>
-          <div className="flex flex-col gap-3 flex-shrink-0">
-            <Link href="/contacto" className="inline-flex items-center gap-3 bg-black hover:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
-              Visítanos <ArrowRight size={13} />
-            </Link>
-            <Link href="/login" className="inline-flex items-center gap-3 border border-black text-black hover:bg-black hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
-              Comunidad en línea
-            </Link>
+      {/* ═══════════════════════════════════════
+          CTA — con "FAMILIA" decorativo
+      ═══════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+        {/* Texto decorativo */}
+        <div className="pointer-events-none absolute left-0 bottom-0 overflow-hidden select-none">
+          <span className="font-black text-white leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(10rem, 30vw, 28rem)', opacity: 0.04, lineHeight: 0.85 }}>
+            FAMILIA
+          </span>
+        </div>
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(0,0,0,0.06), transparent 70%)' }} />
+
+        <div className="relative max-w-6xl mx-auto px-6 py-32 md:py-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/30 mb-12">— Únete a nosotros</p>
+              <h2 className="font-display font-black tracking-tighter text-white"
+                style={{ fontSize: 'clamp(3rem, 9vw, 8rem)', lineHeight: 0.85 }}>
+                Eres parte<br />de esta<br />
+                <em className="text-[#EBEBEB]">historia.</em>
+              </h2>
+            </div>
+            <div className="flex flex-col gap-4">
+              <Link href="/contacto"
+                className="inline-flex items-center justify-between bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group">
+                Visítanos este domingo
+                <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="/login"
+                className="inline-flex items-center justify-between border border-white/10 text-white/40 hover:text-white hover:border-white/25 text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group">
+                Comunidad en línea
+                <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform opacity-50 group-hover:opacity-100" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

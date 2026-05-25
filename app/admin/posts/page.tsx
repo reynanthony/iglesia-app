@@ -27,7 +27,7 @@ export default async function AdminPostsPage({
       </div>
 
       {/* Búsqueda */}
-      <form method="GET" className="flex items-center gap-3 bg-slate-900 border border-slate-800 focus-within:border-amber-500/50 rounded-xl px-4 py-2.5 transition mb-6">
+      <form method="GET" className="flex items-center gap-3 bg-slate-900 border border-slate-800 focus-within:border-[#000000]/50 rounded-xl px-4 py-2.5 transition mb-6">
         <Search size={16} className="text-slate-500 flex-shrink-0" />
         <input
           name="q"

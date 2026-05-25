@@ -10,9 +10,9 @@ function getYouTubeId(url: string) {
 }
 
 const typeConfig: Record<string, { label: string; icon: React.ReactNode }> = {
-  articulo: { label: 'Artículo',  icon: <FileText size={11} /> },
-  video:    { label: 'Video',     icon: <Video size={11} /> },
-  anuncio:  { label: 'Anuncio',   icon: <Megaphone size={11} /> },
+  articulo: { label: 'Artículo', icon: <FileText size={11} /> },
+  video:    { label: 'Video',    icon: <Video size={11} /> },
+  anuncio:  { label: 'Anuncio',  icon: <Megaphone size={11} /> },
 }
 
 export default function MinistryContentCard({
@@ -25,9 +25,9 @@ export default function MinistryContentCard({
   canDelete: boolean
 }) {
   const [deleting, setDeleting] = useState(false)
-  const [confirm, setConfirm] = useState(false)
+  const [confirm, setConfirm]   = useState(false)
 
-  const type = typeConfig[item.type] ?? typeConfig['articulo']
+  const type      = typeConfig[item.type] ?? typeConfig['articulo']
   const youtubeId = item.video_url ? getYouTubeId(item.video_url) : null
 
   const formatDate = (date: string) =>
@@ -44,11 +44,11 @@ export default function MinistryContentCard({
   }
 
   return (
-    <article className="border border-zinc-100 hover:border-zinc-300 bg-white hover:bg-zinc-50 transition group overflow-hidden">
+    <article className="border border-edge hover:border-edge-2 bg-card hover:bg-muted transition group overflow-hidden rounded-xl">
 
       {/* YouTube embed */}
       {youtubeId && (
-        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+        <div className="relative w-full rounded-t-xl overflow-hidden" style={{ paddingBottom: '56.25%' }}>
           <iframe
             src={'https://www.youtube.com/embed/' + youtubeId}
             className="absolute inset-0 w-full h-full"
@@ -60,7 +60,7 @@ export default function MinistryContentCard({
 
       {/* Cover image */}
       {item.image_url && !youtubeId && (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-t-xl">
           <img
             src={item.image_url}
             alt=""
@@ -73,11 +73,11 @@ export default function MinistryContentCard({
         {/* Header row */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-400">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-ink-3">
               {type.icon} {type.label}
             </span>
             {item.pinned && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-500">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#000000]">
                 <Pin size={10} /> Fijado
               </span>
             )}
@@ -87,10 +87,10 @@ export default function MinistryContentCard({
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className={'inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 border transition flex-shrink-0 ' + (
+              className={'inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 border rounded-md transition flex-shrink-0 ' + (
                 confirm
-                  ? 'bg-zinc-900 text-white border-zinc-900'
-                  : 'text-zinc-400 border-zinc-200 hover:text-zinc-900 hover:border-zinc-400'
+                  ? 'bg-ink text-card border-ink'
+                  : 'text-ink-3 border-edge hover:text-ink hover:border-edge-2'
               )}
             >
               <Trash2 size={10} />
@@ -100,13 +100,13 @@ export default function MinistryContentCard({
         </div>
 
         {/* Title */}
-        <h3 className="font-black text-zinc-900 text-lg leading-tight mb-3 group-hover:text-amber-600 transition tracking-tight">
+        <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-[#222222] transition tracking-tight">
           {item.title}
         </h3>
 
         {/* Body excerpt */}
         {item.body && (
-          <p className="text-sm text-zinc-500 leading-relaxed line-clamp-3 mb-4">
+          <p className="text-sm text-ink-2 leading-relaxed line-clamp-3 mb-4">
             {item.body}
           </p>
         )}
@@ -117,24 +117,24 @@ export default function MinistryContentCard({
             href={item.video_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600 hover:text-amber-700 transition mb-4"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#222222] hover:text-amber-700 transition mb-4"
           >
             <Video size={12} /> Ver video
           </a>
         )}
 
         {/* Author + date */}
-        <div className="flex items-center gap-2 pt-4 border-t border-zinc-100">
-          <div className="w-6 h-6 bg-zinc-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
+        <div className="flex items-center gap-2 pt-4 border-t border-edge">
+          <div className="w-6 h-6 rounded-full bg-muted overflow-hidden flex-shrink-0 flex items-center justify-center">
             {item.profiles?.avatar_url ? (
               <img src={item.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-[10px] font-black text-zinc-500">
+              <span className="text-[10px] font-black text-ink-2">
                 {item.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
               </span>
             )}
           </div>
-          <p className="text-[11px] text-zinc-400 uppercase tracking-wider">
+          <p className="text-[11px] text-ink-3 uppercase tracking-wider">
             {item.profiles?.full_name} · {formatDate(item.created_at)}
           </p>
         </div>
