@@ -21,33 +21,16 @@ export default function MinistryContentCard({
   const [deleting, setDeleting] = useState(false)
   const [confirm, setConfirm] = useState(false)
 
-  const typeIcon = {
-    articulo: <FileText size={14} className="text-blue-400" />,
-    video: <Video size={14} className="text-red-400" />,
-    anuncio: <Megaphone size={14} className="text-amber-400" />,
-  }[item.type] ?? <FileText size={14} />
-
-  const typeLabel = {
-    articulo: 'Articulo',
-    video: 'Video',
-    anuncio: 'Anuncio',
-  }[item.type] ?? 'Contenido'
-
-  const typeColor = {
-    articulo: 'bg-blue-400/10 text-blue-400',
-    video: 'bg-red-400/10 text-red-400',
-    anuncio: 'bg-amber-400/10 text-amber-400',
-  }[item.type] ?? 'bg-slate-800 text-slate-400'
+  const typeConfig = {
+    articulo: { label: 'Artículo', icon: <FileText size={12} />, color: 'bg-blue-50 text-blue-600 border-blue-100' },
+    video:    { label: 'Video',    icon: <Video size={12} />,    color: 'bg-red-50 text-red-600 border-red-100' },
+    anuncio:  { label: 'Anuncio',  icon: <Megaphone size={12} />, color: 'bg-amber-50 text-amber-600 border-amber-100' },
+  }[item.type] ?? { label: 'Contenido', icon: <FileText size={12} />, color: 'bg-slate-100 text-slate-600 border-slate-200' }
 
   const youtubeId = item.video_url ? getYouTubeId(item.video_url) : null
 
-  const timeAgo = (date: string) => {
-    const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
-    if (diff < 60) return 'ahora'
-    if (diff < 3600) return Math.floor(diff / 60) + 'm'
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h'
-    return new Date(date).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })
-  }
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
 
   async function handleDelete() {
     if (!confirm) {
@@ -60,9 +43,9 @@ export default function MinistryContentCard({
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+    <article className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition group">
 
-      {/* Video embed */}
+      {/* YouTube embed */}
       {youtubeId && (
         <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
           <iframe
@@ -74,21 +57,27 @@ export default function MinistryContentCard({
         </div>
       )}
 
-      {/* Imagen */}
+      {/* Cover image */}
       {item.image_url && !youtubeId && (
-        <img src={item.image_url} alt="" className="w-full object-cover max-h-64" />
+        <div className="overflow-hidden">
+          <img
+            src={item.image_url}
+            alt=""
+            className="w-full object-cover h-52 group-hover:scale-105 transition duration-500"
+          />
+        </div>
       )}
 
-      {/* Contenido */}
       <div className="p-5">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={'flex items-center gap-1.5 text-xs px-2 py-1 rounded-full ' + typeColor}>
-              {typeIcon} {typeLabel}
+        {/* Top row: type badge + pin + delete */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className={'inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border ' + typeConfig.color}>
+              {typeConfig.icon} {typeConfig.label}
             </span>
             {item.pinned && (
-              <span className="flex items-center gap-1 text-xs text-amber-500">
-                <Pin size={11} /> Anclado
+              <span className="inline-flex items-center gap-1 text-xs text-amber-500 font-medium">
+                <Pin size={11} /> Fijado
               </span>
             )}
           </div>
@@ -97,52 +86,60 @@ export default function MinistryContentCard({
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className={'flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg transition flex-shrink-0 ' + (
+              className={'inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border transition ' + (
                 confirm
-                  ? 'bg-red-500 text-white'
-                  : 'text-slate-500 hover:text-red-400 hover:bg-red-400/10'
+                  ? 'bg-red-500 text-white border-red-500'
+                  : 'text-slate-400 border-slate-200 hover:text-red-500 hover:border-red-200'
               )}
             >
-              <Trash2 size={12} />
-              {confirm ? 'Confirmar' : ''}
+              <Trash2 size={11} />
+              {confirm ? 'Confirmar' : 'Eliminar'}
             </button>
           )}
         </div>
 
-        <h3 className="font-bold text-white text-base mb-2">{item.title}</h3>
+        {/* Title */}
+        <h3 className="font-bold text-slate-900 text-lg leading-snug mb-2 group-hover:text-amber-600 transition">
+          {item.title}
+        </h3>
 
+        {/* Body excerpt */}
         {item.body && (
-          <p className="text-slate-400 text-sm leading-relaxed mb-3 whitespace-pre-wrap">
+          <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-3">
             {item.body}
           </p>
         )}
 
+        {/* External video link */}
         {item.video_url && !youtubeId && (
           <a
             href={item.video_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-amber-500 hover:text-amber-400 text-sm underline"
+            className="inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-700 transition mb-3"
           >
-            Ver video
+            <Video size={14} /> Ver video
           </a>
         )}
 
-        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
-          <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
+        {/* Author + date */}
+        <div className="flex items-center gap-2 pt-3 border-t border-slate-100 mt-auto">
+          <div className="w-7 h-7 rounded-full overflow-hidden bg-slate-200 flex-shrink-0">
             {item.profiles?.avatar_url ? (
               <img src={item.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-slate-300">
+              <div className="w-full h-full flex items-center justify-center text-xs font-bold text-slate-500">
                 {item.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
               </div>
             )}
           </div>
-          <p className="text-xs text-slate-500">
-            {item.profiles?.full_name} · {timeAgo(item.created_at)}
+          <p className="text-xs text-slate-400">
+            <span className="font-medium text-slate-600">{item.profiles?.full_name}</span>
+            {' · '}
+            {formatDate(item.created_at)}
           </p>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
