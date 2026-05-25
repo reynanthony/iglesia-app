@@ -8,6 +8,7 @@ import { Cross, ArrowRight, AlertCircle } from 'lucide-react'
 export default function RegistroPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [confirm, setConfirm] = useState(false)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -18,7 +19,30 @@ export default function RegistroPage() {
     if (result?.error) {
       setError(result.error)
       setLoading(false)
+    } else if (result?.confirm) {
+      setConfirm(true)
     }
+  }
+
+  if (confirm) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0A0A0A' }}>
+        <div className="w-full max-w-sm text-center">
+          <div className="w-14 h-14 bg-[#F5F5F5] rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#0A0A0A] text-2xl">
+            ✉️
+          </div>
+          <h2 className="font-black text-xl tracking-tight mb-3" style={{ color: '#F5F5F5' }}>
+            Revisa tu correo
+          </h2>
+          <p className="text-sm leading-relaxed mb-8" style={{ color: '#6A6A6A' }}>
+            Te enviamos un enlace de confirmación. Ábrelo para activar tu cuenta y acceder a la comunidad.
+          </p>
+          <Link href="/login" className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: '#8A8A8A' }}>
+            Ir al inicio de sesión <ArrowRight size={12} />
+          </Link>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -77,7 +101,7 @@ export default function RegistroPage() {
             type="submit"
             disabled={loading}
             className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.2em] rounded-xl px-6 py-4 transition disabled:opacity-50"
-            style={{ background: '#000000', color: '#0A0A0A' }}
+            style={{ background: '#F5F5F5', color: '#0A0A0A' }}
           >
             {loading ? 'Creando cuenta…' : (
               <>

@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
 export async function register(formData: FormData) {
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
@@ -36,7 +36,13 @@ export async function register(formData: FormData) {
     return { error: 'No se pudo crear la cuenta. Intenta con otro correo.' }
   }
 
-  redirect('/app/feed')
+  // If session exists, email confirmation is disabled — go straight to feed
+  if (data.session) {
+    redirect('/app/feed')
+  }
+
+  // Email confirmation required — tell the user to check their inbox
+  return { confirm: true }
 }
 
 export async function logout() {
