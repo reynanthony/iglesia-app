@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -7,7 +8,10 @@ import {
   Church, CalendarDays, Mic2, ArrowLeft, Globe, LogOut,
 } from 'lucide-react'
 
-const sections = [
+type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean }
+type NavSection = { label: string; items: NavItem[] }
+
+const sections: NavSection[] = [
   {
     label: 'General',
     items: [{ href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true }],
