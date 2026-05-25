@@ -56,7 +56,7 @@ export async function createMinistryContent(formData: FormData) {
 
   if (error) return { error: 'No se pudo publicar' }
 
-  revalidatePath('/app/ministerios/' + ministry_id)
+  revalidatePath('/ministerios/' + ministry_id)
   return { success: true }
 }
 
@@ -71,5 +71,5 @@ export async function deleteMinistryContent(contentId: string, ministrySlug: str
     .eq('id', contentId)
     .eq('user_id', user.id)
 
-  revalidatePath('/app/ministerios/' + ministrySlug)
+  revalidatePath('/ministerios/' + ministrySlug)
 }

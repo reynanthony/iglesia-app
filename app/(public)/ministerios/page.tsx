@@ -1,12 +1,21 @@
-export default function MinisteriosPage() {
-  const ministerios = [
-    { nombre: 'Jovenes', desc: 'Un espacio vibrante para que los jovenes descubran su identidad en Cristo y desarrollen su proposito. Nos reunimos cada viernes con adoracion, Palabra y comunidad.', color: 'bg-blue-500', lider: 'Lider de Jovenes' },
-    { nombre: 'Ninos', desc: 'Ensenamos la Palabra de Dios de forma creativa y divertida para los mas pequenos. Cada domingo tenemos clases especiales adaptadas por edades.', color: 'bg-green-500', lider: 'Lider de Ninos' },
-    { nombre: 'Matrimonios', desc: 'Fortalecemos los hogares con principios biblicos, consejeria y retiros especiales para parejas que desean crecer juntos en Dios.', color: 'bg-purple-500', lider: 'Lider de Matrimonios' },
-    { nombre: 'Adoracion', desc: 'Nuestro equipo de adoracion sirve con excelencia para guiar a la congregacion a la presencia de Dios en cada servicio.', color: 'bg-amber-500', lider: 'Lider de Adoracion' },
-    { nombre: 'Oracion', desc: 'Creemos en el poder de la oracion. Nos reunimos semanalmente para interceder por nuestra iglesia, ciudad y naciones.', color: 'bg-red-500', lider: 'Lider de Oracion' },
-    { nombre: 'Evangelismo', desc: 'Llevamos el mensaje de salvacion a las calles, barrios y comunidades de nuestra ciudad con amor y poder.', color: 'bg-teal-500', lider: 'Lider de Evangelismo' },
-  ]
+import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+
+export default async function MinisteriosPage() {
+  const supabase = await createClient()
+
+  const { data: allMinistries } = await supabase
+    .from('ministries')
+    .select('*')
+    .order('created_at', { ascending: true })
+
+  const parents = allMinistries?.filter(m => !m.parent_id) ?? []
+  const children = allMinistries?.filter(m => m.parent_id) ?? []
+
+  const ministriesWithSubs = parents.map(parent => ({
+    ...parent,
+    sub: children.filter(child => child.parent_id === parent.id),
+  }))
 
   return (
     <div>
@@ -20,12 +29,40 @@ export default function MinisteriosPage() {
 
       <section className="py-20 max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ministerios.map(({ nombre, desc, color, lider }) => (
-            <div key={nombre} className="bg-white border border-slate-100 rounded-2xl p-6 hover:shadow-lg transition">
-              <div className={`w-12 h-12 ${color} rounded-2xl mb-5`} />
-              <h3 className="font-bold text-slate-900 text-xl mb-3">{nombre}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mb-4">{desc}</p>
-              <p className="text-xs text-slate-400 border-t border-slate-100 pt-3">{lider}</p>
+          {ministriesWithSubs.map((ministry: any) => (
+            <div key={ministry.id}>
+              <Link
+                href={'/ministerios/' + ministry.slug}
+                className="block bg-white border border-slate-100 rounded-2xl p-6 hover:shadow-lg transition group"
+              >
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-5"
+                  style={{ backgroundColor: ministry.color + '20' }}
+                >
+                  {ministry.icon}
+                </div>
+                <h3 className="font-bold text-slate-900 text-xl mb-3 group-hover:text-amber-600 transition">{ministry.name}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{ministry.description}</p>
+              </Link>
+
+              {ministry.sub.length > 0 && (
+                <div className="mt-2 ml-4 space-y-2">
+                  {ministry.sub.map((sub: any) => (
+                    <Link
+                      key={sub.id}
+                      href={'/ministerios/' + sub.slug}
+                      className="flex items-center gap-3 bg-slate-50 border border-slate-100 hover:border-slate-300 rounded-xl px-4 py-3 transition group"
+                    >
+                      <span className="text-lg">{sub.icon}</span>
+                      <p className="text-sm text-slate-600 group-hover:text-slate-900 transition">{sub.name}</p>
+                      <div
+                        className="w-1.5 h-1.5 rounded-full ml-auto flex-shrink-0"
+                        style={{ backgroundColor: sub.color }}
+                      />
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

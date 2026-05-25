@@ -43,7 +43,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
       setError(result.error)
       setLoading(false)
     } else {
-      router.push('/app/ministerios/' + ministry.slug)
+      router.push('/ministerios/' + ministry.slug)
     }
   }
 
@@ -57,7 +57,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-8">
         <Link
-          href={'/app/ministerios/' + ministry.slug}
+          href={'/ministerios/' + ministry.slug}
           className="p-2 hover:bg-slate-800 rounded-xl transition"
         >
           <ArrowLeft size={18} />
@@ -169,7 +169,7 @@ export default function NuevoContenidoForm({ ministry }: { ministry: Ministry })
 
           <div className="flex gap-3 justify-end pt-1">
             <Link
-              href={'/app/ministerios/' + ministry.slug}
+              href={'/ministerios/' + ministry.slug}
               className="px-5 py-2.5 border border-slate-700 hover:border-slate-500 rounded-xl text-sm transition"
             >
               Cancelar
