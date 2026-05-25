@@ -118,7 +118,7 @@ export default function MinistryContentCard({
         )}
 
         {item.video_url && !youtubeId && (
-          
+          <a
             href={item.video_url}
             target="_blank"
             rel="noopener noreferrer"
