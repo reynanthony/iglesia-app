@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Pin, Plus } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Plus } from 'lucide-react'
 import MinistryContentCard from '@/components/MinistryContentCard'
 
 export default async function PublicMinistryPage({
@@ -44,15 +44,17 @@ export default async function PublicMinistryPage({
   const isEmpty = pinnedContent.length === 0 && regularContent.length === 0
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white">
 
-      {/* Hero */}
-      <section className="bg-slate-950 text-white py-20">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
-            <Link href="/" className="hover:text-white transition">Inicio</Link>
-            <span>/</span>
-            <Link href="/ministerios" className="hover:text-white transition">Ministerios</Link>
+      {/* HERO */}
+      <section className="bg-zinc-950 border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 pt-16 pb-14">
+
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-10">
+            <Link href="/ministerios" className="hover:text-white transition flex items-center gap-1.5">
+              <ArrowLeft size={11} /> Ministerios
+            </Link>
             {ministry.parent && (
               <>
                 <span>/</span>
@@ -62,37 +64,39 @@ export default async function PublicMinistryPage({
               </>
             )}
             <span>/</span>
-            <span className="text-white">{ministry.name}</span>
+            <span className="text-zinc-400">{ministry.name}</span>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex items-start gap-5">
             <div
-              className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl flex-shrink-0"
-              style={{ backgroundColor: ministry.color + '25' }}
+              className="w-14 h-14 flex items-center justify-center text-2xl flex-shrink-0"
+              style={{ backgroundColor: ministry.color + '20' }}
             >
               {ministry.icon}
             </div>
             <div>
-              <p className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-1">Ministerio</p>
-              <h1 className="text-4xl md:text-5xl font-bold">{ministry.name}</h1>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-2">— Ministerio</p>
+              <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter text-white mb-3">
+                {ministry.name}
+              </h1>
               {ministry.description && (
-                <p className="text-slate-400 mt-2 text-lg max-w-xl">{ministry.description}</p>
+                <p className="text-sm text-zinc-400 max-w-lg leading-relaxed">{ministry.description}</p>
               )}
             </div>
           </div>
         </div>
+
+        {/* Accent line */}
+        <div className="h-0.5 w-full" style={{ backgroundColor: ministry.color }} />
       </section>
 
-      {/* Divider with accent */}
-      <div className="h-1 w-full" style={{ backgroundColor: ministry.color }} />
+      {/* CONTENT */}
+      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
 
-      {/* Content */}
-      <section className="max-w-5xl mx-auto px-4 py-14">
-
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-5 mb-12">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Publicaciones</h2>
-            <p className="text-slate-500 text-sm mt-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-1">— Publicaciones</p>
+            <p className="text-xs text-zinc-400">
               {(content?.length ?? 0) === 0
                 ? 'Sin publicaciones aún'
                 : `${content?.length} publicación${(content?.length ?? 0) !== 1 ? 'es' : ''}`}
@@ -101,39 +105,33 @@ export default async function PublicMinistryPage({
           {canPost && (
             <Link
               href={'/app/ministerios/' + slug + '/nuevo'}
-              className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-700 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition"
+              className="inline-flex items-center gap-2 bg-zinc-900 hover:bg-black text-white text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 transition"
             >
-              <Plus size={16} /> Publicar
+              <Plus size={13} /> Publicar
             </Link>
           )}
         </div>
 
         {isEmpty ? (
-          <div className="text-center py-32 text-slate-400">
-            <p className="text-6xl mb-5">{ministry.icon}</p>
-            <p className="text-xl font-semibold text-slate-600">Próximamente</p>
-            <p className="text-sm mt-2">Estamos preparando contenido para este ministerio.</p>
+          <div className="py-32 text-center border border-zinc-100">
+            <p className="text-5xl mb-4">{ministry.icon}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-2">Próximamente</p>
+            <p className="text-xl font-black text-zinc-900">Preparando contenido</p>
           </div>
         ) : (
           <>
-            {/* Pinned */}
             {pinnedContent.length > 0 && (
               <div className="mb-12">
-                <div className="flex items-center gap-2 mb-5">
-                  <Pin size={15} className="text-amber-500" />
-                  <p className="text-sm font-bold text-amber-500 uppercase tracking-widest">Fijado</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-500 mb-6">— Fijado</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {pinnedContent.map((item: any) => (
                     <MinistryContentCard key={item.id} item={item} ministrySlug={slug} canDelete={canPost} />
                   ))}
                 </div>
               </div>
             )}
-
-            {/* Regular */}
             {regularContent.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {regularContent.map((item: any) => (
                   <MinistryContentCard key={item.id} item={item} ministrySlug={slug} canDelete={canPost} />
                 ))}

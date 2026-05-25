@@ -1,4 +1,4 @@
-import { Play, BookOpen, ArrowRight } from 'lucide-react'
+import { Play, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 const predicas = [
@@ -12,51 +12,51 @@ const predicas = [
 
 const series = ['Vida de oración', 'Fe viva', 'Quiénes somos', 'Propósito divino', 'El corazón de Dios', 'Vida abundante']
 
-export default function PredicasPage() {
-  const [featured, ...rest] = predicas
+const [featured, ...rest] = predicas
 
+export default function PredicasPage() {
   return (
     <div>
 
       {/* HERO */}
-      <section className="relative bg-slate-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/8 via-transparent to-transparent pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-6 py-36 md:py-48">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">Mensajes</p>
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight mb-8 max-w-2xl">
+      <section className="bg-zinc-950 border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-36 md:pb-28">
+          <div className="flex items-start gap-4 mb-12">
+            <div className="w-0.5 h-12 bg-amber-500 flex-shrink-0" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 leading-relaxed">
+              Mensajes<br />Palabra de vida
+            </p>
+          </div>
+          <h1 className="text-[4.5rem] sm:text-[6.5rem] md:text-[9rem] font-black leading-[0.88] tracking-tighter text-white mb-10 max-w-3xl">
             Palabra<br />de vida.
           </h1>
-          <p className="text-slate-400 text-lg max-w-md leading-relaxed">
+          <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
             Escucha y crece con los mensajes de nuestra iglesia. Fe para cada semana.
           </p>
         </div>
       </section>
 
-      {/* FEATURED SERMON */}
-      <section className="bg-white py-16 border-b border-slate-100">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-8">Mensaje reciente</p>
-          <div className="group grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-slate-900 rounded-3xl overflow-hidden cursor-pointer hover:shadow-2xl transition duration-500">
-            <div className="relative aspect-video lg:aspect-auto lg:h-full min-h-[260px] bg-slate-800 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-slate-900/60 hidden lg:block" />
-              <div className="w-20 h-20 bg-white/10 group-hover:bg-amber-500/80 border border-white/20 rounded-full flex items-center justify-center transition duration-300 relative z-10">
-                <Play size={28} className="text-white ml-1.5" />
-              </div>
-              <span className="absolute top-5 left-5 bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full">
+      {/* MENSAJE DESTACADO */}
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-100 pb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Mensaje reciente</p>
+          </div>
+          <div className="group grid grid-cols-1 lg:grid-cols-2 gap-0 border border-zinc-100 overflow-hidden cursor-pointer hover:border-zinc-300 transition">
+            <div className="relative bg-zinc-900 flex items-center justify-center min-h-[260px]">
+              <div className="absolute top-0 left-0 bg-amber-500 text-black text-[9px] font-black uppercase tracking-widest px-4 py-2">
                 Esta semana
-              </span>
-            </div>
-            <div className="p-8 lg:py-10 text-white">
-              <span className="inline-block text-xs font-bold uppercase tracking-widest text-amber-400 mb-3">{featured.serie}</span>
-              <h2 className="text-3xl md:text-4xl font-black leading-tight mb-4">{featured.titulo}</h2>
-              <div className="flex items-center gap-2 text-slate-400 text-sm mb-8">
-                <BookOpen size={14} />
-                <span>{featured.pastor}</span>
-                <span className="text-slate-700">·</span>
-                <span>{featured.fecha}</span>
               </div>
-              <button className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3 rounded-full text-sm transition">
-                <Play size={14} /> Escuchar mensaje
+              <div className="w-14 h-14 border border-white/25 group-hover:bg-amber-500 group-hover:border-amber-500 flex items-center justify-center transition duration-200">
+                <Play size={18} className="text-white ml-1" />
+              </div>
+            </div>
+            <div className="p-10 bg-zinc-50 group-hover:bg-white transition">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-500 mb-4">{featured.serie}</p>
+              <h2 className="text-3xl font-black text-zinc-900 leading-tight tracking-tight mb-4">{featured.titulo}</h2>
+              <p className="text-xs text-zinc-400 uppercase tracking-wider mb-8">{featured.pastor} · {featured.fecha}</p>
+              <button className="inline-flex items-center gap-3 bg-zinc-900 hover:bg-black text-white text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-3.5 transition">
+                <Play size={12} /> Escuchar
               </button>
             </div>
           </div>
@@ -64,14 +64,14 @@ export default function PredicasPage() {
       </section>
 
       {/* SERIES */}
-      <section className="bg-slate-50 py-16 border-b border-slate-100">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">Series</p>
-          <div className="flex flex-wrap gap-3">
+      <section className="bg-zinc-50 border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <div className="flex items-center gap-6 flex-wrap">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 flex-shrink-0">Series</p>
             {series.map(s => (
               <button
                 key={s}
-                className="px-4 py-2 bg-white border border-slate-200 hover:border-amber-400 hover:text-amber-600 text-slate-700 rounded-full text-sm font-medium transition"
+                className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 hover:text-zinc-900 border-b border-transparent hover:border-zinc-900 pb-0.5 transition"
               >
                 {s}
               </button>
@@ -81,26 +81,25 @@ export default function PredicasPage() {
       </section>
 
       {/* GRID DE PRÉDICAS */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-10">Mensajes anteriores</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="flex items-center justify-between mb-12 border-b border-zinc-100 pb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Mensajes anteriores</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {rest.map(({ titulo, pastor, fecha, serie }) => (
               <div key={titulo} className="group cursor-pointer">
-                <div className="relative bg-slate-900 rounded-2xl overflow-hidden mb-4 aspect-video flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-                  <div className="w-14 h-14 bg-white/10 group-hover:bg-amber-500/80 border border-white/20 rounded-full flex items-center justify-center transition duration-300 relative z-10">
-                    <Play size={18} className="text-white ml-1" />
+                <div className="relative bg-zinc-900 mb-5 overflow-hidden" style={{ aspectRatio: '16/10' }}>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-11 h-11 border border-white/25 group-hover:bg-amber-500 group-hover:border-amber-500 flex items-center justify-center transition duration-200">
+                      <Play size={14} className="text-white ml-0.5" />
+                    </div>
                   </div>
-                  <span className="absolute bottom-3 left-3 text-xs font-semibold text-amber-400 z-10">{serie}</span>
+                  <span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">{serie}</span>
                 </div>
-                <h3 className="font-bold text-slate-900 group-hover:text-amber-600 transition mb-1.5">{titulo}</h3>
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
-                  <BookOpen size={11} />
-                  <span>{pastor}</span>
-                  <span>·</span>
-                  <span>{fecha}</span>
-                </div>
+                <h3 className="font-black text-zinc-900 group-hover:text-amber-600 transition text-base leading-tight mb-2">{titulo}</h3>
+                <p className="text-[11px] text-zinc-400 uppercase tracking-wider">{pastor} · {fecha}</p>
               </div>
             ))}
           </div>
@@ -108,13 +107,16 @@ export default function PredicasPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-slate-950 text-white py-28">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">Comunidad</p>
-          <h2 className="text-5xl font-black leading-tight mb-6">¿Listo para más?</h2>
-          <p className="text-slate-400 text-lg mb-10">Únete a nuestra comunidad y conecta con otros creyentes.</p>
-          <Link href="/login" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-full transition text-sm">
-            Unirte a la comunidad <ArrowRight size={15} />
+      <section className="bg-zinc-950">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-8">— Comunidad</p>
+            <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-white">
+              ¿Listo<br />para más?
+            </h2>
+          </div>
+          <Link href="/login" className="inline-flex items-center gap-3 bg-amber-500 hover:bg-amber-400 text-black text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition flex-shrink-0">
+            Unirte a la comunidad <ArrowRight size={13} />
           </Link>
         </div>
       </section>

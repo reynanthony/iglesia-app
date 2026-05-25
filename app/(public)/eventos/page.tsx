@@ -1,39 +1,33 @@
-import { Clock, MapPin, Calendar, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 const regularServices = [
-  { dia: 'Domingo', hora: '10:00 AM', tipo: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
-  { dia: 'Miércoles', hora: '7:00 PM', tipo: 'Estudio Bíblico', desc: 'Profundizando en la Palabra de Dios juntos.' },
-  { dia: 'Viernes', hora: '7:00 PM', tipo: 'Noche de Oración', desc: 'Intercesión y búsqueda de la presencia de Dios.' },
+  { n: '01', day: 'Domingo', time: '10:00 AM', type: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
+  { n: '02', day: 'Miércoles', time: '7:00 PM', type: 'Estudio Bíblico', desc: 'Profundizando en la Palabra de Dios juntos.' },
+  { n: '03', day: 'Viernes', time: '7:00 PM', type: 'Noche de Oración', desc: 'Intercesión y búsqueda de la presencia de Dios.' },
 ]
 
 const specialEvents = [
   {
     titulo: 'Retiro de Jóvenes',
-    fecha: 'Próximo mes',
-    hora: 'Por confirmar',
+    fecha: 'Junio 2025',
     lugar: 'Por confirmar',
-    desc: 'Un fin de semana de encuentro, adoración y crecimiento para la juventud.',
     badge: 'Próximo',
-    color: 'bg-blue-50 border-blue-100 text-blue-600',
+    desc: 'Un fin de semana de encuentro, adoración y crecimiento para la juventud.',
   },
   {
     titulo: 'Conferencia de Matrimonios',
-    fecha: 'Próximo mes',
-    hora: 'Por confirmar',
+    fecha: 'Julio 2025',
     lugar: 'Templo principal',
-    desc: 'Fortalece tu hogar con enseñanzas prácticas y bíblicas para parejas.',
     badge: 'Especial',
-    color: 'bg-purple-50 border-purple-100 text-purple-600',
+    desc: 'Fortalece tu hogar con enseñanzas prácticas y bíblicas para parejas.',
   },
   {
     titulo: 'Noche de Alabanza',
-    fecha: 'Próximamente',
-    hora: '7:00 PM',
+    fecha: 'Por confirmar',
     lugar: 'Templo principal',
-    desc: 'Una noche dedicada a la adoración colectiva y la presencia de Dios.',
     badge: 'Especial',
-    color: 'bg-amber-50 border-amber-100 text-amber-600',
+    desc: 'Una noche dedicada a la adoración colectiva y la presencia de Dios.',
   },
 ]
 
@@ -42,79 +36,68 @@ export default function EventosPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative bg-slate-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/8 via-transparent to-transparent pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-6 py-36 md:py-48">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">Eventos</p>
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight mb-8 max-w-2xl">
+      <section className="bg-zinc-950 border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-36 md:pb-28">
+          <div className="flex items-start gap-4 mb-12">
+            <div className="w-0.5 h-12 bg-amber-500 flex-shrink-0" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 leading-relaxed">
+              Eventos<br />Agenda
+            </p>
+          </div>
+          <h1 className="text-[4.5rem] sm:text-[6.5rem] md:text-[9rem] font-black leading-[0.88] tracking-tighter text-white mb-10 max-w-3xl">
             Lo que<br />se viene.
           </h1>
-          <p className="text-slate-400 text-lg max-w-md leading-relaxed">
+          <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
             Mantente al día con nuestras actividades, servicios y eventos especiales.
           </p>
         </div>
       </section>
 
       {/* SERVICIOS REGULARES */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Cada semana</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-12">Servicios regulares</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {regularServices.map(({ dia, hora, tipo, desc }) => (
-              <div key={dia} className="group bg-slate-50 hover:bg-white border border-slate-100 hover:border-amber-200 hover:shadow-lg rounded-2xl p-8 transition duration-300">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-14 h-14 bg-amber-500/10 group-hover:bg-amber-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition">
-                    <span className="text-amber-600 font-black text-sm">{dia.slice(0, 3).toUpperCase()}</span>
-                  </div>
-                  <div>
-                    <p className="font-bold text-slate-900 text-xl">{hora}</p>
-                    <p className="text-amber-600 text-sm font-semibold">{tipo}</p>
-                  </div>
-                </div>
-                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="flex items-center justify-between mb-12 border-b border-zinc-100 pb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Cada semana</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-100 border border-zinc-100">
+            {regularServices.map(({ n, day, time, type, desc }) => (
+              <div key={n} className="p-8 md:p-10 hover:bg-zinc-50 transition">
+                <span className="text-[10px] font-bold text-zinc-300 tracking-widest block mb-6">{n}</span>
+                <p className="text-3xl font-black text-zinc-900 leading-none tracking-tight mb-1">{time}</p>
+                <p className="text-sm font-black text-zinc-900 mb-1">{type}</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-amber-500 mb-5">{day}</p>
+                <p className="text-xs text-zinc-400 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
-
-          <div className="mt-8 flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4">
-            <MapPin size={16} className="text-slate-400 flex-shrink-0" />
-            <p className="text-sm text-slate-600">
-              <span className="font-semibold text-slate-900">Ubicación:</span> Tu dirección aquí, Ciudad, País
-            </p>
+          <div className="mt-5 border border-zinc-100 px-6 py-4 flex items-center gap-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">Ubicación</p>
+            <div className="w-px h-4 bg-zinc-200" />
+            <p className="text-xs text-zinc-600">Tu dirección aquí, Ciudad, País</p>
           </div>
         </div>
       </section>
 
       {/* EVENTOS ESPECIALES */}
-      <section className="bg-slate-50 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Próximamente</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-12">Eventos especiales</h2>
-
-          <div className="space-y-5">
-            {specialEvents.map(({ titulo, fecha, hora, lugar, desc, badge, color }) => (
+      <section className="bg-zinc-50 border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="flex items-center justify-between mb-12 border-b border-zinc-200 pb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">— Próximamente</p>
+          </div>
+          <div className="space-y-px bg-zinc-200">
+            {specialEvents.map(({ titulo, fecha, lugar, badge, desc }) => (
               <div
                 key={titulo}
-                className="group bg-white border border-slate-100 hover:border-amber-200 hover:shadow-lg rounded-2xl p-7 transition duration-300 flex flex-col sm:flex-row sm:items-center gap-6"
+                className="bg-white hover:bg-zinc-50 transition p-8 md:p-10 flex flex-col sm:flex-row sm:items-start gap-8"
               >
-                <div className="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <Calendar size={24} className="text-amber-500" />
+                <div className="sm:w-48 flex-shrink-0">
+                  <span className="inline-block border border-zinc-200 text-[9px] font-black uppercase tracking-widest text-zinc-500 px-2.5 py-1 mb-3">{badge}</span>
+                  <p className="text-xs text-zinc-400">{fecha}</p>
+                  <p className="text-xs text-zinc-400">{lugar}</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-2 flex-wrap">
-                    <h3 className="font-bold text-slate-900 text-xl">{titulo}</h3>
-                    <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${color}`}>
-                      {badge}
-                    </span>
-                  </div>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-3">{desc}</p>
-                  <div className="flex flex-wrap gap-4 text-xs text-slate-400">
-                    <span className="flex items-center gap-1.5"><Calendar size={12} />{fecha}</span>
-                    <span className="flex items-center gap-1.5"><Clock size={12} />{hora}</span>
-                    <span className="flex items-center gap-1.5"><MapPin size={12} />{lugar}</span>
-                  </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black text-zinc-900 tracking-tight mb-3">{titulo}</h3>
+                  <p className="text-sm text-zinc-500 leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -123,16 +106,19 @@ export default function EventosPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-slate-950 text-white py-28">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">¿Primera vez?</p>
-          <h2 className="text-5xl font-black leading-tight mb-6">Ven y sé parte.</h2>
-          <p className="text-slate-400 text-lg mb-10">Cada servicio es una nueva oportunidad de encontrarte con Dios y con tu comunidad.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contacto" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-full transition text-sm">
-              Escríbenos <ArrowRight size={15} />
+      <section className="bg-amber-500">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-900/50 mb-8">— ¿Primera vez?</p>
+            <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-black">
+              Ven y<br />sé parte.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 flex-shrink-0">
+            <Link href="/contacto" className="inline-flex items-center gap-3 bg-black hover:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
+              Escríbenos <ArrowRight size={13} />
             </Link>
-            <Link href="/login" className="inline-flex items-center justify-center border border-white/15 hover:border-white/30 text-white px-8 py-4 rounded-full transition text-sm font-medium">
+            <Link href="/login" className="inline-flex items-center gap-3 border border-black text-black hover:bg-black hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
               Comunidad en línea
             </Link>
           </div>

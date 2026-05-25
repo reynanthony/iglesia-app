@@ -1,83 +1,82 @@
 import Link from 'next/link'
-import { ArrowRight, Play, Users, Heart, BookOpen, Music, Mic, Globe } from 'lucide-react'
+import { ArrowRight, Play } from 'lucide-react'
 
 const services = [
-  { day: 'Domingo', time: '10:00 AM', type: 'Servicio Principal', note: 'Familias y adultos' },
-  { day: 'Miércoles', time: '7:00 PM', type: 'Estudio Bíblico', note: 'Crecimiento en la Palabra' },
-  { day: 'Viernes', time: '7:00 PM', type: 'Noche de Oración', note: 'Intercesión comunitaria' },
+  { n: '01', day: 'Domingo', time: '10:00 AM', type: 'Servicio Principal' },
+  { n: '02', day: 'Miércoles', time: '7:00 PM', type: 'Estudio Bíblico' },
+  { n: '03', day: 'Viernes', time: '7:00 PM', type: 'Noche de Oración' },
 ]
 
 const values = [
-  { icon: Users, label: 'Comunidad', desc: 'Familia que crece junta en fe' },
-  { icon: Heart, label: 'Amor', desc: 'El amor de Cristo como centro' },
-  { icon: BookOpen, label: 'Palabra', desc: 'Fundados en la Biblia' },
-  { icon: Music, label: 'Adoración', desc: 'Glorificando a Dios juntos' },
-  { icon: Mic, label: 'Oración', desc: 'Comunión constante con Dios' },
-  { icon: Globe, label: 'Misión', desc: 'Impactando nuestra ciudad' },
+  { label: 'Comunidad', desc: 'Familia que crece unida en fe y amor.' },
+  { label: 'Palabra', desc: 'Fundados en la autoridad de la Biblia.' },
+  { label: 'Oración', desc: 'Comunión constante con Dios.' },
+  { label: 'Misión', desc: 'Impactando nuestra ciudad para Cristo.' },
 ]
 
 const ministeriosPrev = [
-  { nombre: 'Jóvenes', desc: 'Fe y comunidad para la próxima generación.', color: '#3b82f6' },
-  { nombre: 'Niños', desc: 'La Palabra de Dios de forma creativa y divertida.', color: '#22c55e' },
-  { nombre: 'Matrimonios', desc: 'Hogares fuertes con principios bíblicos.', color: '#a855f7' },
-  { nombre: 'Adoración', desc: 'Sirviendo con excelencia en cada servicio.', color: '#f59e0b' },
+  { n: '01', nombre: 'Jóvenes', desc: 'Fe y comunidad para la próxima generación.' },
+  { n: '02', nombre: 'Niños', desc: 'La Palabra de Dios de forma creativa.' },
+  { n: '03', nombre: 'Matrimonios', desc: 'Hogares fuertes con principios bíblicos.' },
+  { n: '04', nombre: 'Adoración', desc: 'Sirviendo con excelencia en cada servicio.' },
+]
+
+const predicas = [
+  { titulo: 'El poder de la oración', serie: 'Vida de oración', pastor: 'Pastor Principal', fecha: 'May 18' },
+  { titulo: 'Fe que mueve montañas', serie: 'Fe viva', pastor: 'Pastor Principal', fecha: 'May 11' },
+  { titulo: 'Identidad en Cristo', serie: 'Quiénes somos', pastor: 'Pastor Principal', fecha: 'May 4' },
 ]
 
 export default function HomePage() {
   return (
     <div>
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-slate-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/8 via-transparent to-slate-900/60 pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-6 py-36 md:py-52">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">
-            Iglesia El Manantial
-          </p>
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight mb-8 max-w-3xl">
-            Donde<br />
-            <span className="text-amber-400">fluye</span><br />
-            la vida.
+      {/* ── HERO ──────────────────────────────────────────────── */}
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-36 md:pb-28">
+          <div className="flex items-start gap-4 mb-12">
+            <div className="w-0.5 h-12 bg-amber-500 flex-shrink-0" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 leading-relaxed">
+              Iglesia El Manantial<br />Comunidad de fe
+            </p>
+          </div>
+
+          <h1 className="text-[4.5rem] sm:text-[6.5rem] md:text-[9rem] font-black leading-[0.88] tracking-tighter text-zinc-900 mb-14 max-w-5xl">
+            Donde<br />fluye<br /><span className="text-amber-500">la vida.</span>
           </h1>
-          <p className="text-slate-400 text-lg md:text-xl max-w-md leading-relaxed mb-12">
-            Una comunidad de fe viva donde encontrarás amor, propósito y una familia que te recibe como eres.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/nosotros"
-              className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-full transition text-sm"
-            >
-              Conócenos <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/predicas"
-              className="inline-flex items-center justify-center gap-2 border border-white/15 hover:border-white/30 text-white hover:bg-white/5 px-8 py-4 rounded-full transition text-sm font-medium"
-            >
-              <Play size={15} /> Ver última prédica
-            </Link>
+
+          <div className="flex flex-col sm:flex-row items-start gap-6 sm:gap-12">
+            <p className="text-sm text-zinc-500 leading-relaxed max-w-xs">
+              Una comunidad de fe viva donde encontrarás amor, propósito y una familia que te recibe como eres.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link href="/nosotros" className="inline-flex items-center gap-3 bg-zinc-900 hover:bg-black text-white text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 transition">
+                Conócenos <ArrowRight size={13} />
+              </Link>
+              <Link href="/predicas" className="inline-flex items-center gap-3 border border-zinc-200 hover:border-zinc-900 text-zinc-700 hover:text-zinc-900 text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 transition">
+                <Play size={12} /> Ver prédica
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── HORARIOS ─────────────────────────────────────────── */}
-      <section className="bg-white border-b border-slate-100">
+      <section className="bg-zinc-50 border-b border-zinc-100">
         <div className="max-w-6xl mx-auto px-6 py-14">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-8 text-center">
-            Horarios de servicios
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {services.map(({ day, time, type, note }) => (
-              <div key={day} className="group flex items-start gap-5 bg-slate-50 hover:bg-white border border-slate-100 hover:border-amber-200 hover:shadow-md rounded-2xl px-6 py-5 transition duration-300">
-                <div className="w-12 h-12 bg-amber-500/10 group-hover:bg-amber-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition">
-                  <span className="text-amber-500 font-black text-xs text-center leading-tight">
-                    {day.slice(0, 3).toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-base">{time}</p>
-                  <p className="text-slate-700 text-sm font-medium">{type}</p>
-                  <p className="text-slate-400 text-xs mt-0.5">{note}</p>
-                </div>
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">Servicios semanales</p>
+            <Link href="/eventos" className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 transition flex items-center gap-2">
+              Todos los eventos <ArrowRight size={11} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200">
+            {services.map(({ n, day, time, type }) => (
+              <div key={n} className="py-6 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0">
+                <span className="text-[10px] font-bold text-zinc-300 tracking-widest block mb-4">{n}</span>
+                <p className="text-3xl font-black text-zinc-900 leading-none tracking-tight mb-1">{time}</p>
+                <p className="text-xs font-bold text-zinc-900 mb-1">{type}</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-400">{day}</p>
               </div>
             ))}
           </div>
@@ -85,163 +84,121 @@ export default function HomePage() {
       </section>
 
       {/* ── QUIÉNES SOMOS ────────────────────────────────────── */}
-      <section className="bg-slate-50 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Quiénes somos</p>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
-                Una familia unida por la fe
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="lg:col-span-7">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-8">— Quiénes somos</p>
+              <h2 className="text-5xl md:text-6xl font-black leading-[0.9] tracking-tighter text-zinc-900 mb-8 max-w-lg">
+                Una familia<br />unida por<br />la fe.
               </h2>
-              <p className="text-slate-600 leading-relaxed mb-4 text-base">
+              <p className="text-sm text-zinc-500 leading-relaxed max-w-sm mb-10">
                 Iglesia El Manantial es una comunidad cristiana comprometida con la Palabra de Dios y el servicio a nuestra comunidad. Creemos en la transformación de vidas a través del amor de Cristo.
               </p>
-              <p className="text-slate-600 leading-relaxed mb-10 text-base">
-                Somos una iglesia vibrante con ministerios para todas las edades y un corazón apasionado por servir.
-              </p>
-              <Link
-                href="/nosotros"
-                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-amber-600 transition text-sm group"
-              >
-                Conoce nuestra historia
-                <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+              <Link href="/nosotros" className="inline-flex items-center gap-3 border border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 transition">
+                Nuestra historia <ArrowRight size={13} />
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              {values.map(({ icon: Icon, label, desc }) => (
-                <div key={label} className="bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md transition duration-300">
-                  <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-                    <Icon size={18} className="text-amber-500" />
+            <div className="lg:col-span-5">
+              <div className="grid grid-cols-2 divide-x divide-y divide-zinc-100 border border-zinc-100">
+                {values.map(({ label, desc }) => (
+                  <div key={label} className="p-6">
+                    <p className="text-xs font-black text-zinc-900 mb-2">{label}</p>
+                    <p className="text-[11px] text-zinc-400 leading-relaxed">{desc}</p>
                   </div>
-                  <p className="font-bold text-sm text-slate-900">{label}</p>
-                  <p className="text-slate-500 text-xs mt-1 leading-relaxed">{desc}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── ÚLTIMA PRÉDICA ───────────────────────────────────── */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
+      {/* ── PRÉDICAS ─────────────────────────────────────────── */}
+      <section className="bg-zinc-50 border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="flex items-end justify-between mb-12 border-b border-zinc-200 pb-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-3">Mensajes</p>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
-                Crece en la Palabra
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-3">— Mensajes</p>
+              <h2 className="text-4xl md:text-5xl font-black leading-none tracking-tighter text-zinc-900">
+                Crece en<br />la Palabra.
               </h2>
             </div>
-            <Link
-              href="/predicas"
-              className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-amber-600 transition group"
-            >
-              Ver todos <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+            <Link href="/predicas" className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 transition">
+              Ver todos <ArrowRight size={12} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { titulo: 'El poder de la oración', serie: 'Vida de oración', pastor: 'Pastor Principal' },
-              { titulo: 'Fe que mueve montañas', serie: 'Fe viva', pastor: 'Pastor Principal' },
-              { titulo: 'Identidad en Cristo', serie: 'Quiénes somos', pastor: 'Pastor Principal' },
-            ].map(({ titulo, serie, pastor }, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {predicas.map(({ titulo, serie, pastor, fecha }, i) => (
               <div key={titulo} className="group cursor-pointer">
-                <div className="relative bg-slate-900 rounded-2xl overflow-hidden mb-4 aspect-video flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                  <div className="w-14 h-14 bg-white/10 group-hover:bg-amber-500/80 border border-white/20 rounded-full flex items-center justify-center transition duration-300 relative z-10">
-                    <Play size={20} className="text-white ml-1" />
-                  </div>
+                <div className="relative bg-zinc-900 mb-5 overflow-hidden" style={{ aspectRatio: '16/10' }}>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   {i === 0 && (
-                    <span className="absolute top-3 left-3 bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-full">
+                    <div className="absolute top-0 left-0 bg-amber-500 text-black text-[9px] font-black uppercase tracking-widest px-3 py-1.5">
                       Reciente
-                    </span>
+                    </div>
                   )}
-                  <span className="absolute bottom-3 left-3 text-xs font-semibold text-amber-400 z-10">{serie}</span>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-11 h-11 border border-white/30 group-hover:bg-amber-500 group-hover:border-amber-500 flex items-center justify-center transition duration-200">
+                      <Play size={14} className="text-white ml-0.5" />
+                    </div>
+                  </div>
+                  <span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">{serie}</span>
                 </div>
-                <h3 className="font-bold text-slate-900 group-hover:text-amber-600 transition mb-1">{titulo}</h3>
-                <p className="text-slate-500 text-sm">{pastor}</p>
+                <h3 className="font-black text-zinc-900 group-hover:text-amber-600 transition text-base leading-tight mb-2">{titulo}</h3>
+                <p className="text-[11px] text-zinc-400 uppercase tracking-wider">{pastor} · {fecha}</p>
               </div>
             ))}
-          </div>
-
-          <div className="text-center mt-10 sm:hidden">
-            <Link href="/predicas" className="inline-flex items-center gap-2 border border-slate-200 hover:border-slate-400 text-slate-700 font-semibold px-6 py-3 rounded-full text-sm transition">
-              Ver todas las prédicas <ArrowRight size={15} />
-            </Link>
           </div>
         </div>
       </section>
 
       {/* ── MINISTERIOS ──────────────────────────────────────── */}
-      <section className="bg-slate-950 text-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
+      <section className="bg-zinc-950 border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="flex items-end justify-between mb-12 border-b border-zinc-800 pb-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-3">Ministerios</p>
-              <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-                Un lugar<br />para todos
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600 mb-3">— Ministerios</p>
+              <h2 className="text-4xl md:text-5xl font-black leading-none tracking-tighter text-white">
+                Un lugar<br />para todos.
               </h2>
             </div>
-            <Link
-              href="/ministerios"
-              className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition group"
-            >
-              Ver todos <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+            <Link href="/ministerios" className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition">
+              Ver todos <ArrowRight size={12} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {ministeriosPrev.map(({ nombre, desc, color }) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 border border-zinc-800">
+            {ministeriosPrev.map(({ n, nombre, desc }) => (
               <Link
-                key={nombre}
+                key={n}
                 href="/ministerios"
-                className="group bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 rounded-2xl p-6 transition duration-300"
+                className="group p-8 hover:bg-zinc-900 transition"
               >
-                <div
-                  className="w-10 h-10 rounded-xl mb-5"
-                  style={{ backgroundColor: color + '25' }}
-                >
-                  <div className="w-full h-full rounded-xl flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
-                  </div>
-                </div>
-                <h3 className="font-bold text-white mb-2 group-hover:text-amber-400 transition">{nombre}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+                <span className="text-[10px] font-bold text-zinc-700 tracking-widest block mb-5">{n}</span>
+                <h3 className="font-black text-white text-lg leading-tight mb-3 group-hover:text-amber-400 transition">{nombre}</h3>
+                <p className="text-[11px] text-zinc-500 leading-relaxed">{desc}</p>
               </Link>
             ))}
-          </div>
-
-          <div className="text-center mt-10 sm:hidden">
-            <Link href="/ministerios" className="inline-flex items-center gap-2 border border-slate-700 hover:border-slate-500 text-slate-400 font-semibold px-6 py-3 rounded-full text-sm transition">
-              Ver todos los ministerios <ArrowRight size={15} />
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── CTA FINAL ────────────────────────────────────────── */}
-      <section className="bg-white py-32">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Eres bienvenido</p>
-          <h2 className="text-5xl md:text-6xl font-black text-slate-900 leading-tight mb-6">
-            Tu historia<br />comienza aquí.
-          </h2>
-          <p className="text-slate-500 text-lg leading-relaxed mb-12 max-w-md mx-auto">
-            No importa dónde estés en tu caminar espiritual, hay un lugar para ti en El Manantial.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contacto"
-              className="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-full transition text-sm"
-            >
-              Visítanos este domingo
+      {/* ── CTA ──────────────────────────────────────────────── */}
+      <section className="bg-amber-500">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-900/50 mb-8">— Eres bienvenido</p>
+            <h2 className="text-5xl md:text-7xl font-black leading-[0.88] tracking-tighter text-black">
+              Tu historia<br />comienza<br />aquí.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 flex-shrink-0">
+            <Link href="/contacto" className="inline-flex items-center gap-3 bg-black hover:bg-zinc-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
+              Visítanos este domingo <ArrowRight size={13} />
             </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center border border-slate-200 hover:border-slate-400 text-slate-700 font-bold px-8 py-4 rounded-full transition text-sm"
-            >
+            <Link href="/login" className="inline-flex items-center gap-3 border border-black text-black hover:bg-black hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition">
               Unirte a la comunidad
             </Link>
           </div>

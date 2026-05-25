@@ -1,10 +1,10 @@
-import { MapPin, Clock, Phone, Mail, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 const info = [
-  { icon: MapPin, label: 'Dirección', value: 'Tu dirección aquí, Ciudad, País' },
-  { icon: Phone, label: 'Teléfono', value: '+1 (809) 000-0000' },
-  { icon: Mail, label: 'Email', value: 'info@elmanantial.org' },
-  { icon: Clock, label: 'Horarios', value: 'Dom 10AM · Mié 7PM · Vie 7PM' },
+  { label: 'Dirección', value: 'Tu dirección aquí, Ciudad, País' },
+  { label: 'Teléfono', value: '+1 (809) 000-0000' },
+  { label: 'Email', value: 'info@elmanantial.org' },
+  { label: 'Servicios', value: 'Dom 10AM · Mié 7PM · Vie 7PM' },
 ]
 
 export default function ContactoPage() {
@@ -12,89 +12,85 @@ export default function ContactoPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative bg-slate-950 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/8 via-transparent to-transparent pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto px-6 py-36 md:py-48">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-6">Contacto</p>
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight mb-8 max-w-2xl">
+      <section className="bg-zinc-950 border-b border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-36 md:pb-28">
+          <div className="flex items-start gap-4 mb-12">
+            <div className="w-0.5 h-12 bg-amber-500 flex-shrink-0" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 leading-relaxed">
+              Contacto<br />Encuéntranos
+            </p>
+          </div>
+          <h1 className="text-[4.5rem] sm:text-[6.5rem] md:text-[9rem] font-black leading-[0.88] tracking-tighter text-white mb-10 max-w-3xl">
             Visítanos.
           </h1>
-          <p className="text-slate-400 text-lg max-w-md leading-relaxed">
+          <p className="text-sm text-zinc-400 leading-relaxed max-w-sm">
             Estamos aquí para recibirte. No importa quién eres, eres bienvenido en El Manantial.
           </p>
         </div>
       </section>
 
-      {/* CONTACTO */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      {/* INFO + FORMULARIO */}
+      <section className="bg-white border-b border-zinc-100">
+        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
             {/* Info */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Encuéntranos</p>
-              <h2 className="text-4xl font-bold text-slate-900 mb-10">Información de contacto</h2>
+            <div className="lg:col-span-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-10">— Información</p>
 
-              <div className="space-y-5">
-                {info.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="flex items-start gap-5 bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 hover:shadow-md transition duration-300">
-                    <div className="w-11 h-11 bg-amber-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Icon size={18} className="text-amber-500" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-0.5">{label}</p>
-                      <p className="text-slate-900 font-medium text-sm">{value}</p>
-                    </div>
+              <div className="space-y-px bg-zinc-100">
+                {info.map(({ label, value }) => (
+                  <div key={label} className="bg-white hover:bg-zinc-50 transition p-5 flex flex-col gap-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-400">{label}</p>
+                    <p className="text-sm font-bold text-zinc-900">{value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-10 bg-slate-950 text-white rounded-2xl p-7">
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-3">Primera vez</p>
-                <h3 className="text-xl font-bold mb-3">¿Es tu primera visita?</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  No necesitas saber nada ni traer nada especial. Solo ven como eres. Nuestro equipo de bienvenida estará listo para recibirte.
+              <div className="mt-8 border-l-2 border-amber-500 pl-5 py-1">
+                <p className="text-xs font-black text-zinc-900 mb-2">¿Primera visita?</p>
+                <p className="text-xs text-zinc-500 leading-relaxed">
+                  No necesitas saber nada ni traer nada especial. Solo ven como eres. Nuestro equipo te recibirá.
                 </p>
               </div>
             </div>
 
             {/* Formulario */}
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-amber-500 mb-4">Escríbenos</p>
-              <h2 className="text-4xl font-bold text-slate-900 mb-10">Envíanos un mensaje</h2>
+            <div className="lg:col-span-8">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-10">— Escríbenos</p>
 
               <form className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Nombre</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 block mb-2">Nombre</label>
                     <input
                       type="text"
                       placeholder="Tu nombre"
-                      className="w-full border border-slate-200 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition bg-white"
+                      className="w-full border border-zinc-200 focus:border-zinc-900 px-4 py-3.5 text-sm text-zinc-900 placeholder:text-zinc-300 focus:outline-none transition bg-white"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Apellido</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 block mb-2">Apellido</label>
                     <input
                       type="text"
                       placeholder="Tu apellido"
-                      className="w-full border border-slate-200 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition bg-white"
+                      className="w-full border border-zinc-200 focus:border-zinc-900 px-4 py-3.5 text-sm text-zinc-900 placeholder:text-zinc-300 focus:outline-none transition bg-white"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Email</label>
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 block mb-2">Email</label>
                   <input
                     type="email"
                     placeholder="tu@email.com"
-                    className="w-full border border-slate-200 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition bg-white"
+                    className="w-full border border-zinc-200 focus:border-zinc-900 px-4 py-3.5 text-sm text-zinc-900 placeholder:text-zinc-300 focus:outline-none transition bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Asunto</label>
-                  <select className="w-full border border-slate-200 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none transition bg-white appearance-none">
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 block mb-2">Asunto</label>
+                  <select className="w-full border border-zinc-200 focus:border-zinc-900 px-4 py-3.5 text-sm text-zinc-900 focus:outline-none transition bg-white">
                     <option value="">Selecciona un asunto</option>
                     <option>Primera visita</option>
                     <option>Oración</option>
@@ -104,19 +100,19 @@ export default function ContactoPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Mensaje</label>
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 block mb-2">Mensaje</label>
                   <textarea
                     rows={5}
                     placeholder="¿En qué podemos ayudarte?"
-                    className="w-full border border-slate-200 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition bg-white resize-none"
+                    className="w-full border border-zinc-200 focus:border-zinc-900 px-4 py-3.5 text-sm text-zinc-900 placeholder:text-zinc-300 focus:outline-none transition bg-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-4 rounded-full transition text-sm"
+                  className="inline-flex items-center gap-3 bg-zinc-900 hover:bg-black text-white text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 transition"
                 >
-                  Enviar mensaje <ArrowRight size={15} />
+                  Enviar mensaje <ArrowRight size={13} />
                 </button>
               </form>
             </div>
