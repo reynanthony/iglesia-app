@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
-import { Home, MessageCircle, Users, LogOut, PlusSquare, User, Search } from 'lucide-react'
+import { Home, MessageCircle, Users, LogOut, PlusSquare, User, Search, BookOpen } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -18,13 +18,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .single()
 
   const navItems = [
-    { href: '/app/feed', icon: Home, label: 'Feed' },
-    { href: '/app/buscar', icon: Search, label: 'Buscar' },
-    { href: '/app/nuevo-post', icon: PlusSquare, label: 'Publicar' },
-    { href: '/app/chat', icon: MessageCircle, label: 'Chat' },
-    { href: '/app/oracion', icon: Users, label: 'Oracion' },
-    { href: `/app/perfil/${profile?.username}`, icon: User, label: 'Perfil' },
-  ]
+  { href: '/app/feed', icon: Home, label: 'Feed' },
+  { href: '/app/buscar', icon: Search, label: 'Buscar' },
+  { href: '/app/nuevo-post', icon: PlusSquare, label: 'Publicar' },
+  { href: '/app/chat', icon: MessageCircle, label: 'Chat' },
+  { href: '/app/ministerios', icon: BookOpen, label: 'Ministerios' },
+  { href: '/app/oracion', icon: Users, label: 'Oracion' },
+  { href: '/app/perfil/' + profile?.username, icon: User, label: 'Perfil' },
+]
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
