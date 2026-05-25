@@ -37,7 +37,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html,
 body {
+  overflow-x: hidden;
   background-color: var(--surface);
   color: var(--ink);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
