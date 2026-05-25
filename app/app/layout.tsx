@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -59,6 +59,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Globe size={16} />
             <span>Página principal</span>
           </Link>
+          {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
+            <Link
+              href="/admin"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#111111]"
+              style={{ color: '#4D4D4D' }}
+            >
+              <ShieldCheck size={16} />
+              <span>Panel Admin</span>
+            </Link>
+          )}
 
           {/* User card */}
           <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
@@ -106,6 +116,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <span className="font-black text-sm tracking-tight" style={{ color: '#F5F5F5' }}>El Manantial</span>
         </Link>
         <div className="flex items-center gap-2">
+          {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
+            <Link href="/admin" className="p-1.5 rounded-lg transition" style={{ color: '#4D4D4D' }} title="Panel Admin">
+              <ShieldCheck size={18} />
+            </Link>
+          )}
           <NotificationBell userId={user.id} />
           <Link href={profileHref}>
             <div
