@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { Pin, Trash2, Play, FileText, Megaphone, ImageOff } from 'lucide-react'
+import Link from 'next/link'
+import { Pin, Trash2, Play, FileText, Megaphone, ImageOff, Plus, Pencil } from 'lucide-react'
 import { pinContent, deleteContent } from '@/app/actions/admin'
 
 const typeLabels: Record<string, { label: string; Icon: any; color: string }> = {
@@ -42,6 +43,11 @@ export default async function AdminContenidoPage({
             {content?.length ?? 0} publicaciones · artículos, videos, anuncios
           </p>
         </div>
+        <Link href="/admin/contenido/nuevo"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black self-start"
+          style={{ background: '#F5F5F5' }}>
+          <Plus size={14} /> Nuevo contenido
+        </Link>
       </div>
 
       {/* Filters */}
@@ -140,6 +146,11 @@ export default async function AdminContenidoPage({
 
               {/* Actions */}
               <div className="flex items-center gap-2 flex-shrink-0">
+                <Link href={`/admin/contenido/${item.id}/editar`}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center"
+                  style={{ background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
+                  <Pencil size={13} style={{ color: '#8A8A8A' }} />
+                </Link>
                 <form action={async () => {
                   'use server'
                   await pinContent(item.id, !item.pinned)

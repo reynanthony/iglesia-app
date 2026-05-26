@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Plus, Pencil, Trash2, Play, Pin } from 'lucide-react'
 import { deletePredica } from '@/app/actions/predicas-admin'
 
+
 export default async function AdminPredicasPage() {
   const supabase = await createClient()
   const { data: predicas } = await supabase
@@ -70,7 +71,7 @@ export default async function AdminPredicasPage() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 <Link href={`/admin/predicas/${predica.id}/editar`}
                   className="w-9 h-9 rounded-xl flex items-center justify-center"
-                  style={{ background: '#1A1A1A' }}>
+                  style={{ background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
                   <Pencil size={13} style={{ color: '#8A8A8A' }} />
                 </Link>
                 <form action={async () => {

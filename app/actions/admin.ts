@@ -112,6 +112,107 @@ export async function toggleRoom(roomId: string, isActive: boolean) {
   return { success: true }
 }
 
+// ── Ministry content (admin full access) ────────────────────
+async function uploadToStorage(
+  supabase: Awaited<ReturnType<typeof import('@/lib/supabase/server').createClient>>,
+  file: File,
+  bucket: string
+) {
+  const ext = file.name.split('.').pop() ?? 'jpg'
+  const path = `admin/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  const { error } = await supabase.storage.from(bucket).upload(path, file, { contentType: file.type })
+  if (error) return null
+  return supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl
+}
+
+export async function createAdminContent(formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const image = formData.get('image') as File
+  let image_url: string | null = null
+  if (image && image.size > 0) image_url = await uploadToStorage(ctx.supabase, image, 'posts')
+
+  const ministry_id = (formData.get('ministry_id') as string) || null
+  const { error } = await ctx.supabase.from('ministry_content').insert({
+    title:      (formData.get('title') as string).trim(),
+    body:       (formData.get('body') as string ?? '').trim(),
+    type:       (formData.get('type') as string) || 'articulo',
+    video_url:  (formData.get('video_url') as string ?? '').trim() || null,
+    image_url,
+    ministry_id,
+    user_id:    ctx.userId,
+    pinned:     formData.get('pinned') === 'on',
+  })
+  if (error) return { error: 'No se pudo crear' }
+  revalidatePath('/admin/contenido')
+  revalidatePath('/ministerios')
+  return { success: true }
+}
+
+export async function updateAdminContent(id: string, formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const image = formData.get('image') as File
+  const updates: Record<string, unknown> = {
+    title:      (formData.get('title') as string).trim(),
+    body:       (formData.get('body') as string ?? '').trim(),
+    type:       formData.get('type') as string,
+    video_url:  (formData.get('video_url') as string ?? '').trim() || null,
+    ministry_id: (formData.get('ministry_id') as string) || null,
+    pinned:     formData.get('pinned') === 'on',
+  }
+  if (image && image.size > 0) {
+    const url = await uploadToStorage(ctx.supabase, image, 'posts')
+    if (url) updates.image_url = url
+  }
+  await ctx.supabase.from('ministry_content').update(updates).eq('id', id)
+  revalidatePath('/admin/contenido')
+  revalidatePath('/ministerios')
+  return { success: true }
+}
+
+// ── Posts (admin full access) ────────────────────────────────
+export async function createAdminPost(formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const image = formData.get('image') as File
+  let image_url: string | null = null
+  if (image && image.size > 0) image_url = await uploadToStorage(ctx.supabase, image, 'posts')
+
+  const { error } = await ctx.supabase.from('posts').insert({
+    content:  (formData.get('content') as string ?? '').trim() || null,
+    image_url,
+    user_id:  ctx.userId,
+    pinned:   formData.get('pinned') === 'on',
+  })
+  if (error) return { error: 'No se pudo publicar' }
+  revalidatePath('/admin/posts')
+  revalidatePath('/app/feed')
+  return { success: true }
+}
+
+export async function updateAdminPost(postId: string, formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const image = formData.get('image') as File
+  const updates: Record<string, unknown> = {
+    content: (formData.get('content') as string ?? '').trim() || null,
+    pinned:  formData.get('pinned') === 'on',
+  }
+  if (image && image.size > 0) {
+    const url = await uploadToStorage(ctx.supabase, image, 'posts')
+    if (url) updates.image_url = url
+  }
+  await ctx.supabase.from('posts').update(updates).eq('id', postId)
+  revalidatePath('/admin/posts')
+  revalidatePath('/app/feed')
+  return { success: true }
+}
+
 // ── Page content ─────────────────────────────────────────────
 export async function updatePageContent(page: string, content: Record<string, unknown>) {
   const ctx = await checkAdminOrPastor()

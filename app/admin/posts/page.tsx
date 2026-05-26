@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
 import DeletePostButton from '@/components/admin/DeletePostButton'
 import PinPostButton from '@/components/admin/PinPostButton'
-import { Search, ImageIcon, Pin } from 'lucide-react'
+import { Search, ImageIcon, Pin, Plus, Pencil } from 'lucide-react'
 
 export default async function AdminPostsPage({
   searchParams,
@@ -24,9 +25,16 @@ export default async function AdminPostsPage({
 
   return (
     <div className="p-6 md:p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Publicaciones</h1>
-        <p className="text-slate-500 text-sm mt-1">{posts?.length ?? 0} publicaciones</p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Publicaciones</h1>
+          <p className="text-slate-500 text-sm mt-1">{posts?.length ?? 0} publicaciones</p>
+        </div>
+        <Link href="/admin/posts/nuevo"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black flex-shrink-0"
+          style={{ background: '#F5F5F5' }}>
+          <Plus size={14} /> Nueva publicación
+        </Link>
       </div>
 
       <div className="flex flex-col md:flex-row gap-3 mb-6">
@@ -103,6 +111,11 @@ export default async function AdminPostsPage({
               </div>
 
               <div className="flex items-center gap-2 flex-shrink-0">
+                <Link href={`/admin/posts/${post.id}/editar`}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition"
+                  style={{ background: '#1A1A1A', color: '#5A5A5A', border: '1px solid #2A2A2A' }}>
+                  <Pencil size={12} /> Editar
+                </Link>
                 <PinPostButton postId={post.id} pinned={post.pinned} />
                 <DeletePostButton postId={post.id} />
               </div>
