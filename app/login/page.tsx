@@ -48,6 +48,7 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
+              autoComplete="email"
               placeholder="tu@correo.com"
               className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition text-[#111111]"
               style={{
@@ -64,6 +65,7 @@ export default function LoginPage() {
               name="password"
               type="password"
               required
+              autoComplete="current-password"
               placeholder="••••••••"
               className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition text-[#111111]"
               style={{

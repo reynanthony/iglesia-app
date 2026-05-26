@@ -64,11 +64,11 @@ export default function RegistroPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {[
-            { name: 'full_name',  label: 'Nombre completo',    type: 'text',     placeholder: 'Juan Pérez' },
-            { name: 'username',   label: 'Nombre de usuario',  type: 'text',     placeholder: 'juanperez' },
-            { name: 'email',      label: 'Correo electrónico', type: 'email',    placeholder: 'tu@correo.com' },
-            { name: 'password',   label: 'Contraseña',         type: 'password', placeholder: '••••••••', minLength: 6 },
-          ].map(({ name, label, type, placeholder, minLength }) => (
+            { name: 'full_name',  label: 'Nombre completo',    type: 'text',     placeholder: 'Juan Pérez',    autoComplete: 'name' },
+            { name: 'username',   label: 'Nombre de usuario',  type: 'text',     placeholder: 'juanperez',      autoComplete: 'username' },
+            { name: 'email',      label: 'Correo electrónico', type: 'email',    placeholder: 'tu@correo.com',  autoComplete: 'email' },
+            { name: 'password',   label: 'Contraseña',         type: 'password', placeholder: '••••••••',       autoComplete: 'new-password', minLength: 6 },
+          ].map(({ name, label, type, placeholder, autoComplete, minLength }) => (
             <div key={name}>
               <label className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2.5" style={{ color: '#8A8A8A' }}>
                 {label}
@@ -78,6 +78,7 @@ export default function RegistroPage() {
                 type={type}
                 required
                 placeholder={placeholder}
+                autoComplete={autoComplete}
                 minLength={minLength}
                 className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition"
                 style={{
