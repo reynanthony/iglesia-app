@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Play, Pin } from 'lucide-react'
-import { deletePredica } from '@/app/actions/predicas-admin'
+import { Plus, Pencil, Play, Pin } from 'lucide-react'
+import PinContentButton from '@/components/admin/PinContentButton'
+import DeletePredicaButton from '@/components/admin/DeletePredicaButton'
 
 
 export default async function AdminPredicasPage() {
@@ -74,16 +75,8 @@ export default async function AdminPredicasPage() {
                   style={{ background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
                   <Pencil size={13} style={{ color: '#8A8A8A' }} />
                 </Link>
-                <form action={async () => {
-                  'use server'
-                  await deletePredica(predica.id)
-                }}>
-                  <button type="submit"
-                    className="w-9 h-9 rounded-xl flex items-center justify-center"
-                    style={{ background: '#1A1A1A' }}>
-                    <Trash2 size={13} style={{ color: '#6B3333' }} />
-                  </button>
-                </form>
+                <PinContentButton contentId={predica.id} pinned={predica.pinned ?? false} />
+                <DeletePredicaButton predicaId={predica.id} />
               </div>
             </div>
           </div>

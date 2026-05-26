@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { Mic2, Users, Radio, Trash2, Power, Plus, Pencil } from 'lucide-react'
-import { deleteRoom, toggleRoom } from '@/app/actions/admin'
+import { Mic2, Users, Radio, Plus, Pencil } from 'lucide-react'
 import Link from 'next/link'
+import ToggleRoomButton from '@/components/admin/ToggleRoomButton'
+import DeleteRoomButton from '@/components/admin/DeleteRoomButton'
 
 export default async function AdminOracionPage() {
   const supabase = await createClient()
@@ -83,27 +84,8 @@ export default async function AdminOracionPage() {
                 title="Editar sala">
                 <Pencil size={13} style={{ color: '#8A8A8A' }} />
               </Link>
-              <form action={async () => {
-                'use server'
-                await toggleRoom(room.id, !room.is_active)
-              }}>
-                <button type="submit"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center transition"
-                  style={{ background: room.is_active ? 'rgba(100,200,100,0.10)' : '#1A1A1A', border: '1px solid #2A2A2A' }}
-                  title={room.is_active ? 'Desactivar sala' : 'Activar sala'}>
-                  <Power size={13} style={{ color: room.is_active ? '#6BCB6B' : '#4D4D4D' }} />
-                </button>
-              </form>
-              <form action={async () => {
-                'use server'
-                await deleteRoom(room.id)
-              }}>
-                <button type="submit"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center"
-                  style={{ background: '#1A1A1A' }}>
-                  <Trash2 size={13} style={{ color: '#6B3333' }} />
-                </button>
-              </form>
+              <ToggleRoomButton roomId={room.id} isActive={room.is_active} />
+              <DeleteRoomButton roomId={room.id} />
             </div>
           </div>
         ))}

@@ -84,6 +84,10 @@ export async function pinContent(contentId: string, pinned: boolean) {
   if (!ctx) return { error: 'No autorizado' }
   await ctx.supabase.from('ministry_content').update({ pinned }).eq('id', contentId)
   revalidatePath('/admin/contenido')
+  revalidatePath('/admin/predicas')
+  revalidatePath('/ministerios', 'layout')
+  revalidatePath('/predicas')
+  revalidatePath('/')
   return { success: true }
 }
 
@@ -92,6 +96,10 @@ export async function deleteContent(contentId: string) {
   if (!ctx) return { error: 'No autorizado' }
   await ctx.supabase.from('ministry_content').delete().eq('id', contentId)
   revalidatePath('/admin/contenido')
+  revalidatePath('/admin/predicas')
+  revalidatePath('/ministerios', 'layout')
+  revalidatePath('/predicas')
+  revalidatePath('/')
   return { success: true }
 }
 
@@ -148,7 +156,10 @@ export async function createAdminContent(formData: FormData) {
   })
   if (error) return { error: 'No se pudo crear' }
   revalidatePath('/admin/contenido')
-  revalidatePath('/ministerios')
+  revalidatePath('/admin/predicas')
+  revalidatePath('/ministerios', 'layout')
+  revalidatePath('/predicas')
+  revalidatePath('/')
   return { success: true }
 }
 
@@ -171,7 +182,10 @@ export async function updateAdminContent(id: string, formData: FormData) {
   }
   await ctx.supabase.from('ministry_content').update(updates).eq('id', id)
   revalidatePath('/admin/contenido')
-  revalidatePath('/ministerios')
+  revalidatePath('/admin/predicas')
+  revalidatePath('/ministerios', 'layout')
+  revalidatePath('/predicas')
+  revalidatePath('/')
   return { success: true }
 }
 

@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Pin, Trash2, Play, FileText, Megaphone, ImageOff, Plus, Pencil } from 'lucide-react'
-import { pinContent, deleteContent } from '@/app/actions/admin'
+import { Play, FileText, Megaphone, ImageOff, Plus, Pencil, Pin } from 'lucide-react'
+import PinContentButton from '@/components/admin/PinContentButton'
+import DeleteContentButton from '@/components/admin/DeleteContentButton'
 
 const typeLabels: Record<string, { label: string; Icon: any; color: string }> = {
   articulo:  { label: 'Artículo',  Icon: FileText,   color: 'text-blue-400 bg-blue-400/10' },
@@ -151,27 +152,8 @@ export default async function AdminContenidoPage({
                   style={{ background: '#1A1A1A', border: '1px solid #2A2A2A' }}>
                   <Pencil size={13} style={{ color: '#8A8A8A' }} />
                 </Link>
-                <form action={async () => {
-                  'use server'
-                  await pinContent(item.id, !item.pinned)
-                }}>
-                  <button type="submit"
-                    className="w-9 h-9 rounded-xl flex items-center justify-center transition"
-                    style={{ background: item.pinned ? '#1A2A1A' : '#1A1A1A', border: '1px solid #2A2A2A' }}
-                    title={item.pinned ? 'Desfijar' : 'Fijar'}>
-                    <Pin size={13} style={{ color: item.pinned ? '#6BCB6B' : '#4D4D4D' }} />
-                  </button>
-                </form>
-                <form action={async () => {
-                  'use server'
-                  await deleteContent(item.id)
-                }}>
-                  <button type="submit"
-                    className="w-9 h-9 rounded-xl flex items-center justify-center transition"
-                    style={{ background: '#1A1A1A' }}>
-                    <Trash2 size={13} style={{ color: '#6B3333' }} />
-                  </button>
-                </form>
+                <PinContentButton contentId={item.id} pinned={item.pinned} />
+                <DeleteContentButton contentId={item.id} />
               </div>
             </div>
           )
