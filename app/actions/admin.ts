@@ -1,7 +1,9 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 async function checkAdmin() {
   const supabase = await createClient()
@@ -211,6 +213,98 @@ export async function updateAdminPost(postId: string, formData: FormData) {
   revalidatePath('/admin/posts')
   revalidatePath('/app/feed')
   return { success: true }
+}
+
+// ── Rooms (admin create/edit) ────────────────────────────────
+export async function createAdminRoom(formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  const { error } = await ctx.supabase.from('rooms').insert({
+    name:             (formData.get('name') as string).trim(),
+    description:      (formData.get('description') as string ?? '').trim() || null,
+    max_participants: parseInt(formData.get('max_participants') as string) || 20,
+    created_by:       ctx.userId,
+    is_active:        true,
+  })
+  if (error) return { error: 'No se pudo crear la sala' }
+  revalidatePath('/admin/oracion')
+  revalidatePath('/app/oracion')
+  redirect('/admin/oracion')
+}
+
+export async function updateAdminRoom(roomId: string, formData: FormData) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  await ctx.supabase.from('rooms').update({
+    name:             (formData.get('name') as string).trim(),
+    description:      (formData.get('description') as string ?? '').trim() || null,
+    max_participants: parseInt(formData.get('max_participants') as string) || 20,
+    is_active:        formData.get('is_active') === 'on',
+  }).eq('id', roomId)
+  revalidatePath('/admin/oracion')
+  revalidatePath('/app/oracion')
+  redirect('/admin/oracion')
+}
+
+// ── Users (service role required) ───────────────────────────
+export async function createAdminUser(formData: FormData) {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+
+  let serviceClient
+  try { serviceClient = createServiceClient() }
+  catch { return { error: 'Configura SUPABASE_SERVICE_ROLE_KEY en Vercel para crear usuarios desde el admin.' } }
+
+  const email     = (formData.get('email') as string).trim()
+  const password  = (formData.get('password') as string)
+  const full_name = (formData.get('full_name') as string).trim()
+  const username  = (formData.get('username') as string).trim()
+  const role      = (formData.get('role') as string) || 'miembro'
+
+  const { data, error } = await serviceClient.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { full_name, username },
+  })
+  if (error) return { error: error.message }
+
+  await serviceClient.from('profiles').upsert({
+    id: data.user.id, full_name, username, role,
+  })
+
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+export async function deleteAdminUser(userId: string) {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+
+  let serviceClient
+  try { serviceClient = createServiceClient() }
+  catch { return { error: 'Configura SUPABASE_SERVICE_ROLE_KEY en Vercel para eliminar usuarios.' } }
+
+  const { error } = await serviceClient.auth.admin.deleteUser(userId)
+  if (error) return { error: error.message }
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+// ── Page images ──────────────────────────────────────────────
+export async function uploadPageImage(formData: FormData): Promise<{ url?: string; error?: string }> {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const file = formData.get('file') as File
+  if (!file || file.size === 0) return { error: 'No se seleccionó archivo' }
+
+  const ext = file.name.split('.').pop() ?? 'jpg'
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  const { error } = await ctx.supabase.storage.from('paginas').upload(path, file, { contentType: file.type })
+  if (error) return { error: 'Error al subir imagen' }
+  const { data } = ctx.supabase.storage.from('paginas').getPublicUrl(path)
+  return { url: data.publicUrl }
 }
 
 // ── Page content ─────────────────────────────────────────────

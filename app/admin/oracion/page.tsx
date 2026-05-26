@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { Mic2, Users, Radio, Trash2, Power } from 'lucide-react'
+import { Mic2, Users, Radio, Trash2, Power, Plus, Pencil } from 'lucide-react'
 import { deleteRoom, toggleRoom } from '@/app/actions/admin'
+import Link from 'next/link'
 
 export default async function AdminOracionPage() {
   const supabase = await createClient()
@@ -23,6 +24,11 @@ export default async function AdminOracionPage() {
             {rooms?.length ?? 0} salas · {active} activa{active !== 1 ? 's' : ''}
           </p>
         </div>
+        <Link href="/admin/oracion/nuevo"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold transition"
+          style={{ background: '#F5F5F5', color: '#0A0A0A' }}>
+          <Plus size={13} /> Nueva sala
+        </Link>
       </div>
 
       {/* List */}
@@ -71,6 +77,12 @@ export default async function AdminOracionPage() {
 
             {/* Actions */}
             <div className="flex items-center gap-2 flex-shrink-0">
+              <Link href={`/admin/oracion/${room.id}/editar`}
+                className="w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{ background: '#1A1A1A', border: '1px solid #2A2A2A' }}
+                title="Editar sala">
+                <Pencil size={13} style={{ color: '#8A8A8A' }} />
+              </Link>
               <form action={async () => {
                 'use server'
                 await toggleRoom(room.id, !room.is_active)

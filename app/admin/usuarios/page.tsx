@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import RoleSelector from '@/components/admin/RoleSelector'
 import MinistryAssignment from '@/components/admin/MinistryAssignment'
-import { Search } from 'lucide-react'
+import DeleteUserButton from '@/components/admin/DeleteUserButton'
+import { Search, Plus } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function AdminUsuariosPage({
   searchParams,
@@ -41,9 +43,16 @@ export default async function AdminUsuariosPage({
 
   return (
     <div className="p-6 md:p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Usuarios</h1>
-        <p className="text-slate-500 text-sm mt-1">{users?.length ?? 0} miembros encontrados</p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Usuarios</h1>
+          <p className="text-slate-500 text-sm mt-1">{users?.length ?? 0} miembros encontrados</p>
+        </div>
+        <Link href="/admin/usuarios/nuevo"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold transition flex-shrink-0"
+          style={{ background: '#F5F5F5', color: '#0A0A0A' }}>
+          <Plus size={13} /> Nuevo usuario
+        </Link>
       </div>
 
       <div className="flex flex-col md:flex-row gap-3 mb-6">
@@ -88,6 +97,7 @@ export default async function AdminUsuariosPage({
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden md:table-cell">Registrado</th>
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium">Rol</th>
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden lg:table-cell">Ministerios asignados</th>
+              <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody>
@@ -133,6 +143,9 @@ export default async function AdminUsuariosPage({
                         {user.role === 'admin' ? 'Acceso total' : '—'}
                       </span>
                     )}
+                  </td>
+                  <td className="px-5 py-3.5 text-right">
+                    <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
                   </td>
                 </tr>
               )

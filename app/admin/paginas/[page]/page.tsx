@@ -2,10 +2,11 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import PageEditor from '@/components/admin/PageEditor'
 
-const pagesMeta: Record<string, { label: string; fields: { key: string; label: string; type: 'text' | 'textarea' | 'url'; hint?: string }[] }> = {
+const pagesMeta: Record<string, { label: string; fields: { key: string; label: string; type: 'text' | 'textarea' | 'url' | 'image'; hint?: string }[] }> = {
   home: {
     label: 'Página de inicio',
     fields: [
+      { key: 'hero_image',           label: 'Imagen del hero (fondo)',   type: 'image',    hint: 'Imagen de fondo de la sección principal' },
       { key: 'hero_tagline',         label: 'Tagline del hero',          type: 'text',     hint: 'Ej: Iglesia El Manantial · Comunidad de fe' },
       { key: 'hero_h1_line1',        label: 'Hero — línea 1',            type: 'text' },
       { key: 'hero_h1_line2',        label: 'Hero — línea 2',            type: 'text' },
@@ -20,6 +21,7 @@ const pagesMeta: Record<string, { label: string; fields: { key: string; label: s
   nosotros: {
     label: 'Quiénes somos',
     fields: [
+      { key: 'hero_image',       label: 'Imagen del hero (fondo)',type: 'image' },
       { key: 'hero_tagline',     label: 'Tagline',             type: 'text' },
       { key: 'hero_body',        label: 'Párrafo de apertura', type: 'textarea' },
       { key: 'stat_year',        label: 'Año de fundación',    type: 'text',     hint: 'Ej: 2008' },
