@@ -22,9 +22,9 @@ export default async function SalaPage({ params }: { params: Promise<{ id: strin
   const isCreator = room.created_by === user?.id
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex flex-col" style={{ height: 'calc(100dvh - 56px)' }}>
       {/* Header */}
-      <div className="border-b border-slate-800 px-6 py-4 flex items-center justify-between flex-shrink-0">
+      <div className="flex-shrink-0 px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #1F1F1F' }}>
         <div className="flex items-center gap-3">
           <Link href="/app/oracion" className="p-2 hover:bg-slate-800 rounded-xl transition">
             <ArrowLeft size={18} />

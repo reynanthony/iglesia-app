@@ -63,7 +63,7 @@ export default async function OracionPage() {
             <Link
               href="/app/oracion/nueva"
               className="flex-shrink-0 flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-5 py-3 rounded-xl transition"
-              style={{ background: '#000000', color: '#0A0A0A' }}
+              style={{ background: '#F5F5F5', color: '#0A0A0A' }}
             >
               <Plus size={14} /> Nueva sala
             </Link>
@@ -77,19 +77,15 @@ export default async function OracionPage() {
         {!rooms || rooms.length === 0 ? (
           <div className="text-center py-28">
             <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-              style={{
-                background: 'rgba(0,0,0,0.08)',
-                border: '1px solid rgba(0,0,0,0.15)',
-                boxShadow: '0 0 40px rgba(0,0,0,0.06)',
-              }}>
-              <Mic2 size={28} style={{ color: 'rgba(0,0,0,0.4)' }} />
+              style={{ background: '#161616', border: '1px solid #2A2A2A' }}>
+              <Mic2 size={28} style={{ color: '#4D4D4D' }} />
             </div>
             <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F5F5F5' }}>No hay salas activas</p>
             <p className="text-sm mb-8" style={{ color: '#4D4D4D' }}>Crea una sala y comienza a orar con tu comunidad</p>
             <Link
               href="/app/oracion/nueva"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"
-              style={{ background: '#000000', color: '#0A0A0A' }}
+              style={{ background: '#F5F5F5', color: '#0A0A0A' }}
             >
               <Plus size={13} /> Crear sala
             </Link>
@@ -121,12 +117,9 @@ export default async function OracionPage() {
 
                   <div className="flex items-center gap-4">
                     {/* Icono sala */}
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition"
-                      style={{
-                        background: 'rgba(0,0,0,0.10)',
-                        border: '1px solid rgba(0,0,0,0.15)',
-                      }}>
-                      <Radio size={20} style={{ color: '#888888' }} />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: '#1F1F1F', border: '1px solid #2A2A2A' }}>
+                      <Radio size={20} style={{ color: '#8A8A8A' }} />
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -142,12 +135,12 @@ export default async function OracionPage() {
                       </p>
                     </div>
 
-                    {/* Entrar indicator */}
+                    {/* Entrar button — always visible */}
                     <div
-                      className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition opacity-0 group-hover:opacity-100"
-                      style={{ background: 'rgba(0,0,0,0.15)', color: '#888888', border: '1px solid rgba(0,0,0,0.2)' }}
+                      className="flex-shrink-0 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider"
+                      style={{ background: '#F5F5F5', color: '#0A0A0A' }}
                     >
-                      Unirse
+                      Entrar
                     </div>
                   </div>
                 </div>

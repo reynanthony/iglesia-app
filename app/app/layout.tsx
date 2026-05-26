@@ -136,14 +136,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </header>
 
       {/* ── MAIN ── */}
-      <main className="md:ml-60 pb-20 md:pb-0 pt-14 md:pt-0">
+      <main className="md:ml-60 pt-14 md:pt-0">
         {children}
+        {/* Spacer so content clears the fixed bottom nav (mobile only) */}
+        <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} />
       </main>
 
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav
         className="md:hidden fixed bottom-0 left-0 right-0 z-30 backdrop-blur-md"
-        style={{ background: 'rgba(10,10,10,0.95)', borderTop: '1px solid #1A1A1A' }}
+        style={{ background: 'rgba(10,10,10,0.96)', borderTop: '1px solid #1A1A1A' }}
       >
         <AppBottomNav profileHref={profileHref} />
       </nav>

@@ -62,7 +62,7 @@ export default async function FeedPage() {
               <p className="flex-1 text-sm" style={{ color: '#4D4D4D' }}>¿Qué quieres compartir hoy?</p>
               <div
                 className="flex items-center gap-2 px-4 py-2 rounded-xl transition text-[11px] font-black uppercase tracking-wider"
-                style={{ background: '#000000', color: '#0A0A0A' }}
+                style={{ background: '#F5F5F5', color: '#0A0A0A' }}
               >
                 <PenLine size={12} /> Publicar
               </div>

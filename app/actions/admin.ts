@@ -107,7 +107,13 @@ export async function deleteContent(contentId: string) {
 export async function deleteRoom(roomId: string) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
-  await ctx.supabase.from('rooms').delete().eq('id', roomId)
+  // Service client bypasses RLS so admin can delete any room regardless of creator
+  try {
+    const svc = createServiceClient()
+    await svc.from('rooms').delete().eq('id', roomId)
+  } catch {
+    await ctx.supabase.from('rooms').delete().eq('id', roomId)
+  }
   revalidatePath('/admin/oracion')
   revalidatePath('/app/oracion')
   return { success: true }
@@ -116,7 +122,12 @@ export async function deleteRoom(roomId: string) {
 export async function toggleRoom(roomId: string, isActive: boolean) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
-  await ctx.supabase.from('rooms').update({ is_active: isActive }).eq('id', roomId)
+  try {
+    const svc = createServiceClient()
+    await svc.from('rooms').update({ is_active: isActive }).eq('id', roomId)
+  } catch {
+    await ctx.supabase.from('rooms').update({ is_active: isActive }).eq('id', roomId)
+  }
   revalidatePath('/admin/oracion')
   revalidatePath('/app/oracion')
   return { success: true }
