@@ -46,4 +46,8 @@ supabase/.temp/
 # screenshots
 *.png
 
+# Claude Code internals
+.agents/
+.claude/
+
 .vercel
