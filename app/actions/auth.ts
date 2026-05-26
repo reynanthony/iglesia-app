@@ -12,7 +12,7 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    return { error: 'Correo o contraseña incorrectos' }
+    return { error: error.message }
   }
 
   redirect('/app/feed')
