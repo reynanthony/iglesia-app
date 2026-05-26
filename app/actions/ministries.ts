@@ -14,11 +14,24 @@ export async function createMinistryContent(formData: FormData) {
     .eq('id', user.id)
     .single()
 
-  if (!['admin', 'pastor', 'moderador', 'lider'].includes(profile?.role ?? '')) {
+  const ministry_id = formData.get('ministry_id') as string
+
+  const role = profile?.role ?? ''
+  if (!['admin', 'pastor', 'moderador', 'lider'].includes(role)) {
     return { error: 'No tienes permiso para publicar en ministerios' }
   }
 
-  const ministry_id = formData.get('ministry_id') as string
+  if (role === 'lider') {
+    const { data: assignment } = await supabase
+      .from('ministry_assignments')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('ministry_id', ministry_id)
+      .single()
+    if (!assignment) {
+      return { error: 'Solo puedes publicar en los ministerios que te fueron asignados' }
+    }
+  }
   const title = formData.get('title') as string
   const body = formData.get('body') as string
   const type = formData.get('type') as string

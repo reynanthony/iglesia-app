@@ -1,14 +1,23 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import ContactForm from '@/components/public/ContactForm'
+import { createClient } from '@/lib/supabase/server'
 
-const infoItems = [
-  { icon: MapPin,  label: 'Dirección', value: 'Tu dirección aquí, Ciudad, País' },
-  { icon: Phone,   label: 'Teléfono',  value: '+1 (809) 000-0000' },
-  { icon: Mail,    label: 'Email',     value: 'info@elmanantial.org' },
-  { icon: Clock,   label: 'Servicios', value: 'Dom 10AM · Mié 7PM · Vie 7PM' },
-]
+export default async function ContactoPage() {
+  const supabase = await createClient()
+  const { data } = await supabase.from('page_content').select('content').eq('page', 'contacto').single()
+  const c = (data?.content ?? {}) as Record<string, string>
 
-export default function ContactoPage() {
+  const address  = c.address      || 'Tu dirección aquí, Ciudad, País'
+  const phone    = c.phone        || '+1 (809) 000-0000'
+  const email    = c.email        || 'info@elmanantial.org'
+  const schedule = [c.schedule_sun, c.schedule_wed, c.schedule_fri].filter(Boolean).join(' · ') || 'Dom 10AM · Mié 7PM · Vie 7PM'
+
+  const infoItems = [
+    { icon: MapPin, label: 'Dirección', value: address  },
+    { icon: Phone,  label: 'Teléfono',  value: phone    },
+    { icon: Mail,   label: 'Email',     value: email    },
+    { icon: Clock,  label: 'Servicios', value: schedule },
+  ]
   return (
     <div>
 

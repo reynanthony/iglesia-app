@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import RoleSelector from '@/components/admin/RoleSelector'
+import MinistryAssignment from '@/components/admin/MinistryAssignment'
 import { Search } from 'lucide-react'
 
 export default async function AdminUsuariosPage({
@@ -19,7 +20,24 @@ export default async function AdminUsuariosPage({
   if (role && role !== 'todos') query = query.eq('role', role)
 
   const { data: users } = await query
+
+  const { data: allAssignments } = await supabase
+    .from('ministry_assignments')
+    .select('user_id, ministry_id, ministries(id, name)')
+
+  const { data: allMinistries } = await supabase
+    .from('ministries')
+    .select('id, name')
+    .order('name')
+
   const roles = ['todos', 'admin', 'pastor', 'moderador', 'lider', 'miembro', 'visitante']
+
+  const roleColors: Record<string, string> = {
+    admin:     'bg-red-500/10 text-red-400',
+    pastor:    'bg-purple-500/10 text-purple-400',
+    moderador: 'bg-blue-500/10 text-blue-400',
+    lider:     'bg-green-500/10 text-green-400',
+  }
 
   return (
     <div className="p-6 md:p-8">
@@ -41,18 +59,20 @@ export default async function AdminUsuariosPage({
         </form>
 
         <div className="flex gap-2 flex-wrap">
-          {roles.map(function(r) {
+          {roles.map(r => {
             const params = new URLSearchParams()
             if (q) params.set('q', q)
             if (r !== 'todos') params.set('role', r)
             const qs = params.toString()
             const href = qs ? '/admin/usuarios?' + qs : '/admin/usuarios'
             const isActive = role === r || (!role && r === 'todos')
-            const base = 'px-3 py-2 rounded-xl text-xs font-medium capitalize transition '
-            const active = 'bg-[#000000] text-slate-950'
-            const inactive = 'bg-slate-900 border border-slate-800 text-slate-400 hover:border-slate-600'
             return (
-              <a key={r} href={href} className={base + (isActive ? active : inactive)}>
+              <a key={r} href={href}
+                className={`px-3 py-2 rounded-xl text-xs font-medium capitalize transition ${
+                  isActive
+                    ? 'bg-white text-slate-950'
+                    : 'bg-slate-900 border border-slate-800 text-slate-400 hover:border-slate-600'
+                }`}>
                 {r}
               </a>
             )
@@ -67,38 +87,56 @@ export default async function AdminUsuariosPage({
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium">Usuario</th>
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden md:table-cell">Registrado</th>
               <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium">Rol</th>
+              <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden lg:table-cell">Ministerios asignados</th>
             </tr>
           </thead>
           <tbody>
-            {users?.map((user: any) => (
-              <tr key={user.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
-                      {user.avatar_url ? (
-                        <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-sm font-bold text-slate-300">
-                          {user.full_name?.[0]?.toUpperCase() ?? 'U'}
-                        </div>
-                      )}
+            {users?.map((user: any) => {
+              const userAssignments = (allAssignments ?? []).filter(a => a.user_id === user.id)
+              const showAssign = ['lider', 'pastor', 'moderador'].includes(user.role)
+              return (
+                <tr key={user.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition">
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
+                        {user.avatar_url ? (
+                          <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-sm font-bold text-slate-300">
+                            {user.full_name?.[0]?.toUpperCase() ?? 'U'}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{user.full_name}</p>
+                        <p className="text-xs text-slate-500">@{user.username}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium">{user.full_name}</p>
-                      <p className="text-xs text-slate-500">@{user.username}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 hidden md:table-cell">
-                  <p className="text-xs text-slate-500">
-                    {new Date(user.created_at).toLocaleDateString('es-DO')}
-                  </p>
-                </td>
-                <td className="px-5 py-3.5">
-                  <RoleSelector userId={user.id} currentRole={user.role} />
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-5 py-3.5 hidden md:table-cell">
+                    <p className="text-xs text-slate-500">
+                      {new Date(user.created_at).toLocaleDateString('es-DO')}
+                    </p>
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <RoleSelector userId={user.id} currentRole={user.role} />
+                  </td>
+                  <td className="px-5 py-3.5 hidden lg:table-cell">
+                    {showAssign ? (
+                      <MinistryAssignment
+                        userId={user.id}
+                        assignments={userAssignments as any}
+                        allMinistries={allMinistries ?? []}
+                      />
+                    ) : (
+                      <span className="text-[11px]" style={{ color: '#3A3A3A' }}>
+                        {user.role === 'admin' ? 'Acceso total' : '—'}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
 
@@ -107,6 +145,18 @@ export default async function AdminUsuariosPage({
             No se encontraron usuarios
           </div>
         )}
+      </div>
+
+      {/* Role legend */}
+      <div className="mt-6 flex flex-wrap gap-3">
+        {Object.entries(roleColors).map(([r, cls]) => (
+          <span key={r} className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${cls}`}>
+            {r === 'lider' ? 'Líder — acceso por ministerio asignado' :
+             r === 'moderador' ? 'Moderador — modera posts y comentarios' :
+             r === 'pastor' ? 'Pastor — acceso completo a contenido' :
+             'Admin — control total'}
+          </span>
+        ))}
       </div>
     </div>
   )

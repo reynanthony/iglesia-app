@@ -1,12 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-
-const stats = [
-  { value: '2008', label: 'Fundados' },
-  { value: '500+', label: 'Familias' },
-  { value: '3',    label: 'Generaciones' },
-  { value: '12+',  label: 'Ministerios' },
-]
+import { createClient } from '@/lib/supabase/server'
 
 const beliefs = [
   { n: '01', title: 'La Biblia',    desc: 'La Palabra inspirada de Dios, autoridad final para la fe y la práctica cristiana.' },
@@ -15,7 +9,19 @@ const beliefs = [
   { n: '04', title: 'La misión',    desc: 'Cada creyente llamado a llevar el mensaje de salvación a su comunidad y al mundo.' },
 ]
 
-export default function NosotrosPage() {
+export default async function NosotrosPage() {
+  const supabase = await createClient()
+  const { data } = await supabase.from('page_content').select('content').eq('page', 'nosotros').single()
+  const c = (data?.content ?? {}) as Record<string, string>
+
+  const stats = [
+    { value: c.stat_year        || '2008', label: 'Fundados' },
+    { value: c.stat_families    || '500+', label: 'Familias' },
+    { value: c.stat_generations || '3',    label: 'Generaciones' },
+    { value: c.stat_ministries  || '12+',  label: 'Ministerios' },
+  ]
+
+  const heroBody = c.hero_body || 'Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.'
   return (
     <div>
 
@@ -50,7 +56,7 @@ export default function NosotrosPage() {
               <em className="text-[#000000]">tial.</em>
             </h1>
             <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
-              Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.
+              {heroBody}
             </p>
           </div>
         </div>

@@ -1,27 +1,38 @@
 import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star } from 'lucide-react'
+import { createClient } from '@/lib/supabase/server'
 
-const services = [
-  { n: '01', day: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio principal' },
-  { n: '02', day: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio bíblico' },
-  { n: '03', day: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de oración' },
-]
+export default async function HomePage() {
+  const supabase = await createClient()
+  const [{ data: pageData }, { data: predicasData }] = await Promise.all([
+    supabase.from('page_content').select('content').eq('page', 'home').single(),
+    supabase.from('ministry_content')
+      .select('id, title, body, video_url, pinned, created_at, profiles(full_name), ministries(name)')
+      .eq('type', 'video')
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(5),
+  ])
 
-const latestSermon = {
-  titulo: 'El poder de la oración',
-  serie: 'Vida de oración',
-  pastor: 'Pastor Principal',
-  fecha: 'Mayo 18, 2025',
-}
+  const c = (pageData?.content ?? {}) as Record<string, any>
 
-const moreSermons = [
-  { titulo: 'Fe que mueve montañas',  serie: 'Fe viva',            fecha: 'May 11' },
-  { titulo: 'Identidad en Cristo',    serie: 'Quiénes somos',      fecha: 'May 4' },
-  { titulo: 'El llamado de Dios',     serie: 'Propósito divino',   fecha: 'Abr 27' },
-  { titulo: 'Gracia y perdón',        serie: 'El corazón de Dios', fecha: 'Abr 20' },
-]
+  const defaultServices = [
+    { n: '01', day: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio principal' },
+    { n: '02', day: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio bíblico' },
+    { n: '03', day: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de oración' },
+  ]
+  const rawServices: any[] = c.services ?? defaultServices
+  const services = rawServices.map((s, i) => ({ ...s, n: String(i + 1).padStart(2, '0') }))
 
-export default function HomePage() {
+  const verse        = c.verse                ?? 'Vengan a mí todos los que están cansados y yo les daré descanso.'
+  const verseRef     = c.verse_ref            ?? 'Mateo 11:28'
+  const eventTitle   = c.featured_event_title ?? 'Retiro Anual 2026'
+  const eventDesc    = c.featured_event_desc  ?? 'Junio 2026 · Un fin de semana de encuentro y renovación espiritual.'
+  const heroSubtitle = c.hero_subtitle        ?? 'Una comunidad de fe viva donde encontrarás amor, propósito y una familia que te recibe como eres.'
+
+  const predicas    = predicasData ?? []
+  const featured    = predicas[0]
+  const moreSermons = predicas.slice(1)
   return (
     <div>
 
@@ -64,7 +75,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-2xl">
             <p className="text-sm text-[#111111]/55 leading-relaxed anim-up anim-d5">
-              Una comunidad de fe viva donde encontrarás amor, propósito y una familia que te recibe como eres.
+              {heroSubtitle}
             </p>
             <div className="flex flex-col gap-3 anim-up anim-d5">
               <Link href="/nosotros"
@@ -124,10 +135,10 @@ export default function HomePage() {
             </div>
             <h2 className="font-display font-black tracking-tighter text-[#111111] mb-4"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5rem)', lineHeight: 0.9 }}>
-              Retiro<br />Anual 2026
+              {eventTitle.split(' ').slice(0, -1).join(' ')}<br />{eventTitle.split(' ').slice(-1)}
             </h2>
             <p className="text-base text-[#111111]/50 mb-8">
-              Junio 2026 · Un fin de semana de encuentro y renovación espiritual.
+              {eventDesc}
             </p>
             <Link href="/eventos"
               className="inline-flex items-center gap-3 bg-[#000000] hover:bg-[#222222] text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition">
@@ -206,17 +217,17 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
             <div className="md:col-span-1">
               <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-ink-3 [writing-mode:vertical-rl] rotate-180 hidden md:block">
-                Mateo 11:28
+                {verseRef}
               </p>
             </div>
             <div className="md:col-span-11">
               <p className="font-display font-black text-ink tracking-tighter leading-[0.88]"
                 style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-                "Vengan a mí todos<br />los que están cansados<br />y yo les daré
-                <span className="text-[#000000]"> descanso."</span>
+                "{verse.split(' ').slice(0, -1).join(' ')}{' '}
+                <span className="text-[#000000]">{verse.split(' ').slice(-1)}."</span>
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mt-8 md:hidden">
-                — Mateo 11:28
+                — {verseRef}
               </p>
             </div>
           </div>
@@ -244,45 +255,64 @@ export default function HomePage() {
           </div>
 
           {/* Sermón destacado */}
-          <div className="group cursor-pointer grid grid-cols-1 lg:grid-cols-5 border border-edge rounded-2xl overflow-hidden mb-4 hover:border-edge-2 transition">
-            <div className="lg:col-span-2 relative min-h-[220px] flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #E0E0E0 0%, #EBEBEB 100%)' }}>
-              <div className="absolute top-5 left-5 bg-[#000000] text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg">
-                Esta semana
+          {featured ? (
+            <Link href="/predicas" className="group grid grid-cols-1 lg:grid-cols-5 border border-edge rounded-2xl overflow-hidden mb-4 hover:border-edge-2 transition">
+              <div className="lg:col-span-2 relative min-h-[220px] flex items-center justify-center overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #E0E0E0 0%, #EBEBEB 100%)' }}>
+                {(featured as any).image_url && (
+                  <img src={(featured as any).image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                )}
+                <div className="absolute top-5 left-5 bg-[#000000] text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg">
+                  Esta semana
+                </div>
+                <div className="relative w-16 h-16 rounded-full border border-[#000000]/30 group-hover:bg-[#000000] group-hover:border-[#000000] flex items-center justify-center transition duration-300">
+                  <Play size={20} className="text-[#000000] group-hover:text-white ml-1 transition" />
+                </div>
               </div>
-              <div className="w-16 h-16 rounded-full border border-[#000000]/30 group-hover:bg-[#000000] group-hover:border-[#000000] flex items-center justify-center transition duration-300">
-                <Play size={20} className="text-[#000000] group-hover:text-white ml-1 transition" />
+              <div className="lg:col-span-3 p-8 lg:p-10 bg-card flex flex-col justify-center">
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#000000] mb-3">
+                  {(featured as any).ministries?.name ?? 'Prédica'}
+                </p>
+                <h3 className="text-2xl md:text-3xl font-black text-ink tracking-tight leading-tight mb-3">
+                  {(featured as any).title}
+                </h3>
+                <p className="text-sm text-ink-3 uppercase tracking-wider">
+                  {(featured as any).profiles?.full_name ?? 'Pastor'} ·{' '}
+                  {new Date((featured as any).created_at).toLocaleDateString('es-DO', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </p>
               </div>
+            </Link>
+          ) : (
+            <div className="border border-edge rounded-2xl p-10 mb-4 text-center text-ink-3 text-sm">
+              Aún no hay prédicas publicadas.{' '}
+              <Link href="/admin/predicas/nuevo" className="font-bold text-ink hover:underline">Agregar la primera →</Link>
             </div>
-            <div className="lg:col-span-3 p-8 lg:p-10 bg-card flex flex-col justify-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#000000] mb-3">{latestSermon.serie}</p>
-              <h3 className="text-2xl md:text-3xl font-black text-ink tracking-tight leading-tight mb-3">
-                {latestSermon.titulo}
-              </h3>
-              <p className="text-sm text-ink-3 uppercase tracking-wider">{latestSermon.pastor} · {latestSermon.fecha}</p>
-            </div>
-          </div>
+          )}
 
           {/* Lista de sermones */}
-          <div className="divide-y divide-edge border border-edge rounded-2xl overflow-hidden">
-            {moreSermons.map(({ titulo, serie, fecha }, i) => (
-              <Link key={titulo} href="/predicas"
-                className="group flex items-center gap-6 px-6 py-5 bg-card hover:bg-muted transition">
-                <span className="text-[10px] font-bold text-ink-3 tracking-widest w-6 flex-shrink-0">
-                  {String(i + 2).padStart(2, '0')}
-                </span>
-                <div className="w-8 h-8 rounded-full border border-edge flex items-center justify-center flex-shrink-0 group-hover:bg-[#000000] group-hover:border-[#000000] transition duration-200">
-                  <Play size={10} className="text-ink-3 group-hover:text-white ml-0.5 transition" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-ink group-hover:text-[#000000] transition text-sm truncate">{titulo}</p>
-                  <p className="text-[11px] text-ink-3 mt-0.5">{serie}</p>
-                </div>
-                <p className="text-[11px] text-ink-3 flex-shrink-0 hidden sm:block">{fecha}</p>
-                <ArrowRight size={13} className="text-ink-3 flex-shrink-0 group-hover:translate-x-1 group-hover:text-ink transition-all" />
-              </Link>
-            ))}
-          </div>
+          {moreSermons.length > 0 && (
+            <div className="divide-y divide-edge border border-edge rounded-2xl overflow-hidden">
+              {(moreSermons as any[]).map((p, i) => (
+                <Link key={p.id} href="/predicas"
+                  className="group flex items-center gap-6 px-6 py-5 bg-card hover:bg-muted transition">
+                  <span className="text-[10px] font-bold text-ink-3 tracking-widest w-6 flex-shrink-0">
+                    {String(i + 2).padStart(2, '0')}
+                  </span>
+                  <div className="w-8 h-8 rounded-full border border-edge flex items-center justify-center flex-shrink-0 group-hover:bg-[#000000] group-hover:border-[#000000] transition duration-200">
+                    <Play size={10} className="text-ink-3 group-hover:text-white ml-0.5 transition" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-ink group-hover:text-[#000000] transition text-sm truncate">{p.title}</p>
+                    <p className="text-[11px] text-ink-3 mt-0.5">{p.ministries?.name}</p>
+                  </div>
+                  <p className="text-[11px] text-ink-3 flex-shrink-0 hidden sm:block">
+                    {new Date(p.created_at).toLocaleDateString('es-DO', { month: 'short', day: 'numeric' })}
+                  </p>
+                  <ArrowRight size={13} className="text-ink-3 flex-shrink-0 group-hover:translate-x-1 group-hover:text-ink transition-all" />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

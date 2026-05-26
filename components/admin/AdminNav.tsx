@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, AlertTriangle,
   Church, CalendarDays, Mic2, ArrowLeft, Globe, LogOut,
+  BookOpen, Mic, Globe2,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean }
@@ -19,17 +20,25 @@ const sections: NavSection[] = [
   {
     label: 'Comunidad',
     items: [
-      { href: '/admin/usuarios', icon: Users, label: 'Usuarios' },
-      { href: '/admin/posts', icon: FileText, label: 'Publicaciones' },
-      { href: '/admin/reportes', icon: AlertTriangle, label: 'Reportes' },
+      { href: '/admin/usuarios',    icon: Users,         label: 'Usuarios' },
+      { href: '/admin/posts',       icon: FileText,      label: 'Publicaciones' },
+      { href: '/admin/oracion',     icon: Mic,           label: 'Salas de oración' },
+      { href: '/admin/reportes',    icon: AlertTriangle, label: 'Reportes' },
+    ],
+  },
+  {
+    label: 'Contenido',
+    items: [
+      { href: '/admin/contenido',   icon: BookOpen,      label: 'Ministerios' },
+      { href: '/admin/predicas',    icon: Mic2,          label: 'Prédicas' },
     ],
   },
   {
     label: 'Sitio Web',
     items: [
-      { href: '/admin/ministerios', icon: Church, label: 'Ministerios' },
-      { href: '/admin/eventos', icon: CalendarDays, label: 'Eventos' },
-      { href: '/admin/predicas', icon: Mic2, label: 'Prédicas' },
+      { href: '/admin/ministerios', icon: Church,        label: 'Ministerios (estructura)' },
+      { href: '/admin/eventos',     icon: CalendarDays,  label: 'Eventos' },
+      { href: '/admin/paginas',     icon: Globe2,        label: 'Páginas' },
     ],
   },
 ]
