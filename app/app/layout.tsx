@@ -116,6 +116,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <span className="font-black text-sm tracking-tight" style={{ color: '#F5F5F5' }}>El Manantial</span>
         </Link>
         <div className="flex items-center gap-2">
+          <Link href="/" className="p-1.5 rounded-lg transition" style={{ color: '#4D4D4D' }} title="Sitio web">
+            <Globe size={18} />
+          </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
             <Link href="/admin" className="p-1.5 rounded-lg transition" style={{ color: '#4D4D4D' }} title="Panel Admin">
               <ShieldCheck size={18} />
