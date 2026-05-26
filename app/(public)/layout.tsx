@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import MobileMenu from '@/components/public/MobileMenu'
-import ThemeToggle from '@/components/public/ThemeToggle'
 import { Cross } from 'lucide-react'
 
 const navLinks = [
@@ -16,14 +15,14 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <div className="min-h-screen flex flex-col">
 
       {/* ── HEADER ─────────────────────────────────────── */}
-      <header className="bg-[#FFFFFF]/95 backdrop-blur-sm sticky top-0 z-50 border-b border-[#111111]/[0.08]">
+      <header className="sticky top-0 z-50 backdrop-blur-md" style={{ background: 'rgba(10,10,10,0.95)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-7 h-7 bg-[#000000] flex items-center justify-center text-white rounded-lg">
-              <Cross size={14} strokeWidth={2.5} />
+            <div className="w-7 h-7 bg-white flex items-center justify-center rounded-lg">
+              <Cross size={14} strokeWidth={2.5} className="text-[#0A0A0A]" />
             </div>
-            <span className="font-black text-[#111111] text-sm tracking-tight hidden sm:block">
+            <span className="font-black text-sm tracking-tight hidden sm:block" style={{ color: '#F5F5F5' }}>
               El Manantial
             </span>
           </Link>
@@ -33,7 +32,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <Link
                 key={href}
                 href={href}
-                className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#111111]/45 hover:text-[#111111] transition duration-200"
+                className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40 hover:text-white/90 transition duration-200"
               >
                 {label}
               </Link>
@@ -41,10 +40,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </nav>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <ThemeToggle />
             <Link
               href="/login"
-              className="hidden md:inline-flex items-center bg-[#000000] hover:bg-[#222222] text-white font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl transition"
+              className="hidden md:inline-flex items-center font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl transition"
+              style={{ background: '#F5F5F5', color: '#0A0A0A' }}
             >
               Entrar
             </Link>
