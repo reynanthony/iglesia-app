@@ -284,8 +284,8 @@ export default function ShortsCard({
             <Bookmark
               size={22}
               strokeWidth={1.8}
-              fill={saved ? '#C9A96E' : 'none'}
-              style={{ color: saved ? '#C9A96E' : '#fff' }}
+              fill={saved ? '#22A67A' : 'none'}
+              style={{ color: saved ? '#22A67A' : '#fff' }}
             />
           </div>
         </button>

@@ -58,7 +58,7 @@ export default async function EventosPage() {
       {hasBlocks ? (
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
-        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EDE7DE 0%, #F2EDE7 50%, #F8F5F0 100%)' }}>
           <div className="pointer-events-none absolute right-0 top-0 overflow-hidden select-none flex items-start">
             <span className="font-black text-[#111111] tracking-tighter"
               style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.04, lineHeight: 0.85 }}>
@@ -221,7 +221,7 @@ export default async function EventosPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— ¿Primera vez?</p>

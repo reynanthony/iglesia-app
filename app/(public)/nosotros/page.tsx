@@ -60,7 +60,7 @@ export default async function NosotrosPage() {
               <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
                 style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)', lineHeight: 0.85 }}>
                 Somos<br />El Manan-<br />
-                <em style={{ color: '#C9A96E' }}>tial.</em>
+                <em style={{ color: '#1B7A5E' }}>tial.</em>
               </h1>
               <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
                 {heroBody}
@@ -85,7 +85,7 @@ export default async function NosotrosPage() {
                   </p>
                 </div>
                 {/* Accent line inferior */}
-                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#C9A96E' }} />
+                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#1B7A5E' }} />
               </div>
             </div>
           </div>
@@ -233,7 +233,7 @@ export default async function NosotrosPage() {
       {/* ═══════════════════════════════════════
           CTA — con "FAMILIA" decorativo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
         {/* Texto decorativo */}
         <div className="pointer-events-none absolute left-0 bottom-0 overflow-hidden select-none">
           <span className="font-black text-white leading-none tracking-tighter block"

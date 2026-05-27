@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, MessageCircle, Mic2, Search, User, Plus } from 'lucide-react'
 
-const ACCENT = '#C9A96E'
+const ACCENT = '#22A67A'
 
 const navItems = [
   { href: '/app/feed',    icon: Home,          label: 'Feed',    exact: true  },

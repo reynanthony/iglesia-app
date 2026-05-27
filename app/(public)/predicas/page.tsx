@@ -68,11 +68,11 @@ export default async function PredicasPage() {
             </span>
           </div>
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(201,169,110,0.06), transparent 65%)' }} />
+            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(27,122,94,0.06), transparent 65%)' }} />
           <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-48 md:pb-20 flex flex-col justify-end"
             style={{ minHeight: '80vh' }}>
             <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px bg-[#C9A96E]" />
+              <div className="w-12 h-px bg-[#22A67A]" />
               <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#F5F5F5]/40">
                 Mensajes · Palabra de vida
               </p>
@@ -81,7 +81,7 @@ export default async function PredicasPage() {
               <h1 className="font-display font-black tracking-tighter text-[#F5F5F5]"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
                 Crece<br />en la<br />
-                <em style={{ color: '#C9A96E' }}>Palabra.</em>
+                <em style={{ color: '#22A67A' }}>Palabra.</em>
               </h1>
               <div>
                 <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(245,245,245,0.5)' }}>
@@ -111,7 +111,7 @@ export default async function PredicasPage() {
       <section className="bg-[#F4F4F4] border-b border-[#111111]/[0.06]">
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
           <div className="flex items-center gap-4 mb-10">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#C9A96E' }} />
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#22A67A' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#111111]/45">Mensaje reciente</p>
           </div>
           <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border border-[#111111]/10 hover:border-[#111111]/15 transition cursor-pointer">
@@ -123,16 +123,16 @@ export default async function PredicasPage() {
               }}>
               {!featured.image_url && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: '#C9A96E' }} />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: '#22A67A' }} />
                 </div>
               )}
               <div className="absolute inset-0"
                 style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(0,0,0,0.06), transparent 65%)' }} />
               <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
-                style={{ background: '#C9A96E', color: '#0A0A0A' }}>
+                style={{ background: '#22A67A', color: '#0A0A0A' }}>
                 Esta semana
               </div>
-              <div className="relative w-20 h-20 rounded-full border border-[#111111]/15 group-hover:bg-[#000000] group-hover:border-[#000000] flex items-center justify-center transition duration-500 group-hover:scale-110">
+              <div className="relative w-20 h-20 rounded-full border border-[#111111]/15 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] flex items-center justify-center transition duration-500 group-hover:scale-110">
                 <Play size={22} className="text-[#111111] group-hover:text-white ml-1.5" />
               </div>
             </div>
@@ -188,7 +188,7 @@ export default async function PredicasPage() {
                   }}>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/8 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border border-[#111111]/20 group-hover:bg-[#000000] group-hover:border-[#000000] flex items-center justify-center transition duration-300 group-hover:scale-110">
+                    <div className="w-12 h-12 rounded-full border border-[#111111]/20 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] flex items-center justify-center transition duration-300 group-hover:scale-110">
                       <Play size={14} className="text-[#000000] group-hover:text-white ml-0.5" />
                     </div>
                   </div>
@@ -203,7 +203,7 @@ export default async function PredicasPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 100% at 80% 50%, rgba(0,0,0,0.07), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">

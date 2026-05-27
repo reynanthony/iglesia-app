@@ -16,14 +16,14 @@ function CrossIcon() {
           x1="24" y1="24"
           x2={24 + 18 * Math.cos((deg * Math.PI) / 180)}
           y2={24 + 18 * Math.sin((deg * Math.PI) / 180)}
-          stroke="#C9A96E"
+          stroke="#22A67A"
           strokeWidth="0.8"
           strokeOpacity="0.4"
         />
       ))}
       {/* Cruz */}
-      <rect x="21.5" y="9" width="5" height="30" rx="2" fill="#C9A96E" />
-      <rect x="9" y="18" width="30" height="5" rx="2" fill="#C9A96E" />
+      <rect x="21.5" y="9" width="5" height="30" rx="2" fill="#22A67A" />
+      <rect x="9" y="18" width="30" height="5" rx="2" fill="#22A67A" />
     </svg>
   )
 }
@@ -56,7 +56,7 @@ export default function LoginPage() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%)',
+            backgroundImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(27,122,94,0.06) 0%, transparent 70%)',
           }}
         />
         {/* Palabra decorativa */}
@@ -88,19 +88,19 @@ export default function LoginPage() {
           </h2>
           <p
             className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8"
-            style={{ color: '#C9A96E' }}
+            style={{ color: '#22A67A' }}
           >
             Comunidad de fe
           </p>
 
           {/* Separador */}
-          <div className="w-8 h-px mb-8" style={{ background: 'rgba(201,169,110,0.4)' }} />
+          <div className="w-8 h-px mb-8" style={{ background: 'rgba(27,122,94,0.4)' }} />
 
           {/* Verso */}
           <blockquote className="text-sm leading-relaxed text-center" style={{ color: 'rgba(245,245,245,0.38)' }}>
             "El que bebe del agua que yo le daré no volverá a tener sed jamás."
           </blockquote>
-          <cite className="text-[10px] font-bold uppercase tracking-widest mt-3 block not-italic" style={{ color: '#C9A96E', opacity: 0.6 }}>
+          <cite className="text-[10px] font-bold uppercase tracking-widest mt-3 block not-italic" style={{ color: '#22A67A', opacity: 0.6 }}>
             Juan 4:14
           </cite>
         </div>
@@ -139,7 +139,7 @@ export default function LoginPage() {
                   border: '1px solid #E8E8E8',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#C9A96E')}
+                onFocus={e => (e.currentTarget.style.borderColor = '#1B7A5E')}
                 onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
               />
             </div>
@@ -160,7 +160,7 @@ export default function LoginPage() {
                   border: '1px solid #E8E8E8',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#C9A96E')}
+                onFocus={e => (e.currentTarget.style.borderColor = '#1B7A5E')}
                 onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
               />
             </div>
@@ -191,7 +191,7 @@ export default function LoginPage() {
           <div className="mt-8 pt-8" style={{ borderTop: '1px solid #EBEBEB' }}>
             <p className="text-center text-sm text-[#111111]/50">
               ¿No tienes cuenta?{' '}
-              <Link href="/registro" className="font-bold text-[#111111] hover:text-[#C9A96E] transition-colors">
+              <Link href="/registro" className="font-bold text-[#111111] hover:text-[#1B7A5E] transition-colors">
                 Regístrate
               </Link>
             </p>

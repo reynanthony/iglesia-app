@@ -42,15 +42,15 @@ export default function PhotoSlot({
             />
           )}
           {/* Línea de acento en la base */}
-          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: '#C9A96E' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: '#1B7A5E' }} />
         </>
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(201,169,110,0.12)', border: '1px solid rgba(201,169,110,0.25)' }}
+            style={{ background: 'rgba(27,122,94,0.12)', border: '1px solid rgba(27,122,94,0.25)' }}
           >
-            <ImageIcon size={20} style={{ color: '#C9A96E' }} strokeWidth={1.4} />
+            <ImageIcon size={20} style={{ color: '#1B7A5E' }} strokeWidth={1.4} />
           </div>
           {hint && (
             <p className="text-xs leading-snug" style={{ color: '#A89878', maxWidth: 160 }}>
@@ -58,7 +58,7 @@ export default function PhotoSlot({
             </p>
           )}
           {/* Línea de acento en la base */}
-          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'rgba(201,169,110,0.35)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'rgba(27,122,94,0.35)' }} />
         </div>
       )}
     </div>

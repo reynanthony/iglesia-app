@@ -56,11 +56,11 @@ export default async function HomePage() {
           1. HERO
       ════════════════════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 40%, #FFFFFF 100%)' }}>
+        style={{ background: 'linear-gradient(160deg, #EDE7DE 0%, #F2EDE7 40%, #F8F5F0 100%)' }}>
 
         {/* Glow suave */}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 50% at 60% 90%, rgba(0,0,0,0.12) 0%, transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 70% 50% at 60% 90%, rgba(27,122,94,0.08) 0%, transparent 70%)' }} />
 
         {/* Líneas verticales sutiles */}
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -86,7 +86,7 @@ export default async function HomePage() {
             style={{ fontSize: 'clamp(3.8rem, 13vw, 12rem)', lineHeight: 0.83 }}>
             <span className="block anim-up anim-d2">Donde</span>
             <span className="block anim-up anim-d3">fluye</span>
-            <em className="text-[#000000] block anim-up anim-d4">la vida.</em>
+            <em className="block anim-up anim-d4" style={{ color: '#1B7A5E' }}>la vida.</em>
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-2xl">
@@ -138,7 +138,7 @@ export default async function HomePage() {
       {/* ════════════════════════════════════════════════
           3. EVENTO DESTACADO
       ════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ minHeight: '55vh', background: 'linear-gradient(135deg, #E0E0E0 0%, #EBEBEB 50%, #EBEBEB 100%)' }}>
+      <section className="relative overflow-hidden" style={{ minHeight: '55vh', background: 'linear-gradient(135deg, #EAF3EF 0%, #F2F8F5 50%, #F2F8F5 100%)' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{ backgroundImage: 'radial-gradient(ellipse at 60% 40%, rgba(0,0,0,1) 0%, transparent 60%)' }} />
 
@@ -146,8 +146,8 @@ export default async function HomePage() {
           style={{ minHeight: '55vh' }}>
           <div className="max-w-xl">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#000000]" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#000000]">Próximo evento</p>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#1B7A5E' }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#1B7A5E' }}>Próximo evento</p>
             </div>
             <h2 className="font-display font-black tracking-tighter text-[#111111] mb-4"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5rem)', lineHeight: 0.9 }}>
@@ -157,7 +157,10 @@ export default async function HomePage() {
               {eventDesc}
             </p>
             <Link href="/eventos"
-              className="inline-flex items-center gap-3 bg-[#000000] hover:bg-[#222222] text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition">
+              className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
+              style={{ background: '#1B7A5E' }}
+              onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = '#0B4A38'}
+              onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = '#1B7A5E'}>
               Más información <ArrowRight size={12} />
             </Link>
           </div>
@@ -240,7 +243,7 @@ export default async function HomePage() {
               <p className="font-display font-black text-ink tracking-tighter leading-[0.88]"
                 style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
                 "{verse.split(' ').slice(0, -1).join(' ')}{' '}
-                <span className="text-[#000000]">{verse.split(' ').slice(-1)}."</span>
+                <span style={{ color: '#1B7A5E' }}>{verse.split(' ').slice(-1)}."</span>
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mt-8 md:hidden">
                 — {verseRef}
@@ -278,10 +281,10 @@ export default async function HomePage() {
                 {(featured as any).image_url && (
                   <img src={(featured as any).image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
                 )}
-                <div className="absolute top-5 left-5 bg-[#000000] text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg">
+                <div className="absolute top-5 left-5 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg" style={{ background: '#1B7A5E' }}>
                   Esta semana
                 </div>
-                <div className="relative w-16 h-16 rounded-full border border-[#000000]/30 group-hover:bg-[#000000] group-hover:border-[#000000] flex items-center justify-center transition duration-300">
+                <div className="relative w-16 h-16 rounded-full border border-[#000000]/30 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] flex items-center justify-center transition duration-300">
                   <Play size={20} className="text-[#000000] group-hover:text-white ml-1 transition" />
                 </div>
               </div>
@@ -314,7 +317,7 @@ export default async function HomePage() {
                   <span className="text-[10px] font-bold text-ink-3 tracking-widest w-6 flex-shrink-0">
                     {String(i + 2).padStart(2, '0')}
                   </span>
-                  <div className="w-8 h-8 rounded-full border border-edge flex items-center justify-center flex-shrink-0 group-hover:bg-[#000000] group-hover:border-[#000000] transition duration-200">
+                  <div className="w-8 h-8 rounded-full border border-edge flex items-center justify-center flex-shrink-0 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] transition duration-200">
                     <Play size={10} className="text-ink-3 group-hover:text-white ml-0.5 transition" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -380,7 +383,7 @@ export default async function HomePage() {
           8. CTA FINAL
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden border-t border-[#111111]/[0.06]"
-        style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 50%, #3A6A8F 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 70% 90% at 85% 50%, rgba(255,255,255,0.08), transparent 70%)' }} />
         <div className="pointer-events-none absolute left-0 bottom-0 overflow-hidden select-none">

@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
-/* ── Light mode: blanco y negro ───────────────────────── */
+/* ── Light mode: crema cálida ─────────────────────────── */
 :root {
-  --surface: #FFFFFF;
-  --card:    #FAFAFA;
-  --muted:   #F4F4F4;
-  --ink:     #111111;
-  --ink-2:   #6B6B6B;
-  --ink-3:   #A8A8A8;
-  --edge:    #E8E8E8;
-  --edge-2:  #D0D0D0;
-  --accent:  #C9A96E;
+  --surface: #F8F5F0;
+  --card:    #F2EDE7;
+  --muted:   #EBE5DC;
+  --ink:     #1A1208;
+  --ink-2:   #5C4D3C;
+  --ink-3:   #9C8B77;
+  --edge:    #D8CFC4;
+  --edge-2:  #C4B8AA;
+  --accent:  #1B7A5E;
 }
 
-/* ── Dark mode: pure dark ──────────────────────────────── */
+/* ── Dark mode: café profundo cálido ──────────────────── */
 .dark {
-  --surface: #0A0A0A;
-  --card:    #141414;
-  --muted:   #0A0A0A;
-  --ink:     #F5F5F5;
-  --ink-2:   #8A8A8A;
-  --ink-3:   #4D4D4D;
-  --edge:    #1A1A1A;
-  --edge-2:  #2A2A2A;
-  --accent:  #A8874A;
+  --surface: #0F0D0A;
+  --card:    #1A1510;
+  --muted:   #0F0D0A;
+  --ink:     #F5F0E8;
+  --ink-2:   #8C7C6A;
+  --ink-3:   #4A3D30;
+  --edge:    #2A2018;
+  --edge-2:  #3A2E20;
+  --accent:  #22A67A;
 }
 
 @theme inline {
