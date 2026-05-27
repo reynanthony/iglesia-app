@@ -1,11 +1,16 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import ContactForm from '@/components/public/ContactForm'
 import { createClient } from '@/lib/supabase/server'
+import BlockRenderer from '@/components/BlockRenderer'
 
 export default async function ContactoPage() {
   const supabase = await createClient()
   const { data } = await supabase.from('page_content').select('content').eq('page', 'contacto').single()
-  const c = (data?.content ?? {}) as Record<string, string>
+  const content = (data?.content ?? {}) as Record<string, any>
+  if (Array.isArray(content.blocks) && content.blocks.length > 0) {
+    return <BlockRenderer blocks={content.blocks} />
+  }
+  const c = content as Record<string, string>
 
   const address  = c.address      || 'Tu dirección aquí, Ciudad, País'
   const phone    = c.phone        || '+1 (809) 000-0000'

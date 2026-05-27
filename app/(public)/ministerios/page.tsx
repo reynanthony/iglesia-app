@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowRight, Users, Baby, Heart, Music, BookOpen, Globe, Church, Flame, Star, HandHeart } from 'lucide-react'
+import BlockRenderer from '@/components/BlockRenderer'
 
 function getIcon(ministry: { slug?: string; name?: string }) {
   const key = ((ministry.slug ?? '') + ' ' + (ministry.name ?? '')).toLowerCase()
@@ -28,10 +29,15 @@ const placeholders = [
 export default async function MinisteriosPage() {
   const supabase = await createClient()
 
-  const { data: allMinistries } = await supabase
-    .from('ministries')
-    .select('*')
-    .order('created_at', { ascending: true })
+  const [pageResult, ministriesResult] = await Promise.all([
+    supabase.from('page_content').select('content').eq('page', 'ministerios').single(),
+    supabase.from('ministries').select('*').order('created_at', { ascending: true }),
+  ])
+
+  const editorialBlocks = (pageResult.data?.content as any)?.blocks
+  const hasBlocks = Array.isArray(editorialBlocks) && editorialBlocks.length > 0
+
+  const allMinistries = ministriesResult.data
 
   const parents = allMinistries?.filter(m => !m.parent_id) ?? []
   const children = allMinistries?.filter(m => m.parent_id) ?? []
@@ -44,7 +50,12 @@ export default async function MinisteriosPage() {
   return (
     <div>
 
-      {/* HERO */}
+      {/* ═══════════════════════════════════════
+          ZONA EDITORIAL — bloques del admin, o hero hardcoded
+      ═══════════════════════════════════════ */}
+      {hasBlocks ? (
+        <BlockRenderer blocks={editorialBlocks} />
+      ) : (
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
         <div
           className="pointer-events-none absolute inset-0"
@@ -69,6 +80,11 @@ export default async function MinisteriosPage() {
         </div>
         <div className="h-px w-full bg-[#111111]/[0.08]" />
       </section>
+      )}
+
+      {/* ═══════════════════════════════════════
+          ZONA DE DATOS — siempre visible
+      ═══════════════════════════════════════ */}
 
       {/* GRID */}
       <section className="bg-card border-b border-edge">

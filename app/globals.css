@@ -10,6 +10,7 @@
   --ink-3:   #A8A8A8;
   --edge:    #E8E8E8;
   --edge-2:  #D0D0D0;
+  --accent:  #C9A96E;
 }
 
 /* ── Dark mode: pure dark ──────────────────────────────── */
@@ -22,6 +23,7 @@
   --ink-3:   #4D4D4D;
   --edge:    #1A1A1A;
   --edge-2:  #2A2A2A;
+  --accent:  #A8874A;
 }
 
 @theme inline {
@@ -33,6 +35,7 @@
   --color-ink-3:   var(--ink-3);
   --color-edge:    var(--edge);
   --color-edge-2:  var(--edge-2);
+  --color-accent:  var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -58,8 +61,48 @@ body {
 
 .anim-up { animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
+/* ── Shorts feed ──────────────────────────────────────── */
+
+/*
+  El feed usa position:fixed en el contenedor padre, así que
+  cada card sólo necesita ocupar el 100% de ese contenedor.
+*/
+.shorts-card {
+  height: 100%;
+}
+
+/* Sin scrollbar */
+.shorts-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.shorts-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Sala de oración: altura correcta en desktop y mobile ── */
+/* Desktop: sin top-header ni bottom-nav, ocupa el 100% del viewport */
+.room-height { height: 100dvh; }
+
+/* Mobile (< md): resta top-header (56px) + bottom-nav (56px) + safe-area */
+@media (max-width: 767px) {
+  .room-height {
+    height: calc(100dvh - 112px - env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── Micro-feedback: tap pulse para like/save ── */
+@keyframes tap-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.32); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.animate-tap { animation: tap-pulse 0.38s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
 @media (prefers-reduced-motion: reduce) {
   .anim-up { animation: none; opacity: 1; transform: none; }
+  .animate-tap { animation: none; }
 }
 .anim-d1 { animation-delay: 0.05s; }
 .anim-d2 { animation-delay: 0.22s; }

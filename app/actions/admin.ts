@@ -316,7 +316,52 @@ export async function deleteAdminUser(userId: string) {
   return { success: true }
 }
 
+// ── Cloudinary signed upload ─────────────────────────────────
+export async function getCloudinarySignature(
+  folder: string = 'iglesia'
+): Promise<{ signature?: string; timestamp?: number; apiKey?: string; cloudName?: string; error?: string }> {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const cloudName  = process.env.CLOUDINARY_CLOUD_NAME
+  const apiKey     = process.env.CLOUDINARY_API_KEY
+  const apiSecret  = process.env.CLOUDINARY_API_SECRET
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    return { error: 'missing_config' }
+  }
+
+  const timestamp = Math.round(Date.now() / 1000)
+  // Params must be sorted alphabetically for Cloudinary signature
+  const paramStr  = `folder=${folder}&timestamp=${timestamp}`
+  const { createHash } = await import('crypto')
+  const signature = createHash('sha1').update(paramStr + apiSecret).digest('hex')
+
+  return { signature, timestamp, apiKey, cloudName }
+}
+
 // ── Page images ──────────────────────────────────────────────
+
+// Ensures the 'paginas' bucket allows large uploads (videos can be hundreds of MB).
+// Called automatically when the browser client hits a file-size limit error.
+export async function fixPagesBucketLimit(): Promise<{ ok?: boolean; error?: string }> {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+  try {
+    const svc = createServiceClient()
+    // Read current bucket settings to preserve the public flag
+    const { data: bucket } = await svc.storage.getBucket('paginas')
+    const { error } = await svc.storage.updateBucket('paginas', {
+      public: bucket?.public ?? true,
+      fileSizeLimit: '500mb',
+    })
+    if (error) return { error: error.message }
+    return { ok: true }
+  } catch (e: any) {
+    return { error: e?.message ?? 'Error desconocido' }
+  }
+}
+
 export async function uploadPageImage(formData: FormData): Promise<{ url?: string; error?: string }> {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
@@ -346,3 +391,38 @@ export async function updatePageContent(page: string, content: Record<string, un
   revalidatePath('/contacto')
   return { success: true }
 }
+
+export async function savePageBlocks(page: string, blocks: any[]) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  // Strip video blocks with empty URL — they render null and hide the rest of the page silently
+  const cleanBlocks = blocks.filter(b => !(b.type === 'video' && !b.props?.url?.trim()))
+  const { error } = await ctx.supabase
+    .from('page_content')
+    .upsert(
+      { page, content: { blocks: cleanBlocks }, updated_by: ctx.userId, updated_at: new Date().toISOString() },
+      { onConflict: 'page' }
+    )
+  if (error) return { error: error.message }
+  const paths = ['/', '/nosotros', '/contacto', '/eventos', '/predicas', '/ministerios']
+  paths.forEach(p => revalidatePath(p))
+  revalidatePath('/admin/paginas')
+  return { ok: true }
+}
+
+export async function clearPageBlocks(page: string) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  const { error } = await ctx.supabase
+    .from('page_content')
+    .upsert(
+      { page, content: {}, updated_by: ctx.userId, updated_at: new Date().toISOString() },
+      { onConflict: 'page' }
+    )
+  if (error) return { error: error.message }
+  const paths = ['/', '/nosotros', '/contacto', '/eventos', '/predicas', '/ministerios']
+  paths.forEach(p => revalidatePath(p))
+  revalidatePath('/admin/paginas')
+  return { ok: true }
+}
+

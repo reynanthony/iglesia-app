@@ -12,10 +12,10 @@ function getYouTubeId(url: string) {
   return match ? match[1] : null
 }
 
+const MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
 function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('es-DO', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  })
+  const dt = new Date(d)
+  return `${dt.getUTCDate()} de ${MESES_LARGO[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
 }
 
 /* ── sub-components ───────────────────────────────────── */

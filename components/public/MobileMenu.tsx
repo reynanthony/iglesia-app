@@ -18,64 +18,111 @@ export default function MobileMenu() {
 
   return (
     <div className="md:hidden">
-      {/* Hamburger button */}
       <button
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="mobile-menu-drawer"
         aria-label="Abrir menú"
-        className="w-9 h-9 flex items-center justify-center rounded-lg transition"
-        style={{ background: '#F5F5F5', color: '#0A0A0A' }}
+        className="p-2 transition"
+        style={{ color: 'rgba(245,245,245,0.7)' }}
       >
-        <Menu size={18} />
+        <Menu size={22} />
       </button>
 
       {open && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop — height via 100dvh para escapar el containing block del header con backdrop-filter */}
           <button
-            className="fixed inset-0 z-40 w-full cursor-default"
             onClick={() => setOpen(false)}
             aria-label="Cerrar menú"
             tabIndex={-1}
-            style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100dvh',
+              zIndex: 40,
+              background: 'rgba(0,0,0,0.55)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+              border: 'none',
+              cursor: 'default',
+              padding: 0,
+            }}
           />
 
-          {/* Drawer */}
+          {/* Panel — height via 100dvh por la misma razón */}
           <div
             id="mobile-menu-drawer"
             role="dialog"
             aria-modal="true"
             aria-label="Menú de navegación"
-            className="fixed top-0 right-0 h-full w-72 z-50 flex flex-col bg-white shadow-2xl"
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              height: '100dvh',
+              width: '18rem',
+              zIndex: 50,
+              background: '#111111',
+              borderLeft: '1px solid #2A2A2A',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 h-16 border-b border-black/[0.07]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 bg-black flex items-center justify-center rounded-lg">
-                  <Cross size={12} strokeWidth={2.5} className="text-white" />
+            {/* Cabecera */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0 1.5rem',
+              height: '4rem',
+              borderBottom: '1px solid #2A2A2A',
+              flexShrink: 0,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                <div style={{
+                  width: '1.75rem', height: '1.75rem',
+                  background: '#ffffff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: '0.5rem',
+                }}>
+                  <Cross size={12} strokeWidth={2.5} style={{ color: '#000000' }} />
                 </div>
-                <span className="font-black text-sm tracking-tight text-[#111111]">
+                <span style={{ fontWeight: 900, fontSize: '0.875rem', letterSpacing: '-0.025em', color: '#F5F5F5' }}>
                   El Manantial
                 </span>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar menú"
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-black/30 hover:text-black/70 transition"
+                style={{ padding: '0.375rem', color: '#5A5A5A', background: 'none', border: 'none', cursor: 'pointer' }}
               >
-                <X size={16} />
+                <X size={18} />
               </button>
             </div>
 
             {/* Links */}
-            <nav className="flex-1 px-4 py-6 space-y-0.5" aria-label="Navegación principal">
+            <nav style={{ flex: 1, padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.125rem' }}
+              aria-label="Navegación principal">
               {links.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] text-black/40 hover:text-black hover:bg-black/[0.04] rounded-xl transition"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0.875rem 1rem',
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.2em',
+                    color: '#AAAAAA',
+                    borderRadius: '0.75rem',
+                    textDecoration: 'none',
+                  }}
                 >
                   {label}
                 </Link>
@@ -83,11 +130,25 @@ export default function MobileMenu() {
             </nav>
 
             {/* CTA */}
-            <div className="px-4 py-6 border-t border-black/[0.07]">
+            <div style={{ padding: '1.5rem 1rem', borderTop: '1px solid #2A2A2A', flexShrink: 0 }}>
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="w-full flex items-center justify-center gap-2 bg-black hover:bg-[#222] text-white font-black text-[11px] uppercase tracking-[0.2em] px-4 py-4 rounded-xl transition"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  fontWeight: 900,
+                  fontSize: '0.6875rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.2em',
+                  padding: '1rem',
+                  borderRadius: '0.75rem',
+                  background: '#F5F5F5',
+                  color: '#0A0A0A',
+                  textDecoration: 'none',
+                }}
               >
                 Entrar a la comunidad <ArrowRight size={13} />
               </Link>

@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .eq('id', user.id)
     .single()
 
-  const profileHref = '/app/perfil/' + (profile?.username ?? '')
+  const profileHref = profile?.username ? `/app/perfil/${profile.username}` : '/app/feed'
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (

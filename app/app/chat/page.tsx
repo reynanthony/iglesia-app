@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import ChatBox from '@/components/ChatBox'
+import { MessageSquare } from 'lucide-react'
 
 export default async function ChatPage() {
   const supabase = await createClient()
@@ -12,16 +13,30 @@ export default async function ChatPage() {
     .single()
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)] md:h-screen">
-      <div className="border-b border-slate-800 px-5 py-4 flex-shrink-0 flex items-center gap-3">
-        <div className="w-9 h-9 bg-[#000000]/10 rounded-xl flex items-center justify-center">
-          <span className="text-lg">💬</span>
+    <div className="flex flex-col" style={{ height: 'calc(100dvh - 56px)', background: '#0A0A0A' }}>
+
+      {/* Header */}
+      <div
+        className="flex-shrink-0 flex items-center gap-3 px-5 py-4"
+        style={{ borderBottom: '1px solid #1A1A1A', background: '#0A0A0A' }}
+      >
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: '#161614', border: '1px solid #1A1A1A' }}
+        >
+          <MessageSquare size={16} style={{ color: '#8A8A8A' }} />
         </div>
         <div>
-          <h1 className="font-bold text-sm">Chat de la comunidad</h1>
-          <p className="text-slate-500 text-xs">Mensajes en tiempo real</p>
+          <p className="font-black text-sm tracking-tight" style={{ color: '#F5F5F5' }}>
+            Chat de la comunidad
+          </p>
+          <p className="text-[11px]" style={{ color: '#4D4D4D' }}>
+            Tiempo real · Solo miembros
+          </p>
         </div>
       </div>
+
+      {/* Chat */}
       <div className="flex-1 overflow-hidden">
         <ChatBox
           currentUserId={user!.id}

@@ -66,18 +66,33 @@ export default async function BuscarPage({
 
         {/* Sin resultados */}
         {q && users.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: '#161614', border: '1px solid #1A1A1A' }}>
-              <Search size={20} style={{ color: '#4D4D4D' }} />
-            </div>
-            <p className="font-bold" style={{ color: '#8A8A8A' }}>Sin resultados para "{q}"</p>
+          <div className="text-center py-20 flex flex-col items-center">
+            {/* Ilustración: tres círculos / comunidad */}
+            <svg width="72" height="64" viewBox="0 0 72 64" fill="none" aria-hidden className="mb-5">
+              <circle cx="20" cy="24" r="10" stroke="#C9A96E" strokeWidth="1.5" strokeOpacity="0.5" fill="none"/>
+              <circle cx="20" cy="24" r="5" fill="#C9A96E" fillOpacity="0.2"/>
+              <circle cx="52" cy="24" r="10" stroke="#C9A96E" strokeWidth="1.5" strokeOpacity="0.5" fill="none"/>
+              <circle cx="52" cy="24" r="5" fill="#C9A96E" fillOpacity="0.2"/>
+              <circle cx="36" cy="20" r="12" stroke="#C9A96E" strokeWidth="2" strokeOpacity="0.7" fill="none"/>
+              <circle cx="36" cy="20" r="6" fill="#C9A96E" fillOpacity="0.35"/>
+              {/* Líneas de conexión */}
+              <path d="M29 42 Q36 56 43 42" stroke="#C9A96E" strokeWidth="1.2" strokeOpacity="0.3" fill="none" strokeLinecap="round"/>
+              <path d="M11 44 Q16 54 24 48" stroke="#C9A96E" strokeWidth="1" strokeOpacity="0.2" fill="none" strokeLinecap="round"/>
+              <path d="M61 44 Q56 54 48 48" stroke="#C9A96E" strokeWidth="1" strokeOpacity="0.2" fill="none" strokeLinecap="round"/>
+            </svg>
+            <p className="font-bold mb-1" style={{ color: '#F5F5F5' }}>Sin resultados</p>
+            <p className="text-sm" style={{ color: '#4D4D4D' }}>No encontramos a "{q}" en la comunidad</p>
           </div>
         )}
 
         {/* Sin query */}
         {!q && (
-          <div className="text-center py-16">
+          <div className="text-center py-16 flex flex-col items-center">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden className="mb-4">
+              <circle cx="24" cy="24" r="14" stroke="#2A2A2A" strokeWidth="2" fill="none"/>
+              <line x1="34" y1="34" x2="48" y2="48" stroke="#2A2A2A" strokeWidth="2.5" strokeLinecap="round"/>
+              <circle cx="24" cy="24" r="7" stroke="#C9A96E" strokeWidth="1.2" strokeOpacity="0.5" fill="none"/>
+            </svg>
             <p className="text-sm" style={{ color: '#4D4D4D' }}>Escribe un nombre o @usuario para buscar</p>
           </div>
         )}

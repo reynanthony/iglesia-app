@@ -91,7 +91,7 @@ export default function CommentItem({
             <form onSubmit={handleReply} className="flex items-center gap-2 mt-2">
               <input
                 name="content"
-                placeholder={`Responder a @${comment.profiles?.username}...`}
+                placeholder={`Responder a ${comment.profiles?.username ? `@${comment.profiles.username}` : 'este usuario'}...`}
                 required
                 autoFocus
                 className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#000000] transition"

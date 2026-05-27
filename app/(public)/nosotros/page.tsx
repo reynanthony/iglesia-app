@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import BlockRenderer from '@/components/BlockRenderer'
 
 const beliefs = [
   { n: '01', title: 'La Biblia',    desc: 'La Palabra inspirada de Dios, autoridad final para la fe y la práctica cristiana.' },
@@ -12,7 +13,11 @@ const beliefs = [
 export default async function NosotrosPage() {
   const supabase = await createClient()
   const { data } = await supabase.from('page_content').select('content').eq('page', 'nosotros').single()
-  const c = (data?.content ?? {}) as Record<string, string>
+  const content = (data?.content ?? {}) as Record<string, any>
+  if (Array.isArray(content.blocks) && content.blocks.length > 0) {
+    return <BlockRenderer blocks={content.blocks} />
+  }
+  const c = content as Record<string, string>
 
   const stats = [
     { value: c.stat_year        || '2008', label: 'Fundados' },
@@ -42,22 +47,47 @@ export default async function NosotrosPage() {
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 55% 70% at 10% 60%, rgba(0,0,0,0.07), transparent 65%)' }} />
 
-        <div className="relative max-w-6xl mx-auto w-full px-6 pb-20 pt-32 md:pt-40">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px bg-[#000000]" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
-                Quiénes somos · Desde 2008
+        <div className="relative max-w-6xl mx-auto w-full px-6 pb-0 pt-32 md:pt-40">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end pb-20">
+            {/* Texto */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-5 mb-14">
+                <div className="w-12 h-px bg-[#000000]" />
+                <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
+                  Quiénes somos · Desde 2008
+                </p>
+              </div>
+              <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
+                style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)', lineHeight: 0.85 }}>
+                Somos<br />El Manan-<br />
+                <em style={{ color: '#C9A96E' }}>tial.</em>
+              </h1>
+              <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
+                {heroBody}
               </p>
             </div>
-            <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
-              style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)', lineHeight: 0.85 }}>
-              Somos<br />El Manan-<br />
-              <em className="text-[#000000]">tial.</em>
-            </h1>
-            <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
-              {heroBody}
-            </p>
+
+            {/* Fotografía de comunidad */}
+            <div className="hidden lg:block lg:col-span-5 pb-4">
+              <div
+                className="relative rounded-2xl overflow-hidden"
+                style={{ aspectRatio: '4/5', background: '#E8E0D4' }}
+              >
+                {/* Placeholder hasta que haya foto real */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-8"
+                  style={{ color: '#A89878' }}>
+                  <Users size={36} strokeWidth={1.2} />
+                  <p className="text-sm font-bold tracking-wide leading-snug">
+                    Fotografía de la comunidad
+                  </p>
+                  <p className="text-xs opacity-60">
+                    Agrégala en Admin → Página Nosotros
+                  </p>
+                </div>
+                {/* Accent line inferior */}
+                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#C9A96E' }} />
+              </div>
+            </div>
           </div>
         </div>
 

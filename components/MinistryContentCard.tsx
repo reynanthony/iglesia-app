@@ -30,8 +30,11 @@ export default function MinistryContentCard({
   const type      = typeConfig[item.type] ?? typeConfig['articulo']
   const youtubeId = item.video_url ? getYouTubeId(item.video_url) : null
 
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('es-DO', { day: 'numeric', month: 'short', year: 'numeric' })
+  const formatDate = (date: string) => {
+    const d = new Date(date)
+    const M = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
+    return `${d.getUTCDate()} ${M[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+  }
 
   async function handleDelete() {
     if (!confirm) {

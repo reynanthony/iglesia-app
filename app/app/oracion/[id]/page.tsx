@@ -22,7 +22,7 @@ export default async function SalaPage({ params }: { params: Promise<{ id: strin
   const isCreator = room.created_by === user?.id
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100dvh - 56px)' }}>
+    <div className="room-height flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #1F1F1F' }}>
         <div className="flex items-center gap-3">

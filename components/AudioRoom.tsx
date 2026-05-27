@@ -1,40 +1,49 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LiveKitRoom,
   useParticipants,
-  useLocalParticipant,
+  useTrackToggle,
+  useConnectionState,
   RoomAudioRenderer,
 } from '@livekit/components-react'
+import { Track, ConnectionState } from 'livekit-client'
 import '@livekit/components-styles'
-import { Mic, MicOff, PhoneOff, Users, Loader2 } from 'lucide-react'
+import { Mic, MicOff, PhoneOff, Users, Loader2, WifiOff } from 'lucide-react'
 
 function RoomControls({ onLeave }: { onLeave: () => void }) {
-  const { localParticipant, isMicrophoneEnabled } = useLocalParticipant()
   const participants = useParticipants()
-  const [micError, setMicError] = useState('')
-  const [micPending, setMicPending] = useState(false)
+  const connectionState = useConnectionState()
+  const isConnected = connectionState === ConnectionState.Connected
+  const isConnecting = connectionState === ConnectionState.Connecting || connectionState === ConnectionState.Reconnecting
 
-  const toggleMic = useCallback(async () => {
-    setMicError('')
-    setMicPending(true)
-    try {
-      await localParticipant.setMicrophoneEnabled(!isMicrophoneEnabled)
-    } catch (e: any) {
-      const msg = e?.message ?? ''
-      if (msg.includes('Permission') || msg.includes('denied') || msg.includes('NotAllowed')) {
-        setMicError('Permiso de micrófono denegado. Actívalo en la configuración del navegador.')
-      } else {
-        setMicError('No se pudo acceder al micrófono.')
-      }
-    } finally {
-      setMicPending(false)
-    }
-  }, [localParticipant, isMicrophoneEnabled])
+  // buttonProps.onClick mantiene el gesto de usuario sin wrappers async adicionales,
+  // lo cual es necesario en iOS Safari para que el prompt de permisos funcione.
+  const { buttonProps, enabled: micEnabled } = useTrackToggle({
+    source: Track.Source.Microphone,
+  })
 
   return (
     <div className="flex flex-col h-full">
+
+      {/* Estado de conexión */}
+      <div className="px-4 pt-3 flex-shrink-0">
+        {isConnecting && (
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs"
+            style={{ background: '#1A1A1A', color: '#8A8A8A' }}>
+            <Loader2 size={12} className="animate-spin" />
+            Conectando a la sala…
+          </div>
+        )}
+        {!isConnected && !isConnecting && (
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs"
+            style={{ background: 'rgba(239,68,68,0.08)', color: '#F87171', border: '1px solid rgba(239,68,68,0.15)' }}>
+            <WifiOff size={12} />
+            Sin conexión con la sala. Recarga la página.
+          </div>
+        )}
+      </div>
 
       {/* Participantes */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6">
@@ -46,7 +55,7 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {participants.map((participant) => {
             const isSpeaking = participant.isSpeaking
-            const micEnabled = participant.isMicrophoneEnabled
+            const hasMic = participant.isMicrophoneEnabled
             return (
               <div
                 key={participant.identity}
@@ -69,10 +78,10 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
                 <p className="text-xs font-medium text-center truncate w-full" style={{ color: '#F5F5F5' }}>
                   {participant.name ?? 'Usuario'}
                 </p>
-                <div className={`text-xs flex items-center gap-1`}
-                  style={{ color: micEnabled ? '#6BCB6B' : '#4D4D4D' }}>
-                  {micEnabled ? <Mic size={11} /> : <MicOff size={11} />}
-                  <span>{micEnabled ? 'Activo' : 'Silenciado'}</span>
+                <div className="text-xs flex items-center gap-1"
+                  style={{ color: hasMic ? '#6BCB6B' : '#4D4D4D' }}>
+                  {hasMic ? <Mic size={11} /> : <MicOff size={11} />}
+                  <span>{hasMic ? 'Activo' : 'Silenciado'}</span>
                 </div>
               </div>
             )
@@ -80,30 +89,27 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
         </div>
       </div>
 
-      {/* Error de permisos */}
-      {micError && (
-        <div className="mx-4 mb-2 px-4 py-3 rounded-xl text-sm text-red-400"
-          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
-          {micError}
-        </div>
-      )}
+      {/* Controles */}
+      <div className="flex-shrink-0 p-6 flex items-center justify-center gap-4"
+        style={{ borderTop: '1px solid #1F1F1F' }}>
 
-      {/* Controles — extra bottom padding so they clear the mobile nav */}
-      <div className="flex-shrink-0 p-4 md:p-6 flex items-center justify-center gap-4"
-        style={{ borderTop: '1px solid #1F1F1F', paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
-
+        {/*
+          Spread buttonProps directamente — incluye el onClick de LiveKit que
+          gestiona permisos y el AudioContext de forma compatible con iOS Safari.
+          Sólo sobreescribimos disabled, className y style.
+        */}
         <button
-          onClick={toggleMic}
-          disabled={micPending}
-          className="w-16 h-16 rounded-full flex items-center justify-center transition disabled:opacity-50"
+          {...buttonProps}
+          disabled={buttonProps.disabled || !isConnected}
+          className="w-16 h-16 rounded-full flex items-center justify-center transition disabled:opacity-40"
           style={{
-            background: isMicrophoneEnabled ? '#1F1F1F' : 'rgba(239,68,68,0.15)',
-            border: `2px solid ${isMicrophoneEnabled ? '#2A2A2A' : 'rgba(239,68,68,0.3)'}`,
+            background: micEnabled ? '#1F1F1F' : 'rgba(239,68,68,0.15)',
+            border: `2px solid ${micEnabled ? '#2A2A2A' : 'rgba(239,68,68,0.3)'}`,
           }}
         >
-          {micPending
+          {buttonProps.disabled
             ? <Loader2 size={22} className="animate-spin" style={{ color: '#8A8A8A' }} />
-            : isMicrophoneEnabled
+            : micEnabled
               ? <Mic size={22} style={{ color: '#F5F5F5' }} />
               : <MicOff size={22} style={{ color: '#F87171' }} />
           }
@@ -124,6 +130,7 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
 export default function AudioRoom({ roomId, roomName }: { roomId: string; roomName: string }) {
   const [token, setToken] = useState('')
   const [tokenError, setTokenError] = useState('')
+  const [roomError, setRoomError] = useState('')
   const [left, setLeft] = useState(false)
 
   useEffect(() => {
@@ -136,26 +143,53 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
       .catch(() => setTokenError('Error de conexión. Intenta recargar.'))
   }, [roomId])
 
+
   if (left) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4" style={{ color: '#5A5A5A' }}>
-        <p className="text-3xl">🙏</p>
-        <p className="font-bold" style={{ color: '#F5F5F5' }}>Saliste de la sala</p>
-        <a href="/app/oracion"
-          className="text-sm px-5 py-2.5 rounded-xl font-bold"
-          style={{ background: '#1A1A1A', color: '#8A8A8A', border: '1px solid #2A2A2A' }}>
+      <div className="flex flex-col items-center justify-center h-full gap-5 px-6">
+        <div
+          className="w-16 h-16 rounded-full flex items-center justify-center"
+          style={{ background: '#141414', border: '1px solid #2A2A2A' }}
+        >
+          <PhoneOff size={22} style={{ color: '#4D4D4D' }} />
+        </div>
+        <div className="text-center">
+          <p className="font-black text-base tracking-tight" style={{ color: '#F5F5F5' }}>
+            Saliste de la sala
+          </p>
+          <p className="text-xs mt-1" style={{ color: '#4D4D4D' }}>
+            Tu micrófono ha sido desconectado
+          </p>
+        </div>
+        <a
+          href="/app/oracion"
+          className="text-xs font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"
+          style={{ background: '#141414', color: '#F5F5F5', border: '1px solid #2A2A2A' }}
+        >
           Volver a salas
         </a>
       </div>
     )
   }
 
-  if (tokenError) {
+  if (tokenError || roomError) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-3 px-6 text-center">
-        <p className="text-sm" style={{ color: '#F87171' }}>{tokenError}</p>
+      <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center"
+          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}>
+          <WifiOff size={24} style={{ color: '#F87171' }} />
+        </div>
+        <div>
+          <p className="font-bold text-sm mb-1" style={{ color: '#F5F5F5' }}>
+            {roomError ? 'Servidor de voz no disponible' : 'Error de acceso'}
+          </p>
+          <p className="text-xs" style={{ color: '#8A8A8A' }}>
+            {roomError || tokenError}
+          </p>
+        </div>
         <button onClick={() => window.location.reload()}
-          className="text-sm px-4 py-2 rounded-xl" style={{ background: '#1A1A1A', color: '#8A8A8A' }}>
+          className="text-sm px-5 py-2.5 rounded-xl font-bold transition"
+          style={{ background: '#1A1A1A', color: '#F5F5F5', border: '1px solid #2A2A2A' }}>
           Reintentar
         </button>
       </div>
@@ -178,7 +212,8 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
       connect={true}
       audio={false}
       video={false}
-      onDisconnected={() => setLeft(true)}
+      onConnected={() => setRoomError('')}
+      onError={(e) => setRoomError(`Error: ${e.message}`)}
       style={{ height: '100%', background: 'transparent' }}
     >
       <RoomAudioRenderer />

@@ -2,6 +2,9 @@
 
 import { useMemo } from 'react'
 
+const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+function dayKey(d: Date) { return `${DIAS[d.getUTCDay()]} ${d.getUTCDate()}` }
+
 export default function AdminChart({
   title,
   data,
@@ -13,17 +16,15 @@ export default function AdminChart({
 }) {
   const chartData = useMemo(() => {
     const days: Record<string, number> = {}
+    const now = new Date()
 
     for (let i = 6; i >= 0; i--) {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      const key = d.toLocaleDateString('es-DO', { weekday: 'short', day: 'numeric' })
-      days[key] = 0
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i))
+      days[dayKey(d)] = 0
     }
 
     data.forEach(item => {
-      const d = new Date(item.created_at)
-      const key = d.toLocaleDateString('es-DO', { weekday: 'short', day: 'numeric' })
+      const key = dayKey(new Date(item.created_at))
       if (key in days) days[key]++
     })
 

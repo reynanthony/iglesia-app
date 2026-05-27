@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Flag } from 'lucide-react'
+import { Heart, MessageCircle, Flag } from 'lucide-react'
 import { toggleLike, createComment, reportPost } from '@/app/actions/posts'
 import Link from 'next/link'
 import CommentItem from '@/components/CommentItem'
+import SocialEmbedCard from '@/components/SocialEmbedCard'
+import { detectSocialEmbed } from '@/lib/social-embed'
 
 export default function PostCard({ post, currentUserId }: { post: any, currentUserId: string }) {
   const [showMenu, setShowMenu] = useState(false)
@@ -20,10 +22,10 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
 
   const timeAgo = (date: string) => {
     const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
-    if (diff < 60) return 'AHORA'
-    if (diff < 3600) return `HACE ${Math.floor(diff / 60)} MIN`
-    if (diff < 86400) return `HACE ${Math.floor(diff / 3600)} H`
-    return `HACE ${Math.floor(diff / 86400)} D`
+    if (diff < 60) return 'ahora'
+    if (diff < 3600) return `hace ${Math.floor(diff / 60)} min`
+    if (diff < 86400) return `hace ${Math.floor(diff / 3600)} h`
+    return `hace ${Math.floor(diff / 86400)} d`
   }
 
   async function handleLike() {
@@ -44,34 +46,60 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   }
 
   return (
-    <div className="bg-black border-b border-slate-800 md:border md:rounded-xl md:mb-4 md:overflow-hidden">
-
+    <div
+      style={{
+        background: '#0A0A0A',
+        borderBottom: '1px solid #1A1A1A',
+      }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-3">
-        <Link href={`/app/perfil/${post.profiles?.username}`} className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-[#000000] ring-offset-2 ring-offset-black flex-shrink-0">
-            {post.profiles?.avatar_url ? (
-              <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-[#000000]/20 flex items-center justify-center text-[#000000] font-bold text-sm">
-                {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
-              </div>
-            )}
+      <div className="flex items-center justify-between px-4 py-3.5">
+        {post.profiles?.username ? (
+          <Link href={`/app/perfil/${post.profiles.username}`} className="flex items-center gap-3">
+            <div
+              className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
+              style={{ background: '#1A1A1A', color: '#8A8A8A' }}
+            >
+              {post.profiles.avatar_url
+                ? <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
+                : post.profiles.full_name?.[0]?.toUpperCase() ?? 'U'}
+            </div>
+            <div>
+              <p className="font-bold text-sm leading-tight" style={{ color: '#F5F5F5' }}>{post.profiles.full_name}</p>
+              <p className="text-xs" style={{ color: '#4D4D4D' }}>@{post.profiles.username}</p>
+            </div>
+          </Link>
+        ) : (
+          <div className="flex items-center gap-3">
+            <div
+              className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
+              style={{ background: '#1A1A1A', color: '#8A8A8A' }}
+            >
+              {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
+            </div>
+            <div>
+              <p className="font-bold text-sm leading-tight" style={{ color: '#F5F5F5' }}>{post.profiles?.full_name ?? 'Usuario'}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-white text-sm leading-tight">{post.profiles?.full_name}</p>
-            <p className="text-slate-400 text-xs">@{post.profiles?.username}</p>
-          </div>
-        </Link>
+        )}
 
         <div className="relative">
-          <button onClick={() => setShowMenu(!showMenu)} className="text-slate-400 p-1 hover:text-white transition">
-            <MoreHorizontal size={20} />
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="p-1.5 rounded-lg transition"
+            style={{ color: '#4D4D4D' }}
+          >
+            <svg width="18" height="4" viewBox="0 0 18 4" fill="currentColor">
+              <circle cx="2" cy="2" r="2"/><circle cx="9" cy="2" r="2"/><circle cx="16" cy="2" r="2"/>
+            </svg>
           </button>
           {showMenu && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
-              <div className="absolute right-0 top-full mt-1 bg-slate-900 border border-slate-800 rounded-xl shadow-xl z-20 overflow-hidden w-44">
+              <div
+                className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-40"
+                style={{ background: '#141414', border: '1px solid #2A2A2A' }}
+              >
                 <button
                   onClick={async () => {
                     if (reported) return
@@ -82,12 +110,11 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                     setReporting(false)
                   }}
                   disabled={reporting || reported}
-                  className="w-full flex items-center gap-2.5 px-4 py-3 text-sm hover:bg-slate-800 transition text-left disabled:opacity-50"
+                  className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left disabled:opacity-50 transition"
+                  style={{ color: reported ? '#8A8A8A' : '#F87171' }}
                 >
-                  <Flag size={14} className={reported ? 'text-[#000000]' : 'text-slate-400'} />
-                  <span className={reported ? 'text-[#000000]' : 'text-slate-300'}>
-                    {reported ? 'Reportado' : 'Reportar post'}
-                  </span>
+                  <Flag size={14} />
+                  {reported ? 'Reportado' : 'Reportar'}
                 </button>
               </div>
             </>
@@ -100,49 +127,78 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         <img src={post.image_url} alt="" className="w-full object-cover" />
       )}
 
-      {/* Botones */}
-      <div className="px-3 pt-3 pb-1 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button onClick={handleLike} className="transition active:scale-90">
-            <Heart size={26} className={liked ? 'text-red-500 fill-red-500' : 'text-white'} strokeWidth={1.8} />
-          </button>
-          <button onClick={() => setShowComments(!showComments)} className="transition active:scale-90">
-            <MessageCircle size={26} className="text-white" strokeWidth={1.8} />
-          </button>
-          <button className="transition active:scale-90">
-            <Send size={24} className="text-white" strokeWidth={1.8} />
-          </button>
-        </div>
-        <button className="transition active:scale-90">
-          <Bookmark size={24} className="text-white" strokeWidth={1.8} />
-        </button>
+      {/* Contenido */}
+      <div className="px-4 pt-3 pb-1">
+        <p className="text-sm leading-relaxed" style={{ color: '#F5F5F5' }}>
+          {post.profiles?.username ? (
+            <Link
+              href={`/app/perfil/${post.profiles.username}`}
+              className="font-bold mr-1.5"
+              style={{ color: '#F5F5F5' }}
+            >
+              {post.profiles.username}
+            </Link>
+          ) : (
+            <span className="font-bold mr-1.5">{post.profiles?.full_name ?? 'Usuario'}</span>
+          )}
+          {post.content}
+        </p>
       </div>
 
-      {/* Likes */}
-      {likesCount > 0 && (
-        <p className="px-3 pb-1 text-sm font-semibold text-white">{likesCount} me gusta</p>
-      )}
+      {/* Video embed (YouTube, Facebook, Instagram, TikTok) */}
+      {(() => {
+        const embed = detectSocialEmbed(post.content ?? '')
+        return embed ? (
+          <div className="px-4 pb-2 pt-1">
+            <SocialEmbedCard embed={embed} />
+          </div>
+        ) : null
+      })()}
 
-      {/* Caption */}
-      <div className="px-3 pb-2">
-        <span className="text-sm text-white">
-          <Link href={`/app/perfil/${post.profiles?.username}`} className="font-semibold mr-2">
-            {post.profiles?.username}
-          </Link>
-          {post.content}
+      {/* Acciones */}
+      <div className="flex items-center gap-5 px-4 py-3">
+        <button
+          onClick={handleLike}
+          className="flex items-center gap-1.5 transition active:scale-90"
+          style={{ color: liked ? '#F87171' : '#4D4D4D' }}
+        >
+          <Heart size={20} strokeWidth={1.8} fill={liked ? 'currentColor' : 'none'} />
+          {likesCount > 0 && (
+            <span className="text-xs font-bold" style={{ color: liked ? '#F87171' : '#4D4D4D' }}>
+              {likesCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          onClick={() => setShowComments(!showComments)}
+          className="flex items-center gap-1.5 transition active:scale-90"
+          style={{ color: '#4D4D4D' }}
+        >
+          <MessageCircle size={20} strokeWidth={1.8} />
+          {totalComments > 0 && (
+            <span className="text-xs font-bold">{totalComments}</span>
+          )}
+        </button>
+
+        <span className="text-xs ml-auto" style={{ color: '#2A2A2A' }}>
+          {timeAgo(post.created_at)}
         </span>
       </div>
 
-      {/* Ver comentarios */}
+      {/* Comentarios */}
       {totalComments > 0 && !showComments && (
-        <button onClick={() => setShowComments(true)} className="px-3 pb-2 text-slate-500 text-sm">
-          Ver los {totalComments} comentarios
+        <button
+          onClick={() => setShowComments(true)}
+          className="px-4 pb-3 text-xs font-bold transition"
+          style={{ color: '#4D4D4D' }}
+        >
+          Ver {totalComments} comentario{totalComments !== 1 ? 's' : ''}
         </button>
       )}
 
-      {/* Comentarios expandidos */}
       {showComments && topLevelComments.length > 0 && (
-        <div className="px-3 pb-2 space-y-3">
+        <div className="px-4 pb-3 space-y-3">
           {topLevelComments.map((comment: any) => (
             <CommentItem
               key={comment.id}
@@ -155,22 +211,24 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         </div>
       )}
 
-      {/* Tiempo */}
-      <p className="px-3 pb-2 text-slate-500 text-xs">{timeAgo(post.created_at)}</p>
-
-      {/* Input comentario */}
       {showComments && (
-        <form onSubmit={handleComment} className="flex items-center gap-3 px-3 py-2.5 border-t border-slate-800">
+        <form
+          onSubmit={handleComment}
+          className="flex items-center gap-3 px-4 py-3"
+          style={{ borderTop: '1px solid #1A1A1A' }}
+        >
           <input
             name="content"
-            placeholder="Añade un comentario..."
+            placeholder="Añade un comentario…"
             required
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-slate-500 focus:outline-none"
+            className="flex-1 bg-transparent text-sm focus:outline-none"
+            style={{ color: '#F5F5F5' }}
           />
           <button
             type="submit"
             disabled={commenting}
-            className="text-[#000000] font-semibold text-sm disabled:opacity-50"
+            className="text-xs font-black uppercase tracking-wider disabled:opacity-50 transition"
+            style={{ color: '#F5F5F5' }}
           >
             Publicar
           </button>

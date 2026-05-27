@@ -12,6 +12,8 @@ const roleMeta: Record<string, { label: string; color: string; bg: string }> = {
 
 export default async function PerfilPage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params
+  if (!username || username === 'undefined') notFound()
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

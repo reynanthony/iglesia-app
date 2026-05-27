@@ -1,20 +1,36 @@
 import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import BlockRenderer from '@/components/BlockRenderer'
+
+const MESES_LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+const MESES_CORTO = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+function fmtFechaLarga(iso: string) {
+  const d = new Date(iso)
+  return `${d.getUTCDate()} de ${MESES_LARGO[d.getUTCMonth()]} de ${d.getUTCFullYear()}`
+}
+function fmtFechaCorta(iso: string) {
+  const d = new Date(iso)
+  return `${MESES_CORTO[d.getUTCMonth()]} ${d.getUTCDate()}`
+}
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const [{ data: pageData }, { data: predicasData }] = await Promise.all([
-    supabase.from('page_content').select('content').eq('page', 'home').single(),
-    supabase.from('ministry_content')
-      .select('id, title, body, video_url, pinned, created_at, profiles(full_name), ministries(name)')
-      .eq('type', 'video')
-      .order('pinned', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(5),
-  ])
+  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'home').single()
+  const pageContent = (pageData?.content ?? {}) as Record<string, any>
 
-  const c = (pageData?.content ?? {}) as Record<string, any>
+  if (Array.isArray(pageContent.blocks) && pageContent.blocks.length > 0) {
+    return <BlockRenderer blocks={pageContent.blocks} />
+  }
+
+  const { data: predicasData } = await supabase.from('ministry_content')
+    .select('id, title, body, video_url, pinned, created_at, profiles(full_name), ministries(name)')
+    .eq('type', 'video')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(5)
+
+  const c = pageContent
 
   const defaultServices = [
     { n: '01', day: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio principal' },
@@ -278,7 +294,7 @@ export default async function HomePage() {
                 </h3>
                 <p className="text-sm text-ink-3 uppercase tracking-wider">
                   {(featured as any).profiles?.full_name ?? 'Pastor'} ·{' '}
-                  {new Date((featured as any).created_at).toLocaleDateString('es-DO', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  {fmtFechaLarga((featured as any).created_at)}
                 </p>
               </div>
             </Link>
@@ -306,7 +322,7 @@ export default async function HomePage() {
                     <p className="text-[11px] text-ink-3 mt-0.5">{p.ministries?.name}</p>
                   </div>
                   <p className="text-[11px] text-ink-3 flex-shrink-0 hidden sm:block">
-                    {new Date(p.created_at).toLocaleDateString('es-DO', { month: 'short', day: 'numeric' })}
+                    {fmtFechaCorta(p.created_at)}
                   </p>
                   <ArrowRight size={13} className="text-ink-3 flex-shrink-0 group-hover:translate-x-1 group-hover:text-ink transition-all" />
                 </Link>

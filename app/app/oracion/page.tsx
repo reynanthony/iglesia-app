@@ -75,13 +75,34 @@ export default async function OracionPage() {
       <div className="max-w-2xl mx-auto px-4 py-8">
 
         {!rooms || rooms.length === 0 ? (
-          <div className="text-center py-28">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-              style={{ background: '#161616', border: '1px solid #2A2A2A' }}>
-              <Mic2 size={28} style={{ color: '#4D4D4D' }} />
-            </div>
+          <div className="text-center py-28 flex flex-col items-center">
+            {/* Ilustración SVG: manos en oración */}
+            <svg width="72" height="80" viewBox="0 0 72 80" fill="none" aria-hidden className="mb-6">
+              {/* Mano izquierda */}
+              <path d="M20 52 C18 44 14 38 12 30 C11 26 13 22 17 22 C19 22 21 24 22 27 L24 36"
+                stroke="#C9A96E" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeOpacity="0.8"/>
+              <path d="M24 36 C22 28 20 22 22 18 C23 15 26 14 29 15 C31 16 32 19 32 22 L33 34"
+                stroke="#C9A96E" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeOpacity="0.8"/>
+              <path d="M33 34 C32 26 32 20 34 17 C35 14 38 13 40 15 C42 17 42 22 41 28"
+                stroke="#C9A96E" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeOpacity="0.8"/>
+              {/* Palma izquierda */}
+              <path d="M20 52 C19 58 22 64 28 66 L36 68"
+                stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" fill="none" strokeOpacity="0.7"/>
+              {/* Mano derecha */}
+              <path d="M52 52 C54 44 58 38 60 30 C61 26 59 22 55 22 C53 22 51 24 50 27 L48 36"
+                stroke="#C9A96E" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeOpacity="0.8"/>
+              <path d="M48 36 C50 28 52 22 50 18 C49 15 46 14 43 15 C41 16 40 19 40 22 L39 34"
+                stroke="#C9A96E" strokeWidth="2.5" strokeLinecap="round" fill="none" strokeOpacity="0.8"/>
+              {/* Palma derecha */}
+              <path d="M52 52 C53 58 50 64 44 66 L36 68"
+                stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" fill="none" strokeOpacity="0.7"/>
+              {/* Pequeñas líneas de luz arriba */}
+              <line x1="36" y1="6" x2="36" y2="12" stroke="#C9A96E" strokeWidth="1.5" strokeOpacity="0.4" strokeLinecap="round"/>
+              <line x1="28" y1="8" x2="30" y2="13" stroke="#C9A96E" strokeWidth="1" strokeOpacity="0.25" strokeLinecap="round"/>
+              <line x1="44" y1="8" x2="42" y2="13" stroke="#C9A96E" strokeWidth="1" strokeOpacity="0.25" strokeLinecap="round"/>
+            </svg>
             <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F5F5F5' }}>No hay salas activas</p>
-            <p className="text-sm mb-8" style={{ color: '#4D4D4D' }}>Crea una sala y comienza a orar con tu comunidad</p>
+            <p className="text-sm mb-8 max-w-[200px] leading-relaxed mx-auto" style={{ color: '#4D4D4D' }}>Crea una sala y comienza a orar con tu comunidad</p>
             <Link
               href="/app/oracion/nueva"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"

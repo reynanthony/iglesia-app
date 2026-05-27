@@ -5,14 +5,19 @@ import { createPost } from '@/app/actions/posts'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
+import SocialEmbedCard from '@/components/SocialEmbedCard'
+import { detectSocialEmbed } from '@/lib/social-embed'
 
 export default function NuevoPostPage() {
+  const [content, setContent] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const [fileName, setFileName] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+
+  const embedPreview = detectSocialEmbed(content)
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -33,64 +38,132 @@ export default function NuevoPostPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const formData = new FormData(e.currentTarget)
-    const result = await createPost(formData)
-    if (result?.error) {
-      setError(result.error)
+    try {
+      const formData = new FormData(e.currentTarget)
+      const result = await createPost(formData)
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
+      } else {
+        router.push('/app/feed')
+      }
+    } catch {
+      setError('Error al publicar. Verifica tu conexión e intenta de nuevo.')
       setLoading(false)
-    } else {
-      router.push('/app/feed')
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="flex items-center gap-3 mb-8">
-        <Link href="/app/feed" className="p-2 hover:bg-slate-800 rounded-xl transition">
-          <ArrowLeft size={18} />
-        </Link>
-        <h1 className="text-xl font-bold">Nueva publicacion</h1>
-      </div>
+    <div style={{ background: '#0A0A0A', minHeight: '100vh' }}>
+      <div className="max-w-xl mx-auto px-4 py-8">
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-8">
+          <Link
+            href="/app/feed"
+            className="p-2 rounded-xl transition"
+            style={{ color: '#4D4D4D', background: '#111111', border: '1px solid #1A1A1A' }}
+          >
+            <ArrowLeft size={18} />
+          </Link>
+          <div>
+            <h1 className="font-black text-lg tracking-tight" style={{ color: '#F5F5F5' }}>
+              Nueva publicación
+            </h1>
+            <p className="text-xs" style={{ color: '#4D4D4D' }}>Comparte con la comunidad</p>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          <div>
-            <label className="text-slate-300 text-sm block mb-2">
-              Que quieres compartir?
-            </label>
+          {/* Textarea */}
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{ background: '#111111', border: '1px solid #1A1A1A' }}
+          >
             <textarea
               name="content"
-              rows={4}
-              placeholder="Comparte una reflexion, versiculo, testimonio..."
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition placeholder:text-slate-500 resize-none"
+              rows={5}
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              placeholder="¿Qué quieres compartir hoy? Un versículo, reflexión, testimonio… o pega un enlace de YouTube, Facebook o Instagram."
+              className="w-full bg-transparent text-sm focus:outline-none resize-none px-5 pt-5 pb-3"
+              style={{ color: '#F5F5F5' }}
             />
-          </div>
 
-          {/* Preview imagen */}
-          {preview && (
-            <div className="relative rounded-xl overflow-hidden">
-              <img src={preview} alt="" className="w-full object-cover max-h-80 rounded-xl" />
+            {/* Preview imagen dentro del card */}
+            {preview && (
+              <div className="relative mx-4 mb-4 rounded-xl overflow-hidden">
+                <img src={preview} alt="" className="w-full object-cover max-h-64 rounded-xl" />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full transition"
+                  style={{ background: 'rgba(0,0,0,0.7)' }}
+                >
+                  <X size={15} style={{ color: '#F5F5F5' }} />
+                </button>
+              </div>
+            )}
+
+            {/* Toolbar */}
+            <div
+              className="flex items-center justify-between px-4 py-3"
+              style={{ borderTop: '1px solid #1A1A1A' }}
+            >
               <button
                 type="button"
-                onClick={removeImage}
-                className="absolute top-2 right-2 w-8 h-8 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center transition"
+                onClick={() => fileRef.current?.click()}
+                className="flex items-center gap-2 text-sm transition"
+                style={{ color: fileName ? '#F5F5F5' : '#4D4D4D' }}
               >
-                <X size={16} className="text-white" />
+                <ImageIcon size={16} />
+                <span className="text-xs">{fileName || 'Agregar foto'}</span>
               </button>
+
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/app/feed"
+                  className="px-4 py-2 rounded-xl text-xs font-bold transition"
+                  style={{ color: '#4D4D4D' }}
+                >
+                  Cancelar
+                </Link>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition disabled:opacity-40"
+                  style={{ background: '#F5F5F5', color: '#0A0A0A' }}
+                >
+                  {loading ? 'Publicando…' : 'Publicar'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Preview del embed social (cuando se detecta URL en el contenido) */}
+          {embedPreview && (
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: '#4D4D4D' }}>
+                Vista previa
+              </p>
+              <SocialEmbedCard embed={embedPreview} />
             </div>
           )}
 
-          {/* Botón imagen */}
-          {!preview && (
+          {/* Zona imagen (si no hay preview de imagen y no hay embed) */}
+          {!preview && !embedPreview && (
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="w-full border border-dashed border-slate-700 hover:border-[#000000]/50 rounded-xl py-6 flex flex-col items-center gap-2 text-slate-500 hover:text-[#000000] transition"
+              className="w-full rounded-2xl py-8 flex flex-col items-center gap-2 transition"
+              style={{
+                border: '1px dashed #2A2A2A',
+                color: '#2A2A2A',
+              }}
             >
-              <ImageIcon size={24} />
-              <span className="text-sm">Agregar imagen</span>
-              <span className="text-xs">JPG, PNG, WEBP hasta 10MB</span>
+              <ImageIcon size={22} />
+              <span className="text-xs">JPG, PNG, WEBP · max 10 MB</span>
             </button>
           )}
 
@@ -104,37 +177,13 @@ export default function NuevoPostPage() {
           />
 
           {error && (
-            <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
+            <p
+              className="text-sm px-4 py-3 rounded-xl"
+              style={{ color: '#F87171', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)' }}
+            >
               {error}
             </p>
           )}
-
-          <div className="flex items-center justify-between pt-1">
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              className="flex items-center gap-2 text-slate-400 hover:text-[#000000] text-sm transition"
-            >
-              <ImageIcon size={16} />
-              {fileName ? fileName : 'Foto'}
-            </button>
-
-            <div className="flex gap-3">
-              <Link
-                href="/app/feed"
-                className="px-5 py-2.5 border border-slate-700 hover:border-slate-500 rounded-xl text-sm transition"
-              >
-                Cancelar
-              </Link>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-5 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
-              >
-                {loading ? 'Publicando...' : 'Publicar'}
-              </button>
-            </div>
-          </div>
         </form>
       </div>
     </div>
