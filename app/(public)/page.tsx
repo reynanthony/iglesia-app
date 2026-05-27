@@ -157,10 +157,7 @@ export default async function HomePage() {
               {eventDesc}
             </p>
             <Link href="/eventos"
-              className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-              style={{ background: '#1B7A5E' }}
-              onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = '#0B4A38'}
-              onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = '#1B7A5E'}>
+              className="inline-flex items-center gap-3 bg-[#1B7A5E] hover:bg-[#0B4A38] text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition">
               Más información <ArrowRight size={12} />
             </Link>
           </div>
