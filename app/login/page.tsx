@@ -5,28 +5,6 @@ import { login } from '@/app/actions/auth'
 import Link from 'next/link'
 import { ArrowRight, AlertCircle } from 'lucide-react'
 
-/* SVG de cruz decorativa con rayos de luz */
-function CrossIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden>
-      {/* Rayos */}
-      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
-        <line
-          key={i}
-          x1="24" y1="24"
-          x2={24 + 18 * Math.cos((deg * Math.PI) / 180)}
-          y2={24 + 18 * Math.sin((deg * Math.PI) / 180)}
-          stroke="#22A67A"
-          strokeWidth="0.8"
-          strokeOpacity="0.4"
-        />
-      ))}
-      {/* Cruz */}
-      <rect x="21.5" y="9" width="5" height="30" rx="2" fill="#22A67A" />
-      <rect x="9" y="18" width="30" height="5" rx="2" fill="#22A67A" />
-    </svg>
-  )
-}
 
 export default function LoginPage() {
   const [error, setError] = useState('')
@@ -50,57 +28,45 @@ export default function LoginPage() {
       {/* ── PANEL IZQUIERDO — identidad visual ── */}
       <div
         className="relative lg:w-1/2 flex flex-col items-center justify-center px-10 py-16 overflow-hidden"
-        style={{ background: '#0A0A0A', minHeight: 300 }}
+        style={{ background: '#093C5D', minHeight: 300 }}
       >
-        {/* Patrón de fondo: líneas sutiles */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(27,122,94,0.06) 0%, transparent 70%)',
-          }}
-        />
-        {/* Palabra decorativa */}
-        <div
-          className="pointer-events-none absolute select-none font-black leading-none tracking-tighter"
-          style={{
-            fontSize: 'clamp(10rem, 22vw, 20rem)',
-            color: '#F5F5F5',
-            opacity: 0.025,
-            bottom: '-4rem',
-            left: '-2rem',
-            lineHeight: 1,
-            fontFamily: 'Georgia, serif',
-          }}
-          aria-hidden
-        >
+        {/* Grid sutil */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 80px)' }} />
+        {/* Número decorativo */}
+        <div className="pointer-events-none absolute select-none font-black leading-none tracking-tighter"
+          style={{ fontSize: 'clamp(10rem, 22vw, 20rem)', color: '#76ABAE', opacity: 0.06, bottom: '-4rem', left: '-2rem', lineHeight: 1, fontFamily: 'Georgia, serif' }}
+          aria-hidden>
           FE
         </div>
 
         {/* Contenido central */}
         <div className="relative flex flex-col items-center text-center z-10 max-w-xs">
-          <CrossIcon />
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden>
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
+              <line key={i} x1="24" y1="24"
+                x2={24 + 18 * Math.cos((deg * Math.PI) / 180)}
+                y2={24 + 18 * Math.sin((deg * Math.PI) / 180)}
+                stroke="#76ABAE" strokeWidth="0.8" strokeOpacity="0.4" />
+            ))}
+            <rect x="21.5" y="9" width="5" height="30" rx="2" fill="#76ABAE" />
+            <rect x="9" y="18" width="30" height="5" rx="2" fill="#76ABAE" />
+          </svg>
 
-          <h2
-            className="font-display font-black tracking-tighter mt-6 mb-2"
-            style={{ fontSize: 'clamp(2.4rem, 5vw, 3.5rem)', lineHeight: 0.9, color: '#F5F5F5' }}
-          >
+          <h2 className="font-display font-black tracking-tighter mt-6 mb-2"
+            style={{ fontSize: 'clamp(2.4rem, 5vw, 3.5rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             El Manantial
           </h2>
-          <p
-            className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8"
-            style={{ color: '#22A67A' }}
-          >
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: '#76ABAE' }}>
             Comunidad de fe
           </p>
 
-          {/* Separador */}
-          <div className="w-8 h-px mb-8" style={{ background: 'rgba(27,122,94,0.4)' }} />
+          <div className="w-8 h-px mb-8" style={{ background: 'rgba(118,171,174,0.4)' }} />
 
-          {/* Verso */}
-          <blockquote className="text-sm leading-relaxed text-center" style={{ color: 'rgba(245,245,245,0.38)' }}>
+          <blockquote className="text-sm leading-relaxed text-center" style={{ color: 'rgba(246,243,235,0.40)' }}>
             "El que bebe del agua que yo le daré no volverá a tener sed jamás."
           </blockquote>
-          <cite className="text-[10px] font-bold uppercase tracking-widest mt-3 block not-italic" style={{ color: '#22A67A', opacity: 0.6 }}>
+          <cite className="text-[10px] font-bold uppercase tracking-widest mt-3 block not-italic" style={{ color: '#76ABAE', opacity: 0.7 }}>
             Juan 4:14
           </cite>
         </div>
@@ -139,7 +105,7 @@ export default function LoginPage() {
                   border: '1px solid #E8E8E8',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#1B7A5E')}
+                onFocus={e => (e.currentTarget.style.borderColor = '#76ABAE')}
                 onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
               />
             </div>
@@ -160,7 +126,7 @@ export default function LoginPage() {
                   border: '1px solid #E8E8E8',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#1B7A5E')}
+                onFocus={e => (e.currentTarget.style.borderColor = '#76ABAE')}
                 onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
               />
             </div>
@@ -177,7 +143,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.22em] rounded-xl px-6 py-4 transition-all disabled:opacity-50 text-white active:scale-[0.98]"
-              style={{ background: '#0A0A0A' }}
+              style={{ background: '#093C5D' }}
             >
               {loading ? 'Entrando…' : (
                 <>
@@ -191,7 +157,7 @@ export default function LoginPage() {
           <div className="mt-8 pt-8" style={{ borderTop: '1px solid #EBEBEB' }}>
             <p className="text-center text-sm text-[#111111]/50">
               ¿No tienes cuenta?{' '}
-              <Link href="/registro" className="font-bold text-[#111111] hover:text-[#1B7A5E] transition-colors">
+              <Link href="/registro" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
                 Regístrate
               </Link>
             </p>

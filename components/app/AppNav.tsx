@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, MessageCircle, Mic2, Search, User, Plus } from 'lucide-react'
 
-const ACCENT = '#22A67A'
+const ACCENT = '#76ABAE'
 
 const navItems = [
   { href: '/app/feed',    icon: Home,          label: 'Feed',    exact: true  },
@@ -27,7 +27,7 @@ export default function AppNav({ profileHref }: Props) {
         return (
           <Link key={href} href={href}
             className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
-            style={{ background: active ? '#181818' : undefined, color: active ? '#F5F5F5' : '#8A8A8A' }}>
+            style={{ background: active ? '#0D3352' : undefined, color: active ? '#F6F3EB' : '#7A9EAE' }}>
             <Icon size={18} style={{ color: active ? ACCENT : '#4D4D4D', flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
             <span className={active ? 'font-bold' : ''}>{label}</span>
             {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: ACCENT }} />}
@@ -36,8 +36,8 @@ export default function AppNav({ profileHref }: Props) {
       })}
       <div className="pt-3">
         <Link href="/app/nuevo-post"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-[#181818]"
-          style={{ color: '#F5F5F5' }}>
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-[#0D3352]"
+          style={{ color: '#F6F3EB' }}>
           <Plus size={18} style={{ flexShrink: 0 }} strokeWidth={2.5} />
           Publicar
         </Link>
@@ -76,11 +76,11 @@ export function AppBottomNav({ profileHref }: Props) {
             <Icon
               size={22}
               strokeWidth={active ? 2.5 : 1.8}
-              style={{ color: active ? ACCENT : '#4D4D4D' }}
+              style={{ color: active ? ACCENT : '#4A7A8E' }}
             />
             <span
               className="text-[12px] font-semibold tracking-wide"
-              style={{ color: active ? ACCENT : '#4D4D4D', lineHeight: 1 }}
+              style={{ color: active ? ACCENT : '#4A7A8E', lineHeight: 1 }}
             >
               {label}
             </span>

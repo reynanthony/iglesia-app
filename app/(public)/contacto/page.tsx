@@ -29,34 +29,34 @@ export default async function ContactoPage() {
       {/* ═══════════════════════════════════════
           HERO — conversacional, íntimo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EDE7DE 0%, #F2EDE7 50%, #F8F5F0 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: '#F6F3EB' }}>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 30% 60%, rgba(27,122,94,0.05), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 30% 60%, rgba(118,171,174,0.08), transparent 70%)' }} />
 
         {/* "HOLA" decorativo derecha */}
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
           <span className="font-black tracking-tighter leading-none block"
-            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.07, color: 'rgba(27,122,94,0.6)' }}>
+            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.06, color: '#093C5D' }}>
             HOLA
           </span>
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-32">
           <div className="flex items-center gap-5 mb-14">
-            <div className="w-12 h-px bg-[#000000]" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
+            <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: '#869B7E' }}>
               Contacto · Estamos aquí para ti
             </p>
           </div>
-          <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+          <h1 className="font-display font-black tracking-tighter mb-8"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85, color: '#093C5D' }}>
             Visítanos.
           </h1>
-          <p className="text-base text-[#111111]/50 leading-relaxed max-w-md">
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(9,60,93,0.55)' }}>
             No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.
           </p>
         </div>
-        <div className="h-px w-full bg-[#111111]/[0.08]" />
+        <div className="h-px w-full" style={{ background: '#D2CDB8' }} />
       </section>
 
       {/* ═══════════════════════════════════════
@@ -86,8 +86,8 @@ export default async function ContactoPage() {
 
               {/* Primera visita */}
               <div className="mt-6 p-6 rounded-xl"
-                style={{ background: 'rgba(27,122,94,0.08)', border: '1px solid rgba(27,122,94,0.18)' }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#1B7A5E' }}>¿Primera visita?</p>
+                style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.22)' }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#76ABAE' }}>¿Primera visita?</p>
                 <p className="text-sm font-black text-ink mb-2">No necesitas saber nada.</p>
                 <p className="text-sm text-ink-2 leading-relaxed">
                   Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.

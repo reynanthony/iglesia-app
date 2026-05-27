@@ -31,38 +31,38 @@ export default async function NosotrosPage() {
     <div>
 
       {/* ═══════════════════════════════════════
-          HERO — split asimétrico: texto + año
+          HERO — navy oscuro con tipografía cream
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-end" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+      <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-end" style={{ background: '#093C5D' }}>
 
-        {/* Año fundación — número decorativo derecha */}
+        {/* Grid sutil */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+
+        {/* Año fundación decorativo */}
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
-          <span className="font-black text-[#111111] leading-none tracking-tighter block"
-            style={{ fontSize: 'clamp(18rem, 40vw, 38rem)', opacity: 0.04, lineHeight: 1, paddingRight: '1rem' }}>
+          <span className="font-black leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(18rem, 40vw, 38rem)', opacity: 0.06, lineHeight: 1, paddingRight: '1rem', color: '#76ABAE' }}>
             08
           </span>
         </div>
-
-        {/* Glow izquierda */}
-        <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 55% 70% at 10% 60%, rgba(0,0,0,0.07), transparent 65%)' }} />
 
         <div className="relative max-w-6xl mx-auto w-full px-6 pb-0 pt-32 md:pt-40">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end pb-20">
             {/* Texto */}
             <div className="lg:col-span-7">
               <div className="flex items-center gap-5 mb-14">
-                <div className="w-12 h-px bg-[#000000]" />
-                <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
+                <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
+                <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
                   Quiénes somos · Desde 2008
                 </p>
               </div>
-              <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
+              <h1 className="font-display font-black tracking-tighter text-white mb-8"
                 style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)', lineHeight: 0.85 }}>
                 Somos<br />El Manan-<br />
-                <em style={{ color: '#1B7A5E' }}>tial.</em>
+                <em style={{ color: '#76ABAE' }}>tial.</em>
               </h1>
-              <p className="text-base text-[#111111]/50 leading-relaxed max-w-lg mt-10">
+              <p className="text-base leading-relaxed max-w-lg mt-10" style={{ color: 'rgba(246,243,235,0.55)' }}>
                 {heroBody}
               </p>
             </div>
@@ -71,41 +71,42 @@ export default async function NosotrosPage() {
             <div className="hidden lg:block lg:col-span-5 pb-4">
               <div
                 className="relative rounded-2xl overflow-hidden"
-                style={{ aspectRatio: '4/5', background: '#0B4A38' }}
+                style={{ aspectRatio: '4/5', background: '#F6F3EB' }}
               >
-                {/* Año fundación como arte tipográfico */}
+                {/* Año como arte tipográfico navy */}
                 <div className="absolute inset-0 flex items-end justify-start p-8 overflow-hidden">
-                  <span className="font-black text-white leading-none select-none"
-                    style={{ fontSize: 'clamp(7rem, 18vw, 14rem)', opacity: 0.10, lineHeight: 1 }}>
+                  <span className="font-black leading-none select-none"
+                    style={{ fontSize: 'clamp(7rem, 18vw, 14rem)', opacity: 0.08, lineHeight: 1, color: '#093C5D' }}>
                     2008
                   </span>
                 </div>
-                {/* Cruz minimalista centrada */}
+                {/* Cruz centrada en navy */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
-                    <rect x="32" y="8" width="8" height="56" rx="4" fill="white" fillOpacity="0.35" />
-                    <rect x="8" y="28" width="56" height="8" rx="4" fill="white" fillOpacity="0.35" />
+                    <rect x="32" y="8" width="8" height="56" rx="4" fill="#093C5D" fillOpacity="0.25" />
+                    <rect x="8" y="28" width="56" height="8" rx="4" fill="#093C5D" fillOpacity="0.25" />
                   </svg>
                 </div>
-                {/* Subtle grid texture */}
-                <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                  style={{ backgroundImage: 'repeating-linear-gradient(90deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 60px), repeating-linear-gradient(0deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 60px)' }} />
-                {/* Accent line inferior */}
-                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#22A67A' }} />
+                {/* Accent teal line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#76ABAE' }} />
+                {/* Label */}
+                <div className="absolute top-6 right-6 text-[9px] font-bold uppercase tracking-[0.35em]" style={{ color: '#869B7E' }}>
+                  Desde 2008
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Stats strip */}
-        <div className="relative border-t border-[#111111]/[0.08]">
+        <div className="relative" style={{ borderTop: '1px solid rgba(118,171,174,0.2)' }}>
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#111111]/[0.08]">
+            <div className="grid grid-cols-2 md:grid-cols-4">
               {stats.map(({ value, label }) => (
-                <div key={label} className="px-8 py-7 first:pl-0">
-                  <p className="font-black text-[#111111] tracking-tighter leading-none mb-1"
-                    style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>{value}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#111111]/45">{label}</p>
+                <div key={label} className="px-8 py-7 first:pl-0" style={{ borderRight: '1px solid rgba(118,171,174,0.15)' }}>
+                  <p className="font-black tracking-tighter leading-none mb-1"
+                    style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#76ABAE' }}>{value}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.45)' }}>{label}</p>
                 </div>
               ))}
             </div>
@@ -132,32 +133,32 @@ export default async function NosotrosPage() {
 
           {/* Foto collage placeholder 3 paneles */}
           <div className="grid grid-cols-12 gap-4 mb-20">
-            <div className="col-span-7 rounded-2xl overflow-hidden relative" style={{ minHeight: 320, background: '#1B7A5E' }}>
-              <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
-                style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', opacity: 0.08, lineHeight: 1 }}>
-                La comunidad
+            <div className="col-span-7 rounded-2xl overflow-hidden relative" style={{ minHeight: 320, background: '#093C5D' }}>
+              <span className="absolute inset-0 flex items-center justify-center font-black select-none"
+                style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', opacity: 0.07, lineHeight: 1, color: '#76ABAE' }}>
+                comunidad
               </span>
               <div className="absolute inset-0 flex items-end p-8">
-                <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Comunidad</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(118,171,174,0.5)' }}>La comunidad</p>
               </div>
             </div>
             <div className="col-span-5 grid grid-rows-2 gap-4">
-              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#0B4A38' }}>
-                <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.10, lineHeight: 1 }}>
-                  El servicio
+              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#76ABAE' }}>
+                <span className="absolute inset-0 flex items-center justify-center font-black select-none"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.15, lineHeight: 1, color: '#093C5D' }}>
+                  servicio
                 </span>
                 <div className="absolute inset-0 flex items-end p-6">
-                  <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Servicio</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(9,60,93,0.6)' }}>El servicio</p>
                 </div>
               </div>
-              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#22A67A' }}>
-                <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.12, lineHeight: 1 }}>
-                  La familia
+              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#869B7E' }}>
+                <span className="absolute inset-0 flex items-center justify-center font-black select-none"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.15, lineHeight: 1, color: '#F6F3EB' }}>
+                  familia
                 </span>
                 <div className="absolute inset-0 flex items-end p-6">
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.3em]">Familia</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.6)' }}>La familia</p>
                 </div>
               </div>
             </div>

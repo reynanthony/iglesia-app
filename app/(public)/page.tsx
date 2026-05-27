@@ -3,6 +3,11 @@ import { ArrowRight, Play, Zap, Heart, Music2, Star } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
+const NAVY  = '#093C5D'
+const TEAL  = '#76ABAE'
+const SAGE  = '#869B7E'
+const CREAM = '#F6F3EB'
+
 const MESES_LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
 const MESES_CORTO = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 function fmtFechaLarga(iso: string) {
@@ -49,97 +54,105 @@ export default async function HomePage() {
   const predicas    = predicasData ?? []
   const featured    = predicas[0]
   const moreSermons = predicas.slice(1)
+
   return (
     <div>
 
       {/* ════════════════════════════════════════════════
-          1. HERO — video/gradiente animado oscuro
+          1. HERO — Navy animado con tipografía dominante
       ════════════════════════════════════════════════ */}
       <section className="hero-mesh relative min-h-screen flex flex-col overflow-hidden">
 
-        {/* Video loop opcional — configurable desde admin */}
-        {(pageContent as any).hero_video_url && (
-          <video
-            autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ opacity: 0.35 }}
-          >
-            <source src={(pageContent as any).hero_video_url} type="video/mp4" />
+        {/* Video opcional */}
+        {pageContent.hero_video_url && (
+          <video autoPlay muted loop playsInline
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+            <source src={pageContent.hero_video_url} type="video/mp4" />
           </video>
         )}
 
-        {/* Overlay oscuro jade */}
+        {/* Overlay navy */}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'linear-gradient(160deg, rgba(8,46,34,0.85) 0%, rgba(10,61,46,0.75) 60%, rgba(27,122,94,0.5) 100%)' }} />
+          style={{ background: 'linear-gradient(160deg, rgba(5,24,40,0.90) 0%, rgba(9,60,93,0.80) 60%, rgba(118,171,174,0.30) 100%)' }} />
 
-        {/* Patrón de cuadrícula sutil */}
-        <div className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px)' }} />
+        {/* Grid sutil */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
 
-        {/* Número año decorativo */}
-        <div className="pointer-events-none absolute right-0 bottom-0 select-none overflow-hidden" style={{ lineHeight: 1 }}>
-          <span className="text-[30vw] font-black text-white opacity-[0.04] tracking-tighter leading-none block">
-            2026
+        {/* Número decorativo */}
+        <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
+          <span className="font-black text-white leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(20rem, 45vw, 42rem)', opacity: 0.04, lineHeight: 1 }}>
+            26
           </span>
         </div>
 
-        <div className="relative flex-1 flex flex-col justify-end max-w-6xl mx-auto w-full px-6 pb-20 pt-32">
+        {/* Contenido */}
+        <div className="relative flex-1 flex flex-col justify-end max-w-6xl mx-auto w-full px-6 pb-20 pt-36">
 
-          <div className="flex items-center gap-4 mb-12 anim-up anim-d1">
-            <div className="w-8 h-px bg-white/40" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-white/50">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-4 mb-10 anim-up anim-d1">
+            <div className="w-10 h-px" style={{ background: TEAL }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em]" style={{ color: `${TEAL}99` }}>
               Iglesia El Manantial · Comunidad de fe
             </p>
           </div>
 
-          <h1 className="font-display font-black tracking-tighter text-white mb-14 max-w-5xl"
-            style={{ fontSize: 'clamp(3.8rem, 13vw, 12rem)', lineHeight: 0.83 }}>
-            <span className="block anim-up anim-d2">Donde</span>
-            <span className="block anim-up anim-d3">fluye</span>
-            <em className="block anim-up anim-d4" style={{ color: '#22A67A' }}>la vida.</em>
+          {/* H1 */}
+          <h1 className="font-display font-black tracking-tighter text-white mb-12 max-w-5xl anim-up anim-d2"
+            style={{ fontSize: 'clamp(3.8rem, 12vw, 11rem)', lineHeight: 0.85 }}>
+            Donde<br />fluye
+            <em className="block" style={{ color: TEAL }}> la vida.</em>
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-2xl">
-            <p className="text-sm text-white/60 leading-relaxed anim-up anim-d5">
+          {/* Subtítulo + CTA */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl anim-up anim-d3">
+            <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.60)' }}>
               {heroSubtitle}
             </p>
-            <div className="flex flex-col gap-3 anim-up anim-d5">
+            <div className="flex flex-col gap-3">
               <Link href="/nosotros"
-                className="inline-flex items-center justify-between bg-white hover:bg-[#F2F8F5] text-[11px] font-black uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
-                style={{ color: '#0B4A38' }}>
+                className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
+                style={{ background: CREAM, color: NAVY }}>
                 Conócenos
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/predicas"
-                className="inline-flex items-center justify-between border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group">
-                <span className="flex items-center gap-2.5"><Play size={11} /> Ver prédica</span>
-                <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform opacity-50 group-hover:opacity-100" />
+                className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
+                style={{ border: `1px solid ${TEAL}50`, color: `${CREAM}BB` }}>
+                <span className="flex items-center gap-2.5"><Play size={11} />Ver prédica</span>
+                <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </Link>
             </div>
           </div>
         </div>
 
         {/* Scroll marker */}
-        <div className="relative h-16 flex items-center px-6">
-          <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />
+        <div className="relative h-14 flex items-center px-6">
+          <div className="w-px h-8 bg-gradient-to-b" style={{ backgroundImage: `linear-gradient(to bottom, ${TEAL}60, transparent)` }} />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════
-          2. SERVICES
+          2. HORARIOS — franja cream con números grandes
       ════════════════════════════════════════════════ */}
-      <section className="bg-card border-b border-edge">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-3 divide-x divide-edge">
+      <section style={{ background: CREAM, borderBottom: `1px solid #D2CDB8` }}>
+        <div className="max-w-6xl mx-auto px-6 py-0">
+          <div className="grid grid-cols-3 divide-x divide-[#D2CDB8]">
             {services.map(({ n, day, time, label, type }) => (
-              <div key={n} className="px-8 first:pl-0 last:pr-0 py-6">
-                <span className="text-[9px] font-black text-[#000000]/70 tracking-[0.3em] uppercase block mb-4">{n}</span>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <p className="text-5xl font-black text-ink leading-none tracking-tight">{time}</p>
-                  <p className="text-lg font-black text-ink-3">{label}</p>
+              <div key={n} className="px-8 py-10 first:pl-0 last:pr-0">
+                <span className="text-[9px] font-black uppercase tracking-[0.35em] block mb-5"
+                  style={{ color: TEAL }}>
+                  {n}
+                </span>
+                <div className="flex items-baseline gap-1.5 mb-1">
+                  <p className="font-black tracking-tighter leading-none" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: NAVY }}>
+                    {time}
+                  </p>
+                  <p className="text-xl font-black" style={{ color: SAGE }}>{label}</p>
                 </div>
-                <p className="text-[11px] font-bold text-ink-2">{type}</p>
-                <p className="text-[10px] uppercase tracking-[0.25em] text-ink-3 mt-0.5">{day}</p>
+                <p className="text-[12px] font-bold mt-2" style={{ color: NAVY }}>{type}</p>
+                <p className="text-[10px] uppercase tracking-[0.25em] mt-0.5" style={{ color: SAGE }}>{day}</p>
               </div>
             ))}
           </div>
@@ -147,28 +160,34 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          3. EVENTO DESTACADO
+          3. EVENTO DESTACADO — sage claro con navy
       ════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ minHeight: '55vh', background: 'linear-gradient(135deg, #EAF3EF 0%, #F2F8F5 50%, #F2F8F5 100%)' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{ backgroundImage: 'radial-gradient(ellipse at 60% 40%, rgba(0,0,0,1) 0%, transparent 60%)' }} />
+      <section className="relative overflow-hidden" style={{ background: '#E8EDE6', minHeight: '50vh' }}>
+        {/* Número de día decorativo */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center overflow-hidden select-none">
+          <span className="font-black leading-none tracking-tighter"
+            style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: NAVY, lineHeight: 1, paddingRight: '2rem' }}>
+            06
+          </span>
+        </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28 flex flex-col justify-end h-full"
-          style={{ minHeight: '55vh' }}>
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28 flex flex-col justify-end" style={{ minHeight: '50vh' }}>
           <div className="max-w-xl">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#1B7A5E' }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#1B7A5E' }}>Próximo evento</p>
-            </div>
-            <h2 className="font-display font-black tracking-tighter text-[#111111] mb-4"
-              style={{ fontSize: 'clamp(2.5rem, 7vw, 5rem)', lineHeight: 0.9 }}>
-              {eventTitle.split(' ').slice(0, -1).join(' ')}<br />{eventTitle.split(' ').slice(-1)}
+            {/* Barra teal */}
+            <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
+              Próximo evento
+            </p>
+            <h2 className="font-display font-black tracking-tighter mb-5"
+              style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
+              {eventTitle}
             </h2>
-            <p className="text-base text-[#111111]/50 mb-8">
+            <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
               {eventDesc}
             </p>
             <Link href="/eventos"
-              className="inline-flex items-center gap-3 bg-[#1B7A5E] hover:bg-[#0B4A38] text-white text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition">
+              className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
+              style={{ background: NAVY, color: CREAM }}>
               Más información <ArrowRight size={12} />
             </Link>
           </div>
@@ -176,60 +195,80 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          4. MINISTERIOS FEATURED
+          4. MINISTERIOS FEATURED — 2 tarjetas editoriales
       ════════════════════════════════════════════════ */}
-      <section className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '520px' }}>
+      <section className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '500px' }}>
 
-        {/* Tarjeta grande — 2/3 */}
+        {/* Tarjeta grande — navy oscuro */}
         <Link href="/ministerios"
-          className="group relative md:col-span-2 flex flex-col justify-end overflow-hidden"
-          style={{ minHeight: '420px', background: '#0B4A38' }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.12] group-hover:opacity-[0.22] transition-opacity duration-700"
-            style={{ background: 'radial-gradient(ellipse 80% 80% at 25% 80%, rgba(34,166,122,0.6), transparent 60%)' }} />
-          <div className="pointer-events-none absolute top-0 right-0 w-80 h-80 opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-700"
-            style={{ background: 'radial-gradient(circle, #22A67A, transparent 70%)' }} />
-          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)', backgroundSize: '70px 70px' }} />
+          className="group relative md:col-span-2 flex flex-col justify-between overflow-hidden"
+          style={{ minHeight: '440px', background: NAVY }}>
 
-          <div className="relative p-10 md:p-14 lg:p-16">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-8">
-              <Zap size={26} className="text-white" strokeWidth={2} />
+          {/* Textura sutil */}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
+            style={{ backgroundImage: `repeating-linear-gradient(45deg, ${CREAM} 0px, ${CREAM} 1px, transparent 1px, transparent 20px)` }} />
+          {/* Número decorativo */}
+          <div className="pointer-events-none absolute right-8 top-8 font-black leading-none select-none"
+            style={{ fontSize: 'clamp(8rem, 18vw, 16rem)', opacity: 0.06, color: TEAL, lineHeight: 1 }}>
+            01
+          </div>
+
+          {/* Top label */}
+          <div className="relative p-10 md:p-14">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${TEAL}20` }}>
+                <Zap size={20} style={{ color: TEAL }} strokeWidth={2} />
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: `${TEAL}80` }}>
+                Ministerio de Jóvenes
+              </p>
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40 mb-3">Ministerio de Jóvenes</p>
-            <h2 className="font-display font-black text-white tracking-tighter mb-4 transition"
+          </div>
+
+          {/* Bottom content */}
+          <div className="relative p-10 md:p-14">
+            <h2 className="font-display font-black text-white tracking-tighter mb-5 transition"
               style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
               La próxima<br />generación.
             </h2>
-            <p className="text-sm text-white/55 leading-relaxed mb-8 max-w-sm">
+            <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: `${CREAM}60` }}>
               Fe y comunidad auténtica para jóvenes que quieren vivir algo real.
             </p>
-            <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 group-hover:text-white transition">
+            <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
+              style={{ color: TEAL }}>
               Explorar ministerio
               <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform" />
             </span>
           </div>
         </Link>
 
-        {/* Tarjeta pequeña — 1/3 */}
+        {/* Tarjeta pequeña — teal */}
         <Link href="/ministerios"
-          className="group relative flex flex-col justify-end overflow-hidden"
-          style={{ minHeight: '420px', background: '#1B7A5E' }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.10] group-hover:opacity-[0.20] transition-opacity duration-700"
-            style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 80%, rgba(34,166,122,0.8), transparent 65%)' }} />
+          className="group relative flex flex-col justify-between overflow-hidden"
+          style={{ minHeight: '440px', background: TEAL }}>
+
+          {/* Número decorativo */}
+          <div className="pointer-events-none absolute right-4 bottom-0 font-black leading-none select-none overflow-hidden"
+            style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', opacity: 0.12, color: NAVY, lineHeight: 1 }}>
+            02
+          </div>
 
           <div className="relative p-8 md:p-10">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-7">
-              <Heart size={22} className="text-white" strokeWidth={2} />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-6" style={{ background: 'rgba(255,255,255,0.15)' }}>
+              <Heart size={20} className="text-white" strokeWidth={2} />
             </div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/40 mb-2">Matrimonios</p>
+            <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/60 mb-2">Matrimonios</p>
+          </div>
+
+          <div className="relative p-8 md:p-10">
             <h3 className="font-display font-black text-white tracking-tighter mb-3 transition"
-              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', lineHeight: 0.9 }}>
+              style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', lineHeight: 0.9 }}>
               Hogares<br />sólidos.
             </h3>
-            <p className="text-xs text-white/50 leading-relaxed mb-6">
+            <p className="text-xs text-white/60 leading-relaxed mb-6">
               Principios bíblicos para la familia.
             </p>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition flex items-center gap-2">
               Ver <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
             </span>
           </div>
@@ -237,23 +276,25 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          5. STATEMENT TIPOGRÁFICO
+          5. VERSÍCULO — cream con decoración teal
       ════════════════════════════════════════════════ */}
-      <section className="bg-card border-y border-edge overflow-hidden">
+      <section style={{ background: CREAM, borderTop: `1px solid #D2CDB8`, borderBottom: `1px solid #D2CDB8` }}>
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+          {/* Línea decorativa teal */}
+          <div className="w-full h-px mb-14 opacity-30" style={{ background: `linear-gradient(to right, transparent, ${TEAL}, transparent)` }} />
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
             <div className="md:col-span-1">
-              <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-ink-3 [writing-mode:vertical-rl] rotate-180 hidden md:block">
+              <p className="text-[9px] font-bold uppercase tracking-[0.4em] hidden md:block" style={{ color: SAGE, writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
                 {verseRef}
               </p>
             </div>
             <div className="md:col-span-11">
-              <p className="font-display font-black text-ink tracking-tighter leading-[0.88]"
-                style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+              <p className="font-display font-black tracking-tighter leading-[0.88]"
+                style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)', color: NAVY }}>
                 "{verse.split(' ').slice(0, -1).join(' ')}{' '}
-                <span style={{ color: '#1B7A5E' }}>{verse.split(' ').slice(-1)}."</span>
+                <span style={{ color: TEAL }}>{verse.split(' ').slice(-1)}."</span>
               </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mt-8 md:hidden">
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mt-8 md:hidden" style={{ color: SAGE }}>
                 — {verseRef}
               </p>
             </div>
@@ -262,80 +303,86 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          6. MENSAJES
+          6. MENSAJES — fondo ligeramente diferente
       ════════════════════════════════════════════════ */}
-      <section className="bg-muted border-b border-edge">
+      <section style={{ background: '#EDEAE0', borderBottom: `1px solid #D2CDB8` }}>
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
 
-          <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
+          <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: `1px solid #D2CDB8` }}>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-4">— Mensajes</p>
-              <h2 className="font-display font-black tracking-tighter text-ink"
-                style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>
+                — Mensajes
+              </p>
+              <h2 className="font-display font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
                 Crece en<br />la Palabra.
               </h2>
             </div>
             <Link href="/predicas"
-              className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink-3 hover:text-ink transition">
+              className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
+              style={{ color: SAGE }}>
               Todos <ArrowRight size={12} />
             </Link>
           </div>
 
           {/* Sermón destacado */}
           {featured ? (
-            <Link href="/predicas" className="group grid grid-cols-1 lg:grid-cols-5 border border-edge rounded-2xl overflow-hidden mb-4 hover:border-edge-2 transition">
+            <Link href="/predicas" className="group grid grid-cols-1 lg:grid-cols-5 rounded-2xl overflow-hidden mb-4 transition hover:shadow-lg"
+              style={{ border: `1px solid #D2CDB8` }}>
               <div className="lg:col-span-2 relative min-h-[220px] flex items-center justify-center overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 100%)' }}>
+                style={{ background: (featured as any).image_url ? undefined : `linear-gradient(135deg, ${NAVY} 0%, ${TEAL} 100%)` }}>
                 {(featured as any).image_url && (
-                  <img src={(featured as any).image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                  <img src={(featured as any).image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-80" />
                 )}
-                <div className="absolute top-5 left-5 text-white text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg" style={{ background: 'rgba(34,166,122,0.85)' }}>
+                <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
+                  style={{ background: TEAL, color: CREAM }}>
                   Esta semana
                 </div>
-                <div className="relative w-16 h-16 rounded-full border border-white/30 group-hover:bg-white/20 group-hover:border-white/60 flex items-center justify-center transition duration-300">
+                <div className="relative w-16 h-16 rounded-full flex items-center justify-center transition duration-300"
+                  style={{ border: `1px solid rgba(246,243,235,0.35)`, background: 'rgba(255,255,255,0.08)' }}>
                   <Play size={20} className="text-white ml-1 transition" />
                 </div>
               </div>
-              <div className="lg:col-span-3 p-8 lg:p-10 bg-card flex flex-col justify-center">
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: '#1B7A5E' }}>
+              <div className="lg:col-span-3 p-8 lg:p-10 flex flex-col justify-center" style={{ background: CREAM }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: TEAL }}>
                   {(featured as any).ministries?.name ?? 'Prédica'}
                 </p>
-                <h3 className="text-2xl md:text-3xl font-black text-ink tracking-tight leading-tight mb-3">
+                <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight mb-3" style={{ color: NAVY }}>
                   {(featured as any).title}
                 </h3>
-                <p className="text-sm text-ink-3 uppercase tracking-wider">
-                  {(featured as any).profiles?.full_name ?? 'Pastor'} ·{' '}
-                  {fmtFechaLarga((featured as any).created_at)}
+                <p className="text-sm uppercase tracking-wider" style={{ color: SAGE }}>
+                  {(featured as any).profiles?.full_name ?? 'Pastor'} · {fmtFechaLarga((featured as any).created_at)}
                 </p>
               </div>
             </Link>
           ) : (
-            <div className="border border-edge rounded-2xl p-10 mb-4 text-center text-ink-3 text-sm">
+            <div className="rounded-2xl p-10 mb-4 text-center" style={{ border: `1px solid #D2CDB8`, color: SAGE }}>
               Aún no hay prédicas publicadas.{' '}
-              <Link href="/admin/predicas/nuevo" className="font-bold text-ink hover:underline">Agregar la primera →</Link>
+              <Link href="/admin/predicas/nuevo" className="font-bold hover:underline" style={{ color: NAVY }}>Agregar la primera →</Link>
             </div>
           )}
 
-          {/* Lista de sermones */}
+          {/* Lista más sermons */}
           {moreSermons.length > 0 && (
-            <div className="divide-y divide-edge border border-edge rounded-2xl overflow-hidden">
+            <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid #D2CDB8` }}>
               {(moreSermons as any[]).map((p, i) => (
                 <Link key={p.id} href="/predicas"
-                  className="group flex items-center gap-6 px-6 py-5 bg-card hover:bg-muted transition">
-                  <span className="text-[10px] font-bold text-ink-3 tracking-widest w-6 flex-shrink-0">
+                  className="group flex items-center gap-6 px-6 py-5 transition"
+                  style={{ background: CREAM, borderBottom: i < moreSermons.length - 1 ? `1px solid #D2CDB8` : undefined }}>
+                  <span className="text-[10px] font-bold w-6 flex-shrink-0" style={{ color: SAGE }}>
                     {String(i + 2).padStart(2, '0')}
                   </span>
-                  <div className="w-8 h-8 rounded-full border border-edge flex items-center justify-center flex-shrink-0 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] transition duration-200">
-                    <Play size={10} className="text-ink-3 group-hover:text-white ml-0.5 transition" />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition duration-200 group-hover:border-teal"
+                    style={{ border: `1px solid #D2CDB8` }}>
+                    <Play size={10} className="ml-0.5 transition" style={{ color: SAGE }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-ink group-hover:text-[#000000] transition text-sm truncate">{p.title}</p>
-                    <p className="text-[11px] text-ink-3 mt-0.5">{p.ministries?.name}</p>
+                    <p className="font-bold text-sm truncate" style={{ color: NAVY }}>{p.title}</p>
+                    <p className="text-[11px] mt-0.5" style={{ color: SAGE }}>{p.ministries?.name}</p>
                   </div>
-                  <p className="text-[11px] text-ink-3 flex-shrink-0 hidden sm:block">
+                  <p className="text-[11px] flex-shrink-0 hidden sm:block" style={{ color: SAGE }}>
                     {fmtFechaCorta(p.created_at)}
                   </p>
-                  <ArrowRight size={13} className="text-ink-3 flex-shrink-0 group-hover:translate-x-1 group-hover:text-ink transition-all" />
+                  <ArrowRight size={13} className="flex-shrink-0 group-hover:translate-x-1 transition-all" style={{ color: SAGE }} />
                 </Link>
               ))}
             </div>
@@ -344,45 +391,46 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          7. MINISTERIOS GRID
+          7. MINISTERIOS GRID — navy con 4 tarjetas de colores
       ════════════════════════════════════════════════ */}
-      <section style={{ background: '#0B4A38' }}>
+      <section style={{ background: NAVY }}>
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: `1px solid rgba(118,171,174,0.2)` }}>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: 'rgba(255,255,255,0.35)' }}>— Todos los ministerios</p>
-              <h2 className="font-display font-black tracking-tighter text-white"
-                style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: `${TEAL}80` }}>
+                — Todos los ministerios
+              </p>
+              <h2 className="font-display font-black tracking-tighter text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
                 Un lugar<br />para todos.
               </h2>
             </div>
             <Link href="/ministerios"
               className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
-              style={{ color: 'rgba(255,255,255,0.40)' }}>
+              style={{ color: `${TEAL}70` }}>
               Ver todos <ArrowRight size={12} />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { n: '01', Icon: Zap,    cardBg: '#134D3F', nombre: 'Jóvenes',     desc: 'Próxima generación' },
-              { n: '02', Icon: Star,   cardBg: '#1B7A5E', nombre: 'Niños',       desc: 'Fe desde pequeños' },
-              { n: '03', Icon: Heart,  cardBg: '#0F5C47', nombre: 'Matrimonios', desc: 'Hogares fuertes' },
-              { n: '04', Icon: Music2, cardBg: '#22A67A', nombre: 'Adoración',   desc: 'Excelencia al Señor' },
-            ].map(({ n, Icon, cardBg, nombre, desc }) => (
+              { n: '01', Icon: Zap,    bg: CREAM,                  fg: NAVY,  nombre: 'Jóvenes',     desc: 'Próxima generación' },
+              { n: '02', Icon: Star,   bg: TEAL,                   fg: CREAM, nombre: 'Niños',       desc: 'Fe desde pequeños' },
+              { n: '03', Icon: Heart,  bg: SAGE,                   fg: CREAM, nombre: 'Matrimonios', desc: 'Hogares fuertes' },
+              { n: '04', Icon: Music2, bg: '#0D4A72',              fg: CREAM, nombre: 'Adoración',   desc: 'Excelencia al Señor' },
+            ].map(({ n, Icon, bg, fg, nombre, desc }) => (
               <Link key={n} href="/ministerios"
-                className="group p-8 flex flex-col gap-5 transition hover:brightness-110"
-                style={{ background: cardBg }}>
-                <span className="text-[9px] font-bold tracking-widest" style={{ color: 'rgba(255,255,255,0.30)' }}>{n}</span>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition"
-                  style={{ background: 'rgba(255,255,255,0.12)' }}>
-                  <Icon size={20} className="text-white" strokeWidth={2} />
+                className="group p-7 rounded-2xl flex flex-col gap-5 transition hover:brightness-110"
+                style={{ background: bg }}>
+                <span className="text-[9px] font-bold tracking-widest" style={{ color: fg === CREAM ? `${CREAM}50` : `${NAVY}40` }}>{n}</span>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: fg === CREAM ? 'rgba(255,255,255,0.15)' : `${NAVY}12` }}>
+                  <Icon size={20} style={{ color: fg }} strokeWidth={2} />
                 </div>
                 <div>
-                  <h3 className="font-black text-white text-lg leading-tight mb-1">{nombre}</h3>
-                  <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.50)' }}>{desc}</p>
+                  <h3 className="font-black text-lg leading-tight mb-1" style={{ color: fg }}>{nombre}</h3>
+                  <p className="text-[11px] leading-relaxed" style={{ color: fg === CREAM ? `${CREAM}60` : `${NAVY}60` }}>{desc}</p>
                 </div>
-                <ArrowRight size={13} className="group-hover:translate-x-1 transition-all mt-auto" style={{ color: 'rgba(255,255,255,0.30)' }} />
+                <ArrowRight size={13} className="group-hover:translate-x-1 transition-all mt-auto" style={{ color: fg === CREAM ? `${CREAM}40` : `${NAVY}40` }} />
               </Link>
             ))}
           </div>
@@ -390,14 +438,15 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          8. CTA FINAL
+          8. CTA FINAL — navy a teal diagonal
       ════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden border-t border-[#111111]/[0.06]"
-        style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
+      <section className="relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 55%, ${TEAL} 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 90% at 85% 50%, rgba(255,255,255,0.08), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,255,255,0.06), transparent 70%)' }} />
         <div className="pointer-events-none absolute left-0 bottom-0 overflow-hidden select-none">
-          <span className="text-[22vw] font-black text-white opacity-[0.06] tracking-tighter leading-none block">
+          <span className="text-[22vw] font-black leading-none tracking-tighter block"
+            style={{ color: CREAM, opacity: 0.04 }}>
             VIDA
           </span>
         </div>
@@ -405,29 +454,31 @@ export default async function HomePage() {
         <div className="relative max-w-6xl mx-auto px-6 py-32 md:py-48">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40 mb-12">
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-12" style={{ color: `${TEAL}70` }}>
                 — Eres bienvenido
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.83 }}>
                 Tu historia<br />comienza<br />
-                <em className="text-white/80">aquí.</em>
+                <em style={{ color: TEAL }}>aquí.</em>
               </h2>
             </div>
             <div className="flex flex-col gap-5">
-              <p className="text-base text-white/60 leading-relaxed max-w-xs">
+              <p className="text-base leading-relaxed max-w-xs" style={{ color: `${CREAM}60` }}>
                 No importa dónde estés ni qué hayas vivido. Hay un lugar para ti.
               </p>
               <div className="flex flex-col gap-3 mt-4">
                 <Link href="/contacto"
-                  className="inline-flex items-center justify-between bg-white hover:bg-[#FFFFFF] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group">
+                  className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                  style={{ background: CREAM, color: NAVY }}>
                   Visítanos este domingo
                   <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link href="/login"
-                  className="inline-flex items-center justify-between border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group">
+                  className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                  style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
                   Unirse a la comunidad en línea
-                  <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform opacity-50 group-hover:opacity-100" />
+                  <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </Link>
               </div>
             </div>

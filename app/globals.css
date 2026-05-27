@@ -1,41 +1,38 @@
 @import "tailwindcss";
 
-/* ── Light mode: crema cálida ─────────────────────────── */
+/* ── Paleta: Navy · Cream · Sage · Teal ───────────────── */
 :root {
-  --surface: #F8F5F0;
-  --card:    #F2EDE7;
-  --muted:   #EBE5DC;
-  --ink:     #1A1208;
-  --ink-2:   #5C4D3C;
-  --ink-3:   #9C8B77;
-  --edge:    #D8CFC4;
-  --edge-2:  #C4B8AA;
-  --accent:  #1B7A5E;
-}
-
-/* ── Dark mode: café profundo cálido ──────────────────── */
-.dark {
-  --surface: #0F0D0A;
-  --card:    #1A1510;
-  --muted:   #0F0D0A;
-  --ink:     #F5F0E8;
-  --ink-2:   #8C7C6A;
-  --ink-3:   #4A3D30;
-  --edge:    #2A2018;
-  --edge-2:  #3A2E20;
-  --accent:  #22A67A;
+  --surface: #F6F3EB;
+  --card:    #EDEAE0;
+  --muted:   #E4E0D4;
+  --ink:     #093C5D;
+  --ink-2:   #3A6478;
+  --ink-3:   #869B7E;
+  --edge:    #D2CDB8;
+  --edge-2:  #BEB9A4;
+  --accent:  #76ABAE;
+  --accent-2:#869B7E;
+  --navy:    #093C5D;
+  --teal:    #76ABAE;
+  --sage:    #869B7E;
+  --cream:   #F6F3EB;
 }
 
 @theme inline {
-  --color-surface: var(--surface);
-  --color-card:    var(--card);
-  --color-muted:   var(--muted);
-  --color-ink:     var(--ink);
-  --color-ink-2:   var(--ink-2);
-  --color-ink-3:   var(--ink-3);
-  --color-edge:    var(--edge);
-  --color-edge-2:  var(--edge-2);
-  --color-accent:  var(--accent);
+  --color-surface:  var(--surface);
+  --color-card:     var(--card);
+  --color-muted:    var(--muted);
+  --color-ink:      var(--ink);
+  --color-ink-2:    var(--ink-2);
+  --color-ink-3:    var(--ink-3);
+  --color-edge:     var(--edge);
+  --color-edge-2:   var(--edge-2);
+  --color-accent:   var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-navy:     var(--navy);
+  --color-teal:     var(--teal);
+  --color-sage:     var(--sage);
+  --color-cream:    var(--cream);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -53,15 +50,15 @@ body {
   font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
 }
 
-/* ── Hero: animated mesh gradient ─────────────────── */
+/* ── Hero: animated navy-teal gradient ─────────────── */
 @keyframes mesh-shift {
   0%, 100% { background-position: 0% 50%; }
   50%       { background-position: 100% 50%; }
 }
 .hero-mesh {
-  background: linear-gradient(135deg, #082E22, #1B7A5E, #0A3D2E, #22A67A, #082E22);
+  background: linear-gradient(135deg, #051828, #093C5D, #0D4A72, #76ABAE, #093C5D);
   background-size: 400% 400%;
-  animation: mesh-shift 10s ease infinite;
+  animation: mesh-shift 12s ease infinite;
 }
 
 /* ── Page-load reveal animations ──────────────────── */

@@ -55,8 +55,8 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   return (
     <div
       style={{
-        background: '#0A0A0A',
-        borderBottom: '1px solid #1A1A1A',
+        background: '#061E30',
+        borderBottom: '1px solid #0D3352',
       }}
     >
       {/* Edit modal */}
@@ -106,7 +106,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           <Link href={`/app/perfil/${post.profiles.username}`} className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-              style={{ background: '#1A1A1A', color: '#8A8A8A' }}
+              style={{ background: '#0D3352', color: '#76ABAE' }}
             >
               {post.profiles.avatar_url
                 ? <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -121,7 +121,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-              style={{ background: '#1A1A1A', color: '#8A8A8A' }}
+              style={{ background: '#0D3352', color: '#76ABAE' }}
             >
               {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
             </div>
@@ -135,7 +135,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-1.5 rounded-lg transition"
-            style={{ color: '#4D4D4D' }}
+            style={{ color: '#4A7A8E' }}
           >
             <svg width="18" height="4" viewBox="0 0 18 4" fill="currentColor">
               <circle cx="2" cy="2" r="2"/><circle cx="9" cy="2" r="2"/><circle cx="16" cy="2" r="2"/>
@@ -146,7 +146,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
               <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
               <div
                 className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-44"
-                style={{ background: '#141414', border: '1px solid #2A2A2A' }}
+                style={{ background: '#0B2D47', border: '1px solid #1A3D5C' }}
               >
                 {isOwn ? (
                   <>
@@ -289,7 +289,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         <form
           onSubmit={handleComment}
           className="flex items-center gap-3 px-4 py-3"
-          style={{ borderTop: '1px solid #1A1A1A' }}
+          style={{ borderTop: '1px solid #0D3352' }}
         >
           <input
             name="content"

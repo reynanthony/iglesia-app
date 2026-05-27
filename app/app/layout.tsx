@@ -22,15 +22,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (
-    <div className="min-h-screen" style={{ background: '#0A0A0A', color: '#F5F5F5' }}>
+    <div className="min-h-screen" style={{ background: '#061E30', color: '#F6F3EB' }}>
 
       {/* ── SIDEBAR (desktop) ── */}
       <aside
         className="hidden md:flex w-60 flex-col fixed h-full z-30"
-        style={{ background: '#0A0A0A', borderRight: '1px solid #1A1A1A' }}
+        style={{ background: '#061E30', borderRight: '1px solid #0D3352' }}
       >
         {/* Brand */}
-        <div className="px-5 py-6" style={{ borderBottom: '1px solid #1A1A1A' }}>
+        <div className="px-5 py-6" style={{ borderBottom: '1px solid #0D3352' }}>
           <Link href="/app/feed" className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#000000] rounded-lg flex items-center justify-center text-black flex-shrink-0">
               <Cross size={15} strokeWidth={2.5} />
@@ -50,7 +50,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <AppNav profileHref={profileHref} />
 
         {/* Footer */}
-        <div className="px-3 pb-5" style={{ borderTop: '1px solid #1A1A1A', paddingTop: '1rem' }}>
+        <div className="px-3 pb-5" style={{ borderTop: '1px solid #0D3352', paddingTop: '1rem' }}>
           <Link
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#111111]"
@@ -109,7 +109,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {/* ── HEADER (mobile) ── */}
       <header
         className="md:hidden fixed top-0 left-0 right-0 z-30 px-4 py-3 flex items-center justify-between backdrop-blur-md"
-        style={{ background: 'rgba(10,10,10,0.92)', borderBottom: '1px solid #1A1A1A' }}
+        style={{ background: 'rgba(6,30,48,0.95)', borderBottom: '1px solid #0D3352' }}
       >
         <Link href="/app/feed" className="flex items-center gap-2.5">
           <div className="w-7 h-7 bg-[#000000] rounded-lg flex items-center justify-center text-black"><Cross size={13} strokeWidth={2.5} /></div>
@@ -152,8 +152,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         style={{
           bottom: 'calc(64px + env(safe-area-inset-bottom,0px) + 12px)',
           right: '20px',
-          background: 'linear-gradient(135deg, #1B7A5E, #22A67A)',
-          boxShadow: '0 4px 24px rgba(27,122,94,0.45), 0 2px 8px rgba(0,0,0,0.4)',
+          background: 'linear-gradient(135deg, #093C5D, #76ABAE)',
+          boxShadow: '0 4px 24px rgba(118,171,174,0.35), 0 2px 8px rgba(0,0,0,0.4)',
         }}
         aria-label="Nueva publicación"
       >
@@ -163,7 +163,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav
         className="md:hidden fixed bottom-0 left-0 right-0 z-30 backdrop-blur-md"
-        style={{ background: 'rgba(10,10,10,0.96)', borderTop: '1px solid #1A1A1A' }}
+        style={{ background: 'rgba(6,30,48,0.97)', borderTop: '1px solid #0D3352' }}
       >
         <AppBottomNav profileHref={profileHref} />
       </nav>

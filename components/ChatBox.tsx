@@ -112,7 +112,7 @@ export default function ChatBox({
   })
 
   return (
-    <div className="flex flex-col h-full relative" style={{ background: '#0A0A0A' }}>
+    <div className="flex flex-col h-full relative" style={{ background: '#061E30' }}>
 
       {/* Mensajes */}
       <div
@@ -125,7 +125,7 @@ export default function ChatBox({
           <div className="flex justify-center mt-10">
             <span
               className="text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: '#161614', color: '#4D4D4D' }}
+              style={{ background: '#0D3352', color: '#4A7A8E' }}
             >
               Los mensajes son visibles solo para miembros
             </span>
@@ -138,7 +138,7 @@ export default function ChatBox({
             <div className="flex justify-center my-4">
               <span
                 className="text-[11px] font-bold px-3 py-1 rounded-full"
-                style={{ background: '#161614', color: '#4D4D4D' }}
+                style={{ background: '#0D3352', color: '#4A7A8E' }}
               >
                 {formatDate(msgs[0].created_at)}
               </span>
@@ -189,14 +189,14 @@ export default function ChatBox({
                       className="px-3 py-2"
                       style={{
                         background: isMe
-                          ? 'linear-gradient(135deg, #1B7A5E, #22A67A)'
-                          : '#1A1510',
+                          ? 'linear-gradient(135deg, #093C5D, #76ABAE)'
+                          : '#0D3352',
                         borderRadius: isFirst
                           ? isMe ? '16px 16px 4px 16px' : '16px 16px 16px 4px'
                           : isLast
                             ? isMe ? '16px 4px 16px 16px' : '4px 16px 16px 16px'
                             : isMe ? '16px 4px 4px 16px' : '4px 16px 16px 4px',
-                        border: isMe ? 'none' : '1px solid #2A2018',
+                        border: isMe ? 'none' : '1px solid #1A3D5C',
                       }}
                     >
                       <div className="flex items-end gap-3">
@@ -240,13 +240,13 @@ export default function ChatBox({
       {/* Input */}
       <div
         className="flex-shrink-0 flex items-center gap-2 px-3 py-3"
-        style={{ borderTop: '1px solid #1A1A1A', background: '#0A0A0A' }}
+        style={{ borderTop: '1px solid #0D3352', background: '#061E30' }}
       >
         <div
           className="flex-1 flex items-center gap-3 px-4 rounded-2xl"
           style={{
-            background: '#111111',
-            border: '1px solid #1A1A1A',
+            background: '#0B2D47',
+            border: '1px solid #1A3D5C',
             minHeight: 48,
           }}
         >
@@ -266,7 +266,7 @@ export default function ChatBox({
           onClick={sendMsg}
           disabled={sending || !inputValue.trim()}
           className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition active:scale-95 disabled:opacity-40"
-          style={{ background: 'linear-gradient(135deg, #1B7A5E, #22A67A)' }}
+          style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)' }}
         >
           <Send size={18} style={{ color: 'white' }} />
         </button>

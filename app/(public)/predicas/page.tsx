@@ -60,40 +60,40 @@ export default async function PredicasPage() {
       {hasBlocks ? (
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
-        <section className="relative overflow-hidden" style={{ minHeight: '80vh', background: 'linear-gradient(160deg, #0A0A0A 0%, #111111 60%, #1A1A1A 100%)' }}>
+        <section className="relative overflow-hidden" style={{ minHeight: '80vh', background: '#093C5D' }}>
           <div className="pointer-events-none absolute inset-0 flex items-center overflow-hidden select-none">
-            <span className="font-black text-[#F5F5F5] leading-none tracking-tighter whitespace-nowrap"
-              style={{ fontSize: 'clamp(12rem, 30vw, 28rem)', opacity: 0.04 }}>
+            <span className="font-black leading-none tracking-tighter whitespace-nowrap"
+              style={{ fontSize: 'clamp(12rem, 30vw, 28rem)', opacity: 0.05, color: '#76ABAE' }}>
               PALABRA
             </span>
           </div>
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(27,122,94,0.06), transparent 65%)' }} />
+            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
           <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-48 md:pb-20 flex flex-col justify-end"
             style={{ minHeight: '80vh' }}>
             <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px bg-[#22A67A]" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#F5F5F5]/40">
+              <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.6)' }}>
                 Mensajes · Palabra de vida
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-              <h1 className="font-display font-black tracking-tighter text-[#F5F5F5]"
+              <h1 className="font-display font-black tracking-tighter text-white"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
                 Crece<br />en la<br />
-                <em style={{ color: '#22A67A' }}>Palabra.</em>
+                <em style={{ color: '#76ABAE' }}>Palabra.</em>
               </h1>
               <div>
-                <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(245,245,245,0.5)' }}>
+                <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.50)' }}>
                   Escucha los mensajes de nuestra iglesia y déjate transformar por la Palabra de Dios cada semana.
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2" style={{ color: 'rgba(245,245,245,0.35)' }}>
+                  <div className="flex items-center gap-2" style={{ color: 'rgba(118,171,174,0.60)' }}>
                     <Headphones size={14} />
                     <span className="text-[11px] font-bold uppercase tracking-wider">{sermons.length}+ mensajes</span>
                   </div>
-                  <div className="w-px h-4" style={{ background: 'rgba(245,245,245,0.08)' }} />
-                  <div className="flex items-center gap-2" style={{ color: 'rgba(245,245,245,0.35)' }}>
+                  <div className="w-px h-4" style={{ background: 'rgba(118,171,174,0.20)' }} />
+                  <div className="flex items-center gap-2" style={{ color: 'rgba(118,171,174,0.60)' }}>
                     <span className="text-[11px] font-bold uppercase tracking-wider">{allSeries.length} series</span>
                   </div>
                 </div>
@@ -119,12 +119,12 @@ export default async function PredicasPage() {
               style={{
                 background: featured.image_url
                   ? `url(${featured.image_url}) center/cover`
-                  : 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 100%)',
+                  : 'linear-gradient(135deg, #093C5D 0%, #76ABAE 100%)',
               }}>
               <div className="absolute inset-0"
                 style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(34,166,122,0.15), transparent 65%)' }} />
               <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
-                style={{ background: 'rgba(34,166,122,0.85)', color: 'white' }}>
+                style={{ background: '#76ABAE', color: '#093C5D' }}>
                 Esta semana
               </div>
               <div className="relative w-20 h-20 rounded-full border border-white/25 group-hover:bg-white/20 group-hover:border-white/50 flex items-center justify-center transition duration-500 group-hover:scale-110">
@@ -133,15 +133,15 @@ export default async function PredicasPage() {
             </div>
             <div className="lg:col-span-7 p-10 lg:p-14 transition flex flex-col justify-between gap-8" style={{ background: '#E0F2EB' }}>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: '#1B7A5E' }}>{featured.serie}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: '#76ABAE' }}>{featured.serie}</p>
                 <h2 className="font-display font-black tracking-tight leading-tight mb-4"
-                  style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#0B4A38' }}>
+                  style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#093C5D' }}>
                   {featured.titulo}
                 </h2>
-                <p className="text-sm uppercase tracking-wider" style={{ color: 'rgba(11,74,56,0.55)' }}>{featured.pastor} · {featured.fecha}</p>
+                <p className="text-sm uppercase tracking-wider" style={{ color: 'rgba(9,60,93,0.55)' }}>{featured.pastor} · {featured.fecha}</p>
               </div>
               <button className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition self-start group/btn"
-                style={{ background: '#1B7A5E' }}>
+                style={{ background: '#093C5D' }}>
                 <Play size={12} /> Escuchar ahora
                 <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
@@ -180,7 +180,7 @@ export default async function PredicasPage() {
                 <div className="relative rounded-xl overflow-hidden mb-5"
                   style={{
                     aspectRatio: '16/10',
-                    background: image_url ? `url(${image_url}) center/cover` : 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 100%)',
+                    background: image_url ? `url(${image_url}) center/cover` : 'linear-gradient(135deg, #093C5D 0%, #76ABAE 100%)',
                   }}>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">

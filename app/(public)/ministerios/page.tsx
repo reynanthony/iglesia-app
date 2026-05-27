@@ -18,12 +18,12 @@ function getIcon(ministry: { slug?: string; name?: string }) {
 }
 
 const placeholders = [
-  'linear-gradient(150deg, #082E22 0%, #1B7A5E 100%)',
-  'linear-gradient(150deg, #0B4A38 0%, #22A67A 100%)',
-  'linear-gradient(150deg, #0A3D2E 0%, #1B7A5E 100%)',
-  'linear-gradient(150deg, #134D3F 0%, #22A67A 100%)',
-  'linear-gradient(150deg, #0F5C47 0%, #1B7A5E 100%)',
-  'linear-gradient(150deg, #1A7060 0%, #22A67A 100%)',
+  'linear-gradient(150deg, #093C5D 0%, #76ABAE 100%)',
+  'linear-gradient(150deg, #051828 0%, #093C5D 100%)',
+  'linear-gradient(150deg, #869B7E 0%, #A8BCA2 100%)',
+  'linear-gradient(150deg, #093C5D 0%, #0D4A72 100%)',
+  'linear-gradient(150deg, #76ABAE 0%, #093C5D 100%)',
+  'linear-gradient(150deg, #0D4A72 0%, #76ABAE 100%)',
 ]
 
 export default async function MinisteriosPage() {
@@ -56,17 +56,17 @@ export default async function MinisteriosPage() {
       {hasBlocks ? (
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #082E22 0%, #0B4A38 50%, #1B7A5E 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: '#093C5D' }}>
         <div
           className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(34,166,122,0.15), transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(118,171,174,0.12), transparent 70%)' }}
         />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px)' }} />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 80px)' }} />
         <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-28 md:pt-48 md:pb-40">
           <div className="flex items-start gap-4 mb-12">
-            <div className="w-0.5 h-12 flex-shrink-0" style={{ background: 'rgba(255,255,255,0.4)' }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            <div className="w-0.5 h-12 flex-shrink-0" style={{ background: 'rgba(118,171,174,0.5)' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] leading-relaxed" style={{ color: 'rgba(118,171,174,0.6)' }}>
               Ministerios<br />Un lugar para todos
             </p>
           </div>
@@ -74,13 +74,13 @@ export default async function MinisteriosPage() {
             className="font-display font-black leading-[0.85] tracking-tighter text-white mb-8"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}
           >
-            Un lugar<br />para <em style={{ color: '#22A67A' }}>todos.</em>
+            Un lugar<br />para <em style={{ color: '#76ABAE' }}>todos.</em>
           </h1>
-          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
             Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.
           </p>
         </div>
-        <div className="h-px w-full" style={{ background: 'rgba(255,255,255,0.08)' }} />
+        <div className="h-px w-full" style={{ background: 'rgba(118,171,174,0.15)' }} />
       </section>
       )}
 
@@ -185,7 +185,7 @@ export default async function MinisteriosPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— Sírvenos</p>
