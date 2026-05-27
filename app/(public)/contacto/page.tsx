@@ -29,14 +29,14 @@ export default async function ContactoPage() {
       {/* ═══════════════════════════════════════
           HERO — conversacional, íntimo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EDE7DE 0%, #F2EDE7 50%, #F8F5F0 100%)' }}>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 30% 60%, rgba(0,0,0,0.06), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 30% 60%, rgba(27,122,94,0.05), transparent 70%)' }} />
 
         {/* "HOLA" decorativo derecha */}
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
-          <span className="font-black text-[#111111] tracking-tighter leading-none block"
-            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.04 }}>
+          <span className="font-black tracking-tighter leading-none block"
+            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.07, color: 'rgba(27,122,94,0.6)' }}>
             HOLA
           </span>
         </div>
@@ -86,8 +86,8 @@ export default async function ContactoPage() {
 
               {/* Primera visita */}
               <div className="mt-6 p-6 rounded-xl"
-                style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.12)' }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#222222] dark:text-[#222222] mb-2">¿Primera visita?</p>
+                style={{ background: 'rgba(27,122,94,0.08)', border: '1px solid rgba(27,122,94,0.18)' }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#1B7A5E' }}>¿Primera visita?</p>
                 <p className="text-sm font-black text-ink mb-2">No necesitas saber nada.</p>
                 <p className="text-sm text-ink-2 leading-relaxed">
                   Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.

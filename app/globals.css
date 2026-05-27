@@ -53,6 +53,17 @@ body {
   font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
 }
 
+/* ── Hero: animated mesh gradient ─────────────────── */
+@keyframes mesh-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+.hero-mesh {
+  background: linear-gradient(135deg, #082E22, #1B7A5E, #0A3D2E, #22A67A, #082E22);
+  background-size: 400% 400%;
+  animation: mesh-shift 10s ease infinite;
+}
+
 /* ── Page-load reveal animations ──────────────────── */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(28px); }

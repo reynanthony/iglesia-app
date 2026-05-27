@@ -108,44 +108,40 @@ export default async function PredicasPage() {
       ═══════════════════════════════════════ */}
 
       {/* Sermón destacado */}
-      <section className="bg-[#F4F4F4] border-b border-[#111111]/[0.06]">
+      <section className="border-b border-edge" style={{ background: '#EAF3EF' }}>
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
           <div className="flex items-center gap-4 mb-10">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#22A67A' }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#111111]/45">Mensaje reciente</p>
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#1B7A5E' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#1B7A5E' }}>Mensaje reciente</p>
           </div>
-          <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border border-[#111111]/10 hover:border-[#111111]/15 transition cursor-pointer">
+          <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer" style={{ borderColor: 'rgba(27,122,94,0.15)' }}>
             <div className="lg:col-span-5 relative min-h-[260px] flex items-center justify-center overflow-hidden"
               style={{
                 background: featured.image_url
                   ? `url(${featured.image_url}) center/cover`
-                  : '#EDE8DF',
+                  : 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 100%)',
               }}>
-              {!featured.image_url && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: '#22A67A' }} />
-                </div>
-              )}
               <div className="absolute inset-0"
-                style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(0,0,0,0.06), transparent 65%)' }} />
+                style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(34,166,122,0.15), transparent 65%)' }} />
               <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
-                style={{ background: '#22A67A', color: '#0A0A0A' }}>
+                style={{ background: 'rgba(34,166,122,0.85)', color: 'white' }}>
                 Esta semana
               </div>
-              <div className="relative w-20 h-20 rounded-full border border-[#111111]/15 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] flex items-center justify-center transition duration-500 group-hover:scale-110">
-                <Play size={22} className="text-[#111111] group-hover:text-white ml-1.5" />
+              <div className="relative w-20 h-20 rounded-full border border-white/25 group-hover:bg-white/20 group-hover:border-white/50 flex items-center justify-center transition duration-500 group-hover:scale-110">
+                <Play size={22} className="text-white ml-1.5" />
               </div>
             </div>
-            <div className="lg:col-span-7 p-10 lg:p-14 bg-[#EBEBEB] group-hover:bg-[#E0E0E0] transition flex flex-col justify-between gap-8">
+            <div className="lg:col-span-7 p-10 lg:p-14 transition flex flex-col justify-between gap-8" style={{ background: '#E0F2EB' }}>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#000000]/80 mb-4">{featured.serie}</p>
-                <h2 className="font-display font-black text-[#111111] tracking-tight leading-tight mb-4"
-                  style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: '#1B7A5E' }}>{featured.serie}</p>
+                <h2 className="font-display font-black tracking-tight leading-tight mb-4"
+                  style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#0B4A38' }}>
                   {featured.titulo}
                 </h2>
-                <p className="text-sm text-[#111111]/50 uppercase tracking-wider">{featured.pastor} · {featured.fecha}</p>
+                <p className="text-sm uppercase tracking-wider" style={{ color: 'rgba(11,74,56,0.55)' }}>{featured.pastor} · {featured.fecha}</p>
               </div>
-              <button className="inline-flex items-center gap-3 bg-[#000000] hover:bg-[#222222] text-white text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition self-start group/btn">
+              <button className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition self-start group/btn"
+                style={{ background: '#1B7A5E' }}>
                 <Play size={12} /> Escuchar ahora
                 <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
@@ -184,15 +180,15 @@ export default async function PredicasPage() {
                 <div className="relative rounded-xl overflow-hidden mb-5"
                   style={{
                     aspectRatio: '16/10',
-                    background: image_url ? `url(${image_url}) center/cover` : 'linear-gradient(135deg, #EBEBEB 0%, #E0E0E0 100%)',
+                    background: image_url ? `url(${image_url}) center/cover` : 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 100%)',
                   }}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/8 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full border border-[#111111]/20 group-hover:bg-[#1B7A5E] group-hover:border-[#1B7A5E] flex items-center justify-center transition duration-300 group-hover:scale-110">
-                      <Play size={14} className="text-[#000000] group-hover:text-white ml-0.5" />
+                    <div className="w-12 h-12 rounded-full border border-white/25 group-hover:bg-white/20 group-hover:border-white/50 flex items-center justify-center transition duration-300 group-hover:scale-110">
+                      <Play size={14} className="text-white ml-0.5" />
                     </div>
                   </div>
-                  <span className="absolute bottom-4 left-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#000000]/70">{serie}</span>
+                  <span className="absolute bottom-4 left-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">{serie}</span>
                 </div>
                 <h3 className="font-black text-ink group-hover:text-[#222222] transition text-lg leading-tight mb-2 tracking-tight">{titulo}</h3>
                 <p className="text-[11px] text-ink-3 uppercase tracking-wider">{pastor} · {fecha}</p>

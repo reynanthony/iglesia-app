@@ -18,12 +18,12 @@ function getIcon(ministry: { slug?: string; name?: string }) {
 }
 
 const placeholders = [
-  'linear-gradient(150deg, #141414 0%, #2e2e2e 100%)',
-  'linear-gradient(150deg, #1c1c1c 0%, #383838 100%)',
-  'linear-gradient(150deg, #111111 0%, #2a2a2a 100%)',
-  'linear-gradient(150deg, #1a1a1a 0%, #323232 100%)',
-  'linear-gradient(150deg, #181818 0%, #2c2c2c 100%)',
-  'linear-gradient(150deg, #121212 0%, #262626 100%)',
+  'linear-gradient(150deg, #082E22 0%, #1B7A5E 100%)',
+  'linear-gradient(150deg, #0B4A38 0%, #22A67A 100%)',
+  'linear-gradient(150deg, #0A3D2E 0%, #1B7A5E 100%)',
+  'linear-gradient(150deg, #134D3F 0%, #22A67A 100%)',
+  'linear-gradient(150deg, #0F5C47 0%, #1B7A5E 100%)',
+  'linear-gradient(150deg, #1A7060 0%, #22A67A 100%)',
 ]
 
 export default async function MinisteriosPage() {
@@ -56,29 +56,31 @@ export default async function MinisteriosPage() {
       {hasBlocks ? (
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #082E22 0%, #0B4A38 50%, #1B7A5E 100%)' }}>
         <div
           className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(0,0,0,0.06), transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(34,166,122,0.15), transparent 70%)' }}
         />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 80px)' }} />
         <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-28 md:pt-48 md:pb-40">
           <div className="flex items-start gap-4 mb-12">
-            <div className="w-0.5 h-12 bg-[#000000] flex-shrink-0" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#111111]/45 leading-relaxed">
+            <div className="w-0.5 h-12 flex-shrink-0" style={{ background: 'rgba(255,255,255,0.4)' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
               Ministerios<br />Un lugar para todos
             </p>
           </div>
           <h1
-            className="font-display font-black leading-[0.85] tracking-tighter text-[#111111] mb-8"
+            className="font-display font-black leading-[0.85] tracking-tighter text-white mb-8"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}
           >
-            Un lugar<br />para <em>todos.</em>
+            Un lugar<br />para <em style={{ color: '#22A67A' }}>todos.</em>
           </h1>
-          <p className="text-base text-[#111111]/55 leading-relaxed max-w-md">
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.
           </p>
         </div>
-        <div className="h-px w-full bg-[#111111]/[0.08]" />
+        <div className="h-px w-full" style={{ background: 'rgba(255,255,255,0.08)' }} />
       </section>
       )}
 
@@ -183,7 +185,7 @@ export default async function MinisteriosPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— Sírvenos</p>

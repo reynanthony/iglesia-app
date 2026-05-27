@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle, Flag } from 'lucide-react'
-import { toggleLike, createComment, reportPost } from '@/app/actions/posts'
+import { Heart, MessageCircle, Flag, Pencil, Trash2 } from 'lucide-react'
+import { toggleLike, createComment, reportPost, deleteOwnPost, updateOwnPost } from '@/app/actions/posts'
 import Link from 'next/link'
 import CommentItem from '@/components/CommentItem'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
@@ -13,6 +13,11 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   const [reporting, setReporting] = useState(false)
   const [reported, setReported] = useState(false)
   const [showComments, setShowComments] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [editContent, setEditContent] = useState(post.content ?? '')
+  const [saving, setSaving] = useState(false)
+  const [deleted, setDeleted] = useState(false)
+  const isOwn = post.user_id === currentUserId
   const [commenting, setCommenting] = useState(false)
   const [liked, setLiked] = useState(post.likes?.some((l: any) => l.user_id === currentUserId))
   const [likesCount, setLikesCount] = useState(post.likes?.length ?? 0)
@@ -45,6 +50,8 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
     setCommenting(false)
   }
 
+  if (deleted) return null
+
   return (
     <div
       style={{
@@ -52,6 +59,47 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         borderBottom: '1px solid #1A1A1A',
       }}
     >
+      {/* Edit modal */}
+      {editing && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ background: '#141414', border: '1px solid #2A2A2A' }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A1A1A' }}>
+              <p className="font-bold text-sm" style={{ color: '#F5F5F5' }}>Editar publicación</p>
+              <button onClick={() => setEditing(false)} style={{ color: '#4D4D4D' }}>✕</button>
+            </div>
+            <div className="p-5">
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                rows={5}
+                className="w-full bg-transparent text-sm focus:outline-none resize-none leading-relaxed"
+                style={{ color: '#F5F5F5' }}
+              />
+              <div className="flex justify-end gap-3 mt-4">
+                <button onClick={() => setEditing(false)}
+                  className="text-sm px-4 py-2 rounded-xl transition"
+                  style={{ color: '#4D4D4D' }}>
+                  Cancelar
+                </button>
+                <button
+                  disabled={saving || !editContent.trim()}
+                  onClick={async () => {
+                    setSaving(true)
+                    await updateOwnPost(post.id, editContent)
+                    setSaving(false)
+                    setEditing(false)
+                  }}
+                  className="text-sm font-black px-5 py-2 rounded-xl transition disabled:opacity-50"
+                  style={{ background: 'linear-gradient(135deg, #1B7A5E, #22A67A)', color: 'white' }}
+                >
+                  {saving ? 'Guardando…' : 'Guardar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3.5">
         {post.profiles?.username ? (
@@ -97,25 +145,51 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
               <div
-                className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-40"
+                className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-44"
                 style={{ background: '#141414', border: '1px solid #2A2A2A' }}
               >
-                <button
-                  onClick={async () => {
-                    if (reported) return
-                    setReporting(true)
-                    setShowMenu(false)
-                    await reportPost(post.id, 'Contenido inapropiado')
-                    setReported(true)
-                    setReporting(false)
-                  }}
-                  disabled={reporting || reported}
-                  className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left disabled:opacity-50 transition"
-                  style={{ color: reported ? '#8A8A8A' : '#F87171' }}
-                >
-                  <Flag size={14} />
-                  {reported ? 'Reportado' : 'Reportar'}
-                </button>
+                {isOwn ? (
+                  <>
+                    <button
+                      onClick={() => { setEditing(true); setShowMenu(false) }}
+                      className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
+                      style={{ color: '#F5F5F5' }}
+                    >
+                      <Pencil size={14} />
+                      Editar
+                    </button>
+                    <button
+                      onClick={async () => {
+                        setShowMenu(false)
+                        if (!confirm('¿Eliminar esta publicación?')) return
+                        setDeleted(true)
+                        await deleteOwnPost(post.id)
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
+                      style={{ color: '#F87171' }}
+                    >
+                      <Trash2 size={14} />
+                      Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      if (reported) return
+                      setReporting(true)
+                      setShowMenu(false)
+                      await reportPost(post.id, 'Contenido inapropiado')
+                      setReported(true)
+                      setReporting(false)
+                    }}
+                    disabled={reporting || reported}
+                    className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left disabled:opacity-50 transition"
+                    style={{ color: reported ? '#8A8A8A' : '#F87171' }}
+                  >
+                    <Flag size={14} />
+                    {reported ? 'Reportado' : 'Reportar'}
+                  </button>
+                )}
               </div>
             </>
           )}

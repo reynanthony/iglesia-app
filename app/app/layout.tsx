@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck, Plus } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -144,6 +144,21 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         {/* Spacer so content clears the fixed bottom nav (mobile only) */}
         <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} />
       </main>
+
+      {/* ── FAB Publicar (mobile only) ── */}
+      <Link
+        href="/app/nuevo-post"
+        className="md:hidden fixed z-40 w-14 h-14 rounded-full flex items-center justify-center"
+        style={{
+          bottom: 'calc(64px + env(safe-area-inset-bottom,0px) + 12px)',
+          right: '20px',
+          background: 'linear-gradient(135deg, #1B7A5E, #22A67A)',
+          boxShadow: '0 4px 24px rgba(27,122,94,0.45), 0 2px 8px rgba(0,0,0,0.4)',
+        }}
+        aria-label="Nueva publicación"
+      >
+        <Plus size={26} color="white" strokeWidth={2.5} />
+      </Link>
 
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav

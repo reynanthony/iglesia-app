@@ -71,21 +71,27 @@ export default async function NosotrosPage() {
             <div className="hidden lg:block lg:col-span-5 pb-4">
               <div
                 className="relative rounded-2xl overflow-hidden"
-                style={{ aspectRatio: '4/5', background: '#E8E0D4' }}
+                style={{ aspectRatio: '4/5', background: '#0B4A38' }}
               >
-                {/* Placeholder hasta que haya foto real */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center px-8"
-                  style={{ color: '#A89878' }}>
-                  <Users size={36} strokeWidth={1.2} />
-                  <p className="text-sm font-bold tracking-wide leading-snug">
-                    Fotografía de la comunidad
-                  </p>
-                  <p className="text-xs opacity-60">
-                    Agrégala en Admin → Página Nosotros
-                  </p>
+                {/* Año fundación como arte tipográfico */}
+                <div className="absolute inset-0 flex items-end justify-start p-8 overflow-hidden">
+                  <span className="font-black text-white leading-none select-none"
+                    style={{ fontSize: 'clamp(7rem, 18vw, 14rem)', opacity: 0.10, lineHeight: 1 }}>
+                    2008
+                  </span>
                 </div>
+                {/* Cruz minimalista centrada */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                    <rect x="32" y="8" width="8" height="56" rx="4" fill="white" fillOpacity="0.35" />
+                    <rect x="8" y="28" width="56" height="8" rx="4" fill="white" fillOpacity="0.35" />
+                  </svg>
+                </div>
+                {/* Subtle grid texture */}
+                <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                  style={{ backgroundImage: 'repeating-linear-gradient(90deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 60px), repeating-linear-gradient(0deg, #22A67A 0px, #22A67A 1px, transparent 1px, transparent 60px)' }} />
                 {/* Accent line inferior */}
-                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#1B7A5E' }} />
+                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#22A67A' }} />
               </div>
             </div>
           </div>
@@ -114,7 +120,7 @@ export default async function NosotrosPage() {
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-36">
 
           {/* Pullquote editorial */}
-          <div className="border-l-2 border-[#000000] pl-8 mb-20 max-w-3xl">
+          <div className="border-l-2 pl-8 mb-20 max-w-3xl" style={{ borderColor: '#1B7A5E' }}>
             <p className="font-display font-black text-ink tracking-tight leading-snug"
               style={{ fontSize: 'clamp(1.5rem, 4vw, 2.8rem)' }}>
               "No somos un edificio. Somos una familia que se reúne, crece y sirve juntos."
@@ -126,20 +132,32 @@ export default async function NosotrosPage() {
 
           {/* Foto collage placeholder 3 paneles */}
           <div className="grid grid-cols-12 gap-4 mb-20">
-            <div className="col-span-7 rounded-2xl overflow-hidden bg-[#EBEBEB]" style={{ minHeight: 320 }}>
-              <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 320 }}>
-                Foto comunidad
+            <div className="col-span-7 rounded-2xl overflow-hidden relative" style={{ minHeight: 320, background: '#1B7A5E' }}>
+              <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
+                style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', opacity: 0.08, lineHeight: 1 }}>
+                La comunidad
+              </span>
+              <div className="absolute inset-0 flex items-end p-8">
+                <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Comunidad</p>
               </div>
             </div>
             <div className="col-span-5 grid grid-rows-2 gap-4">
-              <div className="rounded-2xl overflow-hidden bg-[#F4F4F4]" style={{ minHeight: 152 }}>
-                <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 152 }}>
-                  Foto servicio
+              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#0B4A38' }}>
+                <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.10, lineHeight: 1 }}>
+                  El servicio
+                </span>
+                <div className="absolute inset-0 flex items-end p-6">
+                  <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Servicio</p>
                 </div>
               </div>
-              <div className="rounded-2xl overflow-hidden bg-[#EBEBEB]" style={{ minHeight: 152 }}>
-                <div className="w-full h-full flex items-center justify-center text-[#111111]/20 text-[10px] uppercase tracking-widest font-bold" style={{ minHeight: 152 }}>
-                  Foto jóvenes
+              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#22A67A' }}>
+                <span className="absolute inset-0 flex items-center justify-center font-black text-white select-none"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.12, lineHeight: 1 }}>
+                  La familia
+                </span>
+                <div className="absolute inset-0 flex items-end p-6">
+                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.3em]">Familia</p>
                 </div>
               </div>
             </div>

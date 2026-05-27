@@ -165,6 +165,34 @@ export async function toggleCommentLike(commentId: string) {
   revalidatePath('/app/feed')
 }
 
+export async function deleteOwnPost(postId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  await supabase.from('posts').delete().eq('id', postId).eq('user_id', user.id)
+
+  revalidatePath('/app/feed')
+  return { success: true }
+}
+
+export async function updateOwnPost(postId: string, content: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const { error } = await supabase
+    .from('posts')
+    .update({ content: content.trim() })
+    .eq('id', postId)
+    .eq('user_id', user.id)
+
+  if (error) return { error: 'No se pudo actualizar' }
+
+  revalidatePath('/app/feed')
+  return { success: true }
+}
+
 export async function createReply(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

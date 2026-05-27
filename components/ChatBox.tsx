@@ -188,13 +188,15 @@ export default function ChatBox({
                     <div
                       className="px-3 py-2"
                       style={{
-                        background: isMe ? '#1A2E22' : '#161616',
+                        background: isMe
+                          ? 'linear-gradient(135deg, #1B7A5E, #22A67A)'
+                          : '#1A1510',
                         borderRadius: isFirst
                           ? isMe ? '16px 16px 4px 16px' : '16px 16px 16px 4px'
                           : isLast
                             ? isMe ? '16px 4px 16px 16px' : '4px 16px 16px 16px'
                             : isMe ? '16px 4px 4px 16px' : '4px 16px 16px 4px',
-                        border: isMe ? '1px solid #2A4032' : '1px solid #1F1F1F',
+                        border: isMe ? 'none' : '1px solid #2A2018',
                       }}
                     >
                       <div className="flex items-end gap-3">
@@ -264,9 +266,9 @@ export default function ChatBox({
           onClick={sendMsg}
           disabled={sending || !inputValue.trim()}
           className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition active:scale-95 disabled:opacity-40"
-          style={{ background: '#F5F5F5' }}
+          style={{ background: 'linear-gradient(135deg, #1B7A5E, #22A67A)' }}
         >
-          <Send size={18} style={{ color: '#0A0A0A' }} />
+          <Send size={18} style={{ color: 'white' }} />
         </button>
       </div>
     </div>
