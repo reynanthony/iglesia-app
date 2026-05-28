@@ -131,19 +131,22 @@ export default async function EventosPage() {
       <section className="border-t border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-edge">
-            {regularServices.map(({ day, time, label, type, fullDay }) => (
-              <div key={day} className="py-7 md:py-8 md:px-8 first:md:pl-0 last:md:pr-0 flex items-center gap-5">
-                <div className="w-16 h-16 flex-shrink-0 flex flex-col items-center justify-center border border-edge rounded-xl">
-                  <span className="text-[9px] font-bold text-ink-3 uppercase tracking-widest leading-none mb-1">{day}</span>
-                  <div className="flex items-baseline gap-0.5">
-                    <span className="font-black text-ink text-base leading-none">{time}</span>
-                    <span className="text-[9px] font-bold text-ink-3">{label}</span>
-                  </div>
+            {regularServices.map(({ day, time, label, type, desc, fullDay }) => (
+              <div key={day} className="py-8 md:px-8 first:md:pl-0 last:md:pr-0">
+                <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-3">
+                  {fullDay || day}
+                </p>
+                <div className="flex items-baseline gap-1.5 mb-2">
+                  <p className="font-black text-ink tracking-tighter leading-none"
+                    style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+                    {time}
+                  </p>
+                  <p className="font-black text-ink-3 text-xl leading-none">{label}</p>
                 </div>
-                <div className="min-w-0">
-                  <p className="font-bold text-ink text-sm leading-tight">{type}</p>
-                  <p className="text-[11px] text-ink-3 mt-1">{fullDay}</p>
-                </div>
+                <p className="text-sm font-bold text-ink">{type}</p>
+                {desc && (
+                  <p className="text-[11px] text-ink-3 mt-1 leading-relaxed">{desc}</p>
+                )}
               </div>
             ))}
           </div>
