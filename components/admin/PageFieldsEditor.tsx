@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { savePageFields } from '@/app/actions/admin'
-import { Check, Loader2, AlertCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import { Check, Loader2, AlertCircle, Upload, ImageIcon, Video } from 'lucide-react'
 
-type FieldType = 'text' | 'textarea' | 'url' | 'json'
+type FieldType = 'text' | 'textarea' | 'url' | 'json' | 'upload-image' | 'upload-video'
 
 interface FieldDef {
   key: string
@@ -33,8 +34,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_cta1_url', label: 'Botón principal — URL', type: 'url', placeholder: '/nosotros' },
         { key: 'hero_cta2_label', label: 'Botón secundario — texto', type: 'text', placeholder: 'Ver prédica' },
         { key: 'hero_cta2_url', label: 'Botón secundario — URL', type: 'url', placeholder: '/predicas' },
-        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen (JPG/PNG/WebP). El video tiene prioridad si ambos están definidos.' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -145,8 +146,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_title_main', label: 'Título — líneas principales (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Somos\nEl Manan-' },
         { key: 'hero_title_accent', label: 'Título — palabra en teal', type: 'text', placeholder: 'tial.' },
         { key: 'hero_body', label: 'Párrafo introductorio', type: 'textarea', rows: 3, placeholder: 'Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.' },
-        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -215,8 +216,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Eventos · Agenda 2026' },
         { key: 'hero_title_main', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Lo que\nse viene.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Mantente al día con nuestras actividades, servicios y eventos especiales.' },
-        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -269,8 +270,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_title_main', label: 'Título — líneas principales (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Crece\nen la' },
         { key: 'hero_title_accent', label: 'Título — palabra en teal', type: 'text', placeholder: 'Palabra.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Escucha los mensajes de nuestra iglesia y déjate transformar por la Palabra de Dios cada semana.' },
-        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -300,8 +301,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Contacto · Estamos aquí para ti' },
         { key: 'hero_title', label: 'Título principal', type: 'text', placeholder: 'Visítanos.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.' },
-        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -352,7 +353,6 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
     schema.forEach(section =>
       section.fields.forEach(f => {
         const dbVal = fieldDisplayValue(f.type, initialValues[f.key])
-        // Pre-fill with placeholder so users see what the page currently displays
         init[f.key] = dbVal || (f.placeholder ?? '')
       })
     )
@@ -362,10 +362,31 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [isPending, startTransition] = useTransition()
+  const [uploading, setUploading] = useState<Record<string, boolean>>({})
+  const [uploadError, setUploadError] = useState<Record<string, string>>({})
+  const fileRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   function handleChange(key: string, val: string) {
     setValues(prev => ({ ...prev, [key]: val }))
     if (status === 'saved') setStatus('idle')
+  }
+
+  async function handleUpload(key: string, file: File) {
+    setUploading(prev => ({ ...prev, [key]: true }))
+    setUploadError(prev => ({ ...prev, [key]: '' }))
+    try {
+      const supabase = createClient()
+      const ext = file.name.split('.').pop() ?? 'bin'
+      const path = `pages/${key}_${Date.now()}.${ext}`
+      const { error } = await supabase.storage.from('posts').upload(path, file, { upsert: true })
+      if (error) throw error
+      const { data } = supabase.storage.from('posts').getPublicUrl(path)
+      handleChange(key, data.publicUrl)
+    } catch {
+      setUploadError(prev => ({ ...prev, [key]: 'Error al subir. Intenta de nuevo.' }))
+    } finally {
+      setUploading(prev => ({ ...prev, [key]: false }))
+    }
   }
 
   function handleSave() {
@@ -432,49 +453,109 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
             </p>
           </div>
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5" style={{ background: '#061E30' }}>
-            {section.fields.map(field => (
-              <div key={field.key} className={field.type === 'textarea' || field.type === 'json' ? 'md:col-span-2' : ''}>
-                <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: 'rgba(246,243,235,0.45)' }}>
-                  {field.label}
-                </label>
-                {field.type === 'textarea' || field.type === 'json' ? (
-                  <textarea
-                    rows={field.rows ?? 3}
-                    value={values[field.key] ?? ''}
-                    onChange={e => handleChange(field.key, e.target.value)}
-                    placeholder={field.placeholder}
-                    className="w-full rounded-xl px-4 py-3 text-sm font-mono resize-y transition outline-none focus:ring-1"
-                    style={{
-                      background: '#0B2D47',
-                      border: '1px solid #0D3352',
-                      color: '#F6F3EB',
-                      // @ts-ignore
-                      '--tw-ring-color': '#76ABAE',
-                    }}
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    value={values[field.key] ?? ''}
-                    onChange={e => handleChange(field.key, e.target.value)}
-                    placeholder={field.placeholder}
-                    className="w-full rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
-                    style={{
-                      background: '#0B2D47',
-                      border: '1px solid #0D3352',
-                      color: '#F6F3EB',
-                      // @ts-ignore
-                      '--tw-ring-color': '#76ABAE',
-                    }}
-                  />
-                )}
-                {field.hint && (
-                  <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.25)' }}>
-                    {field.hint}
-                  </p>
-                )}
-              </div>
-            ))}
+            {section.fields.map(field => {
+              const isUpload = field.type === 'upload-image' || field.type === 'upload-video'
+              const isTextArea = field.type === 'textarea' || field.type === 'json'
+              const isFullWidth = isTextArea || isUpload
+              return (
+                <div key={field.key} className={isFullWidth ? 'md:col-span-2' : ''}>
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                    {field.label}
+                  </label>
+
+                  {isTextArea ? (
+                    <textarea
+                      rows={field.rows ?? 3}
+                      value={values[field.key] ?? ''}
+                      onChange={e => handleChange(field.key, e.target.value)}
+                      placeholder={field.placeholder}
+                      className="w-full rounded-xl px-4 py-3 text-sm font-mono resize-y transition outline-none focus:ring-1"
+                      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                    />
+                  ) : isUpload ? (
+                    <div className="space-y-2">
+                      {/* Preview if URL is set and looks like a direct file */}
+                      {values[field.key] && values[field.key].startsWith('http') && !values[field.key].includes(field.placeholder ?? '____') && (
+                        <div className="rounded-xl overflow-hidden border" style={{ borderColor: '#0D3352' }}>
+                          {field.type === 'upload-image' ? (
+                            <img
+                              src={values[field.key]}
+                              alt=""
+                              className="w-full max-h-40 object-cover"
+                              onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+                            />
+                          ) : (
+                            <video
+                              src={values[field.key]}
+                              className="w-full max-h-40 object-cover"
+                              muted
+                              onError={e => { (e.target as HTMLVideoElement).style.display = 'none' }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {/* URL input + upload button */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={values[field.key] ?? ''}
+                          onChange={e => handleChange(field.key, e.target.value)}
+                          placeholder={field.type === 'upload-image' ? 'https://... (URL de imagen)' : 'https://... (URL de video .mp4)'}
+                          className="flex-1 rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
+                          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                        />
+                        <input
+                          type="file"
+                          accept={field.type === 'upload-image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'video/mp4,video/webm,video/quicktime'}
+                          className="hidden"
+                          ref={el => { fileRefs.current[field.key] = el }}
+                          onChange={e => {
+                            const file = e.target.files?.[0]
+                            if (file) handleUpload(field.key, file)
+                            e.target.value = ''
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileRefs.current[field.key]?.click()}
+                          disabled={uploading[field.key]}
+                          title={field.type === 'upload-image' ? 'Subir foto desde tu equipo' : 'Subir video desde tu equipo'}
+                          className="flex items-center gap-2 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] transition flex-shrink-0 disabled:opacity-50"
+                          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}
+                        >
+                          {uploading[field.key] ? (
+                            <Loader2 size={14} className="animate-spin" />
+                          ) : field.type === 'upload-image' ? (
+                            <ImageIcon size={14} />
+                          ) : (
+                            <Video size={14} />
+                          )}
+                          {uploading[field.key] ? 'Subiendo…' : 'Subir'}
+                        </button>
+                      </div>
+                      {uploadError[field.key] && (
+                        <p className="text-[11px]" style={{ color: '#F87171' }}>{uploadError[field.key]}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      value={values[field.key] ?? ''}
+                      onChange={e => handleChange(field.key, e.target.value)}
+                      placeholder={field.placeholder}
+                      className="w-full rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
+                      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                    />
+                  )}
+
+                  {field.hint && (
+                    <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                      {field.hint}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       ))}
