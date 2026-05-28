@@ -1,30 +1,69 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { detectSocialEmbed } from '@/lib/social-embed'
 import {
   ArrowLeft, ArrowRight, Plus, Play,
   FileText, Megaphone, Video, Pin, Users,
+  Music, Heart, Star, BookOpen, Mic, Baby, Flame,
+  Home, Globe, Zap, Sparkles,
+  type LucideIcon,
 } from 'lucide-react'
 
-/* ── helpers ──────────────────────────────────────────── */
-function getYouTubeId(url: string) {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)
-  return match ? match[1] : null
+/* ── palette ─────────────────────────────────────────── */
+const NAVY  = '#093C5D'
+const TEAL  = '#76ABAE'
+const CREAM = '#F6F3EB'
+
+/* ── icon mapping ─────────────────────────────────────── */
+const EMOJI_ICON: Record<string, LucideIcon> = {
+  '🙏': Sparkles, '✨': Sparkles, '⛪': Home,
+  '🎵': Music, '🎶': Music, '🎸': Music, '🎹': Music,
+  '👥': Users, '👫': Users, '🤝': Users,
+  '🔥': Flame,
+  '📖': BookOpen, '📚': BookOpen,
+  '⭐': Star, '🌟': Star,
+  '🎤': Mic,
+  '👶': Baby, '🧒': Baby,
+  '❤️': Heart, '💕': Heart, '💖': Heart,
+  '🏠': Home, '🏡': Home,
+  '🌍': Globe, '🌎': Globe,
+  '⚡': Zap,
 }
 
-const MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+const SLUG_ICON: Record<string, LucideIcon> = {
+  joven: Flame,    matrimoni: Heart,
+  adoraci: Music,  alabanza: Music,  musica: Music,
+  oraci: Sparkles, intercesi: Sparkles,
+  nino: Baby,      infanti: Baby,
+  famili: Home,    hogar: Home,
+  mujer: Star,     damas: Star,
+  hombre: Zap,     varon: Zap,
+  mision: Globe,   evangelism: Globe,
+  pastor: BookOpen, estudio: BookOpen, biblia: BookOpen,
+}
+
+function getMinistryIcon(icon: string | null, slug: string): LucideIcon {
+  if (icon && EMOJI_ICON[icon]) return EMOJI_ICON[icon]
+  const s = slug.toLowerCase()
+  for (const [k, C] of Object.entries(SLUG_ICON)) {
+    if (s.includes(k)) return C
+  }
+  return Users
+}
+
+/* ── helpers ─────────────────────────────────────────── */
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
 function fmtDate(d: string) {
   const dt = new Date(d)
-  return `${dt.getUTCDate()} de ${MESES_LARGO[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
+  return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
 }
 
 /* ── sub-components ───────────────────────────────────── */
-function SectionLabel({
-  label, color, count,
-}: { label: string; color: string; count?: number }) {
+function SectionLabel({ label, count }: { label: string; count?: number }) {
   return (
     <div className="flex items-center gap-3 mb-10 pb-5 border-b border-edge">
-      <div className="w-2 h-6 rounded-full flex-shrink-0 bg-ink" />
+      <div className="w-2 h-6 rounded-full flex-shrink-0" style={{ background: TEAL }} />
       <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3">{label}</p>
       {count !== undefined && (
         <span className="ml-auto text-[10px] font-bold text-ink-3">{count}</span>
@@ -33,19 +72,17 @@ function SectionLabel({
   )
 }
 
-function AnnouncementCard({ item, color }: { item: any; color: string }) {
+function AnnouncementCard({ item }: { item: any }) {
   return (
-    <article
-      className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group"
-    >
+    <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group">
       <div
         className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start"
-        style={{ backgroundColor: color + '18', color }}
+        style={{ backgroundColor: TEAL + '18', color: TEAL }}
       >
         <Megaphone size={9} /> Anuncio
         {item.pinned && <><Pin size={8} className="ml-1" /> Fijado</>}
       </div>
-      <h3 className="font-black text-ink text-lg leading-tight group-hover:text-[#222222] transition">
+      <h3 className="font-black text-ink text-lg leading-tight group-hover:text-ink-2 transition">
         {item.title}
       </h3>
       {item.body && (
@@ -61,52 +98,62 @@ function AnnouncementCard({ item, color }: { item: any; color: string }) {
   )
 }
 
-function VideoCard({ item, color }: { item: any; color: string }) {
-  const ytId = item.video_url ? getYouTubeId(item.video_url) : null
+function VideoCard({ item }: { item: any }) {
+  const embed = item.video_url ? detectSocialEmbed(item.video_url) : null
   return (
     <article className="group cursor-pointer">
-      <div className="relative rounded-xl overflow-hidden mb-4 bg-[#EBEBEB]" style={{ aspectRatio: '16/10' }}>
-        {ytId ? (
+      {embed ? (
+        <div
+          className="relative rounded-xl overflow-hidden mb-4"
+          style={{ paddingBottom: embed.aspectPadding, height: 0, background: `linear-gradient(135deg, ${NAVY}, #0D4A72)` }}
+        >
           <iframe
-            src={`https://www.youtube.com/embed/${ytId}`}
+            src={embed.embedUrl}
             className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            loading="lazy"
+            style={{ border: 'none' }}
           />
-        ) : (
-          <>
-            {item.image_url && (
-              <img src={item.image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
-            )}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div
-                className="w-14 h-14 rounded-full flex items-center justify-center border-2 border-white/30 group-hover:border-white/80 transition"
-                style={{ backgroundColor: color + '30' }}
-              >
-                <Play size={18} className="text-white ml-1" />
-              </div>
+          {item.pinned && (
+            <div
+              className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md"
+              style={{ backgroundColor: TEAL, color: NAVY }}
+            >
+              Fijado
             </div>
-            {item.video_url && (
-              <a
-                href={item.video_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0"
-                aria-label="Ver video"
-              />
-            )}
-          </>
-        )}
-        {item.pinned && (
-          <div
-            className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md"
-            style={{ backgroundColor: color, color: '#fff' }}
-          >
-            Fijado
+          )}
+        </div>
+      ) : (
+        <div
+          className="relative rounded-xl overflow-hidden mb-4"
+          style={{ aspectRatio: '16/10', background: `linear-gradient(135deg, ${NAVY}, #0D4A72)` }}
+        >
+          {item.image_url && (
+            <img src={item.image_url} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+          )}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center border-2 border-white/30 group-hover:border-white/80 transition"
+              style={{ backgroundColor: TEAL + '30' }}
+            >
+              <Play size={18} className="text-white ml-1" />
+            </div>
           </div>
-        )}
-      </div>
-      <h3 className="font-black text-ink group-hover:text-[#222222] transition leading-tight mb-1">
+          {item.video_url && (
+            <a href={item.video_url} target="_blank" rel="noopener noreferrer" className="absolute inset-0" aria-label="Ver video" />
+          )}
+          {item.pinned && (
+            <div
+              className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md"
+              style={{ backgroundColor: TEAL, color: NAVY }}
+            >
+              Fijado
+            </div>
+          )}
+        </div>
+      )}
+      <h3 className="font-black text-ink group-hover:text-ink-2 transition leading-tight mb-1">
         {item.title}
       </h3>
       <p className="text-[11px] text-ink-3 uppercase tracking-wider">
@@ -116,27 +163,23 @@ function VideoCard({ item, color }: { item: any; color: string }) {
   )
 }
 
-function ArticleCard({ item, color }: { item: any; color: string }) {
+function ArticleCard({ item }: { item: any }) {
   return (
     <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden">
       {item.image_url && (
         <div className="overflow-hidden h-44 rounded-t-xl">
-          <img
-            src={item.image_url}
-            alt=""
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-          />
+          <img src={item.image_url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
         </div>
       )}
       <div className="p-6">
         <div
           className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md mb-4"
-          style={{ backgroundColor: color + '18', color }}
+          style={{ backgroundColor: TEAL + '18', color: TEAL }}
         >
           <FileText size={9} /> Artículo
           {item.pinned && <><Pin size={8} className="ml-1" /> Fijado</>}
         </div>
-        <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-[#222222] transition">
+        <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-ink-2 transition">
           {item.title}
         </h3>
         {item.body && (
@@ -191,69 +234,80 @@ export default async function PublicMinistryPage({
     canPost = ['admin', 'pastor', 'moderador', 'lider'].includes(profile?.role ?? '')
   }
 
-  const items      = content ?? []
-  const anuncios   = items.filter(i => i.type === 'anuncio')
-  const videos     = items.filter(i => i.type === 'video')
-  const articulos  = items.filter(i => i.type === 'articulo')
-  const pinned     = items.filter(i => i.pinned)
+  const items     = content ?? []
+  const anuncios  = items.filter(i => i.type === 'anuncio')
+  const videos    = items.filter(i => i.type === 'video')
+  const articulos = items.filter(i => i.type === 'articulo')
   const latestAnuncio = anuncios[0] ?? null
-  const color = '#000000'
+
+  const IconComponent = getMinistryIcon(ministry.icon, slug)
 
   return (
     <div>
 
       {/* ══ HERO ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EBEBEB 0%, #F4F4F4 50%, #FFFFFF 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: NAVY }}>
 
-        {/* Radial glow from ministry color */}
+        {/* Subtle teal grid texture */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            opacity: 0.04,
+            backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px)`,
+          }}
+        />
+
+        {/* Radial teal glow */}
         <div
           className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 60% 80% at 80% 50%, ${color}18, transparent 70%)`,
-          }}
+          style={{ background: `radial-gradient(ellipse 60% 80% at 80% 50%, ${TEAL}20, transparent 70%)` }}
         />
 
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-0">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#111111]/40 mb-14">
-            <Link href="/ministerios" className="hover:text-[#111111] transition flex items-center gap-1.5">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] mb-14 text-white/40">
+            <Link href="/ministerios" className="hover:text-white/80 transition flex items-center gap-1.5">
               <ArrowLeft size={11} /> Ministerios
             </Link>
             {ministry.parent && (
               <>
                 <span>/</span>
-                <Link href={`/ministerios/${ministry.parent.slug}`} className="hover:text-[#111111] transition">
+                <Link href={`/ministerios/${ministry.parent.slug}`} className="hover:text-white/80 transition">
                   {ministry.parent.name}
                 </Link>
               </>
             )}
             <span>/</span>
-            <span className="text-[#111111]/65">{ministry.name}</span>
+            <span className="text-white/65">{ministry.name}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end pb-16">
 
             {/* Left: identity */}
             <div className="lg:col-span-7">
-              {/* Icon */}
+
+              {/* Icon — Lucide instead of emoji */}
               <div
-                className="w-20 h-20 flex items-center justify-center text-4xl rounded-2xl mb-8 border border-edge"
-                style={{ backgroundColor: '#11111108', filter: 'grayscale(1)' }}
+                className="w-20 h-20 flex items-center justify-center rounded-2xl mb-8"
+                style={{ background: 'rgba(118,171,174,0.15)', border: '1px solid rgba(118,171,174,0.30)' }}
               >
-                {ministry.icon}
+                <IconComponent size={34} color={TEAL} strokeWidth={1.5} />
               </div>
 
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-ink-3 mb-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: TEAL }}>
                 — Ministerio
               </p>
 
-              <h1 className="text-5xl sm:text-6xl md:text-8xl font-black leading-[0.88] tracking-tighter text-[#111111] mb-6">
+              <h1
+                className="text-5xl sm:text-6xl md:text-8xl font-black leading-[0.88] tracking-tighter mb-6"
+                style={{ color: CREAM }}
+              >
                 {ministry.name}
               </h1>
 
               {ministry.description && (
-                <p className="text-sm text-[#111111]/60 leading-relaxed max-w-lg">
+                <p className="text-sm leading-relaxed max-w-lg" style={{ color: 'rgba(246,243,235,0.60)' }}>
                   {ministry.description}
                 </p>
               )}
@@ -270,8 +324,8 @@ export default async function PublicMinistryPage({
                   { n: anuncios.length,  label: 'Anuncios' },
                 ].map(({ n, label }) => (
                   <div key={label} className="text-center">
-                    <p className="text-3xl font-black text-[#111111] leading-none">{n}</p>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-[#111111]/40 mt-1">{label}</p>
+                    <p className="text-3xl font-black leading-none" style={{ color: CREAM }}>{n}</p>
+                    <p className="text-[10px] uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
                   </div>
                 ))}
               </div>
@@ -281,15 +335,16 @@ export default async function PublicMinistryPage({
                 {canPost && (
                   <Link
                     href={`/app/ministerios/${slug}/nuevo`}
-                    className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-lg transition text-[#111111] border border-[#111111]/15 hover:bg-[#111111]/8"
+                    className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-lg transition hover:bg-white/5"
+                    style={{ color: CREAM, border: '1px solid rgba(246,243,235,0.20)' }}
                   >
                     <Plus size={13} /> Publicar
                   </Link>
                 )}
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-lg transition"
-                  style={{ backgroundColor: color, color: '#fff' }}
+                  className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-lg transition hover:opacity-90"
+                  style={{ backgroundColor: TEAL, color: NAVY }}
                 >
                   <Users size={13} /> Participar
                 </Link>
@@ -298,20 +353,17 @@ export default async function PublicMinistryPage({
           </div>
         </div>
 
-        {/* Color accent line */}
-        <div className="h-1 w-full" style={{ backgroundColor: color }} />
+        {/* Teal accent line */}
+        <div className="h-1 w-full" style={{ backgroundColor: TEAL }} />
       </section>
 
       {/* ══ LATEST ANNOUNCEMENT BANNER ═════════════════════ */}
       {latestAnuncio && (
-        <div
-          className="border-b border-edge"
-          style={{ backgroundColor: color + '0f' }}
-        >
+        <div className="border-b border-edge" style={{ backgroundColor: TEAL + '0f' }}>
           <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-3">
             <div
               className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md flex-shrink-0"
-              style={{ backgroundColor: color + '20', color }}
+              style={{ backgroundColor: TEAL + '20', color: TEAL }}
             >
               <Megaphone size={9} /> Último anuncio
             </div>
@@ -325,10 +377,10 @@ export default async function PublicMinistryPage({
       {items.length === 0 && (
         <section className="max-w-6xl mx-auto px-6 py-40 text-center">
           <div
-            className="w-24 h-24 flex items-center justify-center text-5xl rounded-3xl mx-auto mb-8 border border-edge"
-            style={{ backgroundColor: '#11111108', filter: 'grayscale(1)' }}
+            className="w-24 h-24 flex items-center justify-center rounded-3xl mx-auto mb-8"
+            style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.20)' }}
           >
-            {ministry.icon}
+            <IconComponent size={40} color={TEAL} strokeWidth={1.5} />
           </div>
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3 mb-3">
             Próximamente
@@ -346,14 +398,10 @@ export default async function PublicMinistryPage({
       {anuncios.length > 0 && (
         <section className="bg-surface border-b border-edge">
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-            <SectionLabel
-              label="Actividades y anuncios"
-              color={color}
-              count={anuncios.length}
-            />
+            <SectionLabel label="Actividades y anuncios" count={anuncios.length} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {anuncios.map(item => (
-                <AnnouncementCard key={item.id} item={item} color={color} />
+                <AnnouncementCard key={item.id} item={item} />
               ))}
             </div>
           </div>
@@ -364,31 +412,32 @@ export default async function PublicMinistryPage({
       {videos.length > 0 && (
         <section className="bg-muted border-b border-edge">
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-            <SectionLabel
-              label="Videos y mensajes"
-              color={color}
-              count={videos.length}
-            />
+            <SectionLabel label="Videos y mensajes" count={videos.length} />
 
-            {/* Featured video (first, if pinned) */}
+            {/* Featured video (pinned) */}
             {videos[0].pinned && (
               <div className="mb-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-xl overflow-hidden border border-edge">
-                  <div className="relative bg-[#EBEBEB] min-h-[280px]">
+                  <div
+                    className="relative min-h-[280px]"
+                    style={{ background: `linear-gradient(135deg, ${NAVY}, #0D4A72)` }}
+                  >
                     {(() => {
-                      const ytId = videos[0].video_url ? getYouTubeId(videos[0].video_url) : null
-                      return ytId ? (
+                      const embed = videos[0].video_url ? detectSocialEmbed(videos[0].video_url) : null
+                      return embed ? (
                         <iframe
-                          src={`https://www.youtube.com/embed/${ytId}`}
+                          src={embed.embedUrl}
                           className="absolute inset-0 w-full h-full"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowFullScreen
+                          loading="lazy"
+                          style={{ border: 'none' }}
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div
                             className="w-16 h-16 rounded-full flex items-center justify-center border-2 border-white/30"
-                            style={{ backgroundColor: color + '30' }}
+                            style={{ backgroundColor: TEAL + '30' }}
                           >
                             <Play size={22} className="text-white ml-1" />
                           </div>
@@ -399,7 +448,7 @@ export default async function PublicMinistryPage({
                   <div className="bg-card p-8 lg:p-10 flex flex-col justify-center">
                     <div
                       className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start mb-4"
-                      style={{ backgroundColor: color + '18', color }}
+                      style={{ backgroundColor: TEAL + '18', color: TEAL }}
                     >
                       <Pin size={9} /> Destacado
                     </div>
@@ -421,7 +470,7 @@ export default async function PublicMinistryPage({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {(videos[0].pinned ? videos.slice(1) : videos).map(item => (
-                <VideoCard key={item.id} item={item} color={color} />
+                <VideoCard key={item.id} item={item} />
               ))}
             </div>
           </div>
@@ -432,11 +481,7 @@ export default async function PublicMinistryPage({
       {articulos.length > 0 && (
         <section className="bg-surface border-b border-edge">
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
-            <SectionLabel
-              label="Artículos y recursos"
-              color={color}
-              count={articulos.length}
-            />
+            <SectionLabel label="Artículos y recursos" count={articulos.length} />
 
             {/* Featured article (pinned) */}
             {articulos[0].pinned && (
@@ -454,11 +499,11 @@ export default async function PublicMinistryPage({
                   <div className={`p-8 lg:p-12 flex flex-col justify-center ${articulos[0].image_url ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
                     <div
                       className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start mb-5"
-                      style={{ backgroundColor: color + '18', color }}
+                      style={{ backgroundColor: TEAL + '18', color: TEAL }}
                     >
                       <Pin size={9} /> Artículo destacado
                     </div>
-                    <h2 className="text-3xl font-black text-ink leading-tight tracking-tight mb-4 group-hover:text-[#222222] transition">
+                    <h2 className="text-3xl font-black text-ink leading-tight tracking-tight mb-4 group-hover:text-ink-2 transition">
                       {articulos[0].title}
                     </h2>
                     {articulos[0].body && (
@@ -487,7 +532,7 @@ export default async function PublicMinistryPage({
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {(articulos[0].pinned ? articulos.slice(1) : articulos).map(item => (
-                <ArticleCard key={item.id} item={item} color={color} />
+                <ArticleCard key={item.id} item={item} />
               ))}
             </div>
           </div>
@@ -495,30 +540,44 @@ export default async function PublicMinistryPage({
       )}
 
       {/* ══ CTA ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #222222 100%)' }}>
+      <section
+        className="relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, #0D4A72 100%)` }}
+      >
         <div
           className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(255,255,255,0.04), transparent 70%)' }}
+          style={{ background: `radial-gradient(ellipse 50% 100% at 20% 50%, rgba(118,171,174,0.08), transparent 70%)` }}
         />
+        {/* Ministry initial as large watermark */}
+        <div
+          className="pointer-events-none absolute select-none font-black leading-none tracking-tighter right-0 bottom-0"
+          style={{ fontSize: 'clamp(8rem, 20vw, 18rem)', color: TEAL, opacity: 0.05, lineHeight: 1, fontFamily: 'Georgia, serif' }}
+          aria-hidden
+        >
+          {ministry.name.slice(0, 1).toUpperCase()}
+        </div>
+
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mb-8">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8" style={{ color: 'rgba(118,171,174,0.50)' }}>
               — {ministry.name}
             </p>
-            <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-white">
+            <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter" style={{ color: CREAM }}>
               Sé parte<br />de este<br />ministerio.
             </h2>
           </div>
           <div className="flex flex-col gap-3 flex-shrink-0">
             <Link
               href="/login"
-              className="inline-flex items-center gap-3 text-[#000000] text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition bg-white hover:bg-[#F4F4F4]"
+              className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition hover:opacity-90"
+              style={{ background: CREAM, color: NAVY }}
             >
               Unirse a la comunidad <ArrowRight size={13} />
             </Link>
             <Link
               href="/contacto"
-              className="inline-flex items-center gap-3 border border-white/15 text-white/70 hover:text-white hover:border-white/30 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition"
+              className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition hover:border-white/30"
+              style={{ border: '1px solid rgba(118,171,174,0.25)', color: 'rgba(246,243,235,0.60)' }}
             >
               Contáctanos
             </Link>
