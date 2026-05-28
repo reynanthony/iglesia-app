@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
+export const dynamic = 'force-dynamic'
+
 const defaultRegularServices = [
   { day: 'Dom', fullDay: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
   { day: 'Mié', fullDay: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio Bíblico',   desc: 'Profundizando en la Palabra de Dios juntos.' },

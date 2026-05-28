@@ -3,6 +3,8 @@ import { ArrowRight, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
+export const dynamic = 'force-dynamic'
+
 const defaultBeliefs = [
   { n: '01', title: 'La Biblia',    desc: 'La Palabra inspirada de Dios, autoridad final para la fe y la práctica cristiana.' },
   { n: '02', title: 'La salvación', desc: 'Por gracia mediante la fe en Jesucristo, no por obras humanas.' },

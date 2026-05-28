@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 import PhotoSlot from '@/components/PhotoSlot'
 
+export const dynamic = 'force-dynamic'
+
 const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
 function fmtFecha(iso: string) {
   const d = new Date(iso)

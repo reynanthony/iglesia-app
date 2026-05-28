@@ -3,6 +3,8 @@ import ContactForm from '@/components/public/ContactForm'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ContactoPage() {
   const supabase = await createClient()
   const { data } = await supabase.from('page_content').select('content').eq('page', 'contacto').single()

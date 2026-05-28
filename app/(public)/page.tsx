@@ -3,6 +3,8 @@ import { ArrowRight, Play, Zap, Heart, Music2, Star } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
+export const dynamic = 'force-dynamic'
+
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
 const SAGE  = '#869B7E'
