@@ -118,7 +118,7 @@ export default function ShortsCard({
     <div
       ref={cardRef}
       className="relative w-full h-full overflow-hidden"
-      style={{ background: '#000' }}
+      style={{ background: '#061E30' }}
     >
 
       {/* ══════════════════════════════════════════
@@ -172,7 +172,7 @@ export default function ShortsCard({
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(160deg, #141414 0%, #0A0A0A 55%, #1A1A1A 100%)',
+              'linear-gradient(160deg, #061E30 0%, #0B2D47 55%, #051828 100%)',
           }}
         />
       )}
@@ -186,7 +186,7 @@ export default function ShortsCard({
         style={{
           height: '55%',
           background:
-            'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 45%, transparent 100%)',
+            'linear-gradient(to top, rgba(6,30,48,0.88) 0%, rgba(6,30,48,0.5) 45%, transparent 100%)',
           zIndex: 2,
         }}
       />
@@ -194,7 +194,7 @@ export default function ShortsCard({
         className="absolute inset-x-0 top-0 pointer-events-none"
         style={{
           height: 80,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent)',
+          background: 'linear-gradient(to bottom, rgba(6,30,48,0.5), transparent)',
           zIndex: 2,
         }}
       />

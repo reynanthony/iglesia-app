@@ -31,7 +31,7 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
       <div className="px-4 pt-3 flex-shrink-0">
         {isConnecting && (
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs"
-            style={{ background: '#1A1A1A', color: '#8A8A8A' }}>
+            style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
             <Loader2 size={12} className="animate-spin" />
             Conectando a la sala…
           </div>
@@ -47,7 +47,7 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
 
       {/* Participantes */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6">
-        <div className="flex items-center gap-2 mb-4" style={{ color: '#5A5A5A' }}>
+        <div className="flex items-center gap-2 mb-4" style={{ color: 'rgba(246,243,235,0.40)' }}>
           <Users size={14} />
           <span className="text-sm">{participants.length} participante{participants.length !== 1 ? 's' : ''}</span>
         </div>
@@ -61,25 +61,25 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
                 key={participant.identity}
                 className="rounded-2xl p-4 flex flex-col items-center gap-2 transition"
                 style={{
-                  background: isSpeaking ? '#1A2A1A' : '#141414',
-                  border: `1px solid ${isSpeaking ? '#2A4A2A' : '#1F1F1F'}`,
+                  background: isSpeaking ? '#0D3352' : '#0B2D47',
+                  border: `1px solid ${isSpeaking ? 'rgba(118,171,174,0.40)' : '#0D3352'}`,
                 }}
               >
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold transition"
                   style={{
-                    background: isSpeaking ? 'rgba(107,203,107,0.15)' : '#1F1F1F',
-                    color: isSpeaking ? '#6BCB6B' : '#8A8A8A',
-                    boxShadow: isSpeaking ? '0 0 0 2px #6BCB6B' : 'none',
+                    background: isSpeaking ? 'rgba(118,171,174,0.15)' : '#0D3352',
+                    color: isSpeaking ? '#76ABAE' : 'rgba(246,243,235,0.40)',
+                    boxShadow: isSpeaking ? '0 0 0 2px #76ABAE' : 'none',
                   }}
                 >
                   {participant.name?.[0]?.toUpperCase() ?? 'U'}
                 </div>
-                <p className="text-xs font-medium text-center truncate w-full" style={{ color: '#F5F5F5' }}>
+                <p className="text-xs font-medium text-center truncate w-full" style={{ color: '#F6F3EB' }}>
                   {participant.name ?? 'Usuario'}
                 </p>
                 <div className="text-xs flex items-center gap-1"
-                  style={{ color: hasMic ? '#6BCB6B' : '#4D4D4D' }}>
+                  style={{ color: hasMic ? '#76ABAE' : 'rgba(246,243,235,0.30)' }}>
                   {hasMic ? <Mic size={11} /> : <MicOff size={11} />}
                   <span>{hasMic ? 'Activo' : 'Silenciado'}</span>
                 </div>
@@ -91,7 +91,7 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
 
       {/* Controles */}
       <div className="flex-shrink-0 p-6 flex items-center justify-center gap-4"
-        style={{ borderTop: '1px solid #1F1F1F' }}>
+        style={{ borderTop: '1px solid #0D3352' }}>
 
         {/*
           Spread buttonProps directamente — incluye el onClick de LiveKit que
@@ -103,14 +103,14 @@ function RoomControls({ onLeave }: { onLeave: () => void }) {
           disabled={buttonProps.disabled || !isConnected}
           className="w-16 h-16 rounded-full flex items-center justify-center transition disabled:opacity-40"
           style={{
-            background: micEnabled ? '#1F1F1F' : 'rgba(239,68,68,0.15)',
-            border: `2px solid ${micEnabled ? '#2A2A2A' : 'rgba(239,68,68,0.3)'}`,
+            background: micEnabled ? '#0D3352' : 'rgba(239,68,68,0.15)',
+            border: `2px solid ${micEnabled ? 'rgba(118,171,174,0.30)' : 'rgba(239,68,68,0.3)'}`,
           }}
         >
           {buttonProps.disabled
-            ? <Loader2 size={22} className="animate-spin" style={{ color: '#8A8A8A' }} />
+            ? <Loader2 size={22} className="animate-spin" style={{ color: 'rgba(246,243,235,0.40)' }} />
             : micEnabled
-              ? <Mic size={22} style={{ color: '#F5F5F5' }} />
+              ? <Mic size={22} style={{ color: '#F6F3EB' }} />
               : <MicOff size={22} style={{ color: '#F87171' }} />
           }
         </button>
@@ -149,22 +149,22 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
       <div className="flex flex-col items-center justify-center h-full gap-5 px-6">
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center"
-          style={{ background: '#141414', border: '1px solid #2A2A2A' }}
+          style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
         >
-          <PhoneOff size={22} style={{ color: '#4D4D4D' }} />
+          <PhoneOff size={22} style={{ color: 'rgba(246,243,235,0.30)' }} />
         </div>
         <div className="text-center">
-          <p className="font-black text-base tracking-tight" style={{ color: '#F5F5F5' }}>
+          <p className="font-black text-base tracking-tight" style={{ color: '#F6F3EB' }}>
             Saliste de la sala
           </p>
-          <p className="text-xs mt-1" style={{ color: '#4D4D4D' }}>
+          <p className="text-xs mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
             Tu micrófono ha sido desconectado
           </p>
         </div>
         <a
           href="/app/oracion"
           className="text-xs font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"
-          style={{ background: '#141414', color: '#F5F5F5', border: '1px solid #2A2A2A' }}
+          style={{ background: '#0B2D47', color: '#F6F3EB', border: '1px solid #0D3352' }}
         >
           Volver a salas
         </a>
@@ -180,16 +180,16 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
           <WifiOff size={24} style={{ color: '#F87171' }} />
         </div>
         <div>
-          <p className="font-bold text-sm mb-1" style={{ color: '#F5F5F5' }}>
+          <p className="font-bold text-sm mb-1" style={{ color: '#F6F3EB' }}>
             {roomError ? 'Servidor de voz no disponible' : 'Error de acceso'}
           </p>
-          <p className="text-xs" style={{ color: '#8A8A8A' }}>
+          <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>
             {roomError || tokenError}
           </p>
         </div>
         <button onClick={() => window.location.reload()}
           className="text-sm px-5 py-2.5 rounded-xl font-bold transition"
-          style={{ background: '#1A1A1A', color: '#F5F5F5', border: '1px solid #2A2A2A' }}>
+          style={{ background: '#0B2D47', color: '#F6F3EB', border: '1px solid #0D3352' }}>
           Reintentar
         </button>
       </div>
@@ -198,7 +198,7 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
 
   if (!token) {
     return (
-      <div className="flex items-center justify-center h-full gap-3" style={{ color: '#5A5A5A' }}>
+      <div className="flex items-center justify-center h-full gap-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
         <Loader2 size={18} className="animate-spin" />
         <span className="text-sm">Conectando a la sala…</span>
       </div>

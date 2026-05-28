@@ -169,7 +169,7 @@ export default function NuevoPostPage() {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="w-full rounded-2xl py-8 flex flex-col items-center gap-2 transition"
-              style={{ border: '1px dashed #1A3D5C', color: '#1A3D5C' }}
+              style={{ border: '1px dashed rgba(118,171,174,0.35)', color: 'rgba(118,171,174,0.60)' }}
             >
               <ImageIcon size={22} />
               <span className="text-xs">JPG, PNG, WEBP · max 10 MB</span>
