@@ -22,13 +22,7 @@ export default function PublicNav() {
           <Link
             key={href}
             href={href}
-            className={[
-              'text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-200 pb-0.5',
-              'border-b-[1.5px]',
-              active
-                ? 'text-[#F6F3EB] border-[#76ABAE]'
-                : 'text-[rgba(246,243,235,0.40)] border-transparent hover:text-[#F6F3EB] hover:border-[rgba(118,171,174,0.50)]',
-            ].join(' ')}
+            className={`public-nav-link${active ? ' active' : ''}`}
           >
             {label}
           </Link>

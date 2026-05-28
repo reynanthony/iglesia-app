@@ -117,3 +117,24 @@ body {
 .anim-d3 { animation-delay: 0.38s; }
 .anim-d4 { animation-delay: 0.56s; }
 .anim-d5 { animation-delay: 0.76s; }
+
+/* ── Public nav links ──────────────────────────────── */
+.public-nav-link {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(246,243,235,0.40);
+  border-bottom: 1.5px solid transparent;
+  padding-bottom: 2px;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.public-nav-link:hover {
+  color: #F6F3EB;
+  border-bottom-color: rgba(118,171,174,0.50);
+}
+.public-nav-link.active {
+  color: #F6F3EB;
+  border-bottom-color: #76ABAE;
+}
