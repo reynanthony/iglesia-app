@@ -426,3 +426,32 @@ export async function clearPageBlocks(page: string) {
   return { ok: true }
 }
 
+export async function savePageFields(page: string, fields: Record<string, unknown>) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+
+  const { data: existing } = await ctx.supabase
+    .from('page_content').select('content').eq('page', page).single()
+
+  const current = (existing?.content ?? {}) as Record<string, unknown>
+  // Merge fields but always preserve blocks
+  const merged: Record<string, unknown> = { ...current, ...fields }
+  if (current.blocks) merged.blocks = current.blocks
+
+  const { error } = await ctx.supabase
+    .from('page_content')
+    .upsert(
+      { page, content: merged, updated_by: ctx.userId, updated_at: new Date().toISOString() },
+      { onConflict: 'page' }
+    )
+  if (error) return { error: 'No se pudo guardar' }
+
+  const pagePathMap: Record<string, string[]> = {
+    home: ['/'], nosotros: ['/nosotros'], eventos: ['/eventos'],
+    predicas: ['/predicas'], contacto: ['/contacto'], ministerios: ['/ministerios'],
+  }
+  ;(pagePathMap[page] ?? ['/']).forEach(p => revalidatePath(p))
+  revalidatePath('/admin/paginas')
+  return { success: true }
+}
+
