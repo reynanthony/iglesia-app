@@ -35,21 +35,21 @@ export default function AdminChart({
   const total = chartData.reduce((sum, d) => sum + d.value, 0)
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+    <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
       <div className="flex items-center justify-between mb-1">
-        <h2 className="font-semibold text-sm text-slate-300">{title}</h2>
-        <span className="text-2xl font-bold text-white">{total}</span>
+        <h2 className="font-semibold text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>{title}</h2>
+        <span className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>{total}</span>
       </div>
-      <p className="text-slate-600 text-xs mb-5">ultimos 7 dias</p>
+      <p className="text-xs mb-5" style={{ color: 'rgba(246,243,235,0.30)' }}>últimos 7 días</p>
 
       {/* Barras */}
       <div className="flex items-end gap-1.5 h-32">
         {chartData.map(({ label, value }) => (
           <div key={label} className="flex-1 flex flex-col items-center gap-1">
-            <span className="text-[10px] text-slate-600">{value > 0 ? value : ''}</span>
+            <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.40)' }}>{value > 0 ? value : ''}</span>
             <div className="w-full rounded-t-md transition-all" style={{
               height: `${Math.max((value / max) * 100, value > 0 ? 8 : 2)}%`,
-              backgroundColor: value > 0 ? color : '#1e293b',
+              backgroundColor: value > 0 ? color : '#0D3352',
               minHeight: '4px',
             }} />
           </div>
@@ -59,7 +59,7 @@ export default function AdminChart({
       {/* Labels */}
       <div className="flex gap-1.5 mt-2">
         {chartData.map(({ label }) => (
-          <div key={label} className="flex-1 text-center text-[9px] text-slate-600 truncate">
+          <div key={label} className="flex-1 text-center text-[9px] truncate" style={{ color: 'rgba(246,243,235,0.30)' }}>
             {label.split(' ')[0]}
           </div>
         ))}

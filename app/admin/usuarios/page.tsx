@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import RoleSelector from '@/components/admin/RoleSelector'
 import MinistryAssignment from '@/components/admin/MinistryAssignment'
 import DeleteUserButton from '@/components/admin/DeleteUserButton'
@@ -46,23 +46,23 @@ export default async function AdminUsuariosPage({
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Usuarios</h1>
-          <p className="text-slate-500 text-sm mt-1">{users?.length ?? 0} miembros encontrados</p>
+          <p className="text-[rgba(246,243,235,0.40)] text-sm mt-1">{users?.length ?? 0} miembros encontrados</p>
         </div>
         <Link href="/admin/usuarios/nuevo"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold transition flex-shrink-0"
-          style={{ background: '#F5F5F5', color: '#0A0A0A' }}>
+          style={{ background: '#F6F3EB', color: '#061E30' }}>
           <Plus size={13} /> Nuevo usuario
         </Link>
       </div>
 
       <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <form method="GET" className="flex-1 flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5">
-          <Search size={16} className="text-slate-500 flex-shrink-0" />
+        <form method="GET" className="flex-1 flex items-center gap-3 bg-[#0B2D47] border border-[#0D3352] rounded-xl px-4 py-2.5">
+          <Search size={16} className="text-[rgba(246,243,235,0.40)] flex-shrink-0" />
           <input
             name="q"
             defaultValue={q ?? ''}
             placeholder="Buscar por nombre o usuario..."
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-slate-600 focus:outline-none"
+            className="flex-1 bg-transparent text-white text-sm placeholder:text-[rgba(246,243,235,0.30)] focus:outline-none"
           />
           {role && <input type="hidden" name="role" value={role} />}
         </form>
@@ -79,8 +79,8 @@ export default async function AdminUsuariosPage({
               <a key={r} href={href}
                 className={`px-3 py-2 rounded-xl text-xs font-medium capitalize transition ${
                   isActive
-                    ? 'bg-white text-slate-950'
-                    : 'bg-slate-900 border border-slate-800 text-slate-400 hover:border-slate-600'
+                    ? 'bg-white text-[#061E30]'
+                    : 'bg-[#0B2D47] border border-[#0D3352] text-[rgba(246,243,235,0.45)] hover:border-[#76ABAE]'
                 }`}>
                 {r}
               </a>
@@ -89,14 +89,14 @@ export default async function AdminUsuariosPage({
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+      <div className="bg-[#0B2D47] border border-[#0D3352] rounded-2xl overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-slate-800">
-              <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium">Usuario</th>
-              <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden md:table-cell">Registrado</th>
-              <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium">Rol</th>
-              <th className="text-left px-5 py-3 text-xs text-slate-500 font-medium hidden lg:table-cell">Ministerios asignados</th>
+            <tr className="border-b border-[#0D3352]">
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium">Usuario</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium hidden md:table-cell">Registrado</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium">Rol</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium hidden lg:table-cell">Ministerios asignados</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
@@ -105,26 +105,26 @@ export default async function AdminUsuariosPage({
               const userAssignments = (allAssignments ?? []).filter(a => a.user_id === user.id)
               const showAssign = ['lider', 'pastor', 'moderador'].includes(user.role)
               return (
-                <tr key={user.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition">
+                <tr key={user.id} className="border-b border-[#0D3352]/50 hover:bg-[#0D3352]/30 transition">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-[#0D3352] flex-shrink-0">
                         {user.avatar_url ? (
                           <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-sm font-bold text-slate-300">
+                          <div className="w-full h-full flex items-center justify-center text-sm font-bold text-[rgba(246,243,235,0.70)]">
                             {user.full_name?.[0]?.toUpperCase() ?? 'U'}
                           </div>
                         )}
                       </div>
                       <div>
                         <p className="text-sm font-medium">{user.full_name}</p>
-                        <p className="text-xs text-slate-500">@{user.username}</p>
+                        <p className="text-xs text-[rgba(246,243,235,0.40)]">@{user.username}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-3.5 hidden md:table-cell">
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[rgba(246,243,235,0.40)]">
                       {new Date(user.created_at).toLocaleDateString('es-DO')}
                     </p>
                   </td>
@@ -139,7 +139,7 @@ export default async function AdminUsuariosPage({
                         allMinistries={allMinistries ?? []}
                       />
                     ) : (
-                      <span className="text-[11px]" style={{ color: '#3A3A3A' }}>
+                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
                         {user.role === 'admin' ? 'Acceso total' : '—'}
                       </span>
                     )}
@@ -154,7 +154,7 @@ export default async function AdminUsuariosPage({
         </table>
 
         {(!users || users.length === 0) && (
-          <div className="py-16 text-center text-slate-500 text-sm">
+          <div className="py-16 text-center text-[rgba(246,243,235,0.40)] text-sm">
             No se encontraron usuarios
           </div>
         )}

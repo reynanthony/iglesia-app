@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React from 'react'
 import Link from 'next/link'
@@ -57,7 +57,7 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
         {sections.map(section => (
           <div key={section.label}>
             <p className="text-[9px] font-black uppercase tracking-[0.25em] px-3 mb-1.5"
-              style={{ color: '#333333' }}>
+              style={{ color: 'rgba(246,243,235,0.25)' }}>
               {section.label}
             </p>
             <div className="space-y-0.5">
@@ -69,8 +69,8 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
                     href={href}
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
                     style={{
-                      background: active ? '#1A1A1A' : 'transparent',
-                      color: active ? '#F5F5F5' : '#5A5A5A',
+                      background: active ? '#0B2D47' : 'transparent',
+                      color: active ? '#F6F3EB' : 'rgba(246,243,235,0.40)',
                     }}
                   >
                     <Icon size={14} />
@@ -83,21 +83,21 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
         ))}
       </nav>
 
-      <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#1F1F1F' }}>
+      <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#0D3352' }}>
         <Link href="/" target="_blank"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: '#4D4D4D' }}>
+          style={{ color: 'rgba(246,243,235,0.40)' }}>
           <Globe size={14} /> Ver sitio web
         </Link>
         <Link href="/app/feed"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: '#4D4D4D' }}>
+          style={{ color: 'rgba(246,243,235,0.40)' }}>
           <ArrowLeft size={14} /> Volver a la app
         </Link>
         <form action={logoutAction}>
           <button type="submit"
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: '#4D4D4D' }}>
+            style={{ color: 'rgba(246,243,235,0.40)' }}>
             <LogOut size={14} /> Cerrar sesión
           </button>
         </form>

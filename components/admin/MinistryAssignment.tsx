@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { X, Plus } from 'lucide-react'
@@ -41,7 +41,7 @@ export default function MinistryAssignment({
         <span
           key={a.ministry_id}
           className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-lg"
-          style={{ background: '#1A2A1A', color: '#6BCB6B', border: '1px solid #2A3A2A' }}
+          style={{ background: '#0D3352', color: '#76ABAE', border: '1px solid #2A3A2A' }}
         >
           {a.ministries?.name ?? '—'}
           <button
@@ -60,7 +60,7 @@ export default function MinistryAssignment({
             onClick={() => setShowAdd(v => !v)}
             disabled={pending}
             className="w-6 h-6 rounded-md flex items-center justify-center transition"
-            style={{ background: '#1A1A1A', color: '#5A5A5A', border: '1px solid #2A2A2A' }}
+            style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }}
           >
             <Plus size={11} />
           </button>
@@ -68,7 +68,7 @@ export default function MinistryAssignment({
           {showAdd && (
             <div
               className="absolute left-0 top-8 z-50 rounded-xl shadow-xl min-w-[160px] py-1 overflow-hidden"
-              style={{ background: '#161616', border: '1px solid #2A2A2A' }}
+              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
             >
               {available.map(m => (
                 <button
@@ -86,7 +86,7 @@ export default function MinistryAssignment({
       )}
 
       {assignments.length === 0 && !showAdd && (
-        <span className="text-[11px]" style={{ color: '#3A3A3A' }}>Sin ministerio</span>
+        <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>Sin ministerio</span>
       )}
     </div>
   )

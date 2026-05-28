@@ -21,28 +21,24 @@ export default async function AdminPage() {
     supabase.from('likes').select('*', { count: 'exact', head: true }),
   ])
 
-  // Usuarios por día (últimos 7 días)
   const { data: usersByDay } = await supabase
     .from('profiles')
     .select('created_at')
     .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
     .order('created_at', { ascending: true })
 
-  // Posts por día (últimos 7 días)
   const { data: postsByDay } = await supabase
     .from('posts')
     .select('created_at')
     .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
     .order('created_at', { ascending: true })
 
-  // Últimos usuarios
   const { data: recentUsers } = await supabase
     .from('profiles')
     .select('id, full_name, username, role, avatar_url, created_at')
     .order('created_at', { ascending: false })
     .limit(5)
 
-  // Últimos posts
   const { data: recentPosts } = await supabase
     .from('posts')
     .select('id, content, image_url, created_at, profiles(full_name, username)')
@@ -50,95 +46,90 @@ export default async function AdminPage() {
     .limit(5)
 
   const stats = [
-    { label: 'Usuarios', value: totalUsers ?? 0, icon: Users, color: 'text-blue-400', bg: 'bg-blue-400/10', change: '+12%' },
-    { label: 'Publicaciones', value: totalPosts ?? 0, icon: FileText, color: 'text-[#222222]', bg: 'bg-[#222222]/10', change: '+8%' },
-    { label: 'Mensajes', value: totalMessages ?? 0, icon: MessageCircle, color: 'text-green-400', bg: 'bg-green-400/10', change: '+24%' },
-    { label: 'Likes totales', value: totalLikes ?? 0, icon: TrendingUp, color: 'text-pink-400', bg: 'bg-pink-400/10', change: '+16%' },
-    { label: 'Salas creadas', value: totalRooms ?? 0, icon: Mic, color: 'text-purple-400', bg: 'bg-purple-400/10', change: '+2%' },
-    { label: 'Reportes', value: totalReports ?? 0, icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-400/10', change: '' },
+    { label: 'Usuarios',      value: totalUsers    ?? 0, icon: Users,         iconColor: '#60A5FA', bgColor: 'rgba(96,165,250,0.10)',  change: '+12%' },
+    { label: 'Publicaciones', value: totalPosts    ?? 0, icon: FileText,       iconColor: '#76ABAE', bgColor: 'rgba(118,171,174,0.12)', change: '+8%'  },
+    { label: 'Mensajes',      value: totalMessages ?? 0, icon: MessageCircle,  iconColor: '#4ADE80', bgColor: 'rgba(74,222,128,0.10)',  change: '+24%' },
+    { label: 'Likes totales', value: totalLikes    ?? 0, icon: TrendingUp,     iconColor: '#F472B6', bgColor: 'rgba(244,114,182,0.10)', change: '+16%' },
+    { label: 'Salas creadas', value: totalRooms    ?? 0, icon: Mic,            iconColor: '#C084FC', bgColor: 'rgba(192,132,252,0.10)', change: '+2%'  },
+    { label: 'Reportes',      value: totalReports  ?? 0, icon: AlertTriangle,  iconColor: '#F87171', bgColor: 'rgba(248,113,113,0.10)', change: ''     },
   ]
+
+  const roleBadge = (role: string) => {
+    if (role === 'admin')     return { bg: 'rgba(248,113,113,0.10)',  color: '#F87171' }
+    if (role === 'pastor')    return { bg: 'rgba(192,132,252,0.10)',  color: '#C084FC' }
+    if (role === 'moderador') return { bg: 'rgba(96,165,250,0.10)',   color: '#60A5FA' }
+    return { bg: 'rgba(246,243,235,0.06)', color: 'rgba(246,243,235,0.50)' }
+  }
 
   return (
     <div className="p-6 md:p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-slate-500 text-sm mt-1">Vista general de la plataforma</p>
+        <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Dashboard</h1>
+        <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>Vista general de la plataforma</p>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        {stats.map(({ label, value, icon: Icon, color, bg, change }) => (
-          <div key={label} className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        {stats.map(({ label, value, icon: Icon, iconColor, bgColor, change }) => (
+          <div key={label} className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <div className="flex items-start justify-between mb-3">
-              <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center`}>
-                <Icon size={18} className={color} />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: bgColor }}>
+                <Icon size={18} style={{ color: iconColor }} />
               </div>
               {change && (
-                <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">
+                <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }}>
                   {change}
                 </span>
               )}
             </div>
-            <p className="text-3xl font-bold">{value.toLocaleString()}</p>
-            <p className="text-slate-500 text-sm mt-0.5">{label}</p>
+            <p className="text-3xl font-bold" style={{ color: '#F6F3EB' }}>{value.toLocaleString()}</p>
+            <p className="text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
           </div>
         ))}
       </div>
 
       {/* Graficas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <AdminChart
-          title="Nuevos usuarios (7 dias)"
-          data={usersByDay ?? []}
-          color="#000000"
-        />
-        <AdminChart
-          title="Nuevas publicaciones (7 dias)"
-          data={postsByDay ?? []}
-          color="#000000"
-        />
+        <AdminChart title="Nuevos usuarios (7 días)" data={usersByDay ?? []} color="#76ABAE" />
+        <AdminChart title="Nuevas publicaciones (7 días)" data={postsByDay ?? []} color="#76ABAE" />
       </div>
 
       {/* Tablas recientes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Usuarios recientes */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-          <h2 className="font-semibold mb-4 text-sm text-slate-300">Usuarios recientes</h2>
+        <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <h2 className="font-semibold mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Usuarios recientes</h2>
           <div className="space-y-3">
-            {recentUsers?.map((u: any) => (
-              <div key={u.id} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-700 flex-shrink-0">
-                    {u.avatar_url ? (
-                      <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs font-bold text-slate-300">
-                        {u.full_name?.[0]?.toUpperCase() ?? 'U'}
-                      </div>
-                    )}
+            {recentUsers?.map((u: any) => {
+              const badge = roleBadge(u.role)
+              return (
+                <div key={u.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs"
+                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      {u.avatar_url
+                        ? <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
+                        : u.full_name?.[0]?.toUpperCase() ?? 'U'}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
+                      <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>@{u.username}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium">{u.full_name}</p>
-                    <p className="text-xs text-slate-500">@{u.username}</p>
-                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full capitalize font-bold"
+                    style={{ background: badge.bg, color: badge.color }}>
+                    {u.role}
+                  </span>
                 </div>
-                <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${
-                  u.role === 'admin' ? 'bg-red-500/10 text-red-400' :
-                  u.role === 'pastor' ? 'bg-purple-500/10 text-purple-400' :
-                  u.role === 'moderador' ? 'bg-blue-500/10 text-blue-400' :
-                  'bg-slate-800 text-slate-400'
-                }`}>
-                  {u.role}
-                </span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
         {/* Posts recientes */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-          <h2 className="font-semibold mb-4 text-sm text-slate-300">Publicaciones recientes</h2>
+        <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <h2 className="font-semibold mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Publicaciones recientes</h2>
           <div className="space-y-3">
             {recentPosts?.map((p: any) => (
               <div key={p.id} className="flex items-start gap-3">
@@ -146,9 +137,9 @@ export default async function AdminPage() {
                   <img src={p.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-500 mb-0.5">@{p.profiles?.username}</p>
-                  <p className="text-sm text-slate-300 truncate">{p.content || 'Sin texto'}</p>
-                  <p className="text-xs text-slate-600 mt-0.5">
+                  <p className="text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>@{p.profiles?.username}</p>
+                  <p className="text-sm truncate" style={{ color: 'rgba(246,243,235,0.80)' }}>{p.content || 'Sin texto'}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.30)' }}>
                     {new Date(p.created_at).toLocaleDateString('es-DO')}
                   </p>
                 </div>

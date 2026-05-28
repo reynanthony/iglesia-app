@@ -25,7 +25,7 @@ export default function DeleteUserButton({ userId, username }: { userId: string;
       disabled={isPending}
       title={confirm ? `¿Eliminar @${username}?` : 'Eliminar usuario'}
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition ${
-        confirm ? 'bg-red-500 text-white' : 'bg-slate-800 text-slate-400 hover:text-red-400 hover:bg-red-500/10'
+        confirm ? 'bg-red-500 text-white' : 'bg-[#0D3352] text-[rgba(246,243,235,0.45)] hover:text-red-400 hover:bg-red-500/10'
       }`}
     >
       <Trash2 size={12} />

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
@@ -66,9 +66,9 @@ export default function ContentForm({
   }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
-  const fieldStyle = { background: '#141414', borderColor: '#2A2A2A', color: '#F5F5F5' }
+  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: '#4D4D4D' }
+  const lblStyle = { color: 'rgba(246,243,235,0.40)' }
 
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-5">
@@ -80,9 +80,9 @@ export default function ContentForm({
           {TYPES.map(t => (
             <label key={t.value}
               className={`flex-1 text-center py-2 rounded-xl text-xs font-bold cursor-pointer transition ${
-                type === t.value ? 'text-black' : 'text-slate-400'
+                type === t.value ? 'text-black' : 'text-[rgba(246,243,235,0.45)]'
               }`}
-              style={{ background: type === t.value ? '#F5F5F5' : '#1A1A1A', border: '1px solid #2A2A2A' }}>
+              style={{ background: type === t.value ? '#F6F3EB' : '#0B2D47', border: '1px solid #0D3352' }}>
               <input type="radio" name="type" value={t.value}
                 checked={type === t.value}
                 onChange={() => setType(t.value)}
@@ -141,18 +141,18 @@ export default function ContentForm({
               <button type="button" onClick={() => setPreview('')}
                 className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
                 style={{ background: 'rgba(0,0,0,0.7)' }}>
-                <X size={13} style={{ color: '#F5F5F5' }} />
+                <X size={13} style={{ color: '#F6F3EB' }} />
               </button>
             )}
           </div>
         )}
-        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-slate-600"
-          style={{ borderColor: '#2A2A2A' }}>
-          <ImageIcon size={20} style={{ color: '#3A3A3A' }} />
-          <span className="text-[12px]" style={{ color: '#5A5A5A' }}>
+        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
+          style={{ borderColor: '#0D3352' }}>
+          <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
+          <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
             {preview ? 'Cambiar imagen' : 'Seleccionar imagen'}
           </span>
-          <span className="text-[11px]" style={{ color: '#3A3A3A' }}>JPG, PNG o WebP</span>
+          <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>JPG, PNG o WebP</span>
           <input type="file" name="image" accept="image/*" className="sr-only" onChange={handleFile} />
         </label>
       </div>
@@ -161,7 +161,7 @@ export default function ContentForm({
       <label className="flex items-center gap-3 cursor-pointer">
         <input type="checkbox" name="pinned" defaultChecked={initialValues?.pinned ?? false}
           className="w-4 h-4 accent-white rounded" />
-        <span className="text-[13px] font-medium" style={{ color: '#8A8A8A' }}>
+        <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.40)' }}>
           Fijar este contenido (aparece primero)
         </span>
       </label>
@@ -177,11 +177,11 @@ export default function ContentForm({
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={isPending}
           className="flex-1 py-3 rounded-xl text-sm font-bold transition disabled:opacity-50"
-          style={{ background: '#F5F5F5', color: '#0A0A0A' }}>
+          style={{ background: '#F6F3EB', color: '#061E30' }}>
           {isPending ? 'Guardando…' : submitLabel}
         </button>
         <a href={backHref} className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-          style={{ background: '#1A1A1A', color: '#8A8A8A' }}>
+          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
           Cancelar
         </a>
       </div>

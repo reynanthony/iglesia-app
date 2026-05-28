@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { pinContent } from '@/app/actions/admin'
@@ -23,9 +23,9 @@ export default function PinContentButton({ contentId, pinned }: { contentId: str
       disabled={isPending}
       title={active ? 'Desfijar' : 'Fijar'}
       className="w-9 h-9 rounded-xl flex items-center justify-center transition disabled:opacity-40"
-      style={{ background: active ? '#1A2A1A' : '#1A1A1A', border: `1px solid ${active ? '#2A3A2A' : '#2A2A2A'}` }}
+      style={{ background: active ? '#0D3352' : '#0B2D47', border: `1px solid ${active ? 'rgba(118,171,174,0.20)' : '#0D3352'}` }}
     >
-      <Pin size={13} style={{ color: active ? '#6BCB6B' : '#4D4D4D' }} />
+      <Pin size={13} style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.40)' }} />
     </button>
   )
 }

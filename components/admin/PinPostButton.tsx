@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { pinPost } from '@/app/actions/admin'
@@ -25,8 +25,8 @@ export default function PinPostButton({ postId, pinned }: { postId: string; pinn
       className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition"
       style={
         active
-          ? { background: '#1A2A1A', color: '#6BCB6B', border: '1px solid #2A3A2A' }
-          : { background: '#1A1A1A', color: '#5A5A5A', border: '1px solid #2A2A2A' }
+          ? { background: '#0D3352', color: '#76ABAE', border: '1px solid #2A3A2A' }
+          : { background: '#0B2D47', color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }
       }
     >
       <Pin size={12} />

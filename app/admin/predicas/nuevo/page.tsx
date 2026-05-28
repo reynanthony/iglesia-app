@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { createPredica } from '@/app/actions/predicas-admin'
@@ -11,22 +11,22 @@ export default async function NuevoPredicaPage() {
     .order('name')
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#141414', borderColor: '#2A2A2A', color: '#F5F5F5' }
+  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: '#4D4D4D' }
+  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
 
   return (
     <div>
       <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4"
-        style={{ borderColor: '#1F1F1F' }}>
+        style={{ borderColor: '#0D3352' }}>
         <Link href="/admin/predicas"
           className="w-9 h-9 rounded-xl flex items-center justify-center"
-          style={{ background: '#1A1A1A' }}>
-          <ArrowLeft size={14} style={{ color: '#8A8A8A' }} />
+          style={{ background: '#0B2D47' }}>
+          <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
         </Link>
         <div>
           <h1 className="font-bold text-lg text-white">Nueva prédica</h1>
-          <p className="text-[13px]" style={{ color: '#5A5A5A' }}>Sube un mensaje o sermón</p>
+          <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>Sube un mensaje o sermón</p>
         </div>
       </div>
 
@@ -63,18 +63,18 @@ export default async function NuevoPredicaPage() {
 
           <div>
             <label className={label} style={labelStyle}>Imagen miniatura</label>
-            <div className="rounded-xl border-2 border-dashed p-6 text-center" style={{ borderColor: '#2A2A2A' }}>
+            <div className="rounded-xl border-2 border-dashed p-6 text-center" style={{ borderColor: '#0D3352' }}>
               <input type="file" name="image" accept="image/*"
-                className="w-full text-sm cursor-pointer" style={{ color: '#8A8A8A' }} />
-              <p className="text-[11px] mt-2" style={{ color: '#4D4D4D' }}>JPG, PNG o WebP · 16:9 recomendado</p>
+                className="w-full text-sm cursor-pointer" style={{ color: 'rgba(246,243,235,0.40)' }} />
+              <p className="text-[11px] mt-2" style={{ color: 'rgba(246,243,235,0.40)' }}>JPG, PNG o WebP · 16:9 recomendado</p>
             </div>
           </div>
 
           <label className="flex items-center gap-3 cursor-pointer">
-            <div className="w-5 h-5 rounded border flex items-center justify-center" style={{ borderColor: '#2A2A2A' }}>
+            <div className="w-5 h-5 rounded border flex items-center justify-center" style={{ borderColor: '#0D3352' }}>
               <input type="checkbox" name="pinned" className="sr-only" />
             </div>
-            <span className="text-[13px] font-medium" style={{ color: '#8A8A8A' }}>
+            <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.40)' }}>
               Destacar como mensaje principal
             </span>
           </label>
@@ -82,12 +82,12 @@ export default async function NuevoPredicaPage() {
           <div className="flex gap-3 pt-2">
             <button type="submit"
               className="flex-1 py-3 rounded-xl text-sm font-bold"
-              style={{ background: '#F5F5F5', color: '#0A0A0A' }}>
+              style={{ background: '#F6F3EB', color: '#061E30' }}>
               Publicar prédica
             </button>
             <Link href="/admin/predicas"
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#1A1A1A', color: '#8A8A8A' }}>
+              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
               Cancelar
             </Link>
           </div>

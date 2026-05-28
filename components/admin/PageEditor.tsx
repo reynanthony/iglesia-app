@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { updatePageContent, uploadPageImage } from '@/app/actions/admin'
@@ -54,7 +54,7 @@ export default function PageEditor({
       {fields.map(field => (
         <div key={field.key}>
           <label className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2"
-            style={{ color: '#8A8A8A' }}>
+            style={{ color: 'rgba(246,243,235,0.40)' }}>
             {field.label}
           </label>
 
@@ -69,17 +69,17 @@ export default function PageEditor({
                     onClick={() => handleChange(field.key, '')}
                     className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
                     style={{ background: 'rgba(0,0,0,0.7)' }}>
-                    <X size={13} style={{ color: '#F5F5F5' }} />
+                    <X size={13} style={{ color: '#F6F3EB' }} />
                   </button>
                 </div>
               )}
-              <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-slate-600"
-                style={{ borderColor: '#2A2A2A', opacity: uploadingKey === field.key ? 0.6 : 1 }}>
-                <ImageIcon size={20} style={{ color: '#3A3A3A' }} />
-                <span className="text-[12px]" style={{ color: '#5A5A5A' }}>
+              <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
+                style={{ borderColor: '#0D3352', opacity: uploadingKey === field.key ? 0.6 : 1 }}>
+                <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
+                <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
                   {uploadingKey === field.key ? 'Subiendo…' : values[field.key] ? 'Cambiar imagen' : 'Subir imagen'}
                 </span>
-                <span className="text-[11px]" style={{ color: '#3A3A3A' }}>JPG, PNG o WebP</span>
+                <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>JPG, PNG o WebP</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -98,7 +98,7 @@ export default function PageEditor({
               onChange={e => handleChange(field.key, e.target.value)}
               rows={3}
               className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none resize-none"
-              style={{ background: '#161616', border: '1px solid #2A2A2A', color: '#F5F5F5' }}
+              style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
             />
           ) : (
             <input
@@ -106,12 +106,12 @@ export default function PageEditor({
               value={values[field.key] ?? ''}
               onChange={e => handleChange(field.key, e.target.value)}
               className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
-              style={{ background: '#161616', border: '1px solid #2A2A2A', color: '#F5F5F5' }}
+              style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
             />
           )}
 
           {field.hint && (
-            <p className="text-[11px] mt-1" style={{ color: '#3A3A3A' }}>{field.hint}</p>
+            <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.25)' }}>{field.hint}</p>
           )}
         </div>
       ))}
@@ -121,14 +121,14 @@ export default function PageEditor({
           onClick={handleSave}
           disabled={isPending || uploadingKey !== null}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[12px] font-bold transition disabled:opacity-50"
-          style={{ background: '#F5F5F5', color: '#0A0A0A' }}
+          style={{ background: '#F6F3EB', color: '#061E30' }}
         >
           <Save size={13} />
           {isPending ? 'Guardando…' : 'Guardar cambios'}
         </button>
 
         {status === 'ok' && (
-          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#6BCB6B' }}>
+          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#76ABAE' }}>
             <CheckCircle2 size={14} /> Guardado — los cambios ya son visibles en el sitio
           </span>
         )}

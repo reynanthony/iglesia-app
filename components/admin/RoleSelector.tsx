@@ -22,15 +22,15 @@ export default function RoleSelector({ userId, currentRole }: { userId: string, 
       value={role}
       onChange={handleChange}
       disabled={saving}
-      className={`bg-slate-800 border border-slate-700 text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#000000] transition capitalize ${
+      className={`bg-[#0D3352] border border-slate-700 text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#000000] transition capitalize ${
         role === 'admin' ? 'text-red-400' :
         role === 'pastor' ? 'text-purple-400' :
         role === 'moderador' ? 'text-blue-400' :
-        'text-slate-300'
+        'text-[rgba(246,243,235,0.70)]'
       }`}
     >
       {roles.map(r => (
-        <option key={r} value={r} className="bg-slate-900 capitalize">{r}</option>
+        <option key={r} value={r} className="bg-[#0B2D47] capitalize">{r}</option>
       ))}
     </select>
   )
