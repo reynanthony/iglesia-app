@@ -125,7 +125,7 @@ export default function ChatBox({
           <div className="flex justify-center mt-10">
             <span
               className="text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: '#0D3352', color: '#4A7A8E' }}
+              style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}
             >
               Los mensajes son visibles solo para miembros
             </span>
@@ -138,7 +138,7 @@ export default function ChatBox({
             <div className="flex justify-center my-4">
               <span
                 className="text-[11px] font-bold px-3 py-1 rounded-full"
-                style={{ background: '#0D3352', color: '#4A7A8E' }}
+                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}
               >
                 {formatDate(msgs[0].created_at)}
               </span>
@@ -163,7 +163,7 @@ export default function ChatBox({
                       {isLast ? (
                         <div
                           className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold flex-shrink-0"
-                          style={{ background: '#1A1A1A', color: '#8A8A8A' }}
+                          style={{ background: '#0D3352', color: '#76ABAE' }}
                         >
                           {msg.profiles?.avatar_url
                             ? <img src={msg.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -179,7 +179,7 @@ export default function ChatBox({
                     {!isMe && isFirst && (
                       <p
                         className="text-[11px] font-bold mb-1"
-                        style={{ color: '#8A8A8A', paddingLeft: 12 }}
+                        style={{ color: 'rgba(246,243,235,0.40)', paddingLeft: 12 }}
                       >
                         {msg.profiles?.full_name}
                       </p>
@@ -200,12 +200,12 @@ export default function ChatBox({
                       }}
                     >
                       <div className="flex items-end gap-3">
-                        <p className="text-sm leading-relaxed break-words flex-1" style={{ color: '#F5F5F5' }}>
+                        <p className="text-sm leading-relaxed break-words flex-1" style={{ color: '#F6F3EB' }}>
                           {msg.content}
                         </p>
                         <span
                           className="text-[10px] flex-shrink-0 self-end whitespace-nowrap"
-                          style={{ color: '#4D4D4D' }}
+                          style={{ color: 'rgba(246,243,235,0.35)' }}
                         >
                           {formatTime(msg.created_at)}
                         </span>
@@ -228,9 +228,9 @@ export default function ChatBox({
           className="absolute right-4 flex items-center justify-center w-9 h-9 rounded-full transition"
           style={{
             bottom: 72,
-            background: '#1A1A1A',
-            border: '1px solid #2A2A2A',
-            color: '#8A8A8A',
+            background: '#0D3352',
+            border: '1px solid #0D3352',
+            color: 'rgba(246,243,235,0.60)',
           }}
         >
           <ArrowDown size={16} />
@@ -246,7 +246,7 @@ export default function ChatBox({
           className="flex-1 flex items-center gap-3 px-4 rounded-2xl"
           style={{
             background: '#0B2D47',
-            border: '1px solid #1A3D5C',
+            border: '1px solid #0D3352',
             minHeight: 48,
           }}
         >
@@ -258,7 +258,7 @@ export default function ChatBox({
             placeholder="Escribe un mensaje…"
             autoComplete="off"
             className="flex-1 bg-transparent text-sm focus:outline-none py-3"
-            style={{ color: '#F5F5F5' }}
+            style={{ color: '#F6F3EB' }}
           />
         </div>
 

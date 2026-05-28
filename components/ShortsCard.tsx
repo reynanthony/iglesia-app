@@ -230,7 +230,7 @@ export default function ShortsCard({
         <Link href={profileHref}>
           <div
             className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center font-black text-sm"
-            style={{ border: '2px solid rgba(255,255,255,0.8)', background: '#2A2A2A' }}
+            style={{ border: '2px solid rgba(255,255,255,0.8)', background: '#0D3352' }}
           >
             {avatarUrl
               ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
@@ -284,8 +284,8 @@ export default function ShortsCard({
             <Bookmark
               size={22}
               strokeWidth={1.8}
-              fill={saved ? '#22A67A' : 'none'}
-              style={{ color: saved ? '#22A67A' : '#fff' }}
+              fill={saved ? '#76ABAE' : 'none'}
+              style={{ color: saved ? '#76ABAE' : '#fff' }}
             />
           </div>
         </button>
@@ -362,28 +362,28 @@ export default function ShortsCard({
           <div
             className="absolute bottom-0 left-0 right-0 rounded-t-2xl flex flex-col"
             style={{
-              background: '#111111',
-              maxHeight: '70%',
-              border: '1px solid #1E1E1E',
+              background: '#061E30',
+              maxHeight: 'min(70vh, calc(100dvh - 100px))',
+              border: '1px solid #0D3352',
               borderBottom: 'none',
             }}
             onClick={e => e.stopPropagation()}
           >
             <div
               className="flex items-center justify-between px-5 py-3.5 flex-shrink-0"
-              style={{ borderBottom: '1px solid #1E1E1E' }}
+              style={{ borderBottom: '1px solid #0D3352' }}
             >
-              <p className="font-bold text-sm" style={{ color: '#F5F5F5' }}>
+              <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>
                 {totalComments} {totalComments === 1 ? 'comentario' : 'comentarios'}
               </p>
-              <button onClick={() => setShowComments(false)} style={{ color: '#4D4D4D' }}>
+              <button onClick={() => setShowComments(false)} style={{ color: 'rgba(246,243,235,0.40)' }}>
                 <X size={18} />
               </button>
             </div>
 
             <div className="overflow-y-auto flex-1 px-4 py-2">
               {topLevel.length === 0 ? (
-                <p className="text-center py-10 text-sm" style={{ color: '#4D4D4D' }}>
+                <p className="text-center py-10 text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
                   Sin comentarios. ¡Sé el primero!
                 </p>
               ) : (
@@ -402,25 +402,26 @@ export default function ShortsCard({
             <form
               onSubmit={handleComment}
               className="flex gap-2 px-4 py-3 flex-shrink-0"
-              style={{ borderTop: '1px solid #1E1E1E' }}
+              style={{ borderTop: '1px solid #0D3352' }}
             >
               <input
                 name="content"
                 placeholder="Escribe un comentario…"
                 required
                 autoFocus
+                inputMode="text"
                 className="flex-1 text-sm rounded-xl px-3 py-2.5 focus:outline-none"
                 style={{
-                  background: '#1A1A1A',
-                  color: '#F5F5F5',
-                  border: '1px solid #2A2A2A',
+                  background: '#0B2D47',
+                  color: '#F6F3EB',
+                  border: '1px solid #0D3352',
                 }}
               />
               <button
                 type="submit"
                 disabled={commenting}
                 className="px-4 py-2 rounded-xl text-xs font-black transition disabled:opacity-40"
-                style={{ background: '#F5F5F5', color: '#0A0A0A' }}
+                style={{ background: '#F6F3EB', color: '#061E30' }}
               >
                 {commenting ? '…' : 'Enviar'}
               </button>

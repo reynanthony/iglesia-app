@@ -40,19 +40,32 @@ export default function EditProfileModal({ profile }: { profile: any }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 border border-slate-700 hover:border-slate-500 rounded-xl text-sm transition"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition"
+        style={{ border: '1px solid #0D3352', color: '#F6F3EB' }}
       >
         <Pencil size={14} /> Editar
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md">
-
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(6,30,48,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl"
+            style={{ background: '#061E30', border: '1px solid #0D3352' }}
+          >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-slate-800">
-              <h2 className="font-bold">Editar perfil</h2>
-              <button onClick={() => setOpen(false)} className="p-1.5 hover:bg-slate-800 rounded-lg transition">
+            <div
+              className="flex items-center justify-between p-5"
+              style={{ borderBottom: '1px solid #0D3352' }}
+            >
+              <h2 className="font-bold" style={{ color: '#F6F3EB' }}>Editar perfil</h2>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-1.5 rounded-lg transition"
+                style={{ color: 'rgba(246,243,235,0.40)' }}
+              >
                 <X size={16} />
               </button>
             </div>
@@ -64,7 +77,8 @@ export default function EditProfileModal({ profile }: { profile: any }) {
               <div className="flex flex-col items-center gap-3">
                 <div
                   onClick={() => fileRef.current?.click()}
-                  className="w-24 h-24 rounded-full overflow-hidden bg-[#000000]/20 flex items-center justify-center text-[#000000] font-bold text-3xl cursor-pointer hover:opacity-80 transition relative"
+                  className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center font-bold text-3xl cursor-pointer transition relative"
+                  style={{ background: '#0D3352', color: '#76ABAE', border: '2px solid #0D3352' }}
                 >
                   {preview || profile.avatar_url ? (
                     <img src={preview ?? profile.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -75,7 +89,7 @@ export default function EditProfileModal({ profile }: { profile: any }) {
                     <Pencil size={20} className="text-white" />
                   </div>
                 </div>
-                <p className="text-slate-500 text-xs">Toca para cambiar la foto</p>
+                <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>Toca para cambiar la foto</p>
                 <input
                   ref={fileRef}
                   type="file"
@@ -87,23 +101,30 @@ export default function EditProfileModal({ profile }: { profile: any }) {
               </div>
 
               <div>
-                <label className="text-slate-300 text-sm block mb-1.5">Nombre completo</label>
+                <label className="text-sm block mb-1.5" style={{ color: 'rgba(246,243,235,0.70)' }}>Nombre completo</label>
                 <input
                   name="full_name"
                   defaultValue={profile.full_name}
                   required
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition"
+                  className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition"
+                  style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
                 />
               </div>
 
               <div>
-                <label className="text-slate-300 text-sm block mb-1.5">Biografía</label>
+                <label className="text-sm block mb-1.5" style={{ color: 'rgba(246,243,235,0.70)' }}>Biografía</label>
                 <textarea
                   name="bio"
                   defaultValue={profile.bio ?? ''}
                   rows={3}
                   placeholder="Cuéntanos sobre ti..."
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#000000] transition resize-none placeholder:text-slate-500"
+                  className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition resize-none"
+                  style={{
+                    background: '#0B2D47',
+                    border: '1px solid #0D3352',
+                    color: '#F6F3EB',
+                    caretColor: '#76ABAE',
+                  }}
                 />
               </div>
 
@@ -117,14 +138,16 @@ export default function EditProfileModal({ profile }: { profile: any }) {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="flex-1 py-2.5 border border-slate-700 hover:border-slate-500 rounded-xl text-sm transition"
+                  className="flex-1 py-2.5 rounded-xl text-sm transition"
+                  style={{ border: '1px solid #0D3352', color: 'rgba(246,243,235,0.60)' }}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 py-2.5 bg-[#000000] hover:bg-[#222222] disabled:opacity-50 text-slate-950 font-semibold rounded-xl text-sm transition"
+                  className="flex-1 py-2.5 font-semibold rounded-xl text-sm transition disabled:opacity-50"
+                  style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)', color: '#F6F3EB' }}
                 >
                   {loading ? 'Guardando...' : 'Guardar'}
                 </button>

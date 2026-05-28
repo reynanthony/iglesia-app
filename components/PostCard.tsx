@@ -62,11 +62,11 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
       {/* Edit modal */}
       {editing && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-          style={{ background: 'rgba(0,0,0,0.7)' }}>
-          <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ background: '#141414', border: '1px solid #2A2A2A' }}>
-            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #1A1A1A' }}>
-              <p className="font-bold text-sm" style={{ color: '#F5F5F5' }}>Editar publicación</p>
-              <button onClick={() => setEditing(false)} style={{ color: '#4D4D4D' }}>✕</button>
+          style={{ background: 'rgba(6,30,48,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
+          <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ background: '#061E30', border: '1px solid #0D3352' }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #0D3352' }}>
+              <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Editar publicación</p>
+              <button onClick={() => setEditing(false)} style={{ color: 'rgba(246,243,235,0.40)' }}>✕</button>
             </div>
             <div className="p-5">
               <textarea
@@ -74,12 +74,12 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                 onChange={(e) => setEditContent(e.target.value)}
                 rows={5}
                 className="w-full bg-transparent text-sm focus:outline-none resize-none leading-relaxed"
-                style={{ color: '#F5F5F5' }}
+                style={{ color: '#F6F3EB' }}
               />
               <div className="flex justify-end gap-3 mt-4">
                 <button onClick={() => setEditing(false)}
                   className="text-sm px-4 py-2 rounded-xl transition"
-                  style={{ color: '#4D4D4D' }}>
+                  style={{ color: 'rgba(246,243,235,0.40)' }}>
                   Cancelar
                 </button>
                 <button
@@ -91,7 +91,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                     setEditing(false)
                   }}
                   className="text-sm font-black px-5 py-2 rounded-xl transition disabled:opacity-50"
-                  style={{ background: 'linear-gradient(135deg, #1B7A5E, #22A67A)', color: 'white' }}
+                  style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)', color: '#F6F3EB' }}
                 >
                   {saving ? 'Guardando…' : 'Guardar'}
                 </button>
@@ -113,8 +113,8 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                 : post.profiles.full_name?.[0]?.toUpperCase() ?? 'U'}
             </div>
             <div>
-              <p className="font-bold text-sm leading-tight" style={{ color: '#F5F5F5' }}>{post.profiles.full_name}</p>
-              <p className="text-xs" style={{ color: '#4D4D4D' }}>@{post.profiles.username}</p>
+              <p className="font-bold text-sm leading-tight" style={{ color: '#F6F3EB' }}>{post.profiles.full_name}</p>
+              <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>@{post.profiles.username}</p>
             </div>
           </Link>
         ) : (
@@ -126,7 +126,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
               {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
             </div>
             <div>
-              <p className="font-bold text-sm leading-tight" style={{ color: '#F5F5F5' }}>{post.profiles?.full_name ?? 'Usuario'}</p>
+              <p className="font-bold text-sm leading-tight" style={{ color: '#F6F3EB' }}>{post.profiles?.full_name ?? 'Usuario'}</p>
             </div>
           </div>
         )}
@@ -135,7 +135,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-1.5 rounded-lg transition"
-            style={{ color: '#4A7A8E' }}
+            style={{ color: 'rgba(246,243,235,0.40)' }}
           >
             <svg width="18" height="4" viewBox="0 0 18 4" fill="currentColor">
               <circle cx="2" cy="2" r="2"/><circle cx="9" cy="2" r="2"/><circle cx="16" cy="2" r="2"/>
@@ -153,7 +153,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                     <button
                       onClick={() => { setEditing(true); setShowMenu(false) }}
                       className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
-                      style={{ color: '#F5F5F5' }}
+                      style={{ color: '#F6F3EB' }}
                     >
                       <Pencil size={14} />
                       Editar
@@ -203,12 +203,12 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
 
       {/* Contenido */}
       <div className="px-4 pt-3 pb-1">
-        <p className="text-sm leading-relaxed" style={{ color: '#F5F5F5' }}>
+        <p className="text-sm leading-relaxed" style={{ color: '#F6F3EB' }}>
           {post.profiles?.username ? (
             <Link
               href={`/app/perfil/${post.profiles.username}`}
               className="font-bold mr-1.5"
-              style={{ color: '#F5F5F5' }}
+              style={{ color: '#F6F3EB' }}
             >
               {post.profiles.username}
             </Link>
@@ -247,7 +247,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         <button
           onClick={() => setShowComments(!showComments)}
           className="flex items-center gap-1.5 transition active:scale-90"
-          style={{ color: '#4D4D4D' }}
+          style={{ color: 'rgba(246,243,235,0.40)' }}
         >
           <MessageCircle size={20} strokeWidth={1.8} />
           {totalComments > 0 && (
@@ -255,7 +255,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           )}
         </button>
 
-        <span className="text-xs ml-auto" style={{ color: '#2A2A2A' }}>
+        <span className="text-xs ml-auto" style={{ color: 'rgba(246,243,235,0.30)' }}>
           {timeAgo(post.created_at)}
         </span>
       </div>
@@ -265,7 +265,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         <button
           onClick={() => setShowComments(true)}
           className="px-4 pb-3 text-xs font-bold transition"
-          style={{ color: '#4D4D4D' }}
+          style={{ color: 'rgba(246,243,235,0.40)' }}
         >
           Ver {totalComments} comentario{totalComments !== 1 ? 's' : ''}
         </button>
@@ -296,13 +296,13 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
             placeholder="Añade un comentario…"
             required
             className="flex-1 bg-transparent text-sm focus:outline-none"
-            style={{ color: '#F5F5F5' }}
+            style={{ color: '#F6F3EB' }}
           />
           <button
             type="submit"
             disabled={commenting}
             className="text-xs font-black uppercase tracking-wider disabled:opacity-50 transition"
-            style={{ color: '#F5F5F5' }}
+            style={{ color: '#F6F3EB' }}
           >
             Publicar
           </button>

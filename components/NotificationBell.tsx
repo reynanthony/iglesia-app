@@ -58,8 +58,8 @@ export default function NotificationBell({ userId }: { userId: string }) {
 
   const getIcon = (type: string) => {
     if (type === 'like') return <Heart size={14} className="text-red-400 fill-red-400" />
-    if (type === 'comment') return <MessageCircle size={14} className="text-blue-400" />
-    return <AlertTriangle size={14} className="text-[#222222]" />
+    if (type === 'comment') return <MessageCircle size={14} style={{ color: '#76ABAE' }} />
+    return <AlertTriangle size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
   }
 
   const getText = (n: Notification) => {
@@ -73,9 +73,10 @@ export default function NotificationBell({ userId }: { userId: string }) {
     <div className="relative">
       <button
         onClick={() => { setOpen(!open); if (!open && unread > 0) markAllRead() }}
-        className="relative p-2 hover:bg-slate-800 rounded-xl transition"
+        className="relative p-2.5 rounded-xl transition"
+        style={{ color: 'rgba(246,243,235,0.60)' }}
       >
-        <Bell size={20} className="text-slate-300" />
+        <Bell size={20} />
         {unread > 0 && (
           <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">
             {unread > 9 ? '9+' : unread}
@@ -87,18 +88,27 @@ export default function NotificationBell({ userId }: { userId: string }) {
         <>
           <div className="fixed inset-0 z-0" onClick={() => setOpen(false)} />
 
-         <div className="fixed right-2 top-16 w-[calc(100vw-16px)] md:w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-50 max-h-[75vh] flex flex-col">
-
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 flex-shrink-0">
-              <h3 className="font-semibold text-sm">Notificaciones</h3>
-              <button onClick={() => setOpen(false)} className="text-slate-500 hover:text-white transition">
+          <div
+            className="fixed right-2 top-16 w-[calc(100vw-16px)] md:w-80 rounded-2xl shadow-2xl z-50 max-h-[75vh] flex flex-col"
+            style={{ background: '#061E30', border: '1px solid #0D3352' }}
+          >
+            <div
+              className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+              style={{ borderBottom: '1px solid #0D3352' }}
+            >
+              <h3 className="font-semibold text-sm" style={{ color: '#F6F3EB' }}>Notificaciones</h3>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-1 rounded-lg transition"
+                style={{ color: 'rgba(246,243,235,0.40)' }}
+              >
                 <X size={16} />
               </button>
             </div>
 
             <div className="overflow-y-auto flex-1">
               {notifications.length === 0 ? (
-                <div className="py-10 text-center text-slate-500 text-sm">
+                <div className="py-10 text-center text-sm" style={{ color: 'rgba(246,243,235,0.35)' }}>
                   Sin notificaciones
                 </div>
               ) : (
@@ -107,30 +117,37 @@ export default function NotificationBell({ userId }: { userId: string }) {
                     key={n.id}
                     href="/app/feed"
                     onClick={() => setOpen(false)}
-                    className={`flex items-start gap-3 px-4 py-3 hover:bg-slate-800 transition ${!n.read ? 'bg-slate-800/50' : ''}`}
+                    className="flex items-start gap-3 px-4 py-3 transition"
+                    style={{
+                      background: !n.read ? 'rgba(13,51,82,0.6)' : 'transparent',
+                    }}
                   >
                     <div className="relative flex-shrink-0">
-                      <div className="w-9 h-9 rounded-full overflow-hidden bg-slate-700">
+                      <div
+                        className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold"
+                        style={{ background: '#0D3352', color: '#76ABAE' }}
+                      >
                         {n.profiles?.avatar_url ? (
                           <img src={n.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xs font-bold text-slate-300">
-                            {n.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
-                          </div>
+                          n.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'
                         )}
                       </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-slate-900 rounded-full flex items-center justify-center">
+                      <div
+                        className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center"
+                        style={{ background: '#061E30', border: '1px solid #0D3352' }}
+                      >
                         {getIcon(n.type)}
                       </div>
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-200 leading-snug">{getText(n)}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{timeAgo(n.created_at)}</p>
+                      <p className="text-sm leading-snug" style={{ color: '#F6F3EB' }}>{getText(n)}</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>{timeAgo(n.created_at)}</p>
                     </div>
 
                     {!n.read && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5" />
+                      <div className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style={{ background: '#76ABAE' }} />
                     )}
                   </Link>
                 ))
