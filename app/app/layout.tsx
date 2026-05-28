@@ -5,6 +5,7 @@ import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
 import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
+import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -23,6 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen" style={{ background: '#061E30', color: '#F6F3EB' }}>
+      <CapacitorBridge />
 
       {/* ── SIDEBAR (desktop) ── */}
       <aside

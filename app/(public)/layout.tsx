@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Cross } from 'lucide-react'
 import MobileMenu from '@/components/public/MobileMenu'
 import PublicNav from '@/components/public/PublicNav'
+import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -15,8 +16,17 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <div className="min-h-screen flex flex-col">
 
+      <PublicStatusBar />
+
       {/* ── HEADER ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 backdrop-blur-md" style={{ background: 'rgba(5,24,40,0.97)', borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+      <header
+        className="sticky top-0 z-50 backdrop-blur-md"
+        style={{
+          background: 'rgba(5,24,40,0.97)',
+          borderBottom: '1px solid rgba(118,171,174,0.10)',
+          paddingTop: 'env(safe-area-inset-top, 0px)',
+        }}
+      >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center gap-3 flex-shrink-0">

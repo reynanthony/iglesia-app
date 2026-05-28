@@ -71,7 +71,9 @@ export default function MobileMenu() {
               borderLeft: '1px solid rgba(118,171,174,0.12)',
               display: 'flex',
               flexDirection: 'column',
+              paddingTop: 'env(safe-area-inset-top, 0px)',
               paddingRight: 'env(safe-area-inset-right, 0px)',
+              paddingLeft: 'env(safe-area-inset-left, 0px)',
             }}
           >
             {/* Cabecera */}
