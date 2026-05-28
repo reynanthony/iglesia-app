@@ -371,6 +371,22 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
     if (status === 'saved') setStatus('idle')
   }
 
+  function buildFields(extraKey?: string, extraVal?: string) {
+    const fields: Record<string, unknown> = {}
+    schema.forEach(section =>
+      section.fields.forEach(f => {
+        const raw = f.key === extraKey ? extraVal : values[f.key]
+        if (!raw) return
+        if (f.type === 'json') {
+          try { fields[f.key] = JSON.parse(raw) } catch { /* skip */ }
+        } else {
+          fields[f.key] = raw
+        }
+      })
+    )
+    return fields
+  }
+
   async function handleUpload(key: string, file: File) {
     setUploading(prev => ({ ...prev, [key]: true }))
     setUploadError(prev => ({ ...prev, [key]: '' }))
@@ -383,12 +399,31 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
       const { error } = await supabase.storage.from('posts').upload(path, file, { upsert: true })
       if (error) throw error
       const { data } = supabase.storage.from('posts').getPublicUrl(path)
-      handleChange(key, data.publicUrl)
+      const url = data.publicUrl
+      handleChange(key, url)
+      // Auto-save right away so user doesn't have to click "Guardar"
+      setStatus('saving')
+      startTransition(async () => {
+        const result = await savePageFields(page, buildFields(key, url))
+        setStatus(result?.error ? 'error' : 'saved')
+        if (result?.error) setErrorMsg(result.error)
+      })
     } catch {
       setUploadError(prev => ({ ...prev, [key]: 'Error al subir. Intenta de nuevo.' }))
     } finally {
       setUploading(prev => ({ ...prev, [key]: false }))
     }
+  }
+
+  function handleUrlBlur(key: string, val: string) {
+    if (!val || !val.startsWith('http')) return
+    // Auto-save when user pastes or types a URL and leaves the field
+    setStatus('saving')
+    startTransition(async () => {
+      const result = await savePageFields(page, buildFields(key, val))
+      setStatus(result?.error ? 'error' : 'saved')
+      if (result?.error) setErrorMsg(result.error)
+    })
   }
 
   function handleSave() {
@@ -502,7 +537,8 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
                           type="text"
                           value={values[field.key] ?? ''}
                           onChange={e => handleChange(field.key, e.target.value)}
-                          placeholder={field.type === 'upload-image' ? 'https://... (URL de imagen)' : 'https://... (URL de video .mp4)'}
+                          onBlur={e => handleUrlBlur(field.key, e.target.value)}
+                          placeholder={field.type === 'upload-image' ? 'Pega una URL de imagen o usa el botón Subir' : 'Pega una URL de video .mp4 o usa el botón Subir'}
                           className="flex-1 rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
                           style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
                         />
