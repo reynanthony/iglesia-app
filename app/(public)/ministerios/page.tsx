@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { ArrowRight, Users, Baby, Heart, Music, BookOpen, Globe, Church, Flame, Star, HandHeart } from 'lucide-react'
 import BlockRenderer from '@/components/BlockRenderer'
 
+export const dynamic = 'force-dynamic'
+
 function getIcon(ministry: { slug?: string; name?: string }) {
   const key = ((ministry.slug ?? '') + ' ' + (ministry.name ?? '')).toLowerCase()
   if (key.includes('joven') || key.includes('youth')) return Users
@@ -37,6 +39,18 @@ export default async function MinisteriosPage() {
   const editorialBlocks = (pageResult.data?.content as any)?.blocks
   const hasBlocks = Array.isArray(editorialBlocks) && editorialBlocks.length > 0
 
+  const pageContent = (pageResult.data?.content ?? {}) as Record<string, any>
+  const heroEyebrow     = (pageContent.hero_eyebrow     as string) || 'Ministerios\nUn lugar para todos'
+  const heroTitleMain   = (pageContent.hero_title_main   as string) || 'Un lugar\npara'
+  const heroTitleAccent = (pageContent.hero_title_accent as string) || 'todos.'
+  const heroSubtitle    = (pageContent.hero_subtitle     as string) || 'Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.'
+  const heroImageUrl    = (pageContent.hero_image_url    as string) || null
+  const heroVideoUrl    = (pageContent.hero_video_url    as string) || null
+  const minCtaEyebrow   = (pageContent.min_cta_eyebrow   as string) || '— Sírvenos'
+  const minCtaTitle     = (pageContent.min_cta_title     as string) || '¿Dónde\nencajas tú?'
+  const minCtaLabel     = (pageContent.min_cta_label     as string) || 'Contáctanos'
+  const minCtaUrl       = (pageContent.min_cta_url       as string) || '/contacto'
+
   const allMinistries = ministriesResult.data
 
   const parents = allMinistries?.filter(m => !m.parent_id) ?? []
@@ -57,6 +71,18 @@ export default async function MinisteriosPage() {
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
       <section className="relative overflow-hidden" style={{ background: '#093C5D' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
+        )}
+        {heroVideoUrl && (
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
+            <source src={heroVideoUrl} type="video/mp4" />
+          </video>
+        )}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.35) 100%)' }} />
+        )}
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(118,171,174,0.12), transparent 70%)' }}
@@ -67,17 +93,22 @@ export default async function MinisteriosPage() {
           <div className="flex items-start gap-4 mb-12">
             <div className="w-0.5 h-12 flex-shrink-0" style={{ background: 'rgba(118,171,174,0.5)' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] leading-relaxed" style={{ color: 'rgba(118,171,174,0.6)' }}>
-              Ministerios<br />Un lugar para todos
+              {heroEyebrow.split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </p>
           </div>
           <h1
             className="font-display font-black leading-[0.85] tracking-tighter text-white mb-8"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}
           >
-            Un lugar<br />para <em style={{ color: '#76ABAE' }}>todos.</em>
+            {heroTitleMain.split('\n').map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
+            {heroTitleAccent && <><br /><em style={{ color: '#76ABAE' }}>{heroTitleAccent}</em></>}
           </h1>
           <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
-            Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.
+            {heroSubtitle}
           </p>
         </div>
         <div className="h-px w-full" style={{ background: 'rgba(118,171,174,0.15)' }} />
@@ -188,19 +219,21 @@ export default async function MinisteriosPage() {
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— Sírvenos</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{minCtaEyebrow}</p>
             <h2
               className="font-display font-black leading-[0.85] tracking-tighter text-white"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}
             >
-              ¿Dónde<br /><em>encajas tú?</em>
+              {minCtaTitle.split('\n').map((line, i, arr) => (
+                <span key={i}>{i === 1 ? <em>{line}</em> : line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h2>
           </div>
           <Link
-            href="/contacto"
+            href={minCtaUrl}
             className="inline-flex items-center gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition flex-shrink-0 group"
           >
-            Contáctanos <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+            {minCtaLabel} <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </section>

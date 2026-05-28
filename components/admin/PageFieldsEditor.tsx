@@ -294,6 +294,29 @@ const SCHEMAS: Record<string, SectionDef[]> = {
     },
   ],
 
+  ministerios: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Ministerios\nUn lugar para todos' },
+        { key: 'hero_title_main', label: 'Título — líneas principales (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Un lugar\npara' },
+        { key: 'hero_title_accent', label: 'Título — palabra en teal', type: 'text', placeholder: 'todos.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image', hint: 'Sube una foto JPG/PNG/WebP o pega una URL directa. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video', hint: 'Sube un video MP4 o pega una URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
+      ],
+    },
+    {
+      title: 'CTA final — "¿Dónde encajas tú?"',
+      fields: [
+        { key: 'min_cta_eyebrow', label: 'Etiqueta de sección', type: 'text', placeholder: '— Sírvenos' },
+        { key: 'min_cta_title', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: '¿Dónde\nencajas tú?' },
+        { key: 'min_cta_label', label: 'Botón — texto', type: 'text', placeholder: 'Contáctanos' },
+        { key: 'min_cta_url', label: 'Botón — URL', type: 'url', placeholder: '/contacto' },
+      ],
+    },
+  ],
+
   contacto: [
     {
       title: 'Hero — sección principal',
