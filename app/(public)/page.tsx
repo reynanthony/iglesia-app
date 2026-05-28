@@ -226,8 +226,23 @@ export default async function HomePage() {
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#E8EDE6', minHeight: '50vh' }}>
 
-        {/* Sin imagen: número decorativo de fondo */}
-        {!eventImageUrl && (
+        {/* Imagen lateral — ocupa todo el lado derecho, sin bordes, difuminada */}
+        {eventImageUrl ? (
+          <div className="absolute right-0 top-0 bottom-0 w-1/2 hidden lg:block">
+            <img src={eventImageUrl} alt=""
+              className="w-full h-full object-cover" />
+            {/* Difuminado izquierda (funde con el texto) */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-48"
+              style={{ background: 'linear-gradient(to right, #E8EDE6, transparent)' }} />
+            {/* Difuminado arriba */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24"
+              style={{ background: 'linear-gradient(to bottom, #E8EDE6, transparent)' }} />
+            {/* Difuminado abajo */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
+              style={{ background: 'linear-gradient(to top, #E8EDE6, transparent)' }} />
+          </div>
+        ) : (
+          /* Sin imagen: número decorativo */
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter"
               style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: NAVY, lineHeight: 1, paddingRight: '2rem' }}>
@@ -236,37 +251,24 @@ export default async function HomePage() {
           </div>
         )}
 
-        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28" style={{ minHeight: '50vh' }}>
-          <div className={`flex flex-col justify-end h-full ${eventImageUrl ? 'grid grid-cols-1 lg:grid-cols-2 gap-12 items-center' : ''}`}>
-
-            {/* Texto */}
-            <div className={eventImageUrl ? '' : 'max-w-xl'}>
-              <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
-                {eventEyebrow}
-              </p>
-              <h2 className="font-display font-black tracking-tighter mb-5"
-                style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
-                {eventTitle}
-              </h2>
-              <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
-                {eventDesc}
-              </p>
-              <Link href={eventCtaUrl}
-                className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
-                style={{ background: NAVY, color: CREAM }}>
-                {eventCtaLabel} <ArrowRight size={12} />
-              </Link>
-            </div>
-
-            {/* Imagen lateral */}
-            {eventImageUrl && (
-              <div className="relative rounded-2xl overflow-hidden w-full" style={{ aspectRatio: '4/3' }}>
-                <img src={eventImageUrl} alt={eventTitle}
-                  className="absolute inset-0 w-full h-full object-cover" />
-              </div>
-            )}
-
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28 flex flex-col justify-end" style={{ minHeight: '50vh' }}>
+          <div className="max-w-xl">
+            <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
+              {eventEyebrow}
+            </p>
+            <h2 className="font-display font-black tracking-tighter mb-5"
+              style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
+              {eventTitle}
+            </h2>
+            <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
+              {eventDesc}
+            </p>
+            <Link href={eventCtaUrl}
+              className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
+              style={{ background: NAVY, color: CREAM }}>
+              {eventCtaLabel} <ArrowRight size={12} />
+            </Link>
           </div>
         </div>
       </section>
