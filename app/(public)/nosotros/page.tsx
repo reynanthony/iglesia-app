@@ -88,9 +88,9 @@ export default async function NosotrosPage() {
         </div>
 
         <div className="relative max-w-6xl mx-auto w-full px-6 pb-0 pt-32 md:pt-40">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end pb-20">
+          <div className="pb-20">
             {/* Texto */}
-            <div className="lg:col-span-7">
+            <div className="max-w-3xl">
               <div className="flex items-center gap-5 mb-14">
                 <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
                 <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
@@ -109,34 +109,6 @@ export default async function NosotrosPage() {
               </p>
             </div>
 
-            {/* Fotografía de comunidad */}
-            <div className="hidden lg:block lg:col-span-5 pb-4">
-              <div
-                className="relative rounded-2xl overflow-hidden"
-                style={{ aspectRatio: '4/5', background: '#F6F3EB' }}
-              >
-                {/* Año como arte tipográfico navy */}
-                <div className="absolute inset-0 flex items-end justify-start p-8 overflow-hidden">
-                  <span className="font-black leading-none select-none"
-                    style={{ fontSize: 'clamp(7rem, 18vw, 14rem)', opacity: 0.08, lineHeight: 1, color: '#093C5D' }}>
-                    2008
-                  </span>
-                </div>
-                {/* Cruz centrada en navy */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
-                    <rect x="32" y="8" width="8" height="56" rx="4" fill="#093C5D" fillOpacity="0.25" />
-                    <rect x="8" y="28" width="56" height="8" rx="4" fill="#093C5D" fillOpacity="0.25" />
-                  </svg>
-                </div>
-                {/* Accent teal line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: '#76ABAE' }} />
-                {/* Label */}
-                <div className="absolute top-6 right-6 text-[9px] font-bold uppercase tracking-[0.35em]" style={{ color: '#869B7E' }}>
-                  Desde 2008
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -171,39 +143,6 @@ export default async function NosotrosPage() {
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mt-6">
               {pullquoteAuthor}
             </p>
-          </div>
-
-          {/* Foto collage placeholder 3 paneles */}
-          <div className="grid grid-cols-12 gap-4 mb-20">
-            <div className="col-span-7 rounded-2xl overflow-hidden relative" style={{ minHeight: 320, background: '#093C5D' }}>
-              <span className="absolute inset-0 flex items-center justify-center font-black select-none"
-                style={{ fontSize: 'clamp(4rem, 10vw, 8rem)', opacity: 0.07, lineHeight: 1, color: '#76ABAE' }}>
-                comunidad
-              </span>
-              <div className="absolute inset-0 flex items-end p-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(118,171,174,0.5)' }}>La comunidad</p>
-              </div>
-            </div>
-            <div className="col-span-5 grid grid-rows-2 gap-4">
-              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#76ABAE' }}>
-                <span className="absolute inset-0 flex items-center justify-center font-black select-none"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.15, lineHeight: 1, color: '#093C5D' }}>
-                  servicio
-                </span>
-                <div className="absolute inset-0 flex items-end p-6">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(9,60,93,0.6)' }}>El servicio</p>
-                </div>
-              </div>
-              <div className="rounded-2xl overflow-hidden relative" style={{ minHeight: 152, background: '#869B7E' }}>
-                <span className="absolute inset-0 flex items-center justify-center font-black select-none"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', opacity: 0.15, lineHeight: 1, color: '#F6F3EB' }}>
-                  familia
-                </span>
-                <div className="absolute inset-0 flex items-end p-6">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.6)' }}>La familia</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Texto historia 2 columnas */}
