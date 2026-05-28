@@ -226,22 +226,26 @@ export default async function HomePage() {
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#E8EDE6', minHeight: '50vh' }}>
 
-        {/* Imagen lateral — ocupa todo el lado derecho, sin bordes, difuminada */}
-        {eventImageUrl ? (
-          <div className="absolute right-0 top-0 bottom-0 w-1/2 hidden lg:block">
-            <img src={eventImageUrl} alt=""
-              className="w-full h-full object-cover" />
-            {/* Difuminado izquierda (funde con el texto) */}
+        {eventImageUrl ? (<>
+          {/* Móvil: fondo completo difuminado */}
+          <div className="lg:hidden absolute inset-0">
+            <img src={eventImageUrl} alt="" className="w-full h-full object-cover" />
+            <div className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(to bottom, #E8EDE6 0%, rgba(232,237,230,0.55) 40%, rgba(232,237,230,0.55) 60%, #E8EDE6 100%)' }} />
+            <div className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(to right, #E8EDE6 0%, transparent 60%)' }} />
+          </div>
+          {/* Desktop: panel derecho difuminado */}
+          <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/2">
+            <img src={eventImageUrl} alt="" className="w-full h-full object-cover" />
             <div className="pointer-events-none absolute inset-y-0 left-0 w-48"
               style={{ background: 'linear-gradient(to right, #E8EDE6, transparent)' }} />
-            {/* Difuminado arriba */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-24"
               style={{ background: 'linear-gradient(to bottom, #E8EDE6, transparent)' }} />
-            {/* Difuminado abajo */}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
               style={{ background: 'linear-gradient(to top, #E8EDE6, transparent)' }} />
           </div>
-        ) : (
+        </>) : (
           /* Sin imagen: número decorativo */
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter"
