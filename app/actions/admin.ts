@@ -442,8 +442,13 @@ export async function savePageFields(page: string, fields: Record<string, unknow
     .from('page_content').select('content').eq('page', page).single()
 
   const current = (existing?.content ?? {}) as Record<string, unknown>
-  // Merge fields but always preserve blocks
-  const merged: Record<string, unknown> = { ...current, ...fields }
+  // Merge: null/'' in fields means "delete this key", otherwise overwrite
+  const merged: Record<string, unknown> = { ...current }
+  for (const [k, v] of Object.entries(fields)) {
+    if (v === null || v === '') delete merged[k]
+    else merged[k] = v
+  }
+  // Always preserve blocks (edited separately via block editor)
   if (current.blocks) merged.blocks = current.blocks
 
   const { error } = await ctx.supabase

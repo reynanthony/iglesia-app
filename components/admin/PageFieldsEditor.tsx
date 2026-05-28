@@ -3,7 +3,7 @@
 import { useState, useTransition, useRef } from 'react'
 import { savePageFields } from '@/app/actions/admin'
 import { createClient } from '@/lib/supabase/client'
-import { Check, Loader2, AlertCircle, Upload, ImageIcon, Video } from 'lucide-react'
+import { Check, Loader2, AlertCircle, Upload, ImageIcon, Video, X } from 'lucide-react'
 
 type FieldType = 'text' | 'textarea' | 'url' | 'json' | 'upload-image' | 'upload-video'
 
@@ -332,6 +332,7 @@ const SCHEMAS: Record<string, SectionDef[]> = {
 interface Props {
   page: string
   initialValues: Record<string, unknown>
+  hasBlocks?: boolean
 }
 
 function fieldDisplayValue(type: FieldType, value: unknown): string {
@@ -340,7 +341,7 @@ function fieldDisplayValue(type: FieldType, value: unknown): string {
   return String(value)
 }
 
-export default function PageFieldsEditor({ page, initialValues }: Props) {
+export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Props) {
   const schema = SCHEMAS[page]
   if (!schema) return (
     <div className="p-6 rounded-xl text-sm" style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>
@@ -352,8 +353,7 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
     const init: Record<string, string> = {}
     schema.forEach(section =>
       section.fields.forEach(f => {
-        const dbVal = fieldDisplayValue(f.type, initialValues[f.key])
-        init[f.key] = dbVal || (f.placeholder ?? '')
+        init[f.key] = fieldDisplayValue(f.type, initialValues[f.key])
       })
     )
     return init
@@ -371,22 +371,6 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
     if (status === 'saved') setStatus('idle')
   }
 
-  function buildFields(extraKey?: string, extraVal?: string) {
-    const fields: Record<string, unknown> = {}
-    schema.forEach(section =>
-      section.fields.forEach(f => {
-        const raw = f.key === extraKey ? extraVal : values[f.key]
-        if (!raw) return
-        if (f.type === 'json') {
-          try { fields[f.key] = JSON.parse(raw) } catch { /* skip */ }
-        } else {
-          fields[f.key] = raw
-        }
-      })
-    )
-    return fields
-  }
-
   async function handleUpload(key: string, file: File) {
     setUploading(prev => ({ ...prev, [key]: true }))
     setUploadError(prev => ({ ...prev, [key]: '' }))
@@ -401,10 +385,10 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
       const { data } = supabase.storage.from('posts').getPublicUrl(path)
       const url = data.publicUrl
       handleChange(key, url)
-      // Auto-save right away so user doesn't have to click "Guardar"
+      // Auto-save only this field — don't touch other fields
       setStatus('saving')
       startTransition(async () => {
-        const result = await savePageFields(page, buildFields(key, url))
+        const result = await savePageFields(page, { [key]: url })
         setStatus(result?.error ? 'error' : 'saved')
         if (result?.error) setErrorMsg(result.error)
       })
@@ -417,10 +401,10 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
 
   function handleUrlBlur(key: string, val: string) {
     if (!val || !val.startsWith('http')) return
-    // Auto-save when user pastes or types a URL and leaves the field
+    // Auto-save only this field when user pastes/types a URL and leaves
     setStatus('saving')
     startTransition(async () => {
-      const result = await savePageFields(page, buildFields(key, val))
+      const result = await savePageFields(page, { [key]: val })
       setStatus(result?.error ? 'error' : 'saved')
       if (result?.error) setErrorMsg(result.error)
     })
@@ -432,12 +416,13 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
       const fields: Record<string, unknown> = {}
       schema.forEach(section =>
         section.fields.forEach(f => {
-          const raw = values[f.key]
-          if (raw === '' || raw === undefined) return
+          const raw = values[f.key] ?? ''
           if (f.type === 'json') {
+            if (!raw) { fields[f.key] = null; return }
             try { fields[f.key] = JSON.parse(raw) } catch { /* skip invalid JSON */ }
           } else {
-            fields[f.key] = raw
+            // empty string → null → tells server to delete this field from DB
+            fields[f.key] = raw || null
           }
         })
       )
@@ -481,6 +466,18 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
           </span>
         )}
       </div>
+
+      {hasBlocks && (
+        <div className="rounded-xl px-5 py-4 flex items-start gap-3" style={{ background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.25)' }}>
+          <AlertCircle size={15} style={{ color: '#F87171', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <p className="text-[12px] font-bold" style={{ color: '#F87171' }}>El Editor avanzado tiene contenido activo</p>
+            <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: 'rgba(248,113,113,0.70)' }}>
+              Los bloques del "Editor avanzado" tienen prioridad sobre estos campos. La imagen de fondo y otros cambios aquí no se verán hasta que elimines o publiques sin bloques desde el Editor avanzado.
+            </p>
+          </div>
+        </div>
+      )}
 
       {schema.map(section => (
         <div key={section.title} className="rounded-2xl overflow-hidden" style={{ border: '1px solid #0D3352' }}>
@@ -542,6 +539,25 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
                           className="flex-1 rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
                           style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
                         />
+                        {values[field.key] && values[field.key].startsWith('http') && (
+                          <button
+                            type="button"
+                            title="Quitar imagen"
+                            onClick={() => {
+                              handleChange(field.key, '')
+                              setStatus('saving')
+                              startTransition(async () => {
+                                const result = await savePageFields(page, { [field.key]: null })
+                                setStatus(result?.error ? 'error' : 'saved')
+                                if (result?.error) setErrorMsg(result.error)
+                              })
+                            }}
+                            className="flex items-center justify-center w-10 rounded-xl flex-shrink-0 transition"
+                            style={{ background: '#0B2D47', border: '1px solid rgba(248,113,113,0.30)', color: '#F87171' }}
+                          >
+                            <X size={14} />
+                          </button>
+                        )}
                         <input
                           type="file"
                           accept={field.type === 'upload-image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'video/mp4,video/webm,video/quicktime'}

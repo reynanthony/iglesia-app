@@ -67,7 +67,7 @@ export default function PageEditorTabs({ page, pageLabel, initialBlocks, initial
       {/* Tab content */}
       <div className="px-8 py-8">
         {tab === 'fields' ? (
-          <PageFieldsEditor page={page} initialValues={initialValues} />
+          <PageFieldsEditor page={page} initialValues={initialValues} hasBlocks={initialBlocks.length > 0} />
         ) : (
           <PageBuilder
             page={page}
