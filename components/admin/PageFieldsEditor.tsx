@@ -376,8 +376,10 @@ export default function PageFieldsEditor({ page, initialValues }: Props) {
     setUploadError(prev => ({ ...prev, [key]: '' }))
     try {
       const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('No autenticado')
       const ext = file.name.split('.').pop() ?? 'bin'
-      const path = `pages/${key}_${Date.now()}.${ext}`
+      const path = `${user.id}/pages/${key}_${Date.now()}.${ext}`
       const { error } = await supabase.storage.from('posts').upload(path, file, { upsert: true })
       if (error) throw error
       const { data } = supabase.storage.from('posts').getPublicUrl(path)
