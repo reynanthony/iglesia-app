@@ -130,19 +130,19 @@ export default async function EventosPage() {
       {/* Horarios regulares */}
       <section className="border-t border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-edge">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-edge">
             {regularServices.map(({ day, time, label, type, fullDay }) => (
-              <div key={day} className="px-0 sm:px-8 first:sm:pl-0 py-8 flex items-center gap-6">
-                <div className="w-14 h-14 flex-shrink-0 flex flex-col items-center justify-center border border-edge rounded-xl">
-                  <span className="text-[9px] font-bold text-ink-3 uppercase tracking-widest">{day}</span>
+              <div key={day} className="py-7 md:py-8 md:px-8 first:md:pl-0 last:md:pr-0 flex items-center gap-5">
+                <div className="w-16 h-16 flex-shrink-0 flex flex-col items-center justify-center border border-edge rounded-xl">
+                  <span className="text-[9px] font-bold text-ink-3 uppercase tracking-widest leading-none mb-1">{day}</span>
                   <div className="flex items-baseline gap-0.5">
-                    <span className="font-black text-ink text-lg leading-none">{time}</span>
+                    <span className="font-black text-ink text-base leading-none">{time}</span>
                     <span className="text-[9px] font-bold text-ink-3">{label}</span>
                   </div>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="font-bold text-ink text-sm leading-tight">{type}</p>
-                  <p className="text-[11px] text-ink-3 mt-0.5">{fullDay}</p>
+                  <p className="text-[11px] text-ink-3 mt-1">{fullDay}</p>
                 </div>
               </div>
             ))}
