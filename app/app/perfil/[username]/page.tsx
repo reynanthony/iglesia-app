@@ -4,10 +4,10 @@ import EditProfileModal from '@/components/EditProfileModal'
 import PostCard from '@/components/PostCard'
 
 const roleMeta: Record<string, { label: string; color: string; bg: string }> = {
-  admin:     { label: 'Administrador', color: '#f87171',  bg: 'rgba(239,68,68,0.08)' },
-  pastor:    { label: 'Pastor',        color: '#111111',  bg: 'rgba(0,0,0,0.08)' },
-  moderador: { label: 'Moderador',     color: '#000000',  bg: 'rgba(0,0,0,0.08)' },
-  lider:     { label: 'Líder',         color: '#888888',  bg: 'rgba(128,128,128,0.08)' },
+  admin:     { label: 'Administrador', color: '#F87171',                  bg: 'rgba(248,113,113,0.10)' },
+  pastor:    { label: 'Pastor',        color: '#76ABAE',                  bg: 'rgba(118,171,174,0.12)' },
+  moderador: { label: 'Moderador',     color: '#869B7E',                  bg: 'rgba(134,155,126,0.12)' },
+  lider:     { label: 'Líder',         color: 'rgba(246,243,235,0.55)',   bg: 'rgba(246,243,235,0.06)' },
 }
 
 export default async function PerfilPage({ params }: { params: Promise<{ username: string }> }) {
@@ -37,14 +37,13 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
   const postCount = posts?.length ?? 0
 
   return (
-    <div style={{ background: '#0A0A0A', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100vh' }}>
 
       {/* ── COVER AREA ── */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #181818' }}>
-        {/* Ambient glow based on role */}
+      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
         <div className="absolute inset-0 pointer-events-none"
           style={{
-            background: `radial-gradient(ellipse 60% 100% at 50% 0%, ${role ? role.color + '10' : 'rgba(0,0,0,0.06)'}, transparent 70%)`,
+            background: `radial-gradient(ellipse 60% 100% at 50% 0%, rgba(118,171,174,0.06), transparent 70%)`,
           }} />
 
         <div className="relative max-w-xl mx-auto px-4 pt-10 pb-8">
@@ -52,7 +51,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
             {/* Avatar */}
             <div
               className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center font-black text-2xl flex-shrink-0"
-              style={{ background: 'rgba(0,0,0,0.12)', color: '#000000', border: '2px solid rgba(0,0,0,0.20)' }}
+              style={{ background: '#0D3352', color: '#76ABAE', border: '2px solid #0D3352' }}
             >
               {profile.avatar_url
                 ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -65,7 +64,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
           {/* Identity */}
           <div className="mt-5">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="font-black text-2xl tracking-tight" style={{ color: '#F5F5F5' }}>
+              <h1 className="font-black text-2xl tracking-tight" style={{ color: '#F6F3EB' }}>
                 {profile.full_name}
               </h1>
               {role && (
@@ -77,20 +76,20 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
                 </span>
               )}
             </div>
-            <p className="text-sm mt-1" style={{ color: '#4D4D4D' }}>@{profile.username}</p>
+            <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>@{profile.username}</p>
 
             {profile.bio && (
-              <p className="text-sm mt-4 leading-relaxed max-w-sm" style={{ color: '#8A8A8A' }}>
+              <p className="text-sm mt-4 leading-relaxed max-w-sm" style={{ color: 'rgba(246,243,235,0.55)' }}>
                 {profile.bio}
               </p>
             )}
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-6 mt-6 pt-6" style={{ borderTop: '1px solid #181818' }}>
+          <div className="flex items-center gap-6 mt-6 pt-6" style={{ borderTop: '1px solid #0D3352' }}>
             <div>
-              <p className="font-black text-xl leading-none" style={{ color: '#F5F5F5' }}>{postCount}</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: '#4D4D4D' }}>
+              <p className="font-black text-xl leading-none" style={{ color: '#F6F3EB' }}>{postCount}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
                 {postCount === 1 ? 'Publicación' : 'Publicaciones'}
               </p>
             </div>
@@ -103,10 +102,10 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
         {!posts || posts.length === 0 ? (
           <div className="text-center py-24">
             <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: '#161614', border: '1px solid #1A1A1A' }}>
+              style={{ background: '#0D3352', border: '1px solid #0D3352' }}>
               <span className="text-xl">📝</span>
             </div>
-            <p className="text-sm" style={{ color: '#4D4D4D' }}>Sin publicaciones aún</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>Sin publicaciones aún</p>
           </div>
         ) : (
           <div>
