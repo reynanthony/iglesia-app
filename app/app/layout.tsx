@@ -95,7 +95,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <form action={logout}>
               <button
                 type="submit"
-                className="p-1.5 rounded-lg transition hover:text-white"
+                className="w-9 h-9 flex items-center justify-center rounded-lg transition hover:text-white"
                 style={{ color: 'rgba(246,243,235,0.40)' }}
                 title="Cerrar sesión"
               >
@@ -108,19 +108,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {/* ── HEADER (mobile) ── */}
       <header
-        className="md:hidden fixed top-0 left-0 right-0 z-30 px-4 py-3 flex items-center justify-between backdrop-blur-md"
-        style={{ background: 'rgba(6,30,48,0.95)', borderBottom: '1px solid #0D3352' }}
+        className="md:hidden fixed top-0 left-0 right-0 z-30 px-4 flex items-center justify-between backdrop-blur-md"
+        style={{
+          background: 'rgba(6,30,48,0.95)',
+          borderBottom: '1px solid #0D3352',
+          paddingTop: 'max(12px, env(safe-area-inset-top, 12px))',
+          paddingBottom: '12px',
+        }}
       >
         <Link href="/app/feed" className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#0D3352' }}><Cross size={13} strokeWidth={2.5} style={{ color: '#76ABAE' }} /></div>
           <span className="font-black text-sm tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/" className="p-2.5 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
+          <Link href="/" className="p-3 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
             <Globe size={18} />
           </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-            <Link href="/admin" className="p-2.5 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
+            <Link href="/admin" className="p-3 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
               <ShieldCheck size={18} />
             </Link>
           )}

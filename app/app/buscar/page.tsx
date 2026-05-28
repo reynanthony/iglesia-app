@@ -86,10 +86,10 @@ export default function BuscarPage() {
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 transition hover:bg-[#0D3352]"
+              className="w-11 h-11 flex items-center justify-center rounded-full flex-shrink-0 transition hover:bg-[#0D3352]"
               aria-label="Limpiar búsqueda"
             >
-              <X size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+              <X size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
             </button>
           )}
         </div>
