@@ -118,19 +118,22 @@ export default async function HomePage() {
         {/* Imagen de fondo opcional */}
         {pageContent.hero_image_url && !pageContent.hero_video_url && (
           <img src={pageContent.hero_image_url as string} alt="" aria-hidden
-            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
         {/* Video de fondo opcional */}
         {pageContent.hero_video_url && (
           <video autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
             <source src={pageContent.hero_video_url as string} type="video/mp4" />
           </video>
         )}
 
-        {/* Overlay navy */}
+        {/* Overlay navy — más suave cuando hay imagen/video, completo sin ella */}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'linear-gradient(160deg, rgba(5,24,40,0.90) 0%, rgba(9,60,93,0.80) 60%, rgba(118,171,174,0.30) 100%)' }} />
+          style={{ background: (pageContent.hero_image_url || pageContent.hero_video_url)
+            ? 'linear-gradient(160deg, rgba(5,24,40,0.50) 0%, rgba(9,60,93,0.40) 60%, rgba(118,171,174,0.15) 100%)'
+            : 'linear-gradient(160deg, rgba(5,24,40,0.90) 0%, rgba(9,60,93,0.80) 60%, rgba(118,171,174,0.30) 100%)'
+          }} />
 
         {/* Grid sutil */}
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"

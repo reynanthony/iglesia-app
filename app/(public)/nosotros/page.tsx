@@ -61,11 +61,11 @@ export default async function NosotrosPage() {
 
         {/* Imagen de fondo opcional */}
         {heroImageUrl && !heroVideoUrl && (
-          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
         {/* Video de fondo opcional */}
         {heroVideoUrl && (
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
             <source src={heroVideoUrl} type="video/mp4" />
           </video>
         )}
@@ -73,7 +73,7 @@ export default async function NosotrosPage() {
         {/* Overlay navy */}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.85) 0%, rgba(9,60,93,0.70) 60%, rgba(9,60,93,0.50) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 60%, rgba(9,60,93,0.15) 100%)' }} />
         )}
 
         {/* Grid sutil */}

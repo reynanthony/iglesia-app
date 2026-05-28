@@ -43,16 +43,16 @@ export default async function ContactoPage() {
       ═══════════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
         {heroImageUrl && !heroVideoUrl && (
-          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
         {heroVideoUrl && (
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
             <source src={heroVideoUrl} type="video/mp4" />
           </video>
         )}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.85) 0%, rgba(9,60,93,0.70) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />
         )}
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
