@@ -7,6 +7,7 @@ import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
 import { detectSocialEmbed } from '@/lib/social-embed'
+import { hapticSuccess } from '@/lib/haptics'
 
 const MAX_CHARS = 1500
 
@@ -50,6 +51,7 @@ export default function NuevoPostPage() {
         setError(result.error)
         setLoading(false)
       } else {
+        hapticSuccess()
         router.push('/app/feed')
       }
     } catch {

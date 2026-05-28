@@ -11,6 +11,7 @@ import {
 import { Track, ConnectionState } from 'livekit-client'
 import '@livekit/components-styles'
 import { Mic, MicOff, PhoneOff, Users, Loader2, WifiOff } from 'lucide-react'
+import { hapticMedium } from '@/lib/haptics'
 
 function RoomControls({ onLeave }: { onLeave: () => void }) {
   const participants = useParticipants()
@@ -212,7 +213,7 @@ export default function AudioRoom({ roomId, roomName }: { roomId: string; roomNa
       connect={true}
       audio={false}
       video={false}
-      onConnected={() => setRoomError('')}
+      onConnected={() => { setRoomError(''); hapticMedium() }}
       onError={(e) => setRoomError(`Error: ${e.message}`)}
       style={{ height: '100%', background: 'transparent' }}
     >

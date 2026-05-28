@@ -25,7 +25,7 @@ export default function PhotoSlot({
   return (
     <div
       className={`relative overflow-hidden rounded-2xl ${className}`}
-      style={{ aspectRatio, background: src ? '#1A1A1A' : '#EDE8DF' }}
+      style={{ aspectRatio, background: src ? '#0B2D47' : '#EDE8DF' }}
     >
       {src ? (
         <>

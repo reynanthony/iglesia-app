@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Heart, MessageCircle, Flag, Pencil, Trash2 } from 'lucide-react'
 import { toggleLike, createComment, reportPost, deleteOwnPost, updateOwnPost } from '@/app/actions/posts'
+import { hapticLight } from '@/lib/haptics'
 import Link from 'next/link'
 import CommentItem from '@/components/CommentItem'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
@@ -36,6 +37,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   async function handleLike() {
     setLiked(!liked)
     setLikesCount((c: number) => liked ? c - 1 : c + 1)
+    hapticLight()
     await toggleLike(post.id)
   }
 
@@ -184,7 +186,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                     }}
                     disabled={reporting || reported}
                     className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left disabled:opacity-50 transition"
-                    style={{ color: reported ? '#8A8A8A' : '#F87171' }}
+                    style={{ color: reported ? 'rgba(246,243,235,0.40)' : '#F87171' }}
                   >
                     <Flag size={14} />
                     {reported ? 'Reportado' : 'Reportar'}
@@ -234,11 +236,11 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
         <button
           onClick={handleLike}
           className="flex items-center gap-1.5 transition active:scale-90"
-          style={{ color: liked ? '#F87171' : '#4D4D4D' }}
+          style={{ color: liked ? '#F87171' : 'rgba(246,243,235,0.40)' }}
         >
           <Heart size={20} strokeWidth={1.8} fill={liked ? 'currentColor' : 'none'} />
           {likesCount > 0 && (
-            <span className="text-xs font-bold" style={{ color: liked ? '#F87171' : '#4D4D4D' }}>
+            <span className="text-xs font-bold" style={{ color: liked ? '#F87171' : 'rgba(246,243,235,0.40)' }}>
               {likesCount}
             </span>
           )}
