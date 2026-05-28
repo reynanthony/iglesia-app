@@ -397,10 +397,14 @@ export async function savePageBlocks(page: string, blocks: any[]) {
   if (!ctx) return { error: 'No autorizado' }
   // Strip video blocks with empty URL — they render null and hide the rest of the page silently
   const cleanBlocks = blocks.filter(b => !(b.type === 'video' && !b.props?.url?.trim()))
+  // Fetch existing to preserve field values (hero_image_url, etc.) when saving blocks
+  const { data: existing } = await ctx.supabase
+    .from('page_content').select('content').eq('page', page).single()
+  const existingContent = (existing?.content ?? {}) as Record<string, unknown>
   const { error } = await ctx.supabase
     .from('page_content')
     .upsert(
-      { page, content: { blocks: cleanBlocks }, updated_by: ctx.userId, updated_at: new Date().toISOString() },
+      { page, content: { ...existingContent, blocks: cleanBlocks }, updated_by: ctx.userId, updated_at: new Date().toISOString() },
       { onConflict: 'page' }
     )
   if (error) return { error: error.message }
@@ -413,10 +417,14 @@ export async function savePageBlocks(page: string, blocks: any[]) {
 export async function clearPageBlocks(page: string) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
+  // Fetch existing to preserve field values when clearing blocks
+  const { data: existing } = await ctx.supabase
+    .from('page_content').select('content').eq('page', page).single()
+  const { blocks: _removed, ...fieldsOnly } = ((existing?.content ?? {}) as Record<string, unknown>)
   const { error } = await ctx.supabase
     .from('page_content')
     .upsert(
-      { page, content: {}, updated_by: ctx.userId, updated_at: new Date().toISOString() },
+      { page, content: fieldsOnly, updated_by: ctx.userId, updated_at: new Date().toISOString() },
       { onConflict: 'page' }
     )
   if (error) return { error: error.message }
