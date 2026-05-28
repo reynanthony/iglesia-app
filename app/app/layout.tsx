@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross, ShieldCheck, Plus } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -32,14 +32,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         {/* Brand */}
         <div className="px-5 py-6" style={{ borderBottom: '1px solid #0D3352' }}>
           <Link href="/app/feed" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#000000] rounded-lg flex items-center justify-center text-black flex-shrink-0">
-              <Cross size={15} strokeWidth={2.5} />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
+              <Cross size={15} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
             <div>
-              <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F5F5F5' }}>
+              <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>
                 El Manantial
               </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: '#4D4D4D' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.35)' }}>
                 Comunidad
               </p>
             </div>
@@ -53,8 +53,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="px-3 pb-5" style={{ borderTop: '1px solid #0D3352', paddingTop: '1rem' }}>
           <Link
             href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#111111]"
-            style={{ color: '#4D4D4D' }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]"
+            style={{ color: 'rgba(246,243,235,0.40)' }}
           >
             <Globe size={16} />
             <span>Página principal</span>
@@ -62,8 +62,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
             <Link
               href="/admin"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#111111]"
-              style={{ color: '#4D4D4D' }}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]"
+              style={{ color: 'rgba(246,243,235,0.40)' }}
             >
               <ShieldCheck size={16} />
               <span>Panel Admin</span>
@@ -75,18 +75,18 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Link href={profileHref} className="flex-1 flex items-center gap-3 min-w-0 group">
               <div
                 className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                style={{ background: 'rgba(0,0,0,0.15)', color: '#000000' }}
+                style={{ background: '#0D3352', color: '#76ABAE' }}
               >
                 {profile?.avatar_url
                   ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
                   : initial}
               </div>
               <div className="min-w-0">
-                <p className="text-[13px] font-bold truncate leading-tight group-hover:text-[#222222] transition"
-                  style={{ color: '#F5F5F5' }}>
+                <p className="text-[13px] font-bold truncate leading-tight transition"
+                  style={{ color: '#F6F3EB' }}>
                   {profile?.full_name ?? 'Usuario'}
                 </p>
-                <p className="text-[11px] truncate" style={{ color: '#4D4D4D' }}>
+                <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
                   @{profile?.username ?? ''}
                 </p>
               </div>
@@ -96,7 +96,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <button
                 type="submit"
                 className="p-1.5 rounded-lg transition hover:text-white"
-                style={{ color: '#4D4D4D' }}
+                style={{ color: 'rgba(246,243,235,0.40)' }}
                 title="Cerrar sesión"
               >
                 <LogOut size={15} />
@@ -112,15 +112,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         style={{ background: 'rgba(6,30,48,0.95)', borderBottom: '1px solid #0D3352' }}
       >
         <Link href="/app/feed" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-[#000000] rounded-lg flex items-center justify-center text-black"><Cross size={13} strokeWidth={2.5} /></div>
-          <span className="font-black text-sm tracking-tight" style={{ color: '#F5F5F5' }}>El Manantial</span>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#0D3352' }}><Cross size={13} strokeWidth={2.5} style={{ color: '#76ABAE' }} /></div>
+          <span className="font-black text-sm tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/" className="p-1.5 rounded-lg transition" style={{ color: '#4D4D4D' }} title="Sitio web">
+          <Link href="/" className="p-2.5 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
             <Globe size={18} />
           </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-            <Link href="/admin" className="p-1.5 rounded-lg transition" style={{ color: '#4D4D4D' }} title="Panel Admin">
+            <Link href="/admin" className="p-2.5 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
               <ShieldCheck size={18} />
             </Link>
           )}
@@ -128,7 +128,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Link href={profileHref}>
             <div
               className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
-              style={{ background: 'rgba(0,0,0,0.15)', color: '#000000' }}
+              style={{ background: '#0D3352', color: '#76ABAE' }}
             >
               {profile?.avatar_url
                 ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
@@ -144,21 +144,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         {/* Spacer so content clears the fixed bottom nav (mobile only) */}
         <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} />
       </main>
-
-      {/* ── FAB Publicar (mobile only) ── */}
-      <Link
-        href="/app/nuevo-post"
-        className="md:hidden fixed z-40 w-14 h-14 rounded-full flex items-center justify-center"
-        style={{
-          bottom: 'calc(64px + env(safe-area-inset-bottom,0px) + 12px)',
-          right: '20px',
-          background: 'linear-gradient(135deg, #093C5D, #76ABAE)',
-          boxShadow: '0 4px 24px rgba(118,171,174,0.35), 0 2px 8px rgba(0,0,0,0.4)',
-        }}
-        aria-label="Nueva publicación"
-      >
-        <Plus size={26} color="white" strokeWidth={2.5} />
-      </Link>
 
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav
