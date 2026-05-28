@@ -59,6 +59,7 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'featured_event_desc', label: 'Descripción breve', type: 'textarea', rows: 2, placeholder: 'Junio 2026 · Un fin de semana de encuentro y renovación espiritual.' },
         { key: 'event_cta_label', label: 'Botón — texto', type: 'text', placeholder: 'Más información' },
         { key: 'event_cta_url', label: 'Botón — URL', type: 'url', placeholder: '/eventos' },
+        { key: 'event_image_url', label: 'Foto del evento (aparece al lado derecho)', type: 'upload-image' },
       ],
     },
     {

@@ -83,6 +83,7 @@ export default async function HomePage() {
   const eventEyebrow     = (c.event_eyebrow      as string) ?? 'Próximo evento'
   const eventCtaLabel    = (c.event_cta_label     as string) ?? 'Más información'
   const eventCtaUrl      = (c.event_cta_url       as string) ?? '/eventos'
+  const eventImageUrl    = (c.event_image_url     as string) || null
   const ministry1Cta     = (c.ministry1_cta       as string) ?? 'Explorar ministerio'
   const sermonsEyebrow   = (c.sermons_eyebrow     as string) ?? '— Mensajes'
   const sermonsTitle     = (c.sermons_title       as string) ?? 'Crece en\nla Palabra.'
@@ -224,33 +225,48 @@ export default async function HomePage() {
           3. EVENTO DESTACADO — sage claro con navy
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#E8EDE6', minHeight: '50vh' }}>
-        {/* Número de día decorativo */}
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center overflow-hidden select-none">
-          <span className="font-black leading-none tracking-tighter"
-            style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: NAVY, lineHeight: 1, paddingRight: '2rem' }}>
-            06
-          </span>
-        </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28 flex flex-col justify-end" style={{ minHeight: '50vh' }}>
-          <div className="max-w-xl">
-            {/* Barra teal */}
-            <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
-              {eventEyebrow}
-            </p>
-            <h2 className="font-display font-black tracking-tighter mb-5"
-              style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
-              {eventTitle}
-            </h2>
-            <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
-              {eventDesc}
-            </p>
-            <Link href={eventCtaUrl}
-              className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
-              style={{ background: NAVY, color: CREAM }}>
-              {eventCtaLabel} <ArrowRight size={12} />
-            </Link>
+        {/* Sin imagen: número decorativo de fondo */}
+        {!eventImageUrl && (
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center overflow-hidden select-none">
+            <span className="font-black leading-none tracking-tighter"
+              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: NAVY, lineHeight: 1, paddingRight: '2rem' }}>
+              06
+            </span>
+          </div>
+        )}
+
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28" style={{ minHeight: '50vh' }}>
+          <div className={`flex flex-col justify-end h-full ${eventImageUrl ? 'grid grid-cols-1 lg:grid-cols-2 gap-12 items-center' : ''}`}>
+
+            {/* Texto */}
+            <div className={eventImageUrl ? '' : 'max-w-xl'}>
+              <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
+                {eventEyebrow}
+              </p>
+              <h2 className="font-display font-black tracking-tighter mb-5"
+                style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
+                {eventTitle}
+              </h2>
+              <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
+                {eventDesc}
+              </p>
+              <Link href={eventCtaUrl}
+                className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
+                style={{ background: NAVY, color: CREAM }}>
+                {eventCtaLabel} <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            {/* Imagen lateral */}
+            {eventImageUrl && (
+              <div className="relative rounded-2xl overflow-hidden w-full" style={{ aspectRatio: '4/3' }}>
+                <img src={eventImageUrl} alt={eventTitle}
+                  className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+            )}
+
           </div>
         </div>
       </section>
