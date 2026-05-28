@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,11 +67,7 @@ export default async function NosotrosPage() {
           <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
         {/* Video de fondo opcional */}
-        {heroVideoUrl && (
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
-            <source src={heroVideoUrl} type="video/mp4" />
-          </video>
-        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
 
         {/* Overlay navy */}
         {(heroImageUrl || heroVideoUrl) && (

@@ -1,6 +1,7 @@
 import type { Block } from '@/lib/blocks'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { detectSocialEmbed } from '@/lib/social-embed'
 
 /* ── helpers ────────────────────────────────────────────────── */
 const align = (a?: string) =>
@@ -8,15 +9,6 @@ const align = (a?: string) =>
 
 const spacerHeight: Record<string, string> = {
   xs: '2rem', sm: '4rem', md: '6rem', lg: '10rem', xl: '16rem',
-}
-
-function getYtId(url: string) {
-  const m = url.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/)
-  return m ? m[1] : null
-}
-function getVimeoId(url: string) {
-  const m = url.match(/vimeo\.com\/(\d+)/)
-  return m ? m[1] : null
 }
 
 /* ── individual blocks ──────────────────────────────────────── */
@@ -398,26 +390,19 @@ function ServicesBlock({ p }: { p: Record<string, any> }) {
 
 function VideoBlock({ p }: { p: Record<string, any> }) {
   if (!p.url) return null
-  const ytId = getYtId(p.url)
-  const vimeoId = getVimeoId(p.url)
-  const embedUrl = ytId
-    ? `https://www.youtube.com/embed/${ytId}`
-    : vimeoId
-    ? `https://player.vimeo.com/video/${vimeoId}`
-    : null
-  const isDirect = !embedUrl
+  const embed = detectSocialEmbed(p.url)
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       {p.title && <h3 className="font-black text-xl text-[#111111] mb-4">{p.title}</h3>}
-      {embedUrl ? (
-        <div className="relative w-full rounded-2xl overflow-hidden" style={{ paddingBottom: '56.25%', background: '#111' }}>
-          <iframe src={embedUrl} className="absolute inset-0 w-full h-full"
+      {embed ? (
+        <div className="relative w-full rounded-2xl overflow-hidden" style={{ paddingBottom: embed.aspectPadding, height: 0, background: '#111' }}>
+          <iframe src={embed.embedUrl} className="absolute inset-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen />
+            allowFullScreen loading="lazy" style={{ border: 'none' }} />
         </div>
-      ) : isDirect ? (
+      ) : (
         <video src={p.url} controls className="w-full rounded-2xl" style={{ background: '#111' }} />
-      ) : null}
+      )}
       {p.caption && <p className="text-center text-xs mt-3 text-[#888888]">{p.caption}</p>}
     </div>
   )

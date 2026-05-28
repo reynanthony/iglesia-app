@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -122,13 +123,7 @@ export default async function HomePage() {
           <img src={pageContent.hero_image_url as string} alt="" aria-hidden
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
-        {/* Video de fondo opcional */}
-        {pageContent.hero_video_url && (
-          <video autoPlay muted loop playsInline
-            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
-            <source src={pageContent.hero_video_url as string} type="video/mp4" />
-          </video>
-        )}
+        {pageContent.hero_video_url && <HeroVideo url={pageContent.hero_video_url as string} />}
 
         {/* Overlay navy — más suave cuando hay imagen/video, completo sin ella */}
         <div className="pointer-events-none absolute inset-0"

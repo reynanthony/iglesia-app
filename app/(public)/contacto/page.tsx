@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import ContactForm from '@/components/public/ContactForm'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,11 +48,7 @@ export default async function ContactoPage() {
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
-        {heroVideoUrl && (
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
-            <source src={heroVideoUrl} type="video/mp4" />
-          </video>
-        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
             style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />

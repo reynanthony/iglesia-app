@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 import PhotoSlot from '@/components/PhotoSlot'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,11 +85,7 @@ export default async function PredicasPage() {
           {heroImageUrl && !heroVideoUrl && (
             <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
           )}
-          {heroVideoUrl && (
-            <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.60 }}>
-              <source src={heroVideoUrl} type="video/mp4" />
-            </video>
-          )}
+          {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
           {(heroImageUrl || heroVideoUrl) && (
             <div className="pointer-events-none absolute inset-0"
               style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />
@@ -148,7 +145,8 @@ export default async function PredicasPage() {
             <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#76ABAE' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#76ABAE' }}>{featuredEyebrow}</p>
           </div>
-          <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer" style={{ borderColor: 'rgba(118,171,174,0.20)' }}>
+          <a href={featured.video_url ?? '#'} target={featured.video_url ? '_blank' : undefined} rel="noopener noreferrer"
+            className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer" style={{ borderColor: 'rgba(118,171,174,0.20)' }}>
             <div className="lg:col-span-5 relative min-h-[260px] flex items-center justify-center overflow-hidden"
               style={{
                 background: featured.image_url
@@ -180,7 +178,7 @@ export default async function PredicasPage() {
                 <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
