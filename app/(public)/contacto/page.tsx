@@ -12,10 +12,22 @@ export default async function ContactoPage() {
   }
   const c = content as Record<string, string>
 
-  const address  = c.address      || 'Tu dirección aquí, Ciudad, País'
-  const phone    = c.phone        || '+1 (809) 000-0000'
-  const email    = c.email        || 'info@elmanantial.org'
-  const schedule = [c.schedule_sun, c.schedule_wed, c.schedule_fri].filter(Boolean).join(' · ') || 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const address      = c.address      || 'Tu dirección aquí, Ciudad, País'
+  const phone        = c.phone        || '+1 (809) 000-0000'
+  const email        = c.email        || 'info@elmanantial.org'
+  const schedule     = [c.schedule_sun, c.schedule_wed, c.schedule_fri].filter(Boolean).join(' · ') || 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const heroEyebrow  = c.hero_eyebrow  || 'Contacto · Estamos aquí para ti'
+  const heroTitle    = c.hero_title    || 'Visítanos.'
+  const heroSubtitle = c.hero_subtitle || 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.'
+
+  // New CMS fields
+  const infoEyebrow       = c.info_eyebrow       || '— Información'
+  const formEyebrow       = c.form_eyebrow        || '— Escríbenos'
+  const firstVisitTitle   = c.first_visit_title   || '¿Primera visita?'
+  const firstVisitSubtitle = c.first_visit_subtitle || 'No necesitas saber nada.'
+  const firstVisitBody    = c.first_visit_body    || 'Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.'
+  const heroImageUrl      = c.hero_image_url      || null
+  const heroVideoUrl      = c.hero_video_url      || null
 
   const infoItems = [
     { icon: MapPin, label: 'Dirección', value: address  },
@@ -29,34 +41,44 @@ export default async function ContactoPage() {
       {/* ═══════════════════════════════════════
           HERO — conversacional, íntimo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#F6F3EB' }}>
-        <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 30% 60%, rgba(118,171,174,0.08), transparent 70%)' }} />
-
-        {/* "HOLA" decorativo derecha */}
-        <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
-          <span className="font-black tracking-tighter leading-none block"
-            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.06, color: '#093C5D' }}>
+      <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+        )}
+        {heroVideoUrl && (
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+            <source src={heroVideoUrl} type="video/mp4" />
+          </video>
+        )}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.85) 0%, rgba(9,60,93,0.70) 100%)' }} />
+        )}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
+          <span className="font-black leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
             HOLA
           </span>
         </div>
-
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-32">
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
+        <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: '#869B7E' }}>
-              Contacto · Estamos aquí para ti
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
+              {heroEyebrow}
             </p>
           </div>
-          <h1 className="font-display font-black tracking-tighter mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85, color: '#093C5D' }}>
-            Visítanos.
+          <h1 className="font-display font-black tracking-tighter text-white mb-8"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+            {heroTitle}
           </h1>
-          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(9,60,93,0.55)' }}>
-            No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            {heroSubtitle}
           </p>
         </div>
-        <div className="h-px w-full" style={{ background: '#D2CDB8' }} />
       </section>
 
       {/* ═══════════════════════════════════════
@@ -68,7 +90,7 @@ export default async function ContactoPage() {
 
             {/* Info lateral */}
             <div className="lg:col-span-4 space-y-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Información</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{infoEyebrow}</p>
 
               <div className="space-y-3">
                 {infoItems.map(({ icon: Icon, label, value }) => (
@@ -87,17 +109,17 @@ export default async function ContactoPage() {
               {/* Primera visita */}
               <div className="mt-6 p-6 rounded-xl"
                 style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.22)' }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#76ABAE' }}>¿Primera visita?</p>
-                <p className="text-sm font-black text-ink mb-2">No necesitas saber nada.</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#76ABAE' }}>{firstVisitTitle}</p>
+                <p className="text-sm font-black text-ink mb-2">{firstVisitSubtitle}</p>
                 <p className="text-sm text-ink-2 leading-relaxed">
-                  Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.
+                  {firstVisitBody}
                 </p>
               </div>
             </div>
 
             {/* Formulario funcional */}
             <div className="lg:col-span-8">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-10">— Escríbenos</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-10">{formEyebrow}</p>
               <ContactForm />
             </div>
 

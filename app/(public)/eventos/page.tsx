@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 
-const regularServices = [
+const defaultRegularServices = [
   { day: 'Dom', fullDay: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
   { day: 'Mié', fullDay: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio Bíblico',   desc: 'Profundizando en la Palabra de Dios juntos.' },
   { day: 'Vie', fullDay: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de Oración',  desc: 'Intercesión y búsqueda de la presencia de Dios.' },
@@ -16,10 +16,10 @@ const fallbackEvents = [
 ]
 
 function badgeColor(badge: string) {
-  if (badge === 'Especial') return '#444444'
-  if (badge === 'Por confirmar') return '#A8A8A8'
-  if (badge === 'Hoy') return '#000000'
-  return '#000000'
+  if (badge === 'Especial') return '#093C5D'
+  if (badge === 'Por confirmar') return '#869B7E'
+  if (badge === 'Hoy') return '#76ABAE'
+  return '#093C5D'
 }
 
 const MESES_CORTOS = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
@@ -45,6 +45,28 @@ export default async function EventosPage() {
   const editorialBlocks = (pageResult.data?.content as any)?.blocks
   const hasBlocks = Array.isArray(editorialBlocks) && editorialBlocks.length > 0
 
+  const pageContent = (pageResult.data?.content ?? {}) as Record<string, any>
+  const heroEyebrow   = (pageContent.hero_eyebrow   as string) || 'Eventos · Agenda 2026'
+  const heroTitleMain = (pageContent.hero_title_main as string) || 'Lo que\nse viene.'
+  const heroSubtitle  = (pageContent.hero_subtitle   as string) || 'Mantente al día con nuestras actividades, servicios y eventos especiales.'
+  const heroImageUrl  = (pageContent.hero_image_url  as string) || null
+  const heroVideoUrl  = (pageContent.hero_video_url  as string) || null
+
+  // New CMS fields
+  const regularServices   = Array.isArray(pageContent.regular_services) ? pageContent.regular_services : defaultRegularServices
+  const eventsEyebrow     = pageContent.events_eyebrow    || '— Próximamente'
+  const locationEyebrow   = pageContent.location_eyebrow  || '— Cómo llegar'
+  const locationTitle     = pageContent.location_title    || 'Encuéntranos\naquí.'
+  const locationAddress   = pageContent.location_address  || 'Tu dirección aquí, Ciudad, País'
+  const locationSchedule  = pageContent.location_schedule || 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const locationNextEvent = pageContent.location_next_event || 'Retiro de Jóvenes · Jun 2026'
+  const evCtaEyebrow      = pageContent.ev_cta_eyebrow    || '— ¿Primera vez?'
+  const evCtaTitle        = pageContent.ev_cta_title      || 'Ven y\nsé parte.'
+  const evCta1Label       = pageContent.ev_cta1_label     || 'Escríbenos'
+  const evCta1Url         = pageContent.ev_cta1_url       || '/contacto'
+  const evCta2Label       = pageContent.ev_cta2_label     || 'Comunidad en línea'
+  const evCta2Url         = pageContent.ev_cta2_url       || '/login'
+
   const specialEvents: any[] = eventsResult.data && eventsResult.data.length > 0
     ? eventsResult.data
     : fallbackEvents
@@ -58,28 +80,44 @@ export default async function EventosPage() {
       {hasBlocks ? (
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
-        <section className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #EDE7DE 0%, #F2EDE7 50%, #F8F5F0 100%)' }}>
-          <div className="pointer-events-none absolute right-0 top-0 overflow-hidden select-none flex items-start">
-            <span className="font-black text-[#111111] tracking-tighter"
-              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.04, lineHeight: 0.85 }}>
+        <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
+          {heroImageUrl && !heroVideoUrl && (
+            <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+          )}
+          {heroVideoUrl && (
+            <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+              <source src={heroVideoUrl} type="video/mp4" />
+            </video>
+          )}
+          {(heroImageUrl || heroVideoUrl) && (
+            <div className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.85) 0%, rgba(9,60,93,0.70) 100%)' }} />
+          )}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
+            <span className="font-black leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
               2026
             </span>
           </div>
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 55% 65% at 15% 70%, rgba(0,0,0,0.06), transparent 65%)' }} />
-          <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-48 md:pb-20">
+            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
+          <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
             <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px bg-[#000000]" />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#111111]/40">
-                Eventos · Agenda 2026
+              <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
+                {heroEyebrow}
               </p>
             </div>
-            <h1 className="font-display font-black tracking-tighter text-[#111111] mb-8"
+            <h1 className="font-display font-black tracking-tighter text-white mb-8"
               style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
-              Lo que<br />se viene.
+              {heroTitleMain.split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h1>
-            <p className="text-base text-[#111111]/45 leading-relaxed max-w-md mb-0">
-              Mantente al día con nuestras actividades, servicios y eventos especiales.
+            <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              {heroSubtitle}
             </p>
           </div>
         </section>
@@ -90,21 +128,21 @@ export default async function EventosPage() {
       ═══════════════════════════════════════ */}
 
       {/* Horarios regulares */}
-      <section className="border-t border-[#111111]/[0.08] bg-white">
+      <section className="border-t border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#111111]/[0.08]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-edge">
             {regularServices.map(({ day, time, label, type, fullDay }) => (
               <div key={day} className="px-0 sm:px-8 first:sm:pl-0 py-8 flex items-center gap-6">
-                <div className="w-14 h-14 flex-shrink-0 flex flex-col items-center justify-center border border-[#111111]/10 rounded-xl">
-                  <span className="text-[9px] font-bold text-[#000000]/70 uppercase tracking-widest">{day}</span>
+                <div className="w-14 h-14 flex-shrink-0 flex flex-col items-center justify-center border border-edge rounded-xl">
+                  <span className="text-[9px] font-bold text-ink-3 uppercase tracking-widest">{day}</span>
                   <div className="flex items-baseline gap-0.5">
-                    <span className="font-black text-[#111111] text-lg leading-none">{time}</span>
-                    <span className="text-[9px] font-bold text-[#111111]/55">{label}</span>
+                    <span className="font-black text-ink text-lg leading-none">{time}</span>
+                    <span className="text-[9px] font-bold text-ink-3">{label}</span>
                   </div>
                 </div>
                 <div>
-                  <p className="font-bold text-[#111111] text-sm leading-tight">{type}</p>
-                  <p className="text-[11px] text-[#111111]/45 mt-0.5">{fullDay}</p>
+                  <p className="font-bold text-ink text-sm leading-tight">{type}</p>
+                  <p className="text-[11px] text-ink-3 mt-0.5">{fullDay}</p>
                 </div>
               </div>
             ))}
@@ -116,7 +154,7 @@ export default async function EventosPage() {
       <section className="bg-card border-b border-edge">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Próximamente</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{eventsEyebrow}</p>
             <p className="text-[11px] font-bold text-ink-3">{specialEvents.length} eventos</p>
           </div>
           <div className="space-y-4">
@@ -148,7 +186,7 @@ export default async function EventosPage() {
                     <div className="md:col-span-9 p-8 md:p-10 flex flex-col justify-between gap-6">
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3 mb-4">{event.categoria}</p>
-                        <h3 className="font-display font-black text-ink tracking-tight group-hover:text-[#222222] transition"
+                        <h3 className="font-display font-black text-ink tracking-tight transition"
                           style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', lineHeight: 1 }}>
                           {event.titulo}
                         </h3>
@@ -172,10 +210,12 @@ export default async function EventosPage() {
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="flex flex-col gap-6 justify-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Cómo llegar</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{locationEyebrow}</p>
               <h2 className="font-display font-black text-ink tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
-                Encuéntranos<br />aquí.
+                {locationTitle.split('\n').map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
               <div className="space-y-4 mt-2">
                 <div className="flex items-start gap-4">
@@ -184,7 +224,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Dirección</p>
-                    <p className="text-sm font-bold text-ink">Tu dirección aquí, Ciudad, País</p>
+                    <p className="text-sm font-bold text-ink">{locationAddress}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -193,7 +233,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Horarios</p>
-                    <p className="text-sm font-bold text-ink">Dom 10AM · Mié 7PM · Vie 7PM</p>
+                    <p className="text-sm font-bold text-ink">{locationSchedule}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -201,8 +241,8 @@ export default async function EventosPage() {
                     <Calendar size={14} className="text-ink-3" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Próximo evento</p>
-                    <p className="text-sm font-bold text-ink">Retiro de Jóvenes · Jun 2026</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">{pageContent.location_next_label || 'Próximo evento'}</p>
+                    <p className="text-sm font-bold text-ink">{locationNextEvent}</p>
                   </div>
                 </div>
               </div>
@@ -221,23 +261,25 @@ export default async function EventosPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— ¿Primera vez?</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{evCtaEyebrow}</p>
             <h2 className="font-display font-black leading-[0.85] tracking-tighter text-white"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
-              Ven y<br /><em>sé parte.</em>
+              {evCtaTitle.split('\n').map((line: string, i: number, arr: string[]) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h2>
           </div>
           <div className="flex flex-col gap-4 flex-shrink-0">
-            <Link href="/contacto"
+            <Link href={evCta1Url}
               className="inline-flex items-center justify-between gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
-              Escríbenos <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              {evCta1Label} <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/login"
+            <Link href={evCta2Url}
               className="inline-flex items-center justify-between gap-3 border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
-              Comunidad en línea <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              {evCta2Label} <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
             </Link>
           </div>
         </div>

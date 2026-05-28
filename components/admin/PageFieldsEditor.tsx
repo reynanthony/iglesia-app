@@ -33,7 +33,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_cta1_url', label: 'Botón principal — URL', type: 'url', placeholder: '/nosotros' },
         { key: 'hero_cta2_label', label: 'Botón secundario — texto', type: 'text', placeholder: 'Ver prédica' },
         { key: 'hero_cta2_url', label: 'Botón secundario — URL', type: 'url', placeholder: '/predicas' },
-        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'Dejar vacío para mostrar solo color de fondo' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen (JPG/PNG/WebP). El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -144,6 +145,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_title_main', label: 'Título — líneas principales (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Somos\nEl Manan-' },
         { key: 'hero_title_accent', label: 'Título — palabra en teal', type: 'text', placeholder: 'tial.' },
         { key: 'hero_body', label: 'Párrafo introductorio', type: 'textarea', rows: 3, placeholder: 'Nacimos de un sueño: ver una comunidad donde el amor de Dios fluyera libremente, como agua viva que transforma vidas.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -212,6 +215,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Eventos · Agenda 2026' },
         { key: 'hero_title_main', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Lo que\nse viene.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Mantente al día con nuestras actividades, servicios y eventos especiales.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -264,6 +269,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_title_main', label: 'Título — líneas principales (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Crece\nen la' },
         { key: 'hero_title_accent', label: 'Título — palabra en teal', type: 'text', placeholder: 'Palabra.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Escucha los mensajes de nuestra iglesia y déjate transformar por la Palabra de Dios cada semana.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {
@@ -293,6 +300,8 @@ const SCHEMAS: Record<string, SectionDef[]> = {
         { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Contacto · Estamos aquí para ti' },
         { key: 'hero_title', label: 'Título principal', type: 'text', placeholder: 'Visítanos.' },
         { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'url', hint: 'URL de imagen. El video tiene prioridad si ambos están definidos.' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'url', hint: 'URL directa al archivo .mp4. Tiene prioridad sobre la imagen.' },
       ],
     },
     {

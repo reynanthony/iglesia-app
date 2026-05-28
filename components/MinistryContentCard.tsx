@@ -1,13 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, FileText, Video, Megaphone, Pin } from 'lucide-react'
+import { Trash2, FileText, Video, Megaphone, Pin, ExternalLink } from 'lucide-react'
 import { deleteMinistryContent } from '@/app/actions/ministries'
-
-function getYouTubeId(url: string) {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)
-  return match ? match[1] : null
-}
+import { detectSocialEmbed } from '@/lib/social-embed'
 
 const typeConfig: Record<string, { label: string; icon: React.ReactNode }> = {
   articulo: { label: 'Artículo', icon: <FileText size={11} /> },
@@ -28,7 +24,7 @@ export default function MinistryContentCard({
   const [confirm, setConfirm]   = useState(false)
 
   const type      = typeConfig[item.type] ?? typeConfig['articulo']
-  const youtubeId = item.video_url ? getYouTubeId(item.video_url) : null
+  const embed     = item.video_url ? detectSocialEmbed(item.video_url) : null
 
   const formatDate = (date: string) => {
     const d = new Date(date)
@@ -49,20 +45,22 @@ export default function MinistryContentCard({
   return (
     <article className="border border-edge hover:border-edge-2 bg-card hover:bg-muted transition group overflow-hidden rounded-xl">
 
-      {/* YouTube embed */}
-      {youtubeId && (
-        <div className="relative w-full rounded-t-xl overflow-hidden" style={{ paddingBottom: '56.25%' }}>
+      {/* Social video embed — YouTube, Instagram, TikTok, Facebook */}
+      {embed && (
+        <div className="relative w-full rounded-t-xl overflow-hidden" style={{ paddingBottom: embed.aspectPadding, height: 0 }}>
           <iframe
-            src={'https://www.youtube.com/embed/' + youtubeId}
+            src={embed.embedUrl}
             className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            loading="lazy"
+            style={{ border: 'none' }}
           />
         </div>
       )}
 
       {/* Cover image */}
-      {item.image_url && !youtubeId && (
+      {item.image_url && !embed && (
         <div className="overflow-hidden rounded-t-xl">
           <img
             src={item.image_url}
@@ -80,7 +78,7 @@ export default function MinistryContentCard({
               {type.icon} {type.label}
             </span>
             {item.pinned && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#000000]">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#76ABAE]">
                 <Pin size={10} /> Fijado
               </span>
             )}
@@ -103,7 +101,7 @@ export default function MinistryContentCard({
         </div>
 
         {/* Title */}
-        <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-[#222222] transition tracking-tight">
+        <h3 className="font-black text-ink text-lg leading-tight mb-3 transition tracking-tight">
           {item.title}
         </h3>
 
@@ -114,15 +112,15 @@ export default function MinistryContentCard({
           </p>
         )}
 
-        {/* External video link */}
-        {item.video_url && !youtubeId && (
+        {/* Link to external video if not embeddable */}
+        {item.video_url && !embed && (
           <a
             href={item.video_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#222222] hover:text-amber-700 transition mb-4"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-ink-2 hover:text-[#76ABAE] transition mb-4"
           >
-            <Video size={12} /> Ver video
+            <ExternalLink size={12} /> Ver video
           </a>
         )}
 

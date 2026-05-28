@@ -35,6 +35,24 @@ export default async function PredicasPage() {
   const editorialBlocks = (pageResult.data?.content as any)?.blocks
   const hasBlocks = Array.isArray(editorialBlocks) && editorialBlocks.length > 0
 
+  const pageContent = (pageResult.data?.content ?? {}) as Record<string, string>
+  const heroEyebrow     = pageContent.hero_eyebrow     || 'Mensajes · Palabra de vida'
+  const heroTitleMain   = pageContent.hero_title_main   || 'Crece\nen la'
+  const heroTitleAccent = pageContent.hero_title_accent || 'Palabra.'
+  const heroSubtitle    = pageContent.hero_subtitle     || 'Escucha los mensajes de nuestra iglesia y déjate transformar por la Palabra de Dios cada semana.'
+  const heroImageUrl    = pageContent.hero_image_url    || null
+  const heroVideoUrl    = pageContent.hero_video_url    || null
+
+  // New CMS fields
+  const featuredBadge        = pageContent.featured_badge        || 'Esta semana'
+  const featuredEyebrow      = pageContent.featured_eyebrow      || 'Mensaje reciente'
+  const featuredListenLabel  = pageContent.featured_listen_label || 'Escuchar ahora'
+  const olderEyebrow         = pageContent.older_eyebrow         || '— Mensajes anteriores'
+  const predCtaEyebrow       = pageContent.pred_cta_eyebrow      || '— Comunidad'
+  const predCtaTitle         = pageContent.pred_cta_title        || '¿Listo\npara más?'
+  const predCtaLabel         = pageContent.pred_cta_label        || 'Unirte a la comunidad'
+  const predCtaUrl           = pageContent.pred_cta_url          || '/login'
+
   const dbSermons = sermonsResult.data
   const sermons: any[] = dbSermons && dbSermons.length > 0
     ? dbSermons.map(s => ({
@@ -61,6 +79,18 @@ export default async function PredicasPage() {
         <BlockRenderer blocks={editorialBlocks} />
       ) : (
         <section className="relative overflow-hidden" style={{ minHeight: '80vh', background: '#093C5D' }}>
+          {heroImageUrl && !heroVideoUrl && (
+            <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+          )}
+          {heroVideoUrl && (
+            <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
+              <source src={heroVideoUrl} type="video/mp4" />
+            </video>
+          )}
+          {(heroImageUrl || heroVideoUrl) && (
+            <div className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.85) 0%, rgba(9,60,93,0.70) 100%)' }} />
+          )}
           <div className="pointer-events-none absolute inset-0 flex items-center overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter whitespace-nowrap"
               style={{ fontSize: 'clamp(12rem, 30vw, 28rem)', opacity: 0.05, color: '#76ABAE' }}>
@@ -74,18 +104,20 @@ export default async function PredicasPage() {
             <div className="flex items-center gap-5 mb-14">
               <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
               <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.6)' }}>
-                Mensajes · Palabra de vida
+                {heroEyebrow}
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
               <h1 className="font-display font-black tracking-tighter text-white"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
-                Crece<br />en la<br />
-                <em style={{ color: '#76ABAE' }}>Palabra.</em>
+                {heroTitleMain.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
+                <br /><em style={{ color: '#76ABAE' }}>{heroTitleAccent}</em>
               </h1>
               <div>
                 <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.50)' }}>
-                  Escucha los mensajes de nuestra iglesia y déjate transformar por la Palabra de Dios cada semana.
+                  {heroSubtitle}
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2" style={{ color: 'rgba(118,171,174,0.60)' }}>
@@ -108,13 +140,13 @@ export default async function PredicasPage() {
       ═══════════════════════════════════════ */}
 
       {/* Sermón destacado */}
-      <section className="border-b border-edge" style={{ background: '#EAF3EF' }}>
+      <section className="border-b border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
           <div className="flex items-center gap-4 mb-10">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#1B7A5E' }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#1B7A5E' }}>Mensaje reciente</p>
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#76ABAE' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: '#76ABAE' }}>{featuredEyebrow}</p>
           </div>
-          <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer" style={{ borderColor: 'rgba(27,122,94,0.15)' }}>
+          <div className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer" style={{ borderColor: 'rgba(118,171,174,0.20)' }}>
             <div className="lg:col-span-5 relative min-h-[260px] flex items-center justify-center overflow-hidden"
               style={{
                 background: featured.image_url
@@ -122,16 +154,16 @@ export default async function PredicasPage() {
                   : 'linear-gradient(135deg, #093C5D 0%, #76ABAE 100%)',
               }}>
               <div className="absolute inset-0"
-                style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(34,166,122,0.15), transparent 65%)' }} />
+                style={{ background: 'radial-gradient(ellipse 70% 80% at 30% 60%, rgba(118,171,174,0.12), transparent 65%)' }} />
               <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
                 style={{ background: '#76ABAE', color: '#093C5D' }}>
-                Esta semana
+                {featuredBadge}
               </div>
               <div className="relative w-20 h-20 rounded-full border border-white/25 group-hover:bg-white/20 group-hover:border-white/50 flex items-center justify-center transition duration-500 group-hover:scale-110">
                 <Play size={22} className="text-white ml-1.5" />
               </div>
             </div>
-            <div className="lg:col-span-7 p-10 lg:p-14 transition flex flex-col justify-between gap-8" style={{ background: '#E0F2EB' }}>
+            <div className="lg:col-span-7 p-10 lg:p-14 transition flex flex-col justify-between gap-8 bg-muted">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: '#76ABAE' }}>{featured.serie}</p>
                 <h2 className="font-display font-black tracking-tight leading-tight mb-4"
@@ -142,7 +174,7 @@ export default async function PredicasPage() {
               </div>
               <button className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition self-start group/btn"
                 style={{ background: '#093C5D' }}>
-                <Play size={12} /> Escuchar ahora
+                <Play size={12} /> {featuredListenLabel}
                 <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -171,7 +203,7 @@ export default async function PredicasPage() {
       <section className="bg-muted border-b border-edge">
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
           <div className="flex items-end justify-between mb-12 border-b border-edge pb-7">
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Mensajes anteriores</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{olderEyebrow}</p>
             <p className="text-[11px] font-bold text-ink-3">{rest.length} mensajes</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -190,7 +222,7 @@ export default async function PredicasPage() {
                   </div>
                   <span className="absolute bottom-4 left-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">{serie}</span>
                 </div>
-                <h3 className="font-black text-ink group-hover:text-[#222222] transition text-lg leading-tight mb-2 tracking-tight">{titulo}</h3>
+                <h3 className="font-black text-ink transition text-lg leading-tight mb-2 tracking-tight">{titulo}</h3>
                 <p className="text-[11px] text-ink-3 uppercase tracking-wider">{pastor} · {fecha}</p>
               </Link>
             ))}
@@ -199,20 +231,22 @@ export default async function PredicasPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0B4A38 0%, #1B7A5E 60%, #22A67A 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 100% at 80% 50%, rgba(0,0,0,0.07), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— Comunidad</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{predCtaEyebrow}</p>
             <h2 className="font-display font-black leading-[0.85] tracking-tighter text-white"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
-              ¿Listo<br />para más?
+              {predCtaTitle.split('\n').map((line: string, i: number, arr: string[]) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h2>
           </div>
-          <Link href="/login"
+          <Link href={predCtaUrl}
             className="inline-flex items-center gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition flex-shrink-0">
-            Unirte a la comunidad <ArrowRight size={13} />
+            {predCtaLabel} <ArrowRight size={13} />
           </Link>
         </div>
       </section>

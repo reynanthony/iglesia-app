@@ -51,6 +51,58 @@ export default async function HomePage() {
   const eventDesc    = c.featured_event_desc  ?? 'Junio 2026 · Un fin de semana de encuentro y renovación espiritual.'
   const heroSubtitle = c.hero_subtitle        ?? 'Una comunidad de fe viva donde encontrarás amor, propósito y una familia que te recibe como eres.'
 
+  // CMS fields
+  const heroEyebrow      = (c.hero_eyebrow      as string) ?? 'Iglesia El Manantial · Comunidad de fe'
+  const heroTitleMain    = (c.hero_title_main    as string) ?? 'Donde\nfluye'
+  const heroTitleAccent  = (c.hero_title_accent  as string) ?? 'la vida.'
+  const heroCta1Label    = (c.hero_cta1_label    as string) ?? 'Conócenos'
+  const heroCta1Url      = (c.hero_cta1_url      as string) ?? '/nosotros'
+  const heroCta2Label    = (c.hero_cta2_label    as string) ?? 'Ver prédica'
+  const heroCta2Url      = (c.hero_cta2_url      as string) ?? '/predicas'
+  const ministry1Label   = (c.ministry1_label    as string) ?? 'Ministerio de Jóvenes'
+  const ministry1Title   = (c.ministry1_title    as string) ?? 'La próxima generación.'
+  const ministry1Desc    = (c.ministry1_desc     as string) ?? 'Fe y comunidad auténtica para jóvenes que quieren vivir algo real.'
+  const ministry1Url     = (c.ministry1_url      as string) ?? '/ministerios'
+  const ministry2Label   = (c.ministry2_label    as string) ?? 'Matrimonios'
+  const ministry2Title   = (c.ministry2_title    as string) ?? 'Hogares sólidos.'
+  const ministry2Desc    = (c.ministry2_desc     as string) ?? 'Principios bíblicos para la familia.'
+  const ministry2Url     = (c.ministry2_url      as string) ?? '/ministerios'
+  const ctaEyebrow       = (c.cta_eyebrow        as string) ?? '— Eres bienvenido'
+  const ctaTitleMain     = (c.cta_title_main     as string) ?? 'Tu historia\ncomienza'
+  const ctaTitleAccent   = (c.cta_title_accent   as string) ?? 'aquí.'
+  const ctaBody          = (c.cta_body           as string) ?? 'No importa dónde estés ni qué hayas vivido. Hay un lugar para ti.'
+  const cta1Label        = (c.cta1_label         as string) ?? 'Visítanos este domingo'
+  const cta1Url          = (c.cta1_url           as string) ?? '/contacto'
+  const cta2Label        = (c.cta2_label         as string) ?? 'Unirse a la comunidad en línea'
+  const cta2Url          = (c.cta2_url           as string) ?? '/login'
+
+  // New CMS fields
+  const eventEyebrow     = (c.event_eyebrow      as string) ?? 'Próximo evento'
+  const eventCtaLabel    = (c.event_cta_label     as string) ?? 'Más información'
+  const eventCtaUrl      = (c.event_cta_url       as string) ?? '/eventos'
+  const ministry1Cta     = (c.ministry1_cta       as string) ?? 'Explorar ministerio'
+  const sermonsEyebrow   = (c.sermons_eyebrow     as string) ?? '— Mensajes'
+  const sermonsTitle     = (c.sermons_title       as string) ?? 'Crece en\nla Palabra.'
+  const sermonsCtaLabel  = (c.sermons_cta_label   as string) ?? 'Todos'
+  const sermonsCtaUrl    = (c.sermons_cta_url     as string) ?? '/predicas'
+  const sermonsBadge     = (c.sermons_badge       as string) ?? 'Esta semana'
+  const ministriesEyebrow = (c.ministries_eyebrow as string) ?? '— Todos los ministerios'
+  const ministriesTitle  = (c.ministries_title    as string) ?? 'Un lugar\npara todos.'
+  const ministriesCta    = (c.ministries_cta      as string) ?? 'Ver todos'
+  const ministriesUrl    = (c.ministries_url      as string) ?? '/ministerios'
+  const mini1Name        = (c.mini1_name          as string) ?? 'Jóvenes'
+  const mini1Desc        = (c.mini1_desc          as string) ?? 'Próxima generación'
+  const mini1Url         = (c.mini1_url           as string) ?? '/ministerios'
+  const mini2Name        = (c.mini2_name          as string) ?? 'Niños'
+  const mini2Desc        = (c.mini2_desc          as string) ?? 'Fe desde pequeños'
+  const mini2Url         = (c.mini2_url           as string) ?? '/ministerios'
+  const mini3Name        = (c.mini3_name          as string) ?? 'Matrimonios'
+  const mini3Desc        = (c.mini3_desc          as string) ?? 'Hogares fuertes'
+  const mini3Url         = (c.mini3_url           as string) ?? '/ministerios'
+  const mini4Name        = (c.mini4_name          as string) ?? 'Adoración'
+  const mini4Desc        = (c.mini4_desc          as string) ?? 'Excelencia al Señor'
+  const mini4Url         = (c.mini4_url           as string) ?? '/ministerios'
+
   const predicas    = predicasData ?? []
   const featured    = predicas[0]
   const moreSermons = predicas.slice(1)
@@ -63,11 +115,16 @@ export default async function HomePage() {
       ════════════════════════════════════════════════ */}
       <section className="hero-mesh relative min-h-screen flex flex-col overflow-hidden">
 
-        {/* Video opcional */}
+        {/* Imagen de fondo opcional */}
+        {pageContent.hero_image_url && !pageContent.hero_video_url && (
+          <img src={pageContent.hero_image_url as string} alt="" aria-hidden
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.30 }} />
+        )}
+        {/* Video de fondo opcional */}
         {pageContent.hero_video_url && (
           <video autoPlay muted loop playsInline
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.25 }}>
-            <source src={pageContent.hero_video_url} type="video/mp4" />
+            <source src={pageContent.hero_video_url as string} type="video/mp4" />
           </video>
         )}
 
@@ -94,15 +151,17 @@ export default async function HomePage() {
           <div className="flex items-center gap-4 mb-10 anim-up anim-d1">
             <div className="w-10 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.5em]" style={{ color: `${TEAL}99` }}>
-              Iglesia El Manantial · Comunidad de fe
+              {heroEyebrow}
             </p>
           </div>
 
           {/* H1 */}
           <h1 className="font-display font-black tracking-tighter text-white mb-12 max-w-5xl anim-up anim-d2"
             style={{ fontSize: 'clamp(3.8rem, 12vw, 11rem)', lineHeight: 0.85 }}>
-            Donde<br />fluye
-            <em className="block" style={{ color: TEAL }}> la vida.</em>
+            {heroTitleMain.split('\n').map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
+            <em className="block" style={{ color: TEAL }}> {heroTitleAccent}</em>
           </h1>
 
           {/* Subtítulo + CTA */}
@@ -111,16 +170,16 @@ export default async function HomePage() {
               {heroSubtitle}
             </p>
             <div className="flex flex-col gap-3">
-              <Link href="/nosotros"
+              <Link href={heroCta1Url}
                 className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
                 style={{ background: CREAM, color: NAVY }}>
-                Conócenos
+                {heroCta1Label}
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/predicas"
+              <Link href={heroCta2Url}
                 className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
                 style={{ border: `1px solid ${TEAL}50`, color: `${CREAM}BB` }}>
-                <span className="flex items-center gap-2.5"><Play size={11} />Ver prédica</span>
+                <span className="flex items-center gap-2.5"><Play size={11} />{heroCta2Label}</span>
                 <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </Link>
             </div>
@@ -138,21 +197,23 @@ export default async function HomePage() {
       ════════════════════════════════════════════════ */}
       <section style={{ background: CREAM, borderBottom: `1px solid #D2CDB8` }}>
         <div className="max-w-6xl mx-auto px-6 py-0">
-          <div className="grid grid-cols-3 divide-x divide-[#D2CDB8]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#D2CDB8]">
             {services.map(({ n, day, time, label, type }) => (
-              <div key={n} className="px-8 py-10 first:pl-0 last:pr-0">
-                <span className="text-[9px] font-black uppercase tracking-[0.35em] block mb-5"
+              <div key={n} className="flex sm:block items-center gap-6 px-6 sm:px-8 py-6 sm:py-10">
+                <span className="text-[9px] font-black uppercase tracking-[0.35em] block mb-0 sm:mb-5 flex-shrink-0"
                   style={{ color: TEAL }}>
                   {n}
                 </span>
-                <div className="flex items-baseline gap-1.5 mb-1">
-                  <p className="font-black tracking-tighter leading-none" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: NAVY }}>
-                    {time}
-                  </p>
-                  <p className="text-xl font-black" style={{ color: SAGE }}>{label}</p>
+                <div className="flex-1 sm:flex-none">
+                  <div className="flex items-baseline gap-1.5 mb-1">
+                    <p className="font-black tracking-tighter leading-none" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', color: NAVY }}>
+                      {time}
+                    </p>
+                    <p className="text-lg font-black" style={{ color: SAGE }}>{label}</p>
+                  </div>
+                  <p className="text-[12px] font-bold mt-1" style={{ color: NAVY }}>{type}</p>
+                  <p className="text-[10px] uppercase tracking-[0.25em] mt-0.5" style={{ color: SAGE }}>{day}</p>
                 </div>
-                <p className="text-[12px] font-bold mt-2" style={{ color: NAVY }}>{type}</p>
-                <p className="text-[10px] uppercase tracking-[0.25em] mt-0.5" style={{ color: SAGE }}>{day}</p>
               </div>
             ))}
           </div>
@@ -176,7 +237,7 @@ export default async function HomePage() {
             {/* Barra teal */}
             <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
-              Próximo evento
+              {eventEyebrow}
             </p>
             <h2 className="font-display font-black tracking-tighter mb-5"
               style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', lineHeight: 0.9, color: NAVY }}>
@@ -185,10 +246,10 @@ export default async function HomePage() {
             <p className="text-base leading-relaxed mb-10" style={{ color: `${NAVY}70` }}>
               {eventDesc}
             </p>
-            <Link href="/eventos"
+            <Link href={eventCtaUrl}
               className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
               style={{ background: NAVY, color: CREAM }}>
-              Más información <ArrowRight size={12} />
+              {eventCtaLabel} <ArrowRight size={12} />
             </Link>
           </div>
         </div>
@@ -200,7 +261,7 @@ export default async function HomePage() {
       <section className="grid grid-cols-1 md:grid-cols-3" style={{ minHeight: '500px' }}>
 
         {/* Tarjeta grande — navy oscuro */}
-        <Link href="/ministerios"
+        <Link href={ministry1Url}
           className="group relative md:col-span-2 flex flex-col justify-between overflow-hidden"
           style={{ minHeight: '440px', background: NAVY }}>
 
@@ -220,7 +281,7 @@ export default async function HomePage() {
                 <Zap size={20} style={{ color: TEAL }} strokeWidth={2} />
               </div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: `${TEAL}80` }}>
-                Ministerio de Jóvenes
+                {ministry1Label}
               </p>
             </div>
           </div>
@@ -229,21 +290,21 @@ export default async function HomePage() {
           <div className="relative p-10 md:p-14">
             <h2 className="font-display font-black text-white tracking-tighter mb-5 transition"
               style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
-              La próxima<br />generación.
+              {ministry1Title}
             </h2>
             <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: `${CREAM}60` }}>
-              Fe y comunidad auténtica para jóvenes que quieren vivir algo real.
+              {ministry1Desc}
             </p>
             <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
               style={{ color: TEAL }}>
-              Explorar ministerio
+              {ministry1Cta}
               <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform" />
             </span>
           </div>
         </Link>
 
         {/* Tarjeta pequeña — teal */}
-        <Link href="/ministerios"
+        <Link href={ministry2Url}
           className="group relative flex flex-col justify-between overflow-hidden"
           style={{ minHeight: '440px', background: TEAL }}>
 
@@ -257,16 +318,16 @@ export default async function HomePage() {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-6" style={{ background: 'rgba(255,255,255,0.15)' }}>
               <Heart size={20} className="text-white" strokeWidth={2} />
             </div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/60 mb-2">Matrimonios</p>
+            <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/60 mb-2">{ministry2Label}</p>
           </div>
 
           <div className="relative p-8 md:p-10">
             <h3 className="font-display font-black text-white tracking-tighter mb-3 transition"
               style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', lineHeight: 0.9 }}>
-              Hogares<br />sólidos.
+              {ministry2Title}
             </h3>
             <p className="text-xs text-white/60 leading-relaxed mb-6">
-              Principios bíblicos para la familia.
+              {ministry2Desc}
             </p>
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition flex items-center gap-2">
               Ver <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
@@ -311,16 +372,18 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: `1px solid #D2CDB8` }}>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>
-                — Mensajes
+                {sermonsEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
-                Crece en<br />la Palabra.
+                {sermonsTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
             </div>
-            <Link href="/predicas"
+            <Link href={sermonsCtaUrl}
               className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
               style={{ color: SAGE }}>
-              Todos <ArrowRight size={12} />
+              {sermonsCtaLabel} <ArrowRight size={12} />
             </Link>
           </div>
 
@@ -335,7 +398,7 @@ export default async function HomePage() {
                 )}
                 <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
                   style={{ background: TEAL, color: CREAM }}>
-                  Esta semana
+                  {sermonsBadge}
                 </div>
                 <div className="relative w-16 h-16 rounded-full flex items-center justify-center transition duration-300"
                   style={{ border: `1px solid rgba(246,243,235,0.35)`, background: 'rgba(255,255,255,0.08)' }}>
@@ -398,27 +461,29 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: `1px solid rgba(118,171,174,0.2)` }}>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: `${TEAL}80` }}>
-                — Todos los ministerios
+                {ministriesEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
-                Un lugar<br />para todos.
+                {ministriesTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
             </div>
-            <Link href="/ministerios"
+            <Link href={ministriesUrl}
               className="hidden sm:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
               style={{ color: `${TEAL}70` }}>
-              Ver todos <ArrowRight size={12} />
+              {ministriesCta} <ArrowRight size={12} />
             </Link>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { n: '01', Icon: Zap,    bg: CREAM,                  fg: NAVY,  nombre: 'Jóvenes',     desc: 'Próxima generación' },
-              { n: '02', Icon: Star,   bg: TEAL,                   fg: CREAM, nombre: 'Niños',       desc: 'Fe desde pequeños' },
-              { n: '03', Icon: Heart,  bg: SAGE,                   fg: CREAM, nombre: 'Matrimonios', desc: 'Hogares fuertes' },
-              { n: '04', Icon: Music2, bg: '#0D4A72',              fg: CREAM, nombre: 'Adoración',   desc: 'Excelencia al Señor' },
-            ].map(({ n, Icon, bg, fg, nombre, desc }) => (
-              <Link key={n} href="/ministerios"
+              { n: '01', Icon: Zap,    bg: CREAM,     fg: NAVY,  nombre: mini1Name, desc: mini1Desc, url: mini1Url },
+              { n: '02', Icon: Star,   bg: TEAL,      fg: CREAM, nombre: mini2Name, desc: mini2Desc, url: mini2Url },
+              { n: '03', Icon: Heart,  bg: SAGE,      fg: CREAM, nombre: mini3Name, desc: mini3Desc, url: mini3Url },
+              { n: '04', Icon: Music2, bg: '#0D4A72', fg: CREAM, nombre: mini4Name, desc: mini4Desc, url: mini4Url },
+            ].map(({ n, Icon, bg, fg, nombre, desc, url }) => (
+              <Link key={n} href={url}
                 className="group p-7 rounded-2xl flex flex-col gap-5 transition hover:brightness-110"
                 style={{ background: bg }}>
                 <span className="text-[9px] font-bold tracking-widest" style={{ color: fg === CREAM ? `${CREAM}50` : `${NAVY}40` }}>{n}</span>
@@ -455,29 +520,31 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-12" style={{ color: `${TEAL}70` }}>
-                — Eres bienvenido
+                {ctaEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.83 }}>
-                Tu historia<br />comienza<br />
-                <em style={{ color: TEAL }}>aquí.</em>
+                {ctaTitleMain.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
+                <br /><em style={{ color: TEAL }}>{ctaTitleAccent}</em>
               </h2>
             </div>
             <div className="flex flex-col gap-5">
               <p className="text-base leading-relaxed max-w-xs" style={{ color: `${CREAM}60` }}>
-                No importa dónde estés ni qué hayas vivido. Hay un lugar para ti.
+                {ctaBody}
               </p>
               <div className="flex flex-col gap-3 mt-4">
-                <Link href="/contacto"
+                <Link href={cta1Url}
                   className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
                   style={{ background: CREAM, color: NAVY }}>
-                  Visítanos este domingo
+                  {cta1Label}
                   <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link href="/login"
+                <Link href={cta2Url}
                   className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
                   style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
-                  Unirse a la comunidad en línea
+                  {cta2Label}
                   <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </Link>
               </div>
