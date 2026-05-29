@@ -24,8 +24,8 @@ export default async function AdminEventosPage() {
   return (
     <div>
       {/* Header */}
-      <div className="border-b px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
-        style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div>
           <h1 className="font-bold text-lg text-white">Eventos</h1>
           <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
@@ -38,10 +38,12 @@ export default async function AdminEventosPage() {
           <Plus size={14} /> Nuevo evento
         </Link>
       </div>
+      </div>
 
       {/* SQL notice if table missing */}
       {(!events || events.length === 0) && (
-        <div className="mx-4 md:mx-8 mt-6 rounded-xl border p-5" style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+        <div className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
+        <div className="rounded-xl border p-5" style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
           <p className="text-[11px] font-black uppercase tracking-wider mb-2" style={{ color: 'rgba(246,243,235,0.40)' }}>
             Configuración requerida
           </p>
@@ -80,10 +82,11 @@ CREATE POLICY "Admins gestionan eventos"
 -- Ir a Storage → New bucket → nombre: "eventos" → Public`}
           </pre>
         </div>
+        </div>
       )}
 
       {/* Event list */}
-      <div className="px-4 md:px-8 py-6 space-y-3">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-3">
         {events?.map(event => (
           <div key={event.id} className="rounded-2xl border overflow-hidden"
             style={{ borderColor: '#0D3352', background: '#0B2D47' }}>

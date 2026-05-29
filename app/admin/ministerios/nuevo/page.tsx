@@ -24,8 +24,8 @@ export default async function NuevoMinisterioPage({
   return (
     <div>
       {/* Header */}
-      <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4"
-        style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="max-w-3xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
         <Link href="/admin/ministerios"
           className="w-9 h-9 rounded-xl flex items-center justify-center"
           style={{ background: '#0B2D47' }}>
@@ -38,7 +38,8 @@ export default async function NuevoMinisterioPage({
       </div>
 
       {/* Form */}
-      <div className="px-4 md:px-8 py-6 max-w-xl">
+      </div>
+      <div className="max-w-3xl mx-auto px-4 md:px-8 py-6">
         <form action={createMinistry} encType="multipart/form-data" className="space-y-5">
 
           <div>

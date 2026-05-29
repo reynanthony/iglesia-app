@@ -24,7 +24,8 @@ export default async function AdminPostsPage({
   const { data: posts } = await query
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Publicaciones</h1>
@@ -132,6 +133,7 @@ export default async function AdminPostsPage({
             No se encontraron publicaciones
           </div>
         )}
+      </div>
       </div>
     </div>
   )

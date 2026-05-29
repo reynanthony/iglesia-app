@@ -62,7 +62,8 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Dashboard</h1>
         <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>Vista general de la plataforma</p>
@@ -148,6 +149,7 @@ export default async function AdminPage() {
           </div>
         </div>
 
+      </div>
       </div>
     </div>
   )

@@ -15,7 +15,8 @@ export default async function AdminReportesPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-9 h-9 bg-[#000000]/10 rounded-xl flex items-center justify-center">
           <AlertTriangle size={18} className="text-[#000000]" />
@@ -58,6 +59,7 @@ export default async function AdminReportesPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   )
 }

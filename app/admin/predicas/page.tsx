@@ -16,8 +16,8 @@ export default async function AdminPredicasPage() {
   return (
     <div>
       {/* Header */}
-      <div className="border-b px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
-        style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div>
           <h1 className="font-bold text-lg text-white">Prédicas</h1>
           <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
@@ -32,7 +32,8 @@ export default async function AdminPredicasPage() {
       </div>
 
       {/* List */}
-      <div className="px-4 md:px-8 py-6 space-y-3">
+      </div>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-3">
         {(!predicas || predicas.length === 0) && (
           <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
             <p className="text-sm mb-2" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay prédicas publicadas.</p>

@@ -71,7 +71,8 @@ export default async function AdminPaginasPage() {
 
   return (
     <div>
-      <div className="border-b px-4 md:px-8 py-5" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-5">
         <div className="flex items-center gap-3 mb-1">
           <Layers size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
           <h1 className="font-bold text-lg text-white">Editor de páginas</h1>
@@ -81,7 +82,8 @@ export default async function AdminPaginasPage() {
         </p>
       </div>
 
-      <div className="px-4 md:px-8 py-6 space-y-8">
+      </div>
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-8">
         {groups.map(group => (
           <div key={group}>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
