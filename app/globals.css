@@ -118,26 +118,6 @@ body {
 .anim-d4 { animation-delay: 0.56s; }
 .anim-d5 { animation-delay: 0.76s; }
 
-/* ── App: compensación safe-area en header (mobile) ── */
-/*
-  El header mobile tiene padding-top = safe-area-inset-top + 56px de contenido.
-  El main y los contenedores fixed deben compensar exactamente eso.
-*/
-.app-content-top {
-  padding-top: calc(56px + env(safe-area-inset-top, 0px));
-}
-@media (min-width: 768px) {
-  .app-content-top { padding-top: 0; }
-}
-
-/* Para contenedores fixed inset-0 dentro del app (Comunidad shorts) */
-.app-shorts-top {
-  padding-top: calc(56px + env(safe-area-inset-top, 0px));
-}
-@media (min-width: 768px) {
-  .app-shorts-top { padding-top: 0; }
-}
-
 /* ── Public nav links ──────────────────────────────── */
 .public-nav-link {
   font-size: 11px;

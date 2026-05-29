@@ -53,30 +53,21 @@ export function AppBottomNav({ profileHref }: Props) {
   ]
 
   return (
-    <div
-      className="flex"
-      style={{
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        /* minHeight debe incluir el safe-area para que los 56px de contenido
-           no se compriman detrás del home indicator de iPhone */
-        minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))',
-      }}
-    >
+    <div className="flex" style={{ height: 56 }}>
       {items.map(({ href, icon: Icon, label, exact }) => {
         const active = isActive(href, exact)
         return (
           <Link
             key={href}
             href={href}
-            className="flex-1 flex flex-col items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
+            className="flex-1 flex flex-col items-center justify-center gap-1"
             style={{
               WebkitTapHighlightColor: 'transparent',
-              height: 56,
               minWidth: 0,
             }}
           >
             <Icon
-              size={23}
+              size={24}
               strokeWidth={active ? 2.5 : 1.8}
               style={{ color: active ? ACCENT : INACTIVE_COLOR, flexShrink: 0 }}
             />
@@ -84,8 +75,8 @@ export function AppBottomNav({ profileHref }: Props) {
               className="font-semibold truncate w-full text-center"
               style={{
                 color: active ? ACCENT : INACTIVE_COLOR,
-                fontSize: 11,
-                lineHeight: 1.1,
+                fontSize: 10,
+                lineHeight: 1.2,
               }}
             >
               {label}

@@ -19,155 +19,185 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .eq('id', user.id)
     .single()
 
-  const profileHref = profile?.username ? `/app/perfil/${profile.username}` : '/app/feed'
+  const profileHref = profile?.username ? `/app/perfil/${profile.username}` : '/app/comunidad'
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (
-    <div className="min-h-screen" style={{ background: '#061E30', color: '#F6F3EB' }}>
+    <>
       <CapacitorBridge />
 
-      {/* ── SIDEBAR (desktop) ── */}
-      <aside
-        className="hidden md:flex w-60 flex-col fixed h-full z-30"
-        style={{ background: '#061E30', borderRight: '1px solid #0D3352' }}
-      >
-        {/* Brand */}
-        <div className="px-5 py-6" style={{ borderBottom: '1px solid #0D3352' }}>
-          <Link href="/app/feed" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
-              <Cross size={15} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
-            </div>
-            <div>
-              <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>
-                El Manantial
-              </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.35)' }}>
-                Comunidad
-              </p>
-            </div>
-          </Link>
-        </div>
-
-        {/* Nav — client component owns icons + active state */}
-        <AppNav profileHref={profileHref} />
-
-        {/* Footer */}
-        <div className="px-3 pb-5" style={{ borderTop: '1px solid #0D3352', paddingTop: '1rem' }}>
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]"
-            style={{ color: 'rgba(246,243,235,0.40)' }}
-          >
-            <Globe size={16} />
-            <span>Página principal</span>
-          </Link>
-          {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-            <Link
-              href="/admin"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]"
-              style={{ color: 'rgba(246,243,235,0.40)' }}
-            >
-              <ShieldCheck size={16} />
-              <span>Panel Admin</span>
-            </Link>
-          )}
-
-          {/* User card */}
-          <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
-            <Link href={profileHref} className="flex-1 flex items-center gap-3 min-w-0 group">
-              <div
-                className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                style={{ background: '#0D3352', color: '#76ABAE' }}
-              >
-                {profile?.avatar_url
-                  ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
-                  : initial}
-              </div>
-              <div className="min-w-0">
-                <p className="text-[13px] font-bold truncate leading-tight transition"
-                  style={{ color: '#F6F3EB' }}>
-                  {profile?.full_name ?? 'Usuario'}
-                </p>
-                <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
-                  @{profile?.username ?? ''}
-                </p>
-              </div>
-            </Link>
-            <NotificationBell userId={user.id} />
-            <form action={logout}>
-              <button
-                type="submit"
-                className="w-9 h-9 flex items-center justify-center rounded-lg transition hover:text-white"
-                style={{ color: 'rgba(246,243,235,0.40)' }}
-                title="Cerrar sesión"
-              >
-                <LogOut size={15} />
-              </button>
-            </form>
-          </div>
-        </div>
-      </aside>
-
-      {/* ── HEADER (mobile) ── */}
       {/*
-        Estructura: header = safe-area-top (padding) + 56px de contenido.
-        main compensa exactamente: calc(56px + env(safe-area-inset-top, 0px))
-        via la clase CSS .app-content-top (ver globals.css).
+        ══════════════════════════════════════════════════════
+        MOBILE LAYOUT — Flex column, sin position:fixed.
+        Capacitor WebView no garantiza fixed. Usamos flex
+        para que header y nav sean elementos del flujo normal.
+        ══════════════════════════════════════════════════════
       */}
-      <header
-        className="md:hidden fixed top-0 left-0 right-0 z-30 backdrop-blur-md"
+      <div
+        className="md:hidden flex flex-col"
         style={{
-          background: 'rgba(6,30,48,0.95)',
-          borderBottom: '1px solid #0D3352',
-          paddingTop: 'env(safe-area-inset-top, 0px)',
+          height: '100dvh',
+          overflow: 'hidden',
+          background: '#061E30',
+          color: '#F6F3EB',
         }}
       >
-        <div className="px-4 flex items-center justify-between" style={{ height: 56 }}>
-          <Link href="/app/comunidad" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#0D3352' }}>
-              <Cross size={13} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
-            </div>
-            <span className="font-black text-sm tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
-          </Link>
-          <div className="flex items-center gap-1">
-            <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
-              <Globe size={18} />
+        {/* Safe area top (status bar en iOS/Android) */}
+        <div style={{
+          height: 'env(safe-area-inset-top, 0px)',
+          flexShrink: 0,
+          background: 'rgba(6,30,48,0.98)',
+        }} />
+
+        {/* Header — 56px fijo, en flujo normal (no fixed) */}
+        <header
+          style={{
+            height: 56,
+            flexShrink: 0,
+            background: 'rgba(6,30,48,0.98)',
+            borderBottom: '1px solid #0D3352',
+          }}
+        >
+          <div className="px-4 flex items-center justify-between h-full">
+            <Link href="/app/comunidad" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
+                <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
+              </div>
+              <span className="font-black text-base tracking-tight" style={{ color: '#F6F3EB' }}>
+                El Manantial
+              </span>
             </Link>
-            {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-              <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
-                <ShieldCheck size={18} />
+
+            <div className="flex items-center gap-1">
+              {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
+                <Link
+                  href="/admin"
+                  className="w-10 h-10 flex items-center justify-center rounded-xl transition"
+                  style={{ color: 'rgba(246,243,235,0.45)' }}
+                  title="Admin"
+                >
+                  <ShieldCheck size={19} />
+                </Link>
+              )}
+              <NotificationBell userId={user.id} />
+              <Link href={profileHref}>
+                <div
+                  className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm ml-1"
+                  style={{ background: '#0D3352', color: '#76ABAE' }}
+                >
+                  {profile?.avatar_url
+                    ? <img src={profile.avatar_url} alt="" width={36} height={36} loading="lazy" className="w-full h-full object-cover" />
+                    : initial}
+                </div>
               </Link>
-            )}
-            <NotificationBell userId={user.id} />
-            <Link href={profileHref}>
-              <div
-                className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
-                style={{ background: '#0D3352', color: '#76ABAE' }}
-              >
-                {profile?.avatar_url
-                  ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
-                  : initial}
+            </div>
+          </div>
+        </header>
+
+        {/* Área de contenido — scrolleable, ocupa todo el espacio restante */}
+        <main
+          style={{
+            flex: 1,
+            minHeight: 0,           /* evita que flexbox desborde */
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch' as any,
+            overscrollBehaviorY: 'contain' as any,
+            background: '#061E30',
+          }}
+        >
+          {children}
+        </main>
+
+        {/* Bottom nav — 56px fijo, en flujo normal (no fixed) */}
+        <nav
+          style={{
+            flexShrink: 0,
+            background: 'rgba(6,30,48,0.98)',
+            borderTop: '1px solid #0D3352',
+          }}
+        >
+          <AppBottomNav profileHref={profileHref} />
+        </nav>
+
+        {/* Safe area bottom (home indicator en iPhone) */}
+        <div style={{
+          height: 'env(safe-area-inset-bottom, 0px)',
+          flexShrink: 0,
+          background: 'rgba(6,30,48,0.98)',
+        }} />
+      </div>
+
+      {/*
+        ══════════════════════════════════════════════════════
+        DESKTOP LAYOUT — Sidebar fija + contenido
+        ══════════════════════════════════════════════════════
+      */}
+      <div
+        className="hidden md:flex"
+        style={{ minHeight: '100vh', background: '#061E30', color: '#F6F3EB' }}
+      >
+        {/* Sidebar */}
+        <aside
+          className="w-60 flex-shrink-0 flex flex-col sticky top-0 h-screen"
+          style={{ background: '#061E30', borderRight: '1px solid #0D3352' }}
+        >
+          <div className="px-5 py-6" style={{ borderBottom: '1px solid #0D3352' }}>
+            <Link href="/app/comunidad" className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
+                <Cross size={15} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
+              </div>
+              <div>
+                <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>
+                  El Manantial
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                  Comunidad
+                </p>
               </div>
             </Link>
           </div>
-        </div>
-      </header>
 
-      {/* ── MAIN ── */}
-      <main className="md:ml-60 app-content-top">
-        {children}
-        {/* Spacer: matches total bottom nav height (56px content + safe-area-bottom) */}
-        <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} />
-      </main>
+          <AppNav profileHref={profileHref} />
 
-      {/* ── BOTTOM NAV (mobile) ── */}
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-30 backdrop-blur-md"
-        style={{ background: 'rgba(6,30,48,0.97)', borderTop: '1px solid #0D3352' }}
-      >
-        <AppBottomNav profileHref={profileHref} />
-      </nav>
+          <div className="px-3 pb-5" style={{ borderTop: '1px solid #0D3352', paddingTop: '1rem' }}>
+            <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <Globe size={16} />
+              <span>Página principal</span>
+            </Link>
+            {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
+              <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <ShieldCheck size={16} />
+                <span>Panel Admin</span>
+              </Link>
+            )}
+            <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
+              <Link href={profileHref} className="flex-1 flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm" style={{ background: '#0D3352', color: '#76ABAE' }}>
+                  {profile?.avatar_url
+                    ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
+                    : initial}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[13px] font-bold truncate leading-tight" style={{ color: '#F6F3EB' }}>{profile?.full_name ?? 'Usuario'}</p>
+                  <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>@{profile?.username ?? ''}</p>
+                </div>
+              </Link>
+              <NotificationBell userId={user.id} />
+              <form action={logout}>
+                <button type="submit" className="w-9 h-9 flex items-center justify-center rounded-lg transition hover:text-white" style={{ color: 'rgba(246,243,235,0.40)' }} title="Cerrar sesión">
+                  <LogOut size={15} />
+                </button>
+              </form>
+            </div>
+          </div>
+        </aside>
 
-    </div>
+        {/* Contenido desktop */}
+        <main className="flex-1 min-w-0">
+          {children}
+        </main>
+      </div>
+    </>
   )
 }

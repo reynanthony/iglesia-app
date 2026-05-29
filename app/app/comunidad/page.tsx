@@ -44,8 +44,8 @@ export default async function ComunidadPage({
 
   return (
     <div
-      className="fixed inset-0 md:left-60 z-10 flex flex-col app-shorts-top"
-      style={{ background: '#061E30' }}
+      className="flex flex-col"
+      style={{ background: '#061E30', height: '100%' }}
     >
       {/* Filtros por categoría */}
       {cat === undefined || cat === '' ? null : null}
@@ -70,15 +70,15 @@ export default async function ComunidadPage({
         ))}
       </div>
 
-      {/* FAB nueva publicación */}
+      {/* FAB nueva publicación — absolute dentro del contenedor (no fixed) */}
       <Link
         href="/app/nuevo-post"
-        className="md:hidden fixed z-40 w-12 h-12 rounded-full flex items-center justify-center"
+        className="md:hidden absolute z-20 w-12 h-12 rounded-full flex items-center justify-center"
         style={{
-          bottom: 'calc(64px + env(safe-area-inset-bottom,0px) + 16px)',
-          left: '16px',
-          background: 'rgba(118,171,174,0.18)',
-          border: '1px solid rgba(118,171,174,0.30)',
+          bottom: 16,
+          left: 16,
+          background: 'rgba(118,171,174,0.20)',
+          border: '1px solid rgba(118,171,174,0.35)',
           backdropFilter: 'blur(8px)',
         }}
         aria-label="Nueva publicación"
@@ -88,8 +88,8 @@ export default async function ComunidadPage({
 
       {/* Scroll con snap vertical */}
       <div
-        className="shorts-scroll flex-1 overflow-y-scroll w-full"
-        style={{ scrollSnapType: 'y mandatory', WebkitOverflowScrolling: 'touch' as any }}
+        className="shorts-scroll flex-1 overflow-y-scroll w-full relative"
+        style={{ scrollSnapType: 'y mandatory', WebkitOverflowScrolling: 'touch' as any, minHeight: 0 }}
       >
         {!posts || posts.length === 0 ? (
           <div className="w-full h-full flex flex-col items-center justify-center gap-5 text-center px-8">
