@@ -142,6 +142,16 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 : initial}
             </div>
           </Link>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="w-10 h-10 flex items-center justify-center rounded-lg transition"
+              style={{ color: 'rgba(246,243,235,0.40)' }}
+              title="Cerrar sesión"
+            >
+              <LogOut size={18} />
+            </button>
+          </form>
         </div>
       </header>
 
