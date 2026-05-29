@@ -31,15 +31,42 @@ export default async function AdminEnVivoPage() {
         </div>
 
         {!tableExists && (
-          <div className="mb-6 p-4 rounded-xl flex items-start gap-3"
-            style={{ background: 'rgba(248,113,113,0.10)', border: '1px solid rgba(248,113,113,0.25)' }}>
-            <AlertCircle size={16} style={{ color: '#F87171', flexShrink: 0, marginTop: 1 }} />
-            <div>
-              <p className="text-sm font-bold" style={{ color: '#F87171' }}>Tabla no configurada</p>
-              <p className="text-[12px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                Ejecuta <code className="font-mono">supabase/v2_live_config.sql</code> en el SQL Editor de Supabase para activar esta sección.
-              </p>
+          <div className="mb-6 rounded-xl overflow-hidden"
+            style={{ border: '1px solid rgba(248,113,113,0.30)' }}>
+            <div className="flex items-start gap-3 p-4"
+              style={{ background: 'rgba(248,113,113,0.10)' }}>
+              <AlertCircle size={16} style={{ color: '#F87171', flexShrink: 0, marginTop: 1 }} />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold" style={{ color: '#F87171' }}>Tabla no configurada</p>
+                <p className="text-[12px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                  Ejecuta el SQL de abajo en <strong>Supabase Dashboard → SQL Editor</strong> para activar esta sección.
+                </p>
+              </div>
             </div>
+            <pre className="text-[11px] leading-relaxed p-4 overflow-x-auto"
+              style={{ background: '#061E30', color: 'rgba(246,243,235,0.65)', fontFamily: 'monospace' }}>{`CREATE TABLE IF NOT EXISTS site_config (
+  key        TEXT PRIMARY KEY,
+  value      TEXT,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO site_config (key, value) VALUES
+  ('is_live',    'false'),
+  ('live_url',   ''),
+  ('live_title', 'Culto en vivo')
+ON CONFLICT (key) DO NOTHING;
+
+ALTER TABLE site_config ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Todos leen config del sitio"
+  ON site_config FOR SELECT USING (true);
+
+CREATE POLICY "Admins gestionan config"
+  ON site_config FOR ALL USING (
+    EXISTS (SELECT 1 FROM profiles
+            WHERE id = auth.uid()
+            AND role IN ('admin','pastor'))
+  );`}</pre>
           </div>
         )}
 
@@ -70,14 +97,14 @@ export default async function AdminEnVivoPage() {
         {/* Toggle */}
         <form action={toggleLive} className="mb-4">
           <input type="hidden" name="is_live" value={isLive ? '' : 'on'} />
-          <button type="submit"
-            className="w-full py-3.5 rounded-xl text-sm font-black transition"
+          <button type="submit" disabled={!tableExists}
+            className="w-full py-3.5 rounded-xl text-sm font-black transition disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               background: isLive ? 'rgba(248,113,113,0.15)' : 'rgba(118,171,174,0.15)',
               color:      isLive ? '#F87171' : '#76ABAE',
               border: `1px solid ${isLive ? 'rgba(248,113,113,0.30)' : 'rgba(118,171,174,0.30)'}`,
             }}>
-            {isLive ? '⏹ Detener transmisión' : '▶ Iniciar transmisión'}
+            {isLive ? 'Detener transmisión' : 'Iniciar transmisión'}
           </button>
         </form>
 
@@ -116,8 +143,8 @@ export default async function AdminEnVivoPage() {
             />
           </div>
 
-          <button type="submit"
-            className="w-full py-3 rounded-xl text-sm font-bold"
+          <button type="submit" disabled={!tableExists}
+            className="w-full py-3 rounded-xl text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: '#F6F3EB', color: '#061E30' }}>
             Guardar configuración
           </button>
