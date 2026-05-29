@@ -95,6 +95,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
           {/* Acciones */}
           <div className="flex items-center gap-0.5">
+            <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Sitio público">
+              <Globe size={19} />
+            </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
               <Link href="/admin" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }}>
                 <ShieldCheck size={19} />
