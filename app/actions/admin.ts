@@ -468,3 +468,14 @@ export async function savePageFields(page: string, fields: Record<string, unknow
   return { success: true }
 }
 
+// ── Mensajes de contacto ─────────────────────────────────────
+export async function markMessageRead(id: string): Promise<void> {
+  const supabase = await checkAdmin()
+  if (!supabase) return
+  const { data: { user } } = await supabase.auth.getUser()
+  await supabase
+    .from('contact_messages')
+    .update({ read: true, read_by: user!.id, read_at: new Date().toISOString() })
+    .eq('id', id)
+  revalidatePath('/admin/mensajes')
+}

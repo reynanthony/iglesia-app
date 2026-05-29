@@ -1,15 +1,14 @@
-﻿'use client'
+'use client'
 
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, Users, FileText, AlertTriangle,
-  Church, CalendarDays, Mic2, ArrowLeft, Globe, LogOut,
-  BookOpen, Mic, Globe2,
+  LayoutDashboard, Users, FileText, Shield, ShieldAlert,
+  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic,
 } from 'lucide-react'
 
-type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean }
+type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean; external?: boolean }
 type NavSection = { label: string; items: NavItem[] }
 
 const sections: NavSection[] = [
@@ -20,30 +19,30 @@ const sections: NavSection[] = [
   {
     label: 'Comunidad',
     items: [
-      { href: '/admin/usuarios',    icon: Users,         label: 'Usuarios' },
-      { href: '/admin/posts',       icon: FileText,      label: 'Publicaciones' },
-      { href: '/admin/oracion',     icon: Mic,           label: 'Salas de oración' },
-      { href: '/admin/reportes',    icon: AlertTriangle, label: 'Reportes' },
+      { href: '/admin/usuarios',    icon: Users,      label: 'Usuarios' },
+      { href: '/admin/posts',       icon: FileText,   label: 'Publicaciones' },
+      { href: '/admin/oracion',     icon: Mic,        label: 'Salas de oración' },
     ],
   },
   {
-    label: 'Contenido',
+    label: 'Monitoreo',
     items: [
-      { href: '/admin/contenido',   icon: BookOpen,      label: 'Ministerios' },
-      { href: '/admin/predicas',    icon: Mic2,          label: 'Prédicas' },
-    ],
-  },
-  {
-    label: 'Sitio Web',
-    items: [
-      { href: '/admin/ministerios', icon: Church,        label: 'Ministerios (estructura)' },
-      { href: '/admin/eventos',     icon: CalendarDays,  label: 'Eventos' },
-      { href: '/admin/paginas',     icon: Globe2,        label: 'Páginas' },
+      { href: '/admin/mensajes',    icon: Mail,       label: 'Mensajes' },
+      { href: '/admin/reportes',    icon: ShieldAlert,label: 'Reportes' },
+      { href: '/admin/seguridad',   icon: Shield,     label: 'Seguridad' },
     ],
   },
 ]
 
-export default function AdminNav({ logoutAction }: { logoutAction: () => Promise<void> }) {
+export default function AdminNav({
+  logoutAction,
+  unreadMessages = 0,
+  strapiUrl,
+}: {
+  logoutAction: () => Promise<void>
+  unreadMessages?: number
+  strapiUrl?: string
+}) {
   const pathname = usePathname()
 
   function isActive(href: string, exact?: boolean) {
@@ -63,6 +62,7 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
             <div className="space-y-0.5">
               {section.items.map(({ href, icon: Icon, label, exact }) => {
                 const active = isActive(href, exact)
+                const isMensajes = href === '/admin/mensajes'
                 return (
                   <Link
                     key={href}
@@ -74,7 +74,15 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
                     }}
                   >
                     <Icon size={14} />
-                    {label}
+                    <span className="flex-1">{label}</span>
+                    {isMensajes && unreadMessages > 0 && (
+                      <span
+                        className="text-[10px] font-black px-1.5 py-0.5 rounded-full"
+                        style={{ background: '#76ABAE', color: '#061E30' }}
+                      >
+                        {unreadMessages}
+                      </span>
+                    )}
                   </Link>
                 )
               })}
@@ -84,12 +92,23 @@ export default function AdminNav({ logoutAction }: { logoutAction: () => Promise
       </nav>
 
       <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#0D3352' }}>
+        {strapiUrl && (
+          <a
+            href={strapiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
+            style={{ color: 'rgba(246,243,235,0.40)' }}
+          >
+            <ExternalLink size={14} /> Editar sitio (Strapi)
+          </a>
+        )}
         <Link href="/" target="_blank"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
           style={{ color: 'rgba(246,243,235,0.40)' }}>
           <Globe size={14} /> Ver sitio web
         </Link>
-        <Link href="/app/feed"
+        <Link href="/app/comunidad"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
           style={{ color: 'rgba(246,243,235,0.40)' }}>
           <ArrowLeft size={14} /> Volver a la app

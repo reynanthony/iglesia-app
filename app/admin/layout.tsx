@@ -1,4 +1,4 @@
-﻿import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
@@ -17,7 +17,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'admin') redirect('/app/feed')
+  if (profile?.role !== 'admin') redirect('/app/comunidad')
+
+  // Badge: mensajes no leídos
+  const { count: unreadMessages } = await supabase
+    .from('contact_messages')
+    .select('*', { count: 'exact', head: true })
+    .eq('read', false)
+
+  const strapiUrl = process.env.STRAPI_URL
 
   return (
     <div className="min-h-screen flex" style={{ background: '#061E30', color: '#F6F3EB' }}>
@@ -35,19 +43,23 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
           </div>
         </div>
-        <AdminNav logoutAction={logout} />
+        <AdminNav
+          logoutAction={logout}
+          unreadMessages={unreadMessages ?? 0}
+          strapiUrl={strapiUrl}
+        />
       </aside>
 
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 border-b flex items-center justify-between px-4 h-14"
-        style={{ background: '#061E30', borderColor: '#0D3352', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 border-b flex items-center justify-between px-4"
+        style={{ background: '#061E30', borderColor: '#0D3352', paddingTop: 'env(safe-area-inset-top, 0px)', minHeight: 56 }}>
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black"
             style={{ background: '#F6F3EB', color: '#061E30' }}>A</div>
           <span className="font-bold text-sm text-white">Panel Admin</span>
         </div>
         <div className="flex items-center gap-1">
-          <Link href="/app/feed"
+          <Link href="/app/comunidad"
             className="px-3 py-2 rounded-lg text-[11px] font-bold transition"
             style={{ color: 'rgba(246,243,235,0.40)' }}>
             ← App
@@ -66,7 +78,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
         style={{ background: '#061E30', borderColor: '#0D3352' }}>
-        <AdminMobileNav />
+        <AdminMobileNav unreadMessages={unreadMessages ?? 0} />
       </nav>
 
       <main className="flex-1 md:ml-56 pt-14 md:pt-0 pb-20 md:pb-0 min-h-screen">{children}</main>

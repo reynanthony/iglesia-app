@@ -2,16 +2,16 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, MessageCircle, Mic2, Search, User } from 'lucide-react'
+import { Users2, MessageCircle, Mic2, Search, User } from 'lucide-react'
 
 const ACCENT = '#76ABAE'
 const INACTIVE_COLOR = 'rgba(118,171,174,0.45)'
 
 const navItems = [
-  { href: '/app/feed',    icon: Home,          label: 'Feed',    exact: true  },
-  { href: '/app/buscar',  icon: Search,         label: 'Buscar',  exact: true  },
-  { href: '/app/chat',    icon: MessageCircle,  label: 'Chat',    exact: false },
-  { href: '/app/oracion', icon: Mic2,           label: 'Oración', exact: false },
+  { href: '/app/comunidad', icon: Users2,         label: 'Comunidad', exact: false },
+  { href: '/app/buscar',    icon: Search,          label: 'Buscar',    exact: true  },
+  { href: '/app/chat',      icon: MessageCircle,   label: 'Chat',      exact: false },
+  { href: '/app/oracion',   icon: Mic2,            label: 'Oración',   exact: false },
 ]
 
 interface Props { profileHref: string }
@@ -45,11 +45,11 @@ export function AppBottomNav({ profileHref }: Props) {
     exact ? pathname === href : pathname.startsWith(href)
 
   const items = [
-    { href: '/app/feed',    icon: Home,          label: 'Inicio',  exact: true  },
-    { href: '/app/buscar',  icon: Search,         label: 'Buscar',  exact: true  },
-    { href: '/app/chat',    icon: MessageCircle,  label: 'Chat',    exact: false },
-    { href: '/app/oracion', icon: Mic2,           label: 'Oración', exact: false },
-    { href: profileHref,    icon: User,           label: 'Perfil',  exact: false },
+    { href: '/app/comunidad', icon: Users2,         label: 'Comunidad', exact: false },
+    { href: '/app/buscar',    icon: Search,          label: 'Buscar',    exact: true  },
+    { href: '/app/chat',      icon: MessageCircle,   label: 'Chat',      exact: false },
+    { href: '/app/oracion',   icon: Mic2,            label: 'Oración',   exact: false },
+    { href: profileHref,      icon: User,            label: 'Perfil',    exact: false },
   ]
 
   return (

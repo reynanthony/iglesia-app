@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Heart, MessageCircle, X, Share2, Bookmark } from 'lucide-react'
+import { MessageCircle, X, Share2, Bookmark } from 'lucide-react'
 import Link from 'next/link'
-import { toggleLike, createComment } from '@/app/actions/posts'
+import { createComment } from '@/app/actions/posts'
 import { detectSocialEmbed, getAutoplayUrl, PLATFORM_LABEL } from '@/lib/social-embed'
 import CommentItem from '@/components/CommentItem'
+import ReactionBar from '@/components/app/ReactionBar'
 
 function useSaved(postId: string) {
   const key = 'saved-posts'
@@ -39,13 +40,8 @@ export default function ShortsCard({
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [liked, setLiked] = useState(
-    post.likes?.some((l: any) => l.user_id === currentUserId) ?? false,
-  )
-  const [likesCount, setLikesCount] = useState(post.likes?.length ?? 0)
   const [showComments, setShowComments] = useState(false)
   const [commenting, setCommenting] = useState(false)
-  const [tapLike, setTapLike] = useState(false)
   const [tapSave, setTapSave] = useState(false)
   const { saved, toggle: toggleSave } = useSaved(post.id)
 
@@ -82,17 +78,9 @@ export default function ShortsCard({
     return `${Math.floor(s / 86400)} d`
   }
 
-  async function handleLike() {
-    setLiked((p: boolean) => !p)
-    setLikesCount((c: number) => liked ? c - 1 : c + 1)
-    setTapLike(true)
-    setTimeout(() => setTapLike(false), 400)
-    await toggleLike(post.id)
-  }
-
   async function handleShare() {
     const text = post.content?.slice(0, 100) ?? ''
-    const url  = `${window.location.origin}/app/feed`
+    const url  = `${window.location.origin}/app/comunidad`
     if (navigator.share) {
       try {
         await navigator.share({ title: 'Publicación', text, url })
@@ -238,23 +226,12 @@ export default function ShortsCard({
           </div>
         </Link>
 
-        {/* Like */}
-        <button onClick={handleLike} className="flex flex-col items-center gap-0.5">
-          <div
-            className={`w-11 h-11 rounded-full flex items-center justify-center ${tapLike ? 'animate-tap' : ''}`}
-            style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)' }}
-          >
-            <Heart
-              size={22}
-              strokeWidth={1.8}
-              fill={liked ? '#F87171' : 'none'}
-              style={{ color: liked ? '#F87171' : '#fff' }}
-            />
-          </div>
-          {likesCount > 0 && (
-            <span className="text-[11px] font-bold text-white leading-none">{likesCount}</span>
-          )}
-        </button>
+        {/* Reacciones espirituales */}
+        <ReactionBar
+          postId={post.id}
+          currentUserId={currentUserId}
+          reactions={post.reactions ?? []}
+        />
 
         {/* Comentarios */}
         <button
