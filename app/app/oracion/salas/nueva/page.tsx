@@ -22,7 +22,7 @@ export default function NuevaSalaPage() {
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
           <Link href="/app/oracion/salas"

@@ -37,7 +37,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
   const postCount = posts?.length ?? 0
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
 
       {/* ── COVER AREA ── */}
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>

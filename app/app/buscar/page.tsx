@@ -52,7 +52,7 @@ export default function BuscarPage() {
   }, [query])
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
       <div className="max-w-xl mx-auto px-4 py-10">
 
         {/* Header */}

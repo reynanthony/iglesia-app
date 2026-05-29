@@ -109,56 +109,54 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* ── HEADER (mobile) ── */}
+      {/*
+        Estructura: header = safe-area-top (padding) + 56px de contenido.
+        main compensa exactamente: calc(56px + env(safe-area-inset-top, 0px))
+        via la clase CSS .app-content-top (ver globals.css).
+      */}
       <header
-        className="md:hidden fixed top-0 left-0 right-0 z-30 px-4 flex items-center justify-between backdrop-blur-md"
+        className="md:hidden fixed top-0 left-0 right-0 z-30 backdrop-blur-md"
         style={{
           background: 'rgba(6,30,48,0.95)',
           borderBottom: '1px solid #0D3352',
-          paddingTop: 'max(12px, env(safe-area-inset-top, 12px))',
-          paddingBottom: '12px',
+          paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
-        <Link href="/app/feed" className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#0D3352' }}><Cross size={13} strokeWidth={2.5} style={{ color: '#76ABAE' }} /></div>
-          <span className="font-black text-sm tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <Link href="/" className="p-3 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
-            <Globe size={18} />
-          </Link>
-          {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-            <Link href="/admin" className="p-3 rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
-              <ShieldCheck size={18} />
-            </Link>
-          )}
-          <NotificationBell userId={user.id} />
-          <Link href={profileHref}>
-            <div
-              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
-              style={{ background: '#0D3352', color: '#76ABAE' }}
-            >
-              {profile?.avatar_url
-                ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
-                : initial}
+        <div className="px-4 flex items-center justify-between" style={{ height: 56 }}>
+          <Link href="/app/comunidad" className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#0D3352' }}>
+              <Cross size={13} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
+            <span className="font-black text-sm tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
           </Link>
-          <form action={logout}>
-            <button
-              type="submit"
-              className="w-10 h-10 flex items-center justify-center rounded-lg transition"
-              style={{ color: 'rgba(246,243,235,0.40)' }}
-              title="Cerrar sesión"
-            >
-              <LogOut size={18} />
-            </button>
-          </form>
+          <div className="flex items-center gap-1">
+            <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Sitio web">
+              <Globe size={18} />
+            </Link>
+            {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
+              <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-lg transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Panel Admin">
+                <ShieldCheck size={18} />
+              </Link>
+            )}
+            <NotificationBell userId={user.id} />
+            <Link href={profileHref}>
+              <div
+                className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
+                style={{ background: '#0D3352', color: '#76ABAE' }}
+              >
+                {profile?.avatar_url
+                  ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
+                  : initial}
+              </div>
+            </Link>
+          </div>
         </div>
       </header>
 
       {/* ── MAIN ── */}
-      <main className="md:ml-60 pt-14 md:pt-0">
+      <main className="md:ml-60 app-content-top">
         {children}
-        {/* Spacer so content clears the fixed bottom nav (mobile only) */}
+        {/* Spacer: matches total bottom nav height (56px content + safe-area-bottom) */}
         <div className="md:hidden" style={{ height: 'calc(56px + env(safe-area-inset-bottom, 0px))' }} />
       </main>
 

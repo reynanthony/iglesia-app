@@ -44,7 +44,7 @@ export default async function ComunidadPage({
 
   return (
     <div
-      className="fixed inset-0 md:left-60 z-10 flex flex-col"
+      className="fixed inset-0 md:left-60 z-10 flex flex-col app-shorts-top"
       style={{ background: '#061E30' }}
     >
       {/* Filtros por categoría */}

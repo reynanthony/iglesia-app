@@ -14,7 +14,7 @@ export default async function SalasPage() {
   const count = rooms?.length ?? 0
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
 
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
         <div className="absolute inset-0 pointer-events-none"

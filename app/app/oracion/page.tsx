@@ -46,7 +46,7 @@ export default async function OracionPage({
   const activeTab = estado ?? 'todas'
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
 
       {/* Header */}
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
@@ -99,10 +99,15 @@ export default async function OracionPage({
         {error && (
           <div className="rounded-2xl p-6 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <p className="text-sm font-bold mb-1" style={{ color: '#F87171' }}>
-              Tabla no encontrada
+              {error.code === '42P01' ? 'Tabla no encontrada' : 'Error al cargar peticiones'}
             </p>
-            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
-              Ejecuta la migración SQL en Supabase Dashboard → SQL Editor → supabase/v2_ecosystem.sql
+            <p className="text-[12px] mb-2" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              {error.code === '42P01'
+                ? 'Ejecuta la migración SQL en Supabase Dashboard → SQL Editor → supabase/v2_ecosystem.sql'
+                : error.message}
+            </p>
+            <p className="text-[10px] font-mono" style={{ color: 'rgba(246,243,235,0.25)' }}>
+              código: {error.code}
             </p>
           </div>
         )}

@@ -164,7 +164,10 @@ export default async function PredicasPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {rest.map(({ id, titulo, pastor, fecha, serie, image_url, video_url }) => (
-              <Link key={id} href={video_url ?? '#'} className="group block">
+              <a key={id} href={video_url ?? '#'}
+                target={video_url ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                className="group block">
                 <div className="relative rounded-xl overflow-hidden mb-5"
                   style={{
                     aspectRatio: '16/10',
@@ -180,7 +183,7 @@ export default async function PredicasPage() {
                 </div>
                 <h3 className="font-black text-ink transition text-lg leading-tight mb-2 tracking-tight">{titulo}</h3>
                 <p className="text-[11px] text-ink-3 uppercase tracking-wider">{pastor} · {fecha}</p>
-              </Link>
+              </a>
             ))}
           </div>
         </div>

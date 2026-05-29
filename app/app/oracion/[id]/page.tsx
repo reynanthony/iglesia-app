@@ -47,7 +47,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
     : ((req.profiles as any)?.full_name ?? 'Usuario')
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100vh' }}>
+    <div style={{ background: '#061E30', minHeight: '100%' }}>
 
       {/* Header */}
       <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-4"

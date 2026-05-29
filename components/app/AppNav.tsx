@@ -54,8 +54,13 @@ export function AppBottomNav({ profileHref }: Props) {
 
   return (
     <div
-      className="flex items-stretch"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', minHeight: 56 }}
+      className="flex"
+      style={{
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        /* minHeight debe incluir el safe-area para que los 56px de contenido
+           no se compriman detrás del home indicator de iPhone */
+        minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))',
+      }}
     >
       {items.map(({ href, icon: Icon, label, exact }) => {
         const active = isActive(href, exact)
@@ -63,17 +68,25 @@ export function AppBottomNav({ profileHref }: Props) {
           <Link
             key={href}
             href={href}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-2 min-h-[52px] active:opacity-70 transition-opacity"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
+            className="flex-1 flex flex-col items-center justify-center gap-1.5 active:opacity-70 transition-opacity"
+            style={{
+              WebkitTapHighlightColor: 'transparent',
+              height: 56,
+              minWidth: 0,
+            }}
           >
             <Icon
-              size={22}
+              size={23}
               strokeWidth={active ? 2.5 : 1.8}
-              style={{ color: active ? ACCENT : INACTIVE_COLOR }}
+              style={{ color: active ? ACCENT : INACTIVE_COLOR, flexShrink: 0 }}
             />
             <span
-              className="text-[12px] font-semibold tracking-wide"
-              style={{ color: active ? ACCENT : INACTIVE_COLOR, lineHeight: 1 }}
+              className="font-semibold truncate w-full text-center"
+              style={{
+                color: active ? ACCENT : INACTIVE_COLOR,
+                fontSize: 11,
+                lineHeight: 1.1,
+              }}
             >
               {label}
             </span>
