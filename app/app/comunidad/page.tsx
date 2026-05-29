@@ -44,8 +44,8 @@ export default async function ComunidadPage({
 
   return (
     <div
-      className="flex flex-col"
-      style={{ background: '#061E30', height: '100%' }}
+      className="flex flex-col app-content-height"
+      style={{ background: '#061E30' }}
     >
       {/* Filtros por categoría */}
       {cat === undefined || cat === '' ? null : null}
@@ -73,9 +73,9 @@ export default async function ComunidadPage({
       {/* FAB nueva publicación — absolute dentro del contenedor (no fixed) */}
       <Link
         href="/app/nuevo-post"
-        className="md:hidden absolute z-20 w-12 h-12 rounded-full flex items-center justify-center"
+        className="md:hidden fixed z-20 w-12 h-12 rounded-full flex items-center justify-center"
         style={{
-          bottom: 16,
+          bottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
           left: 16,
           background: 'rgba(118,171,174,0.20)',
           border: '1px solid rgba(118,171,174,0.35)',

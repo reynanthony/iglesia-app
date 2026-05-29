@@ -118,6 +118,26 @@ body {
 .anim-d4 { animation-delay: 0.56s; }
 .anim-d5 { animation-delay: 0.76s; }
 
+/* ── App layout: fixed header/nav + safe-area ─────── */
+.app-header-offset {
+  padding-top: calc(56px + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 768px) {
+  .app-header-offset { padding-top: 0; }
+}
+
+.app-nav-spacer {
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Full visible area between fixed header and fixed nav */
+.app-content-height {
+  height: calc(100dvh - 112px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+  .app-content-height { height: 100dvh; }
+}
+
 /* ── Public nav links ──────────────────────────────── */
 .public-nav-link {
   font-size: 11px;

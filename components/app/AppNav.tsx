@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Users2, MessageCircle, Mic2, Search, User } from 'lucide-react'
+import { Users2, MessageCircle, Flame, Search, User } from 'lucide-react'
 
 const ACCENT = '#76ABAE'
 const INACTIVE_COLOR = 'rgba(118,171,174,0.45)'
@@ -11,7 +11,7 @@ const navItems = [
   { href: '/app/comunidad', icon: Users2,         label: 'Comunidad', exact: false },
   { href: '/app/buscar',    icon: Search,          label: 'Buscar',    exact: true  },
   { href: '/app/chat',      icon: MessageCircle,   label: 'Chat',      exact: false },
-  { href: '/app/oracion',   icon: Mic2,            label: 'Oración',   exact: false },
+  { href: '/app/oracion',   icon: Flame,           label: 'Oración',   exact: false },
 ]
 
 interface Props { profileHref: string }
@@ -48,7 +48,7 @@ export function AppBottomNav({ profileHref }: Props) {
     { href: '/app/comunidad', icon: Users2,         label: 'Comunidad', exact: false },
     { href: '/app/buscar',    icon: Search,          label: 'Buscar',    exact: true  },
     { href: '/app/chat',      icon: MessageCircle,   label: 'Chat',      exact: false },
-    { href: '/app/oracion',   icon: Mic2,            label: 'Oración',   exact: false },
+    { href: '/app/oracion',   icon: Flame,           label: 'Oración',   exact: false },
     { href: profileHref,      icon: User,            label: 'Perfil',    exact: false },
   ]
 
@@ -67,7 +67,7 @@ export function AppBottomNav({ profileHref }: Props) {
             }}
           >
             <Icon
-              size={24}
+              size={22}
               strokeWidth={active ? 2.5 : 1.8}
               style={{ color: active ? ACCENT : INACTIVE_COLOR, flexShrink: 0 }}
             />
@@ -75,7 +75,7 @@ export function AppBottomNav({ profileHref }: Props) {
               className="font-semibold truncate w-full text-center"
               style={{
                 color: active ? ACCENT : INACTIVE_COLOR,
-                fontSize: 10,
+                fontSize: 12,
                 lineHeight: 1.2,
               }}
             >

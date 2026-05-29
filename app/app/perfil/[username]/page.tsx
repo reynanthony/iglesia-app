@@ -69,7 +69,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
               </h1>
               {role && (
                 <span
-                  className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
+                  className="text-[11px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
                   style={{ background: role.bg, color: role.color }}
                 >
                   {role.label}

@@ -13,7 +13,7 @@ export default async function ChatPage() {
     .single()
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100dvh - 56px)', background: '#061E30' }}>
+    <div className="flex flex-col app-content-height" style={{ background: '#061E30' }}>
 
       {/* Header */}
       <div
