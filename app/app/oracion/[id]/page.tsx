@@ -27,7 +27,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   const [{ data: req }, { data: participants }] = await Promise.all([
     supabase
       .from('prayer_requests')
-      .select('*, profiles(full_name, username)')
+      .select('*, profiles!prayer_requests_user_id_fkey(full_name, username)')
       .eq('id', id)
       .single(),
     supabase

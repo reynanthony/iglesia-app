@@ -28,7 +28,7 @@ export default async function OracionPage({
 
   let query = supabase
     .from('prayer_requests')
-    .select('id, title, is_anonymous, status, created_at, user_id, profiles(full_name, username)')
+    .select('id, title, is_anonymous, status, created_at, user_id, profiles!prayer_requests_user_id_fkey(full_name, username)')
     .order('created_at', { ascending: false })
     .limit(50)
 
@@ -106,7 +106,7 @@ export default async function OracionPage({
                 ? 'Ejecuta la migración SQL en Supabase Dashboard → SQL Editor → supabase/v2_ecosystem.sql'
                 : error.message}
             </p>
-            <p className="text-[10px] font-mono" style={{ color: 'rgba(246,243,235,0.25)' }}>
+            <p className="text-[11px] font-mono" style={{ color: 'rgba(246,243,235,0.50)' }}>
               código: {error.code}
             </p>
           </div>
