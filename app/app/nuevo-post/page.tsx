@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { createPost } from '@/app/actions/posts'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
@@ -29,6 +29,8 @@ export default function NuevoPostPage() {
   const [fileName, setFileName] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const groupId = searchParams.get('group')
 
   const embedPreview = detectSocialEmbed(content)
   const charsLeft = MAX_CHARS - content.length
@@ -57,13 +59,14 @@ export default function NuevoPostPage() {
     try {
       const formData = new FormData(e.currentTarget)
       formData.set('category', category)
+      if (groupId) formData.set('group_id', groupId)
       const result = await createPost(formData)
       if (result?.error) {
         setError(result.error)
         setLoading(false)
       } else {
         hapticSuccess()
-        router.push('/app/comunidad')
+        router.push(groupId ? `/app/grupos/${groupId}` : '/app/comunidad')
       }
     } catch {
       setError('Error al publicar. Verifica tu conexión e intenta de nuevo.')
@@ -81,7 +84,7 @@ export default function NuevoPostPage() {
       >
         <div className="flex items-center gap-3">
           <Link
-            href="/app/comunidad"
+            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad'}
             className="p-2.5 rounded-xl transition"
             style={{ color: '#76ABAE', background: '#0B2D47', border: '1px solid #0D3352' }}
           >
@@ -91,7 +94,9 @@ export default function NuevoPostPage() {
             <h1 className="font-black text-lg tracking-tight" style={{ color: '#F6F3EB' }}>
               Nueva publicación
             </h1>
-            <p className="text-xs" style={{ color: 'rgba(118,171,174,0.55)' }}>Comparte con la comunidad</p>
+            <p className="text-xs" style={{ color: 'rgba(118,171,174,0.55)' }}>
+              {groupId ? 'Para el grupo' : 'Comparte con la comunidad'}
+            </p>
           </div>
         </div>
 
@@ -235,7 +240,7 @@ export default function NuevoPostPage() {
 
           {/* Cancelar al final (accesible en mobile) */}
           <Link
-            href="/app/comunidad"
+            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad'}
             className="block text-center py-3 text-sm transition"
             style={{ color: 'rgba(118,171,174,0.50)' }}
           >

@@ -12,6 +12,8 @@ export async function createPost(formData: FormData) {
   const imageFile = formData.get('image') as File
   const categoryRaw = formData.get('category') as string | null
   const category = categoryRaw && categoryRaw !== '' ? categoryRaw : null
+  const groupIdRaw = formData.get('group_id') as string | null
+  const group_id = groupIdRaw && groupIdRaw !== '' ? groupIdRaw : null
 
   if (!content?.trim() && (!imageFile || imageFile.size === 0)) {
     return { error: 'Escribe algo o sube una imagen' }
@@ -40,11 +42,13 @@ export async function createPost(formData: FormData) {
       content: content?.trim() ?? '',
       image_url,
       category,
+      group_id,
     })
 
   if (error) return { error: 'No se pudo publicar' }
 
   revalidatePath('/app/comunidad')
+  if (group_id) revalidatePath(`/app/grupos/${group_id}`)
   return { success: true }
 }
 export async function toggleLike(postId: string) {

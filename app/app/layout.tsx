@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck, Search } from 'lucide-react'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -95,6 +95,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
           {/* Acciones */}
           <div className="flex items-center gap-0.5">
+            <Link href="/app/buscar" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Buscar">
+              <Search size={19} />
+            </Link>
             <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Sitio público">
               <Globe size={19} />
             </Link>
