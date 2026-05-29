@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Users2, MessageCircle, Flame, Search, User, UsersRound, BookOpen } from 'lucide-react'
+import { Users2, MessageCircle, Flame, Search, User, UsersRound, BookOpen, Radio } from 'lucide-react'
 
 const ACCENT = '#76ABAE'
 const INACTIVE_COLOR = 'rgba(118,171,174,0.45)'
@@ -13,6 +13,7 @@ const navItems = [
   { href: '/app/buscar',      icon: Search,        label: 'Buscar',      exact: true  },
   { href: '/app/chat',        icon: MessageCircle, label: 'Chat',        exact: false },
   { href: '/app/oracion',     icon: Flame,         label: 'Oración',     exact: false },
+  { href: '/app/en-vivo',     icon: Radio,         label: 'En Vivo',     exact: false },
   { href: '/app/discipulado', icon: BookOpen,      label: 'Discipulado', exact: true  },
 ]
 
