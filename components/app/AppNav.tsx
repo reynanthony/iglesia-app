@@ -2,17 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Users2, MessageCircle, Flame, Search, User, UsersRound } from 'lucide-react'
+import { Users2, MessageCircle, Flame, Search, User, UsersRound, BookOpen } from 'lucide-react'
 
 const ACCENT = '#76ABAE'
 const INACTIVE_COLOR = 'rgba(118,171,174,0.45)'
 
 const navItems = [
-  { href: '/app/comunidad', icon: Users2,       label: 'Comunidad', exact: false },
-  { href: '/app/grupos',    icon: UsersRound,   label: 'Grupos',    exact: false },
-  { href: '/app/buscar',    icon: Search,        label: 'Buscar',    exact: true  },
-  { href: '/app/chat',      icon: MessageCircle, label: 'Chat',      exact: false },
-  { href: '/app/oracion',   icon: Flame,         label: 'Oración',   exact: false },
+  { href: '/app/comunidad',   icon: Users2,       label: 'Comunidad',   exact: false },
+  { href: '/app/grupos',      icon: UsersRound,   label: 'Grupos',      exact: false },
+  { href: '/app/buscar',      icon: Search,        label: 'Buscar',      exact: true  },
+  { href: '/app/chat',        icon: MessageCircle, label: 'Chat',        exact: false },
+  { href: '/app/oracion',     icon: Flame,         label: 'Oración',     exact: false },
+  { href: '/app/discipulado', icon: BookOpen,      label: 'Discipulado', exact: true  },
 ]
 
 interface Props { profileHref: string }

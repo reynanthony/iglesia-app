@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import EditProfileModal from '@/components/EditProfileModal'
 import PostCard from '@/components/PostCard'
+import DiscipleshipProgress from '@/components/app/DiscipleshipProgress'
 
 const roleMeta: Record<string, { label: string; color: string; bg: string }> = {
   admin:     { label: 'Administrador', color: '#F87171',                  bg: 'rgba(248,113,113,0.10)' },
@@ -25,16 +26,25 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
 
   if (!profile) notFound()
 
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('*, profiles(id, full_name, username, avatar_url), likes(id, user_id), comments(id, content, created_at, profiles(full_name, username))')
-    .eq('user_id', profile.id)
-    .order('created_at', { ascending: false })
+  const [{ data: posts }, { data: discipleship }, { data: stages }] = await Promise.all([
+    supabase
+      .from('posts')
+      .select('*, profiles(id, full_name, username, avatar_url), likes(id, user_id), comments(id, content, created_at, profiles(full_name, username))')
+      .eq('user_id', profile.id)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('user_discipleship')
+      .select('*, discipleship_stages(*)')
+      .eq('user_id', profile.id)
+      .maybeSingle(),
+    supabase.from('discipleship_stages').select('*').order('order_index'),
+  ])
 
-  const isOwner = user?.id === profile.id
-  const role = roleMeta[profile.role]
-  const initial = profile.full_name?.[0]?.toUpperCase() ?? 'U'
-  const postCount = posts?.length ?? 0
+  const isOwner      = user?.id === profile.id
+  const role         = roleMeta[profile.role]
+  const initial      = profile.full_name?.[0]?.toUpperCase() ?? 'U'
+  const postCount    = posts?.length ?? 0
+  const currentStage = (discipleship?.discipleship_stages as any) ?? null
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -94,6 +104,12 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
               </p>
             </div>
           </div>
+
+          <DiscipleshipProgress
+            stages={stages ?? []}
+            currentStage={currentStage}
+            isOwner={isOwner}
+          />
         </div>
       </div>
 
