@@ -10,6 +10,8 @@ export async function createPost(formData: FormData) {
 
   const content = formData.get('content') as string
   const imageFile = formData.get('image') as File
+  const categoryRaw = formData.get('category') as string | null
+  const category = categoryRaw && categoryRaw !== '' ? categoryRaw : null
 
   if (!content?.trim() && (!imageFile || imageFile.size === 0)) {
     return { error: 'Escribe algo o sube una imagen' }
@@ -37,11 +39,12 @@ export async function createPost(formData: FormData) {
       user_id: user.id,
       content: content?.trim() ?? '',
       image_url,
+      category,
     })
 
   if (error) return { error: 'No se pudo publicar' }
 
-  revalidatePath('/app/feed')
+  revalidatePath('/app/comunidad')
   return { success: true }
 }
 export async function toggleLike(postId: string) {

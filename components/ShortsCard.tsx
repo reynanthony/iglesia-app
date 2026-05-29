@@ -302,7 +302,7 @@ export default function ShortsCard({
         className="absolute left-0 right-16 px-4"
         style={{ bottom: 'calc(72px + env(safe-area-inset-bottom, 0px))', zIndex: 4 }}
       >
-        <Link href={profileHref} className="inline-flex items-center gap-2 mb-1.5">
+        <Link href={profileHref} className="inline-flex items-center gap-2 mb-1.5 flex-wrap">
           <span
             className="font-black text-white text-sm"
             style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}
@@ -312,6 +312,14 @@ export default function ShortsCard({
           <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
             {timeAgo(post.created_at)}
           </span>
+          {post.category && (
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(118,171,174,0.25)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.35)' }}
+            >
+              {post.category}
+            </span>
+          )}
         </Link>
 
         {hasMedia && post.content && (

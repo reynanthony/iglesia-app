@@ -11,8 +11,18 @@ import { hapticSuccess } from '@/lib/haptics'
 
 const MAX_CHARS = 1500
 
+const CATEGORIES = [
+  { key: 'testimonio',  label: 'Testimonio' },
+  { key: 'reflexion',   label: 'Reflexión' },
+  { key: 'devocional',  label: 'Devocional' },
+  { key: 'peticion',    label: 'Petición' },
+  { key: 'servicio',    label: 'Servicio' },
+  { key: 'evento',      label: 'Evento' },
+]
+
 export default function NuevoPostPage() {
   const [content, setContent] = useState('')
+  const [category, setCategory] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
@@ -46,13 +56,14 @@ export default function NuevoPostPage() {
     setError('')
     try {
       const formData = new FormData(e.currentTarget)
+      formData.set('category', category)
       const result = await createPost(formData)
       if (result?.error) {
         setError(result.error)
         setLoading(false)
       } else {
         hapticSuccess()
-        router.push('/app/feed')
+        router.push('/app/comunidad')
       }
     } catch {
       setError('Error al publicar. Verifica tu conexión e intenta de nuevo.')
@@ -70,7 +81,7 @@ export default function NuevoPostPage() {
       >
         <div className="flex items-center gap-3">
           <Link
-            href="/app/feed"
+            href="/app/comunidad"
             className="p-2.5 rounded-xl transition"
             style={{ color: '#76ABAE', background: '#0B2D47', border: '1px solid #0D3352' }}
           >
@@ -155,6 +166,32 @@ export default function NuevoPostPage() {
             </div>
           </div>
 
+          {/* Selector de categoría */}
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider mb-2"
+              style={{ color: 'rgba(118,171,174,0.60)' }}>
+              Categoría <span style={{ color: 'rgba(118,171,174,0.35)' }}>(opcional)</span>
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map(c => (
+                <button
+                  key={c.key}
+                  type="button"
+                  onClick={() => setCategory(cat => cat === c.key ? '' : c.key)}
+                  className="px-3.5 py-1.5 rounded-full text-[12px] font-bold tracking-wide transition"
+                  style={{
+                    background: category === c.key ? '#76ABAE' : '#0B2D47',
+                    color: category === c.key ? '#061E30' : 'rgba(246,243,235,0.55)',
+                    border: '1px solid',
+                    borderColor: category === c.key ? '#76ABAE' : '#0D3352',
+                  }}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Preview embed social */}
           {embedPreview && (
             <div>
@@ -198,7 +235,7 @@ export default function NuevoPostPage() {
 
           {/* Cancelar al final (accesible en mobile) */}
           <Link
-            href="/app/feed"
+            href="/app/comunidad"
             className="block text-center py-3 text-sm transition"
             style={{ color: 'rgba(118,171,174,0.50)' }}
           >

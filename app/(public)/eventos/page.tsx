@@ -1,10 +1,21 @@
 import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
-import BlockRenderer from '@/components/BlockRenderer'
-import { HeroVideo } from '@/components/public/HeroVideo'
+import { cmsGet, cmsImageUrl } from '@/lib/directus'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
+type DirectusEvento = {
+  id: string
+  titulo: string
+  descripcion?: string
+  fecha_inicio: string
+  fecha_fin?: string | null
+  lugar?: string
+  categoria?: string
+  badge?: string
+  imagen?: string
+  visible?: boolean
+}
 
 const defaultRegularServices = [
   { day: 'Dom', fullDay: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
@@ -12,16 +23,24 @@ const defaultRegularServices = [
   { day: 'Vie', fullDay: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de Oración',  desc: 'Intercesión y búsqueda de la presencia de Dios.' },
 ]
 
-const fallbackEvents = [
-  { id: '1', titulo: 'Retiro de Jóvenes', fecha_inicio: '2026-06-20', fecha_fin: '2026-06-22', lugar: 'Por confirmar', badge: 'Próximo', categoria: 'Jóvenes', descripcion: 'Un fin de semana de encuentro, adoración y crecimiento para la juventud.', image_url: null },
-  { id: '2', titulo: 'Conferencia de Matrimonios', fecha_inicio: '2026-07-11', fecha_fin: '2026-07-12', lugar: 'Templo principal', badge: 'Especial', categoria: 'Matrimonios', descripcion: 'Fortalece tu hogar con enseñanzas prácticas y bíblicas para parejas.', image_url: null },
-  { id: '3', titulo: 'Noche de Alabanza', fecha_inicio: '2026-08-01', fecha_fin: null, lugar: 'Templo principal', badge: 'Por confirmar', categoria: 'Adoración', descripcion: 'Una noche dedicada a la adoración colectiva y la presencia de Dios.', image_url: null },
+const fallbackEvents: DirectusEvento[] = [
+  { id: '1', titulo: 'Retiro de Jóvenes', fecha_inicio: '2026-06-20', fecha_fin: '2026-06-22', lugar: 'Por confirmar', badge: 'Próximo', categoria: 'Jóvenes', descripcion: 'Un fin de semana de encuentro, adoración y crecimiento para la juventud.' },
+  { id: '2', titulo: 'Conferencia de Matrimonios', fecha_inicio: '2026-07-11', fecha_fin: '2026-07-12', lugar: 'Templo principal', badge: 'Especial', categoria: 'Matrimonios', descripcion: 'Fortalece tu hogar con enseñanzas prácticas y bíblicas para parejas.' },
+  { id: '3', titulo: 'Noche de Alabanza', fecha_inicio: '2026-08-01', fecha_fin: null, lugar: 'Templo principal', badge: 'Por confirmar', categoria: 'Adoración', descripcion: 'Una noche dedicada a la adoración colectiva y la presencia de Dios.' },
 ]
 
-function badgeColor(badge: string) {
-  if (badge === 'Especial') return '#093C5D'
-  if (badge === 'Por confirmar') return '#869B7E'
-  if (badge === 'Hoy') return '#76ABAE'
+const BADGE_LABEL: Record<string, string> = {
+  proximo: 'Próximo', especial: 'Especial', hoy: 'Hoy', por_confirmar: 'Por confirmar',
+  'Próximo': 'Próximo', 'Especial': 'Especial', 'Hoy': 'Hoy', 'Por confirmar': 'Por confirmar',
+}
+function badgeLabel(badge?: string) {
+  return BADGE_LABEL[badge ?? ''] ?? badge ?? 'Próximo'
+}
+function badgeColor(badge?: string) {
+  const b = (badge ?? '').toLowerCase()
+  if (b === 'especial') return '#093C5D'
+  if (b === 'por_confirmar' || b === 'por confirmar') return '#869B7E'
+  if (b === 'hoy') return '#76ABAE'
   return '#093C5D'
 }
 
@@ -38,99 +57,49 @@ function formatEventDate(fechaInicio: string, fechaFin?: string | null) {
 }
 
 export default async function EventosPage() {
-  const supabase = await createClient()
+  const cmsEventos = await cmsGet<DirectusEvento>('eventos', {
+    sort: 'fecha_inicio',
+  })
 
-  const [pageResult, eventsResult] = await Promise.all([
-    supabase.from('page_content').select('content').eq('page', 'eventos').single(),
-    supabase.from('events').select('*').eq('visible', true).order('fecha_inicio', { ascending: true }),
-  ])
-
-  const editorialBlocks = (pageResult.data?.content as any)?.blocks
-  const hasBlocks = Array.isArray(editorialBlocks) && editorialBlocks.length > 0
-
-  const pageContent = (pageResult.data?.content ?? {}) as Record<string, any>
-  const heroEyebrow   = (pageContent.hero_eyebrow   as string) || 'Eventos · Agenda 2026'
-  const heroTitleMain = (pageContent.hero_title_main as string) || 'Lo que\nse viene.'
-  const heroSubtitle  = (pageContent.hero_subtitle   as string) || 'Mantente al día con nuestras actividades, servicios y eventos especiales.'
-  const heroImageUrl  = (pageContent.hero_image_url  as string) || null
-  const heroVideoUrl  = (pageContent.hero_video_url  as string) || null
-
-  // New CMS fields
-  const regularServices   = Array.isArray(pageContent.regular_services) ? pageContent.regular_services : defaultRegularServices
-  const eventsEyebrow     = pageContent.events_eyebrow    || '— Próximamente'
-  const locationEyebrow   = pageContent.location_eyebrow  || '— Cómo llegar'
-  const locationTitle     = pageContent.location_title    || 'Encuéntranos\naquí.'
-  const locationAddress   = pageContent.location_address  || 'Tu dirección aquí, Ciudad, País'
-  const locationSchedule  = pageContent.location_schedule || 'Dom 10AM · Mié 7PM · Vie 7PM'
-  const locationNextEvent = pageContent.location_next_event || 'Retiro de Jóvenes · Jun 2026'
-  const evCtaEyebrow      = pageContent.ev_cta_eyebrow    || '— ¿Primera vez?'
-  const evCtaTitle        = pageContent.ev_cta_title      || 'Ven y\nsé parte.'
-  const evCta1Label       = pageContent.ev_cta1_label     || 'Escríbenos'
-  const evCta1Url         = pageContent.ev_cta1_url       || '/contacto'
-  const evCta2Label       = pageContent.ev_cta2_label     || 'Comunidad en línea'
-  const evCta2Url         = pageContent.ev_cta2_url       || '/login'
-
-  const specialEvents: any[] = eventsResult.data && eventsResult.data.length > 0
-    ? eventsResult.data
-    : fallbackEvents
+  const specialEvents: DirectusEvento[] = cmsEventos.length > 0 ? cmsEventos : fallbackEvents
 
   return (
     <div>
 
-      {/* ═══════════════════════════════════════
-          ZONA EDITORIAL — bloques del admin, o hero hardcoded
-      ═══════════════════════════════════════ */}
-      {hasBlocks ? (
-        <BlockRenderer blocks={editorialBlocks} />
-      ) : (
-        <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
-          {heroImageUrl && !heroVideoUrl && (
-            <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
-          )}
-          {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
-          {(heroImageUrl || heroVideoUrl) && (
-            <div className="pointer-events-none absolute inset-0"
-              style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />
-          )}
-          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-            style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
-            <span className="font-black leading-none tracking-tighter block"
-              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
-              2026
-            </span>
-          </div>
-          <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
-          <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
-            <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
-                {heroEyebrow}
-              </p>
-            </div>
-            <h1 className="font-display font-black tracking-tighter text-white mb-8"
-              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
-              {heroTitleMain.split('\n').map((line, i, arr) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
-            </h1>
-            <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
-              {heroSubtitle}
+      {/* Hero */}
+      <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
+          <span className="font-black leading-none tracking-tighter block"
+            style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
+            2026
+          </span>
+        </div>
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
+        <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
+          <div className="flex items-center gap-5 mb-14">
+            <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
+              Eventos · Agenda 2026
             </p>
           </div>
-        </section>
-      )}
-
-      {/* ═══════════════════════════════════════
-          ZONA DE DATOS — siempre visible
-      ═══════════════════════════════════════ */}
+          <h1 className="font-display font-black tracking-tighter text-white mb-8"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+            Lo que<br />se viene.
+          </h1>
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            Mantente al día con nuestras actividades, servicios y eventos especiales.
+          </p>
+        </div>
+      </section>
 
       {/* Horarios regulares */}
       <section className="border-t border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-edge">
-            {regularServices.map(({ day, time, label, type, desc, fullDay }) => (
+            {defaultRegularServices.map(({ day, time, label, type, desc, fullDay }) => (
               <div key={day} className="py-8 md:px-8 first:md:pl-0 last:md:pr-0">
                 <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-3">
                   {fullDay || day}
@@ -156,22 +125,24 @@ export default async function EventosPage() {
       <section className="bg-card border-b border-edge">
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{eventsEyebrow}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Próximamente</p>
             <p className="text-[11px] font-bold text-ink-3">{specialEvents.length} eventos</p>
           </div>
           <div className="space-y-4">
             {specialEvents.map((event) => {
               const { mes, dia, year } = formatEventDate(event.fecha_inicio, event.fecha_fin)
               const bc = badgeColor(event.badge)
+              const imgUrl = cmsImageUrl(event.imagen)
               return (
                 <div key={event.id}
                   className="group border border-edge hover:border-edge-2 rounded-2xl overflow-hidden transition bg-card hover:bg-muted">
                   <div className="grid grid-cols-1 md:grid-cols-12">
+                    {/* Panel izquierdo — fecha */}
                     <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-edge">
                       <div>
                         <span className="inline-block text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-lg mb-6"
                           style={{ backgroundColor: bc + '18', color: bc, border: `1px solid ${bc}25` }}>
-                          {event.badge}
+                          {badgeLabel(event.badge)}
                         </span>
                         <p className="font-black text-ink-3 tracking-widest text-sm">{mes}</p>
                         <p className="font-black text-ink leading-none tracking-tighter"
@@ -185,19 +156,36 @@ export default async function EventosPage() {
                         <p className="text-[11px] text-ink-3">{event.lugar}</p>
                       </div>
                     </div>
-                    <div className="md:col-span-9 p-8 md:p-10 flex flex-col justify-between gap-6">
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3 mb-4">{event.categoria}</p>
-                        <h3 className="font-display font-black text-ink tracking-tight transition"
-                          style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', lineHeight: 1 }}>
-                          {event.titulo}
-                        </h3>
-                        <p className="text-sm text-ink-2 leading-relaxed mt-4 max-w-2xl">{event.descripcion}</p>
+
+                    {/* Panel derecho — contenido con imagen de fondo */}
+                    <div className="md:col-span-9 relative flex flex-col justify-between gap-6 overflow-hidden"
+                      style={{ minHeight: 220 }}>
+                      {imgUrl && (
+                        <>
+                          <img src={imgUrl} alt={event.titulo}
+                            className="absolute inset-0 w-full h-full object-cover" />
+                          <div className="absolute inset-0"
+                            style={{ background: 'linear-gradient(135deg, rgba(9,60,93,0.82) 0%, rgba(9,60,93,0.60) 60%, rgba(118,171,174,0.40) 100%)' }} />
+                        </>
+                      )}
+                      <div className="relative p-8 md:p-10 flex flex-col justify-between h-full gap-6">
+                        <div>
+                          <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mb-4 ${imgUrl ? 'text-white/60' : 'text-ink-3'}`}>
+                            {event.categoria}
+                          </p>
+                          <h3 className="font-display font-black tracking-tight transition"
+                            style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', lineHeight: 1, color: imgUrl ? 'white' : undefined }}>
+                            {event.titulo}
+                          </h3>
+                          <p className={`text-sm leading-relaxed mt-4 max-w-2xl ${imgUrl ? 'text-white/70' : 'text-ink-2'}`}>
+                            {event.descripcion}
+                          </p>
+                        </div>
+                        <Link href="/contacto"
+                          className={`inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition self-start ${imgUrl ? 'text-white/70 hover:text-white' : 'text-ink-3 hover:text-ink'}`}>
+                          Más información <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </div>
-                      <Link href="/contacto"
-                        className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink-3 hover:text-ink transition self-start">
-                        Más información <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                      </Link>
                     </div>
                   </div>
                 </div>
@@ -212,12 +200,10 @@ export default async function EventosPage() {
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="flex flex-col gap-6 justify-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{locationEyebrow}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Cómo llegar</p>
               <h2 className="font-display font-black text-ink tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
-                {locationTitle.split('\n').map((line: string, i: number, arr: string[]) => (
-                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-                ))}
+                Encuéntranos<br />aquí.
               </h2>
               <div className="space-y-4 mt-2">
                 <div className="flex items-start gap-4">
@@ -226,7 +212,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Dirección</p>
-                    <p className="text-sm font-bold text-ink">{locationAddress}</p>
+                    <p className="text-sm font-bold text-ink">Tu dirección aquí, Ciudad, País</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -235,7 +221,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Horarios</p>
-                    <p className="text-sm font-bold text-ink">{locationSchedule}</p>
+                    <p className="text-sm font-bold text-ink">Dom 10AM · Mié 7PM · Vie 7PM</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -243,8 +229,10 @@ export default async function EventosPage() {
                     <Calendar size={14} className="text-ink-3" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">{pageContent.location_next_label || 'Próximo evento'}</p>
-                    <p className="text-sm font-bold text-ink">{locationNextEvent}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Próximo evento</p>
+                    <p className="text-sm font-bold text-ink">
+                      {specialEvents[0]?.titulo ?? 'Ver agenda arriba'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -266,22 +254,20 @@ export default async function EventosPage() {
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{evCtaEyebrow}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— ¿Primera vez?</p>
             <h2 className="font-display font-black leading-[0.85] tracking-tighter text-white"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
-              {evCtaTitle.split('\n').map((line: string, i: number, arr: string[]) => (
-                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-              ))}
+              Ven y<br />sé parte.
             </h2>
           </div>
           <div className="flex flex-col gap-4 flex-shrink-0">
-            <Link href={evCta1Url}
+            <Link href="/contacto"
               className="inline-flex items-center justify-between gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
-              {evCta1Label} <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              Escríbenos <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href={evCta2Url}
+            <Link href="/login"
               className="inline-flex items-center justify-between gap-3 border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
-              {evCta2Label} <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              Comunidad en línea <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
             </Link>
           </div>
         </div>
