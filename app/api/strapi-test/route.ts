@@ -16,7 +16,7 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${url}/api/content-type-builder/content-types`, {
+    const res = await fetch(`${url}/api/upload/files?pagination[limit]=1`, {
       headers: { Authorization: `Bearer ${token}` },
       signal: AbortSignal.timeout(5000),
     })
