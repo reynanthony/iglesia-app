@@ -16,22 +16,22 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${url}/api/upload/files?pagination[limit]=1`, {
+    const res = await fetch(`${url}/items/predicas?limit=1`, {
       headers: { Authorization: `Bearer ${token}` },
       signal: AbortSignal.timeout(5000),
     })
     return NextResponse.json({
       ok: res.ok,
       status: res.status,
-      STRAPI_URL: '✓ ' + url,
-      STRAPI_API_TOKEN: '✓ configurado',
-      mensaje: res.ok ? 'Conexión exitosa con Strapi' : 'Strapi respondió con error',
+      CMS: '✓ ' + url,
+      token: '✓ configurado',
+      mensaje: res.ok ? 'Conexión exitosa con Directus' : 'Error al conectar',
     })
   } catch (e: any) {
     return NextResponse.json({
       ok: false,
-      STRAPI_URL: '✓ ' + url,
-      STRAPI_API_TOKEN: '✓ configurado',
+      CMS: '✓ ' + url,
+      token: '✓ configurado',
       error: 'No se pudo conectar: ' + e.message,
     })
   }
