@@ -149,10 +149,8 @@ export default async function EnVivoPage() {
               style={{ color: 'rgba(118,171,174,0.60)' }}>Últimas predicas</p>
             <div className="space-y-2">
               {predicas.map(p => (
-                <a key={p.id}
-                  href={p.video_url ?? '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link key={p.id}
+                  href={`/app/predicas/${p.id}`}
                   className="flex items-center gap-4 p-4 rounded-2xl group transition"
                   style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
@@ -169,7 +167,7 @@ export default async function EnVivoPage() {
                     </p>
                   </div>
                   <Play size={14} style={{ color: 'rgba(246,243,235,0.30)', flexShrink: 0 }} />
-                </a>
+                </Link>
               ))}
             </div>
             <Link href="/predicas"
