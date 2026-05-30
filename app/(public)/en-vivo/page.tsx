@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
+import { ArrowRight, Radio, Clock, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import VideoPlayer from '@/components/VideoPlayer'
+import LivePlayer from '@/components/LivePlayer'
 
 export const revalidate = 0
 
@@ -95,17 +95,9 @@ export default async function EnVivoPage() {
 
           {/* EMBEDDED PLAYER */}
           <div className="w-full" style={{ background: '#000' }}>
-            {ytId ? (
-              <div className="max-w-5xl mx-auto">
-                <VideoPlayer ytId={ytId} title={liveTitle} />
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-28 gap-6"
-                style={{ background: '#0A0A0A' }}>
-                <Wifi size={24} style={{ color: '#EF4444' }} />
-                <p className="text-white font-black text-lg">{liveTitle}</p>
-              </div>
-            )}
+            <div className="max-w-5xl mx-auto">
+              <LivePlayer url={liveUrl} title={liveTitle} />
+            </div>
           </div>
 
           {/* Below player: join CTA */}

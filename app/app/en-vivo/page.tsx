@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveChatBox from '@/components/app/LiveChatBox'
-import VideoPlayer from '@/components/VideoPlayer'
+import LivePlayer from '@/components/LivePlayer'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
@@ -74,23 +74,12 @@ export default async function EnVivoPage() {
 
           {/* Video player */}
           <div className="md:flex-1 bg-black">
-            {liveYtId ? (
-              <VideoPlayer ytId={liveYtId} title={liveTitle} />
-            ) : liveUrl ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-3 px-6 text-center">
-                <Radio size={24} style={{ color: '#76ABAE' }} />
-                <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
-                <a href={liveUrl} target="_blank" rel="noopener noreferrer"
-                  className="text-[12px] font-bold px-4 py-2 rounded-xl"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}>
-                  Ver en YouTube →
-                </a>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center py-20">
-                <Radio size={24} style={{ color: '#76ABAE', opacity: 0.4 }} />
-              </div>
-            )}
+            {liveUrl
+              ? <LivePlayer url={liveUrl} title={liveTitle} />
+              : <div className="flex items-center justify-center py-20">
+                  <Radio size={24} style={{ color: '#76ABAE', opacity: 0.4 }} />
+                </div>
+            }
           </div>
 
           {/* Live chat */}
