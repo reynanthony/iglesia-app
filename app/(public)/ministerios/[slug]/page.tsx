@@ -72,9 +72,10 @@ function SectionLabel({ label, count }: { label: string; count?: number }) {
   )
 }
 
-function AnnouncementCard({ item }: { item: any }) {
+function AnnouncementCard({ item, href }: { item: any; href: string }) {
   return (
-    <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group">
+    <Link href={href}>
+    <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group cursor-pointer">
       <div
         className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start"
         style={{ backgroundColor: TEAL + '18', color: TEAL }}
@@ -95,12 +96,14 @@ function AnnouncementCard({ item }: { item: any }) {
         )}
       </div>
     </article>
+    </Link>
   )
 }
 
-function VideoCard({ item }: { item: any }) {
+function VideoCard({ item, href }: { item: any; href: string }) {
   const embed = item.video_url ? detectSocialEmbed(item.video_url) : null
   return (
+    <Link href={href}>
     <article className="group cursor-pointer">
       {embed ? (
         <div
@@ -140,9 +143,6 @@ function VideoCard({ item }: { item: any }) {
               <Play size={18} className="text-white ml-1" />
             </div>
           </div>
-          {item.video_url && (
-            <a href={item.video_url} target="_blank" rel="noopener noreferrer" className="absolute inset-0" aria-label="Ver video" />
-          )}
           {item.pinned && (
             <div
               className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md"
@@ -160,12 +160,14 @@ function VideoCard({ item }: { item: any }) {
         {item.profiles?.full_name ?? 'Ministerio'} · {fmtDate(item.created_at)}
       </p>
     </article>
+    </Link>
   )
 }
 
-function ArticleCard({ item }: { item: any }) {
+function ArticleCard({ item, href }: { item: any; href: string }) {
   return (
-    <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden">
+    <Link href={href}>
+    <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden cursor-pointer">
       {item.image_url && (
         <div className="overflow-hidden h-44 rounded-t-xl">
           <img src={item.image_url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
@@ -199,6 +201,7 @@ function ArticleCard({ item }: { item: any }) {
         </div>
       </div>
     </article>
+    </Link>
   )
 }
 
@@ -401,7 +404,7 @@ export default async function PublicMinistryPage({
             <SectionLabel label="Actividades y anuncios" count={anuncios.length} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {anuncios.map(item => (
-                <AnnouncementCard key={item.id} item={item} />
+                <AnnouncementCard key={item.id} item={item} href={`/ministerios/${slug}/contenido/${item.id}`} />
               ))}
             </div>
           </div>
@@ -470,7 +473,7 @@ export default async function PublicMinistryPage({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {(videos[0].pinned ? videos.slice(1) : videos).map(item => (
-                <VideoCard key={item.id} item={item} />
+                <VideoCard key={item.id} item={item} href={`/ministerios/${slug}/contenido/${item.id}`} />
               ))}
             </div>
           </div>
@@ -485,7 +488,8 @@ export default async function PublicMinistryPage({
 
             {/* Featured article (pinned) */}
             {articulos[0].pinned && (
-              <div className="mb-10 bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden">
+              <Link href={`/ministerios/${slug}/contenido/${articulos[0].id}`}>
+              <div className="mb-10 bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden cursor-pointer">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
                   {articulos[0].image_url && (
                     <div className="lg:col-span-5 overflow-hidden h-64 lg:h-auto rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none">
@@ -528,11 +532,12 @@ export default async function PublicMinistryPage({
                   </div>
                 </div>
               </div>
+              </Link>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {(articulos[0].pinned ? articulos.slice(1) : articulos).map(item => (
-                <ArticleCard key={item.id} item={item} />
+                <ArticleCard key={item.id} item={item} href={`/ministerios/${slug}/contenido/${item.id}`} />
               ))}
             </div>
           </div>

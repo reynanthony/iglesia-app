@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, BookOpen, ChevronRight } from 'lucide-react'
+import { ArrowRight, BookOpen, ChevronRight, Quote } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 
 export const revalidate = 3600
@@ -32,31 +32,39 @@ function getVerseOfDay() {
   return VERSES[dayOfYear % VERSES.length]
 }
 
-const PLANS = [
-  { title: 'La Biblia en un año',     desc: 'Lee toda la Escritura en 365 días — 3 capítulos diarios.',           duration: '365 días',  level: 'Todos' },
-  { title: 'Nuevo Testamento en 90',  desc: 'El evangelio completo en tres meses de lectura constante.',            duration: '90 días',   level: 'Principiantes' },
-  { title: 'Salmos y Proverbios',     desc: 'Un salmo y un capítulo de Proverbios por día. Para la vida diaria.',  duration: '30 días',   level: 'Todos' },
-  { title: 'Vida de Cristo en Juan',  desc: 'El Evangelio de Juan completo en 21 sesiones de lectio divina.',      duration: '21 días',   level: 'Profundización' },
+// Pasajes bíblicos destacados para explorar
+const PASSAGES = [
+  { ref: 'Juan 1:1–18',        title: 'El Verbo hecho carne',         desc: 'El prólogo más profundo de la Escritura.' },
+  { ref: 'Romanos 8',           title: 'Vida en el Espíritu',          desc: 'El capítulo del triunfo cristiano.' },
+  { ref: 'Salmo 23',            title: 'El Buen Pastor',               desc: 'El salmo más conocido del mundo.' },
+  { ref: 'Mateo 5–7',           title: 'El Sermón del Monte',          desc: 'El corazón de la ética de Jesús.' },
+  { ref: '1 Corintios 13',      title: 'El Himno del Amor',            desc: 'La definición perfecta del amor bíblico.' },
+  { ref: 'Hebreos 11',          title: 'Galería de la Fe',             desc: 'Los héroes de la fe a lo largo de la historia.' },
 ]
+
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+function fmtDate(d: string) {
+  const dt = new Date(d)
+  return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]}`
+}
 
 export default async function BibliaPage() {
   const supabase = await createClient()
   const verse = getVerseOfDay()
 
-  // Devocionales de Supabase (si la tabla existe)
   const { data: devocionales } = await supabase
     .from('devocionales')
     .select('id,title,content,author,verse,verse_ref,created_at')
     .eq('published', true)
     .order('created_at', { ascending: false })
-    .limit(4)
+    .limit(6)
 
   const devos = devocionales ?? []
 
   return (
     <div>
 
-      {/* HERO — versículo del día dominante */}
+      {/* ══ HERO — versículo del día ════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '90vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
@@ -99,9 +107,9 @@ export default async function BibliaPage() {
                 <BookOpen size={18} style={{ color: TEAL }} />
               </div>
               <div>
-                <p className="text-sm font-black text-white">Continúa en la comunidad</p>
+                <p className="text-sm font-black text-white">Explora la Escritura</p>
                 <p className="text-[11px]" style={{ color: `rgba(246,243,235,0.45)` }}>
-                  Planes de lectura · Notas personales · Grupos de estudio
+                  Devocionales · Pasajes destacados · Reflexiones
                 </p>
               </div>
             </div>
@@ -121,8 +129,8 @@ export default async function BibliaPage() {
         </div>
       </section>
 
-      {/* DEVOCIONALES */}
-      {devos.length > 0 && (
+      {/* ══ DEVOCIONALES ══════════════════════════════════════ */}
+      {devos.length > 0 ? (
         <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
           <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
             <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
@@ -136,12 +144,14 @@ export default async function BibliaPage() {
             </div>
 
             {/* Devocional destacado */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden mb-5"
+            <Link href={`/biblia/devocional/${devos[0].id}`}
+              className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden mb-5 transition"
               style={{ border: '1px solid #D2CDB8' }}>
               <div className="lg:col-span-5 flex items-center justify-center p-12 md:p-16"
                 style={{ background: NAVY }}>
                 {devos[0].verse && (
                   <div className="text-center">
+                    <Quote size={20} style={{ color: `${TEAL}60`, margin: '0 auto 12px' }} />
                     <p className="font-display font-black text-white tracking-tight leading-tight mb-4"
                       style={{ fontSize: 'clamp(1.3rem, 3vw, 2rem)' }}>
                       "{devos[0].verse}"
@@ -154,95 +164,115 @@ export default async function BibliaPage() {
                   </div>
                 )}
               </div>
-              <div className="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-center" style={{ background: CREAM }}>
-                <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: TEAL }}>
+              <div className="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-center gap-4" style={{ background: CREAM }}>
+                <p className="text-[9px] font-bold uppercase tracking-[0.35em]" style={{ color: TEAL }}>
                   Devocional reciente
                 </p>
-                <h3 className="font-black text-2xl md:text-3xl tracking-tight leading-tight mb-4" style={{ color: NAVY }}>
+                <h3 className="font-black text-2xl md:text-3xl tracking-tight leading-tight" style={{ color: NAVY }}>
                   {devos[0].title}
                 </h3>
-                <p className="text-sm leading-relaxed line-clamp-4 mb-6" style={{ color: `${NAVY}65` }}>
+                <p className="text-sm leading-relaxed line-clamp-4" style={{ color: `${NAVY}65` }}>
                   {devos[0].content}
                 </p>
-                <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
-                  {devos[0].author}
-                </p>
+                <div className="flex items-center justify-between pt-2">
+                  <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
+                    {devos[0].author}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wider"
+                    style={{ color: TEAL }}>
+                    Leer <ArrowRight size={11} />
+                  </span>
+                </div>
               </div>
-            </div>
+            </Link>
 
             {/* Otros devocionales */}
             {devos.length > 1 && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {devos.slice(1).map(d => (
-                  <div key={d.id} className="p-7 rounded-2xl" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
+                  <Link key={d.id} href={`/biblia/devocional/${d.id}`}
+                    className="group p-7 rounded-2xl transition hover:brightness-95"
+                    style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
                     <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: TEAL }}>
-                      Devocional
+                      {d.verse_ref ?? 'Devocional'}
                     </p>
-                    <h4 className="font-black text-lg tracking-tight leading-tight mb-3" style={{ color: NAVY }}>
+                    <h4 className="font-black text-lg tracking-tight leading-tight mb-3 group-hover:opacity-70 transition" style={{ color: NAVY }}>
                       {d.title}
                     </h4>
                     <p className="text-[12px] leading-relaxed line-clamp-3 mb-4" style={{ color: `${NAVY}60` }}>
                       {d.content}
                     </p>
-                    <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
-                      {d.author}
-                    </p>
-                  </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
+                        {d.author}
+                      </p>
+                      <span className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1" style={{ color: TEAL }}>
+                        Leer <ArrowRight size={10} />
+                      </span>
+                    </div>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
         </section>
+      ) : (
+        <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
+          <div className="max-w-6xl mx-auto px-6 py-20">
+            <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Devocionales</p>
+                <h2 className="font-display font-black tracking-tighter"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
+                  Reflexiones<br />para el alma.
+                </h2>
+              </div>
+            </div>
+            <div className="text-center py-20">
+              <p className="text-sm" style={{ color: `${NAVY}50` }}>
+                Los devocionales estarán disponibles pronto.
+              </p>
+            </div>
+          </div>
+        </section>
       )}
 
-      {/* PLANES DE LECTURA */}
+      {/* ══ PASAJES DESTACADOS ════════════════════════════════ */}
       <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Planes de lectura</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Escritura</p>
               <h2 className="font-display font-black tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
-                Lee con<br />propósito.
+                Pasajes que<br />transforman.
               </h2>
             </div>
           </div>
 
           <div className="space-y-px rounded-2xl overflow-hidden" style={{ border: '1px solid #D2CDB8' }}>
-            {PLANS.map(({ title, desc, duration, level }, idx) => (
-              <div key={title}
-                className="group flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 md:px-8 py-6 md:py-7 transition hover:bg-white"
+            {PASSAGES.map(({ ref, title, desc }, idx) => (
+              <div key={ref}
+                className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 md:px-8 py-6 md:py-7"
                 style={{ background: idx % 2 === 0 ? CREAM : '#F4F1E8' }}>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="font-black text-base tracking-tight" style={{ color: NAVY }}>{title}</h3>
-                    <span className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full flex-shrink-0"
-                      style={{ background: `${TEAL}15`, color: TEAL }}>
-                      {level}
-                    </span>
-                  </div>
-                  <p className="text-[12px]" style={{ color: `${NAVY}60` }}>{desc}</p>
+                <div className="flex-shrink-0 w-32">
+                  <p className="text-[10px] font-black uppercase tracking-wider" style={{ color: TEAL }}>{ref}</p>
                 </div>
-                <div className="flex items-center gap-6 flex-shrink-0">
-                  <div className="text-right">
-                    <p className="font-black text-base leading-none" style={{ color: TEAL }}>{duration}</p>
-                  </div>
-                  <Link href="/registro"
-                    className="text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-lg transition opacity-0 group-hover:opacity-100"
-                    style={{ background: NAVY, color: CREAM }}>
-                    Iniciar
-                  </Link>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-black text-base tracking-tight" style={{ color: NAVY }}>{title}</h3>
+                  <p className="text-[12px] mt-0.5" style={{ color: `${NAVY}60` }}>{desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-[11px] mt-4 text-center" style={{ color: `${NAVY}40` }}>
-            * Los planes con seguimiento de progreso están disponibles en la comunidad en línea.
+
+          <p className="text-[11px] mt-6 text-center" style={{ color: `${NAVY}40` }}>
+            Consulta estos pasajes en tu Biblia o en aplicaciones como YouVersion, Bible Gateway o Blue Letter Bible.
           </p>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ══ CTA ══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
