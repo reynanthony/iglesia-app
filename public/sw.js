@@ -1,4 +1,4 @@
-const CACHE = 'el-manantial-v1'
+const CACHE = 'el-manantial-v2'
 
 // Páginas que cacheamos para offline
 const OFFLINE_URLS = ['/offline']
