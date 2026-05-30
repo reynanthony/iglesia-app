@@ -7,7 +7,7 @@ import VideoPlayer from '@/components/VideoPlayer'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
-  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
   return m ? m[1] : null
 }
 
@@ -37,14 +37,16 @@ export default async function EnVivoPage() {
     .eq('type', 'video')
     .order('created_at', { ascending: false })
     .limit(4)
-  const predicas = (rawPredicas ?? []).map((p: any) => ({
-    id: p.id,
-    title: p.title,
-    speaker: p.speaker?.full_name ?? null,
-    date: p.date,
-    thumbnail: p.thumbnail,
-    video_url: p.video_url,
-  }))
+  const predicas = (rawPredicas ?? []).map((p: any) => {
+    const ytId = getYoutubeId(p.video_url ?? '')
+    return {
+      id: p.id,
+      title: p.title,
+      speaker: p.speaker?.full_name ?? null,
+      date: p.date,
+      thumbnail: p.thumbnail ?? (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null),
+    }
+  })
 
   const currentProfile = {
     full_name: profile?.full_name ?? 'Usuario',
@@ -52,7 +54,7 @@ export default async function EnVivoPage() {
     avatar_url: profile?.avatar_url ?? null,
   }
 
-  if (isLive && liveYtId) {
+  if (isLive) {
     return (
       <div style={{ background: '#061E30', minHeight: '100%' }}>
 
@@ -72,7 +74,23 @@ export default async function EnVivoPage() {
 
           {/* Video player */}
           <div className="md:flex-1 bg-black">
-            <VideoPlayer ytId={liveYtId} title={liveTitle} />
+            {liveYtId ? (
+              <VideoPlayer ytId={liveYtId} title={liveTitle} />
+            ) : liveUrl ? (
+              <div className="flex flex-col items-center justify-center py-20 gap-3 px-6 text-center">
+                <Radio size={24} style={{ color: '#76ABAE' }} />
+                <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
+                <a href={liveUrl} target="_blank" rel="noopener noreferrer"
+                  className="text-[12px] font-bold px-4 py-2 rounded-xl"
+                  style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}>
+                  Ver en YouTube →
+                </a>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center py-20">
+                <Radio size={24} style={{ color: '#76ABAE', opacity: 0.4 }} />
+              </div>
+            )}
           </div>
 
           {/* Live chat */}
