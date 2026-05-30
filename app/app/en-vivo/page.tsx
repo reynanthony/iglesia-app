@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
-import { cmsGet, cmsImageUrl } from '@/lib/directus'
 import LiveChatBox from '@/components/app/LiveChatBox'
 
 function youtubeEmbedUrl(url: string): string | null {
@@ -21,8 +20,6 @@ function youtubeEmbedUrl(url: string): string | null {
     return null
   }
 }
-
-type Predica = { id: string; title: string; speaker?: string; date?: string; thumbnail?: string; video_url?: string }
 
 export default async function EnVivoPage() {
   const supabase = await createClient()
@@ -43,8 +40,21 @@ export default async function EnVivoPage() {
   const liveTitle = cfg['live_title'] ?? 'Culto en vivo'
   const embedUrl = youtubeEmbedUrl(liveUrl)
 
-  // Fetch last 4 predicas for offline state
-  const predicas = await cmsGet<Predica>('predicas', { sort: '-date', limit: '4' })
+  // Fetch last 4 predicas for offline state (from Supabase, same source as admin)
+  const { data: rawPredicas } = await supabase
+    .from('ministry_content')
+    .select('id, title, video_url, thumbnail:image_url, speaker:profiles(full_name), date:created_at')
+    .eq('type', 'video')
+    .order('created_at', { ascending: false })
+    .limit(4)
+  const predicas = (rawPredicas ?? []).map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    speaker: p.speaker?.full_name ?? null,
+    date: p.date,
+    thumbnail: p.thumbnail,
+    video_url: p.video_url,
+  }))
 
   const currentProfile = {
     full_name: profile?.full_name ?? 'Usuario',
@@ -156,7 +166,7 @@ export default async function EnVivoPage() {
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
                     style={{ background: '#0D3352' }}>
                     {p.thumbnail
-                      ? <img src={cmsImageUrl(p.thumbnail) ?? ''} alt="" className="w-full h-full object-cover" />
+                      ? <img src={p.thumbnail} alt="" className="w-full h-full object-cover" />
                       : <Play size={18} style={{ color: '#76ABAE' }} />}
                   </div>
                   <div className="flex-1 min-w-0">

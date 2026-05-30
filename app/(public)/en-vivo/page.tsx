@@ -1,9 +1,8 @@
 import Link from 'next/link'
-import { ArrowRight, Radio, Clock, Play, Wifi, ExternalLink } from 'lucide-react'
+import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { cmsGet, cmsImageUrl } from '@/lib/directus'
 
-export const revalidate = 60
+export const revalidate = 0
 
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
@@ -16,19 +15,15 @@ const SCHEDULE = [
   { day: 'Viernes',   time: '7:00 PM',  type: 'Noche de oración',  live: false },
 ]
 
-type DirectusPredica = {
-  id: string; title: string; description?: string
-  video_url?: string; thumbnail?: string; series?: string; speaker?: string; date?: string
-}
-
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
 function fmtFecha(iso: string) {
   const d = new Date(iso)
   return `${MESES[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
 }
 
-function getYoutubeId(url: string) {
-  const m = url?.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+function getYoutubeId(url?: string | null) {
+  if (!url) return null
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
   return m ? m[1] : null
 }
 
@@ -44,21 +39,28 @@ export default async function EnVivoPage() {
   const isLive    = cfg['is_live'] === 'true'
   const liveUrl   = cfg['live_url']  ?? ''
   const liveTitle = cfg['live_title'] ?? 'Servicio en vivo'
+  const ytId      = getYoutubeId(liveUrl)
 
-  const ytId = getYoutubeId(liveUrl)
+  // Predicas from Supabase (same source as admin)
+  const { data: rawPredicas } = await supabase
+    .from('ministry_content')
+    .select('id, title, body, video_url, image_url, created_at, profiles(full_name), ministries(name)')
+    .eq('type', 'video')
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(12)
 
-  const cmsSermons = await cmsGet<DirectusPredica>('predicas', { sort: '-date', limit: '12' })
-  const predicas = cmsSermons.map(s => ({
+  const predicas = (rawPredicas ?? []).map((s: any) => ({
     id: s.id,
     titulo: s.title,
-    pastor: s.speaker ?? 'Pastor Principal',
-    fecha: s.date ? fmtFecha(s.date) : '',
-    serie: s.series ?? '',
+    pastor: s.profiles?.full_name ?? 'Pastor Principal',
+    fecha: fmtFecha(s.created_at),
+    serie: s.ministries?.name ?? '',
     video_url: s.video_url ?? null,
-    image_url: cmsImageUrl(s.thumbnail),
+    image_url: s.image_url ?? null,
   }))
 
-  const featured = predicas[0]
+  const featured = predicas[0] ?? null
   const archive  = predicas.slice(1)
 
   return (
