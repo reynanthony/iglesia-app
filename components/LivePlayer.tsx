@@ -12,17 +12,17 @@ function toEmbedUrl(url: string): string | null {
   if (!url) return null
   if (url.includes('/embed/')) return url
 
-  // Standard video ID: watch?v=, live/ID, shorts/ID
+  // Standard video ID: watch?v=, live/ID, shorts/ID, youtu.be/
   const byId = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
   if (byId) return `https://www.youtube.com/embed/${byId[1]}?rel=0&modestbranding=1&playsinline=1`
 
-  // Channel ID: /channel/UCxxxxxx
-  const byChannelId = url.match(/youtube\.com\/channel\/(UC[a-zA-Z0-9_-]+)/)
+  // Channel ID from any YouTube URL (including studio.youtube.com)
+  const byChannelId = url.match(/(?:youtube\.com|studio\.youtube\.com)\/channel\/(UC[a-zA-Z0-9_-]+)/)
   if (byChannelId) return `https://www.youtube.com/embed/live_stream?channel=${byChannelId[1]}&rel=0&modestbranding=1`
 
-  // @username/live
+  // @username format
   const byUsername = url.match(/youtube\.com\/@([^/?#]+)/)
-  if (byUsername) return `https://www.youtube.com/embed/live_stream?user=${byUsername[1]}&rel=0&modestbranding=1`
+  if (byUsername) return `https://www.youtube.com/embed/live_stream?channel=${byUsername[1]}&rel=0&modestbranding=1`
 
   return null
 }

@@ -124,7 +124,7 @@ CREATE POLICY "Admins gestionan config"
               style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, color: '#F6F3EB' }}
             />
             <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
-              Acepta URLs de youtube.com y youtu.be
+              Pega la URL pública del video: youtube.com/watch?v=... o youtu.be/... (no la de YouTube Studio)
             </p>
           </div>
 
