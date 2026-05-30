@@ -1,5 +1,5 @@
 const CMS   = process.env.STRAPI_URL
-const TOKEN = process.env.STRAPI_API_TOKEN
+const TOKEN = process.env.STRAPI_API_TOKEN ?? ''
 
 // ── Directus collection types ──────────────────────────
 
@@ -80,13 +80,14 @@ export async function cmsGet<T>(
   collection: string,
   params?: Record<string, string>,
 ): Promise<T[]> {
-  if (!CMS || !TOKEN) return []
+  if (!CMS) return []
   try {
     const url = new URL(`/items/${collection}`, CMS)
     url.searchParams.set('limit', '100')
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
+    const headers: Record<string, string> = TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}
     const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${TOKEN}` },
+      headers,
       next: { revalidate: 60 },
     })
     if (!res.ok) return []
@@ -102,12 +103,13 @@ export async function cmsById<T>(
   id: string | number,
   params?: Record<string, string>,
 ): Promise<T | null> {
-  if (!CMS || !TOKEN) return null
+  if (!CMS) return null
   try {
     const url = new URL(`/items/${collection}/${id}`, CMS)
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
+    const headers: Record<string, string> = TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}
     const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${TOKEN}` },
+      headers,
       next: { revalidate: 60 },
     })
     if (!res.ok) return null
@@ -122,12 +124,13 @@ export async function cmsSingle<T>(
   collection: string,
   params?: Record<string, string>,
 ): Promise<T | null> {
-  if (!CMS || !TOKEN) return null
+  if (!CMS) return null
   try {
     const url = new URL(`/items/${collection}`, CMS)
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
+    const headers: Record<string, string> = TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}
     const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${TOKEN}` },
+      headers,
       next: { revalidate: 60 },
     })
     if (!res.ok) return null
