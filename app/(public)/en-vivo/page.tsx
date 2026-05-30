@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import VideoPlayer from '@/components/VideoPlayer'
 
 export const revalidate = 0
 
@@ -93,16 +92,22 @@ export default async function EnVivoPage() {
             </div>
           </div>
 
-          {/* EMBEDDED PLAYER — autoplay immediately, no button needed */}
+          {/* EMBEDDED PLAYER — starts automatically */}
           <div className="w-full" style={{ background: '#000' }}>
             {ytId ? (
-              <VideoPlayer ytId={ytId} title={liveTitle} autoStart={true} />
+              <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+                <iframe
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={liveTitle}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
+                />
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-28 gap-6"
                 style={{ background: '#0A0A0A' }}>
-                <div className="w-16 h-16 rounded-full border border-red-500/30 flex items-center justify-center">
-                  <Wifi size={24} style={{ color: '#EF4444' }} />
-                </div>
+                <Wifi size={24} style={{ color: '#EF4444' }} />
                 <p className="text-white font-black text-lg">{liveTitle}</p>
               </div>
             )}
