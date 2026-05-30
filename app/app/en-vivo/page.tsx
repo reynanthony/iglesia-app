@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveChatBox from '@/components/app/LiveChatBox'
+import VideoPlayer from '@/components/VideoPlayer'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
@@ -69,15 +70,9 @@ export default async function EnVivoPage() {
         {/* Responsive split: video top, chat bottom on mobile; side by side on desktop */}
         <div className="flex flex-col md:flex-row" style={{ height: 'calc(100% - 57px)' }}>
 
-          {/* Video — iframe starts immediately */}
-          <div className="md:flex-1 bg-black" style={{ position: 'relative', aspectRatio: '16/9' }}>
-            <iframe
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
-              src={`https://www.youtube.com/embed/${liveYtId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-              title={liveTitle}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowFullScreen
-            />
+          {/* Video player */}
+          <div className="md:flex-1 bg-black">
+            <VideoPlayer ytId={liveYtId} title={liveTitle} />
           </div>
 
           {/* Live chat */}
