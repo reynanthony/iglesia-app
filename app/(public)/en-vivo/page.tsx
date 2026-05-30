@@ -41,21 +41,18 @@ function getYoutubeId(url: string) {
 export default async function EnVivoPage() {
   const supabase = await createClient()
 
-  // Live state from Supabase
-  let config: { is_live: boolean; live_url: string; live_title: string } | null = null
+  // Live state from Supabase site_config (key/value rows)
+  let cfg: Record<string, string> = {}
   try {
-    const { data } = await supabase
-      .from('site_config')
-      .select('is_live, live_url, live_title')
-      .single()
-    config = data
+    const { data } = await supabase.from('site_config').select('key, value')
+    cfg = Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value]))
   } catch {
-    config = null
+    cfg = {}
   }
 
-  const isLive    = config?.is_live   ?? false
-  const liveUrl   = config?.live_url  ?? ''
-  const liveTitle = config?.live_title ?? 'Servicio en vivo'
+  const isLive    = cfg['is_live'] === 'true'
+  const liveUrl   = cfg['live_url']  ?? ''
+  const liveTitle = cfg['live_title'] ?? 'Servicio en vivo'
 
   // Predicas from Directus CMS (recorded sermons)
   const cmsSermons = await cmsGet<DirectusPredica>('predicas', { sort: '-date', limit: '12' })

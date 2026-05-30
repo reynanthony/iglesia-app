@@ -18,6 +18,7 @@ async function setConfig(key: string, value: string) {
   await supabase.from('site_config')
     .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
   revalidatePath('/admin/en-vivo')
+  revalidatePath('/en-vivo')
   revalidatePath('/app/en-vivo')
 }
 
