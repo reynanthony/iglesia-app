@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Radio, Clock, Calendar, Play, Wifi, ChevronRight } from 'lucide-react'
+import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { cmsGet, cmsImageUrl } from '@/lib/directus'
 
@@ -11,20 +11,14 @@ const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
 const SCHEDULE = [
-  { day: 'Domingo',   time: '10:00 AM', type: 'Servicio principal',  live: true  },
-  { day: 'Miércoles', time: '7:00 PM',  type: 'Estudio bíblico',    live: false },
-  { day: 'Viernes',   time: '7:00 PM',  type: 'Noche de oración',   live: false },
+  { day: 'Domingo',   time: '10:00 AM', type: 'Servicio principal', live: true  },
+  { day: 'Miércoles', time: '7:00 PM',  type: 'Estudio bíblico',   live: false },
+  { day: 'Viernes',   time: '7:00 PM',  type: 'Noche de oración',  live: false },
 ]
 
 type DirectusPredica = {
-  id: string
-  title: string
-  description?: string
-  video_url?: string
-  thumbnail?: string
-  series?: string
-  speaker?: string
-  date?: string
+  id: string; title: string; description?: string
+  video_url?: string; thumbnail?: string; series?: string; speaker?: string; date?: string
 }
 
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
@@ -41,20 +35,18 @@ function getYoutubeId(url: string) {
 export default async function EnVivoPage() {
   const supabase = await createClient()
 
-  // Live state from Supabase site_config (key/value rows)
   let cfg: Record<string, string> = {}
   try {
     const { data } = await supabase.from('site_config').select('key, value')
     cfg = Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value]))
-  } catch {
-    cfg = {}
-  }
+  } catch { cfg = {} }
 
   const isLive    = cfg['is_live'] === 'true'
   const liveUrl   = cfg['live_url']  ?? ''
   const liveTitle = cfg['live_title'] ?? 'Servicio en vivo'
 
-  // Predicas from Directus CMS (recorded sermons)
+  const ytId = getYoutubeId(liveUrl)
+
   const cmsSermons = await cmsGet<DirectusPredica>('predicas', { sort: '-date', limit: '12' })
   const predicas = cmsSermons.map(s => ({
     id: s.id,
@@ -72,115 +64,133 @@ export default async function EnVivoPage() {
   return (
     <div>
 
-      {/* ══ HERO ══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '85vh' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
-        <div className="pointer-events-none absolute inset-0"
-          style={{ background: isLive
-            ? `radial-gradient(ellipse 60% 60% at 50% 30%, rgba(239,68,68,0.08), transparent 65%)`
-            : `radial-gradient(ellipse 50% 65% at 85% 30%, ${TEAL}10, transparent 65%)` }} />
+      {/* ══ HERO ═══════════════════════════════════════════════
+          When LIVE  → immersive embedded player fills the hero
+          When OFFLINE → editorial text layout               */}
 
-        {/* LIVE dot */}
-        {isLive && (
-          <div className="absolute top-28 md:top-36 left-6 flex items-center gap-3">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: '#EF4444' }} />
-              <span className="relative inline-flex rounded-full h-3 w-3" style={{ background: '#EF4444' }} />
-            </span>
-            <span className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: '#EF4444' }}>En vivo ahora</span>
-          </div>
-        )}
+      {isLive ? (
+        /* ─── LIVE HERO ─────────────────────────────────── */
+        <section style={{ background: '#000' }}>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-44 md:pb-24 flex flex-col justify-end"
-          style={{ minHeight: '85vh' }}>
-
-          <div className="flex items-center gap-5 mb-12">
-            <div className="w-px h-10" style={{ background: TEAL }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
-              El Manantial · {isLive ? 'Transmisión en vivo' : 'Transmisiones y prédicas'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-end">
-            <div>
-              <h1 className="font-display font-black tracking-tighter text-white mb-6"
-                style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
-                {isLive ? <>La iglesia<br /><em style={{ color: '#EF4444' }}>en vivo.</em></> : <>La Palabra<br />donde<br /><em style={{ color: TEAL }}>estés.</em></>}
-              </h1>
-            </div>
-            <div>
-              {isLive ? (
-                <>
-                  <p className="text-base leading-relaxed mb-8" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                    Estamos transmitiendo ahora mismo. Únete a la congregación desde cualquier lugar — la presencia de Dios no tiene fronteras.
-                  </p>
-                  <a href={liveUrl} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition"
-                    style={{ background: '#EF4444', color: '#FFFFFF' }}>
-                    <Radio size={13} /> Ver transmisión en vivo
-                  </a>
-                </>
-              ) : (
-                <>
-                  <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                    Todos los domingos transmitimos nuestro servicio. Accede también al archivo completo de prédicas predicadas en El Manantial.
-                  </p>
-                  <div className="flex items-center gap-3 p-4 rounded-xl mb-6"
-                    style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid rgba(118,171,174,0.18)' }}>
-                    <Clock size={14} style={{ color: TEAL, flexShrink: 0 }} />
-                    <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.60)' }}>
-                      Próxima transmisión: <strong className="text-white">Domingo 10:00 AM</strong>
-                    </p>
-                  </div>
-                  {featured?.video_url && (
-                    <a href={featured.video_url} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-                      style={{ background: TEAL, color: NAVY }}>
-                      <Play size={12} /> Ver última prédica
-                    </a>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ PLAYER EN VIVO ══════════════════════════════════ */}
-      {isLive && liveUrl && (
-        <section style={{ background: '#000', borderBottom: '1px solid #111' }}>
-          <div className="max-w-5xl mx-auto px-6 py-10">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: '#EF4444' }} />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5" style={{ background: '#EF4444' }} />
+          {/* Top status bar */}
+          <div className="flex items-center gap-4 px-6 py-4"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+            <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.30)' }}>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-red-400" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-400" />
               </span>
-              <p className="text-sm font-black text-white">{liveTitle}</p>
+              En vivo
+            </span>
+            <p className="text-sm font-bold text-white truncate">{liveTitle}</p>
+            <div className="ml-auto flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em]"
+              style={{ color: 'rgba(255,255,255,0.30)' }}>
+              <Radio size={11} /> El Manantial
             </div>
-            {getYoutubeId(liveUrl) ? (
-              <div className="relative w-full rounded-2xl overflow-hidden" style={{ paddingTop: '56.25%' }}>
+          </div>
+
+          {/* EMBEDDED PLAYER — full width */}
+          <div className="w-full" style={{ background: '#000' }}>
+            {ytId ? (
+              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
                 <iframe
                   className="absolute inset-0 w-full h-full"
-                  src={`https://www.youtube.com/embed/${getYoutubeId(liveUrl)}?autoplay=1&rel=0`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   allowFullScreen
+                  style={{ border: 'none' }}
                 />
               </div>
             ) : (
-              <div className="rounded-2xl p-12 text-center" style={{ background: '#0A0A0A', border: '1px solid #222' }}>
+              /* Non-YouTube stream: show link to open externally */
+              <div className="flex flex-col items-center justify-center py-28 gap-6"
+                style={{ background: '#0A0A0A' }}>
+                <div className="w-16 h-16 rounded-full border border-red-500/30 flex items-center justify-center">
+                  <Wifi size={24} style={{ color: '#EF4444' }} />
+                </div>
+                <p className="text-white font-black text-lg">{liveTitle}</p>
                 <a href={liveUrl} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl"
                   style={{ background: '#EF4444', color: '#fff' }}>
-                  <Wifi size={13} /> Abrir transmisión
+                  <Radio size={13} /> Abrir transmisión
                 </a>
               </div>
             )}
           </div>
+
+          {/* Below player: join CTA */}
+          <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+            style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.3em] mb-1" style={{ color: 'rgba(255,255,255,0.30)' }}>
+                El Manantial · Culto en línea
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                Comparte con alguien que necesite escuchar la Palabra hoy.
+              </p>
+            </div>
+            <Link href="/registro"
+              className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-xl flex-shrink-0"
+              style={{ background: TEAL, color: NAVY }}>
+              Únete a la comunidad <ArrowRight size={12} />
+            </Link>
+          </div>
+        </section>
+
+      ) : (
+        /* ─── OFFLINE HERO ───────────────────────────────── */
+        <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '85vh' }}>
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: `radial-gradient(ellipse 50% 65% at 85% 30%, ${TEAL}10, transparent 65%)` }} />
+          <div className="pointer-events-none absolute right-0 bottom-0 select-none">
+            <span className="font-black leading-none"
+              style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.04, color: TEAL, lineHeight: 1 }}>
+              FE
+            </span>
+          </div>
+
+          <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-44 md:pb-24 flex flex-col justify-end"
+            style={{ minHeight: '85vh' }}>
+            <div className="flex items-center gap-5 mb-12">
+              <div className="w-px h-10" style={{ background: TEAL }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+                El Manantial · Transmisiones y prédicas
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-end">
+              <h1 className="font-display font-black tracking-tighter text-white"
+                style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+                La Palabra<br />donde<br /><em style={{ color: TEAL }}>estés.</em>
+              </h1>
+              <div>
+                <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                  Todos los domingos transmitimos nuestro servicio. Accede también al archivo completo de prédicas.
+                </p>
+                <div className="flex items-center gap-3 p-4 rounded-xl mb-6"
+                  style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid rgba(118,171,174,0.18)' }}>
+                  <Clock size={14} style={{ color: TEAL, flexShrink: 0 }} />
+                  <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.60)' }}>
+                    Próxima transmisión: <strong className="text-white">Domingo 10:00 AM</strong>
+                  </p>
+                </div>
+                {featured?.video_url && (
+                  <a href={featured.video_url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
+                    style={{ background: TEAL, color: NAVY }}>
+                    <Play size={12} /> Ver última prédica
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
         </section>
       )}
 
-      {/* ══ PRÉDICA DESTACADA ════════════════════════════════ */}
+      {/* ══ PRÉDICA DESTACADA ══════════════════════════════════ */}
       {featured && (
         <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
@@ -195,7 +205,6 @@ export default async function EnVivoPage() {
               className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer"
               style={{ borderColor: '#D2CDB8' }}>
 
-              {/* Thumbnail */}
               <div className="lg:col-span-5 relative min-h-[260px] flex items-center justify-center overflow-hidden"
                 style={{
                   background: featured.image_url
@@ -203,16 +212,17 @@ export default async function EnVivoPage() {
                     : `linear-gradient(135deg, ${NAVY} 0%, #0D4A72 100%)`,
                 }}>
                 <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.20)' }} />
-                <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
-                  style={{ background: TEAL, color: NAVY }}>
-                  {featured.serie || 'Mensaje'}
-                </div>
+                {featured.serie && (
+                  <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
+                    style={{ background: TEAL, color: NAVY }}>
+                    {featured.serie}
+                  </div>
+                )}
                 <div className="relative w-20 h-20 rounded-full border-2 border-white/25 group-hover:bg-white/20 flex items-center justify-center transition duration-300 group-hover:scale-110">
                   <Play size={22} className="text-white ml-1.5" />
                 </div>
               </div>
 
-              {/* Info */}
               <div className="lg:col-span-7 p-10 lg:p-14 flex flex-col justify-between gap-8"
                 style={{ background: '#EDEAE0' }}>
                 <div>
@@ -237,7 +247,7 @@ export default async function EnVivoPage() {
         </section>
       )}
 
-      {/* ══ ARCHIVO DE PRÉDICAS ══════════════════════════════ */}
+      {/* ══ ARCHIVO DE PRÉDICAS ════════════════════════════════ */}
       {archive.length > 0 && (
         <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
           <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
@@ -249,9 +259,9 @@ export default async function EnVivoPage() {
                   Prédicas<br />anteriores.
                 </h2>
               </div>
-              <div className="hidden sm:flex flex-col items-end gap-2">
-                <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>{predicas.length} mensajes</p>
-              </div>
+              <p className="hidden sm:block text-[11px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
+                {predicas.length} mensajes
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -348,7 +358,7 @@ export default async function EnVivoPage() {
             </div>
             <div className="flex flex-col gap-4">
               <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                El stream es el primer paso. La comunidad en línea te permite participar, orar, conectar y crecer junto a cientos de personas.
+                El stream es el primer paso. La comunidad en línea te permite participar, orar y crecer.
               </p>
               <Link href="/registro"
                 className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
