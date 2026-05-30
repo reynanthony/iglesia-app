@@ -3,22 +3,12 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveChatBox from '@/components/app/LiveChatBox'
+import VideoPlayer from '@/components/VideoPlayer'
 
-function youtubeEmbedUrl(url: string): string | null {
+function getYoutubeId(url: string): string | null {
   if (!url) return null
-  try {
-    const u = new URL(url)
-    let id: string | null = null
-    if (u.hostname.includes('youtu.be')) {
-      id = u.pathname.slice(1)
-    } else if (u.hostname.includes('youtube.com')) {
-      id = u.searchParams.get('v') ?? u.pathname.replace('/embed/', '')
-    }
-    if (!id) return null
-    return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`
-  } catch {
-    return null
-  }
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+  return m ? m[1] : null
 }
 
 export default async function EnVivoPage() {
@@ -38,7 +28,7 @@ export default async function EnVivoPage() {
   const isLive   = cfg['is_live'] === 'true'
   const liveUrl  = cfg['live_url'] ?? ''
   const liveTitle = cfg['live_title'] ?? 'Culto en vivo'
-  const embedUrl = youtubeEmbedUrl(liveUrl)
+  const liveYtId  = getYoutubeId(liveUrl)
 
   // Fetch last 4 predicas for offline state (from Supabase, same source as admin)
   const { data: rawPredicas } = await supabase
@@ -62,7 +52,7 @@ export default async function EnVivoPage() {
     avatar_url: profile?.avatar_url ?? null,
   }
 
-  if (isLive && embedUrl) {
+  if (isLive && liveYtId) {
     return (
       <div style={{ background: '#061E30', minHeight: '100%' }}>
 
@@ -80,16 +70,9 @@ export default async function EnVivoPage() {
         {/* Responsive split: video top, chat bottom on mobile; side by side on desktop */}
         <div className="flex flex-col md:flex-row" style={{ height: 'calc(100% - 57px)' }}>
 
-          {/* Video */}
-          <div className="md:flex-1 bg-black" style={{ aspectRatio: '16/9' }}>
-            <iframe
-              src={embedUrl}
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
-              allowFullScreen
-              sandbox="allow-same-origin allow-scripts allow-forms allow-presentation"
-              className="w-full h-full"
-              style={{ border: 'none' }}
-            />
+          {/* Video — autoStart skips thumbnail, plays immediately */}
+          <div className="md:flex-1 bg-black">
+            <VideoPlayer ytId={liveYtId} title={liveTitle} autoStart={true} />
           </div>
 
           {/* Live chat */}

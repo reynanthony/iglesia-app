@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import VideoPlayer from '@/components/VideoPlayer'
 
 export const revalidate = 0
 
@@ -92,32 +93,17 @@ export default async function EnVivoPage() {
             </div>
           </div>
 
-          {/* EMBEDDED PLAYER — full width */}
+          {/* EMBEDDED PLAYER — autoplay immediately, no button needed */}
           <div className="w-full" style={{ background: '#000' }}>
             {ytId ? (
-              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  sandbox="allow-same-origin allow-scripts allow-forms allow-presentation"
-                  style={{ border: 'none' }}
-                />
-              </div>
+              <VideoPlayer ytId={ytId} title={liveTitle} autoStart={true} />
             ) : (
-              /* Non-YouTube stream: show link to open externally */
               <div className="flex flex-col items-center justify-center py-28 gap-6"
                 style={{ background: '#0A0A0A' }}>
                 <div className="w-16 h-16 rounded-full border border-red-500/30 flex items-center justify-center">
                   <Wifi size={24} style={{ color: '#EF4444' }} />
                 </div>
                 <p className="text-white font-black text-lg">{liveTitle}</p>
-                <a href={liveUrl} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl"
-                  style={{ background: '#EF4444', color: '#fff' }}>
-                  <Radio size={13} /> Abrir transmisión
-                </a>
               </div>
             )}
           </div>

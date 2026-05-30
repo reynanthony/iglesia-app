@@ -7,10 +7,11 @@ interface VideoPlayerProps {
   ytId: string
   thumbnail?: string | null
   title?: string
+  autoStart?: boolean  // true = skip thumbnail, load iframe immediately (for live streams)
 }
 
-export default function VideoPlayer({ ytId, thumbnail, title }: VideoPlayerProps) {
-  const [playing, setPlaying] = useState(false)
+export default function VideoPlayer({ ytId, thumbnail, title, autoStart = false }: VideoPlayerProps) {
+  const [playing, setPlaying] = useState(autoStart)
 
   const thumb = thumbnail ?? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`
   const src   = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`
