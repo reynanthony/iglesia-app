@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Radio, Clock, Play, Wifi } from 'lucide-react'
+import { ArrowRight, Radio, Clock, Play, Wifi, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { cmsGet, cmsImageUrl } from '@/lib/directus'
 
@@ -177,12 +177,12 @@ export default async function EnVivoPage() {
                     Próxima transmisión: <strong className="text-white">Domingo 10:00 AM</strong>
                   </p>
                 </div>
-                {featured?.video_url && (
-                  <a href={featured.video_url} target="_blank" rel="noopener noreferrer"
+                {featured && (
+                  <Link href={`/predicas/${featured.id}`}
                     className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
                     style={{ background: TEAL, color: NAVY }}>
                     <Play size={12} /> Ver última prédica
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>
@@ -199,9 +199,7 @@ export default async function EnVivoPage() {
               <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: TEAL }}>Prédica reciente</p>
             </div>
 
-            <a href={featured.video_url ?? '#'}
-              target={featured.video_url ? '_blank' : undefined}
-              rel="noopener noreferrer"
+            <Link href={`/predicas/${featured.id}`}
               className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition cursor-pointer"
               style={{ borderColor: '#D2CDB8' }}>
 
@@ -242,7 +240,7 @@ export default async function EnVivoPage() {
                   <Play size={12} /> Ver prédica <ArrowRight size={12} />
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
       )}
@@ -267,20 +265,15 @@ export default async function EnVivoPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {archive.map(({ id, titulo, pastor, fecha, serie, image_url, video_url }) => {
                 const ytId = getYoutubeId(video_url ?? '')
+                const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : image_url
                 return (
-                  <a key={id} href={video_url ?? '#'}
-                    target={video_url ? '_blank' : undefined}
-                    rel="noopener noreferrer"
-                    className="group block">
+                  <Link key={id} href={`/predicas/${id}`} className="group block">
                     <div className="relative rounded-xl overflow-hidden mb-4"
                       style={{ aspectRatio: '16/10', background: NAVY }}>
-                      {ytId ? (
-                        <img src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`} alt=""
+                      {thumb && (
+                        <img src={thumb} alt=""
                           className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition" />
-                      ) : image_url ? (
-                        <img src={image_url} alt=""
-                          className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition" />
-                      ) : null}
+                      )}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-12 h-12 rounded-full border border-white/25 group-hover:bg-white/20 flex items-center justify-center transition group-hover:scale-110">
                           <Play size={14} className="text-white ml-0.5" />
@@ -294,7 +287,7 @@ export default async function EnVivoPage() {
                       {titulo}
                     </h3>
                     <p className="text-[11px] uppercase tracking-wider" style={{ color: SAGE }}>{pastor} · {fecha}</p>
-                  </a>
+                  </Link>
                 )
               })}
             </div>

@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Play, Calendar, User, Mic } from 'lucide-react'
+import { cmsGet, cmsById, cmsImageUrl } from '@/lib/directus'
 
 export const revalidate = 300
 
@@ -10,151 +10,166 @@ const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
+type DirectusPredica = {
+  id: string; status?: string; title: string; description?: string
+  video_url?: string; thumbnail?: string; series?: string; speaker?: string; date?: string
+}
+
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
 function fmtDate(d: string) {
   const dt = new Date(d)
   return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
 }
 
-export default async function MensajeDetailPage({
+function getYoutubeId(url?: string) {
+  if (!url) return null
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+  return m ? m[1] : null
+}
+
+export default async function PredicaDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const supabase = await createClient()
 
-  const { data: item } = await supabase
-    .from('ministry_content')
-    .select('*, profiles(full_name, username, avatar_url), ministries(name, slug)')
-    .eq('id', id)
-    .in('type', ['articulo', 'anuncio'])
-    .single()
+  const [predica, related] = await Promise.all([
+    cmsById<DirectusPredica>('predicas', id),
+    cmsGet<DirectusPredica>('predicas', {
+      'filter[status][_eq]': 'published',
+      'filter[id][_neq]': id,
+      'sort': '-date',
+      'limit': '3',
+    }),
+  ])
 
-  if (!item) notFound()
+  if (!predica) notFound()
 
-  // Related articles from same ministry
-  const { data: related } = await supabase
-    .from('ministry_content')
-    .select('id, title, body, image_url, created_at, ministries(name, slug)')
-    .eq('ministry_id', item.ministry_id)
-    .in('type', ['articulo', 'anuncio'])
-    .neq('id', id)
-    .order('created_at', { ascending: false })
-    .limit(3)
-
-  const ministry = item.ministries as any
-  const profile  = item.profiles as any
+  const ytId       = getYoutubeId(predica.video_url)
+  const thumbUrl   = cmsImageUrl(predica.thumbnail) ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
 
   return (
     <div>
 
-      {/* NAV BAR */}
+      {/* NAV */}
       <div style={{ background: '#051828', borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
-        <div className="max-w-4xl mx-auto px-6 py-5 flex items-center gap-3">
-          <Link href="/predicas"
+        <div className="max-w-5xl mx-auto px-6 py-5">
+          <Link href="/en-vivo"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] transition"
             style={{ color: `${TEAL}70` }}>
-            <ArrowLeft size={11} /> Mensajes
+            <ArrowLeft size={11} /> En Vivo / Prédicas
           </Link>
-          {ministry && (
-            <>
-              <span style={{ color: 'rgba(118,171,174,0.25)' }}>/</span>
-              <Link href={`/ministerios/${ministry.slug}`}
-                className="text-[10px] font-bold uppercase tracking-[0.3em] transition"
-                style={{ color: 'rgba(246,243,235,0.35)' }}>
-                {ministry.name}
-              </Link>
-            </>
-          )}
         </div>
       </div>
 
-      {/* HERO */}
-      <section style={{ background: NAVY }}>
-        <div className="max-w-4xl mx-auto px-6 pt-14 pb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-8 text-[9px] font-black uppercase tracking-[0.25em]"
-            style={{ background: `${TEAL}18`, color: TEAL, border: `1px solid ${TEAL}30` }}>
-            <BookOpen size={10} />
-            {ministry?.name ?? 'Mensaje'}
+      {/* VIDEO PLAYER or THUMBNAIL HERO */}
+      {ytId ? (
+        <div style={{ background: '#000' }}>
+          <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src={`https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+              style={{ border: 'none' }}
+            />
           </div>
+        </div>
+      ) : thumbUrl ? (
+        <div style={{ background: '#000', maxHeight: 480, overflow: 'hidden' }}>
+          <img src={thumbUrl} alt={predica.title} className="w-full object-cover" style={{ maxHeight: 480 }} />
+        </div>
+      ) : null}
 
-          <h1 className="font-display font-black tracking-tighter text-white mb-8"
-            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)', lineHeight: 0.88 }}>
-            {item.title}
+      {/* META */}
+      <section style={{ background: NAVY }}>
+        <div className="max-w-5xl mx-auto px-6 py-10 md:py-14">
+          {predica.series && (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-6 text-[9px] font-black uppercase tracking-[0.25em]"
+              style={{ background: `${TEAL}18`, color: TEAL, border: `1px solid ${TEAL}30` }}>
+              <Mic size={10} /> {predica.series}
+            </div>
+          )}
+
+          <h1 className="font-display font-black tracking-tighter text-white mb-6"
+            style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
+            {predica.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-5 pt-5" style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
-            {profile && (
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                  style={{ background: `${TEAL}20`, border: `1px solid ${TEAL}30` }}>
-                  {profile.avatar_url
-                    ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-                    : <span className="text-[10px] font-black" style={{ color: TEAL }}>{profile.full_name?.[0]?.toUpperCase() ?? 'A'}</span>
-                  }
-                </div>
-                <span className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.65)' }}>{profile.full_name}</span>
+          <div className="flex flex-wrap items-center gap-5 pt-5"
+            style={{ borderTop: '1px solid rgba(118,171,174,0.15)' }}>
+            {predica.speaker && (
+              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.65)' }}>
+                <User size={12} />
+                <span className="text-[12px] font-bold">{predica.speaker}</span>
               </div>
             )}
-            <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
-              <Calendar size={11} />
-              <span className="text-[11px]">{fmtDate(item.created_at)}</span>
-            </div>
+            {predica.date && (
+              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                <Calendar size={12} />
+                <span className="text-[12px]">{fmtDate(predica.date)}</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* IMAGE */}
-      {item.image_url && (
-        <div style={{ background: '#000' }}>
-          <div className="max-w-4xl mx-auto">
-            <img src={item.image_url} alt={item.title}
-              className="w-full object-cover" style={{ maxHeight: '520px' }} />
+      {/* DESCRIPTION */}
+      {predica.description && (
+        <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
+          <div className="max-w-3xl mx-auto px-6 py-14 md:py-20">
+            {predica.description.split('\n\n').map((p, i) =>
+              p.trim() ? (
+                <p key={i} className="mb-6 text-base leading-relaxed" style={{ color: `${NAVY}85` }}>
+                  {p}
+                </p>
+              ) : null
+            )}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* BODY */}
-      <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
-        <div className="max-w-2xl mx-auto px-6 py-16 md:py-20">
-          {item.body ? (
-            <div>
-              {item.body.split('\n\n').map((paragraph: string, i: number) =>
-                paragraph.trim() ? (
-                  <p key={i} className="mb-6 text-base leading-relaxed" style={{ color: `${NAVY}85` }}>
-                    {paragraph}
-                  </p>
-                ) : null
-              )}
-            </div>
-          ) : (
-            <p className="text-base italic" style={{ color: `${NAVY}50` }}>
-              Sin contenido adicional.
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* RELATED */}
-      {(related ?? []).length > 0 && (
+      {/* MORE PREDICAS */}
+      {related.length > 0 && (
         <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
-          <div className="max-w-4xl mx-auto px-6 py-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-8" style={{ color: SAGE }}>— Más del mismo ministerio</p>
+          <div className="max-w-5xl mx-auto px-6 py-14">
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-8" style={{ color: SAGE }}>
+              — Más prédicas
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {(related ?? []).map((r: any) => (
-                <Link key={r.id} href={`/predicas/${r.id}`}
-                  className="group p-5 rounded-2xl transition"
-                  style={{ background: CREAM, border: '1px solid #D2CDB8' }}>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: TEAL }}>
-                    {(r.ministries as any)?.name ?? 'Mensaje'}
-                  </p>
-                  <h3 className="font-black text-sm tracking-tight leading-tight mb-2 group-hover:opacity-70 transition" style={{ color: NAVY }}>
-                    {r.title}
-                  </h3>
-                  <p className="text-[10px]" style={{ color: SAGE }}>{fmtDate(r.created_at)}</p>
-                </Link>
-              ))}
+              {related.map(r => {
+                const rYtId = getYoutubeId(r.video_url)
+                const rThumb = cmsImageUrl(r.thumbnail) ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
+                return (
+                  <Link key={r.id} href={`/predicas/${r.id}`}
+                    className="group block rounded-2xl overflow-hidden transition"
+                    style={{ border: '1px solid #D2CDB8', background: CREAM }}>
+                    <div className="relative overflow-hidden" style={{ aspectRatio: '16/9', background: NAVY }}>
+                      {rThumb && (
+                        <img src={rThumb} alt={r.title}
+                          className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white/20 transition">
+                          <Play size={12} className="text-white ml-0.5" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      {r.series && (
+                        <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-1.5" style={{ color: TEAL }}>{r.series}</p>
+                      )}
+                      <h3 className="font-black text-sm tracking-tight leading-tight group-hover:opacity-70 transition" style={{ color: NAVY }}>
+                        {r.title}
+                      </h3>
+                      {r.speaker && (
+                        <p className="text-[10px] mt-1.5" style={{ color: SAGE }}>{r.speaker}</p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -162,11 +177,11 @@ export default async function MensajeDetailPage({
 
       {/* BACK + CTA */}
       <section style={{ background: NAVY }}>
-        <div className="max-w-4xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <Link href="/predicas"
+        <div className="max-w-5xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <Link href="/en-vivo"
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
             style={{ color: 'rgba(246,243,235,0.45)' }}>
-            <ArrowLeft size={12} /> Todos los mensajes
+            <ArrowLeft size={12} /> Volver a Prédicas
           </Link>
           <Link href="/registro"
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition"
