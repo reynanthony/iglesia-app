@@ -7,8 +7,12 @@ import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
   { href: '/ministerios', label: 'Ministerios' },
-  { href: '/eventos',     label: 'Eventos' },
+  { href: '/educacion',   label: 'Educación' },
   { href: '/predicas',    label: 'Prédicas' },
+  { href: '/eventos',     label: 'Eventos' },
+  { href: '/en-vivo',     label: 'En Vivo' },
+  { href: '/biblia',      label: 'Biblia' },
+  { href: '/donaciones',  label: 'Donaciones' },
   { href: '/contacto',    label: 'Contacto' },
 ]
 
@@ -81,11 +85,35 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               </Link>
             </div>
 
-            {/* Links */}
-            <div className="md:col-span-3 md:col-start-7">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Páginas</p>
-              <div className="space-y-3.5">
-                {[{ href: '/', label: 'Inicio' }, ...navLinks].map(({ href, label }) => (
+            {/* Links col 1 */}
+            <div className="md:col-span-2 md:col-start-7 xl:col-start-7">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Iglesia</p>
+              <div className="space-y-3">
+                {[
+                  { href: '/', label: 'Inicio' },
+                  { href: '/nosotros', label: 'Nosotros' },
+                  { href: '/ministerios', label: 'Ministerios' },
+                  { href: '/educacion', label: 'Educación' },
+                  { href: '/contacto', label: 'Contacto' },
+                ].map(({ href, label }) => (
+                  <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/40 hover:text-[#FFFFFF] transition">
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Links col 2 */}
+            <div className="md:col-span-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Contenido</p>
+              <div className="space-y-3">
+                {[
+                  { href: '/predicas', label: 'Prédicas' },
+                  { href: '/eventos', label: 'Eventos' },
+                  { href: '/en-vivo', label: 'En Vivo' },
+                  { href: '/biblia', label: 'Biblia' },
+                  { href: '/donaciones', label: 'Donaciones' },
+                ].map(({ href, label }) => (
                   <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/40 hover:text-[#FFFFFF] transition">
                     {label}
                   </Link>
@@ -95,19 +123,19 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             {/* Services */}
             <div className="md:col-span-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Servicios</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Cultos</p>
               <div className="space-y-3.5 text-sm text-[#FFFFFF]/40">
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold">Domingo</p>
-                  <p>10:00 AM</p>
+                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Domingo</p>
+                  <p className="text-xs">10:00 AM</p>
                 </div>
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold">Miércoles</p>
-                  <p>7:00 PM</p>
+                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Miércoles</p>
+                  <p className="text-xs">7:00 PM</p>
                 </div>
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold">Viernes</p>
-                  <p>7:00 PM</p>
+                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Viernes</p>
+                  <p className="text-xs">7:00 PM</p>
                 </div>
               </div>
             </div>

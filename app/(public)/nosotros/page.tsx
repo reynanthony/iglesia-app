@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import BlockRenderer from '@/components/BlockRenderer'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
+type Leader = { id: string; name: string; title: string; bio: string | null; avatar_url: string | null; category: string }
+
 export const dynamic = 'force-dynamic'
 
 const defaultBeliefs = [
@@ -15,7 +17,13 @@ const defaultBeliefs = [
 
 export default async function NosotrosPage() {
   const supabase = await createClient()
-  const { data } = await supabase.from('page_content').select('content').eq('page', 'nosotros').single()
+  const [{ data }, { data: leadersData }] = await Promise.all([
+    supabase.from('page_content').select('content').eq('page', 'nosotros').single(),
+    supabase.from('church_leaders').select('id,name,title,bio,avatar_url,category').eq('is_public', true).order('order_index'),
+  ])
+  const leaders: Leader[] = leadersData ?? []
+  const pastoral   = leaders.filter(l => l.category === 'pastoral')
+  const ministerio = leaders.filter(l => l.category === 'ministerio')
   const content = (data?.content ?? {}) as Record<string, any>
   if (Array.isArray(content.blocks) && content.blocks.length > 0) {
     return <BlockRenderer blocks={content.blocks} />
@@ -221,6 +229,100 @@ export default async function NosotrosPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════
+          EQUIPO PASTORAL
+      ═══════════════════════════════════════ */}
+      {leaders.length > 0 && (
+        <section className="bg-card border-b border-edge">
+          <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+
+            <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-4">— Nuestro equipo</p>
+                <h2 className="font-display font-black tracking-tighter text-ink"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
+                  Quienes te<br /><em style={{ color: '#76ABAE' }}>acompañan.</em>
+                </h2>
+              </div>
+            </div>
+
+            {/* Pastores / liderazgo general */}
+            {pastoral.length > 0 && (
+              <div className="mb-16">
+                <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-8">Liderazgo pastoral</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {pastoral.map((l, i) => (
+                    <div key={l.id}
+                      className="group relative flex flex-col gap-5 p-8 rounded-2xl border border-edge hover:border-[rgba(118,171,174,0.40)] transition"
+                      style={{ background: i === 0 ? '#093C5D' : undefined }}>
+                      {/* Avatar */}
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0"
+                          style={{ background: i === 0 ? 'rgba(118,171,174,0.20)' : 'rgba(9,60,93,0.10)', border: `1px solid ${i === 0 ? 'rgba(118,171,174,0.30)' : 'rgba(9,60,93,0.15)'}` }}>
+                          {l.avatar_url
+                            ? <img src={l.avatar_url} alt={l.name} className="w-full h-full object-cover" />
+                            : <span className="font-black text-2xl" style={{ color: i === 0 ? '#76ABAE' : '#093C5D' }}>
+                                {l.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
+                              </span>
+                          }
+                        </div>
+                        <div>
+                          <p className="font-black text-base leading-tight" style={{ color: i === 0 ? '#F6F3EB' : undefined }}>
+                            {l.name}
+                          </p>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-0.5" style={{ color: '#76ABAE' }}>
+                            {l.title}
+                          </p>
+                        </div>
+                      </div>
+                      {/* Bio */}
+                      {l.bio && (
+                        <p className="text-sm leading-relaxed" style={{ color: i === 0 ? 'rgba(246,243,235,0.60)' : 'rgba(9,60,93,0.60)' }}>
+                          {l.bio}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Líderes de ministerios */}
+            {ministerio.length > 0 && (
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-8">Líderes de ministerios</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {ministerio.map(l => (
+                    <div key={l.id}
+                      className="flex flex-col items-center text-center gap-4 p-6 rounded-2xl border border-edge hover:bg-muted transition">
+                      <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center"
+                        style={{ background: 'rgba(9,60,93,0.10)', border: '2px solid rgba(118,171,174,0.25)' }}>
+                        {l.avatar_url
+                          ? <img src={l.avatar_url} alt={l.name} className="w-full h-full object-cover" />
+                          : <span className="font-black text-2xl" style={{ color: '#093C5D' }}>
+                              {l.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
+                            </span>
+                        }
+                      </div>
+                      <div>
+                        <p className="font-black text-sm leading-tight text-ink">{l.name}</p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1" style={{ color: '#76ABAE' }}>
+                          {l.title}
+                        </p>
+                      </div>
+                      {l.bio && (
+                        <p className="text-[11px] text-ink-3 leading-relaxed line-clamp-3">{l.bio}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════════
           CTA — con "FAMILIA" decorativo

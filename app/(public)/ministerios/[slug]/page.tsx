@@ -539,6 +539,44 @@ export default async function PublicMinistryPage({
         </section>
       )}
 
+      {/* ══ LÍDER DEL MINISTERIO ══════════════════════════ */}
+      {(ministry.leader_name) && (
+        <section className="bg-card border-b border-edge">
+          <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+            <div className="flex items-center gap-3 mb-10 pb-5 border-b border-edge">
+              <div className="w-2 h-6 rounded-full flex-shrink-0" style={{ background: TEAL }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3">Liderazgo del ministerio</p>
+            </div>
+            <div className="flex flex-col md:flex-row items-start gap-8 max-w-2xl">
+              {/* Avatar */}
+              <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center"
+                style={{ background: `${TEAL}18`, border: `2px solid ${TEAL}30` }}>
+                {ministry.leader_avatar_url
+                  ? <img src={ministry.leader_avatar_url} alt={ministry.leader_name} className="w-full h-full object-cover" />
+                  : <span className="font-black text-3xl" style={{ color: TEAL }}>
+                      {ministry.leader_name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
+                    </span>
+                }
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: TEAL }}>
+                  {ministry.leader_title ?? 'Líder'}
+                </p>
+                <h3 className="text-2xl font-black text-ink tracking-tight mb-3">{ministry.leader_name}</h3>
+                {ministry.leader_bio && (
+                  <p className="text-sm text-ink-2 leading-relaxed">{ministry.leader_bio}</p>
+                )}
+                <Link href="/contacto"
+                  className="inline-flex items-center gap-2 mt-5 text-[11px] font-bold uppercase tracking-[0.2em] transition"
+                  style={{ color: TEAL }}>
+                  Contactar <ArrowRight size={11} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ══ CTA ════════════════════════════════════════════ */}
       <section
         className="relative overflow-hidden"
