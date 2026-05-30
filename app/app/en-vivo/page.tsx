@@ -15,7 +15,7 @@ function youtubeEmbedUrl(url: string): string | null {
       id = u.searchParams.get('v') ?? u.pathname.replace('/embed/', '')
     }
     if (!id) return null
-    return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+    return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`
   } catch {
     return null
   }
@@ -84,8 +84,9 @@ export default async function EnVivoPage() {
           <div className="md:flex-1 bg-black" style={{ aspectRatio: '16/9' }}>
             <iframe
               src={embedUrl}
-              allow="autoplay; fullscreen; picture-in-picture"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
               allowFullScreen
+              sandbox="allow-same-origin allow-scripts allow-forms allow-presentation"
               className="w-full h-full"
               style={{ border: 'none' }}
             />
