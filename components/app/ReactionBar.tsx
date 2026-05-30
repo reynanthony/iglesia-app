@@ -24,10 +24,12 @@ export default function ReactionBar({
   postId,
   currentUserId,
   reactions: initialReactions,
+  inline = false,
 }: {
   postId: string
   currentUserId: string
   reactions: Reaction[]
+  inline?: boolean
 }) {
   const [reactions, setReactions] = useState<Reaction[]>(initialReactions ?? [])
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -57,6 +59,56 @@ export default function ReactionBar({
 
   const Icon = currentDef?.icon ?? Flame
 
+  /* ── Inline mode (horizontal, for PostCard feed) ── */
+  if (inline) {
+    return (
+      <div className="relative flex items-center gap-1.5">
+        <button
+          onClick={() => setPickerOpen(p => !p)}
+          className="flex items-center gap-1.5 transition-transform active:scale-90"
+          aria-label="Reaccionar"
+        >
+          <Icon
+            size={20}
+            strokeWidth={1.8}
+            style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.40)' }}
+          />
+          {totalCount > 0 && (
+            <span className="text-xs font-bold"
+              style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.40)' }}>
+              {totalCount}
+            </span>
+          )}
+        </button>
+        {pickerOpen && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setPickerOpen(false)} />
+            <div className="absolute z-50 flex flex-row gap-1 p-2 rounded-2xl shadow-xl"
+              style={{ bottom: '32px', left: 0, background: '#0B2D47', border: '1px solid #0D3352' }}>
+              {REACTIONS.map(r => {
+                const RIcon = r.icon
+                const isSelected = myReaction?.type === r.type
+                return (
+                  <button key={r.type} onClick={() => handleSelect(r.type)}
+                    className="flex flex-col items-center gap-1 px-2.5 py-2 rounded-xl transition"
+                    style={{ background: isSelected ? 'rgba(118,171,174,0.15)' : 'transparent' }}>
+                    <RIcon size={18} strokeWidth={isSelected ? 2.5 : 1.8}
+                      style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.60)' }} />
+                    <span className="text-[9px] font-bold leading-none"
+                      style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.40)' }}>
+                      {r.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    )
+  }
+
+  /* ── TikTok vertical mode (ShortsCard) ── */
   return (
     <div className="relative flex flex-col items-center gap-0.5">
       {/* Main reaction button */}

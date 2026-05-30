@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle, Flag, Pencil, Trash2 } from 'lucide-react'
-import { toggleLike, createComment, reportPost, deleteOwnPost, updateOwnPost } from '@/app/actions/posts'
-import { hapticLight } from '@/lib/haptics'
+import { MessageCircle, Flag, Pencil, Trash2 } from 'lucide-react'
+import { createComment, reportPost, deleteOwnPost, updateOwnPost } from '@/app/actions/posts'
 import Link from 'next/link'
 import CommentItem from '@/components/CommentItem'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
 import { detectSocialEmbed } from '@/lib/social-embed'
+import ReactionBar from '@/components/app/ReactionBar'
 
 export default function PostCard({ post, currentUserId }: { post: any, currentUserId: string }) {
   const [showMenu, setShowMenu] = useState(false)
@@ -20,8 +20,6 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   const [deleted, setDeleted] = useState(false)
   const isOwn = post.user_id === currentUserId
   const [commenting, setCommenting] = useState(false)
-  const [liked, setLiked] = useState(post.likes?.some((l: any) => l.user_id === currentUserId))
-  const [likesCount, setLikesCount] = useState(post.likes?.length ?? 0)
 
   const topLevelComments = post.comments?.filter((c: any) => !c.parent_id) ?? []
   const totalComments = post.comments?.length ?? 0
@@ -32,13 +30,6 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
     if (diff < 3600) return `hace ${Math.floor(diff / 60)} min`
     if (diff < 86400) return `hace ${Math.floor(diff / 3600)} h`
     return `hace ${Math.floor(diff / 86400)} d`
-  }
-
-  async function handleLike() {
-    setLiked(!liked)
-    setLikesCount((c: number) => liked ? c - 1 : c + 1)
-    hapticLight()
-    await toggleLike(post.id)
   }
 
   async function handleComment(e: React.FormEvent<HTMLFormElement>) {
@@ -232,19 +223,13 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
       })()}
 
       {/* Acciones */}
-      <div className="flex items-center gap-5 px-4 py-3">
-        <button
-          onClick={handleLike}
-          className="flex items-center gap-1.5 transition active:scale-90"
-          style={{ color: liked ? '#F87171' : 'rgba(246,243,235,0.40)' }}
-        >
-          <Heart size={20} strokeWidth={1.8} fill={liked ? 'currentColor' : 'none'} />
-          {likesCount > 0 && (
-            <span className="text-xs font-bold" style={{ color: liked ? '#F87171' : 'rgba(246,243,235,0.40)' }}>
-              {likesCount}
-            </span>
-          )}
-        </button>
+      <div className="flex items-center gap-4 px-4 py-3">
+        <ReactionBar
+          postId={post.id}
+          currentUserId={currentUserId}
+          reactions={post.reactions ?? []}
+          inline
+        />
 
         <button
           onClick={() => setShowComments(!showComments)}
@@ -257,7 +242,14 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
           )}
         </button>
 
-        <span className="text-xs ml-auto" style={{ color: 'rgba(246,243,235,0.30)' }}>
+        {post.category && (
+          <span className="text-[9px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-lg ml-auto"
+            style={{ background: 'rgba(118,171,174,0.12)', color: 'rgba(118,171,174,0.70)' }}>
+            {post.category}
+          </span>
+        )}
+
+        <span className="text-xs" style={{ color: 'rgba(246,243,235,0.30)', marginLeft: post.category ? 0 : 'auto' }}>
           {timeAgo(post.created_at)}
         </span>
       </div>
