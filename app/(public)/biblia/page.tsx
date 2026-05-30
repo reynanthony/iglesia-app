@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, BookOpen, ChevronRight, Quote } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { ArrowRight, BookOpen, Quote } from 'lucide-react'
+import { cmsGet, cmsImageUrl, type DDevocional } from '@/lib/directus'
+import { OT_BOOKS, NT_BOOKS, hasBibleApi } from '@/lib/bible'
 
 export const revalidate = 3600
 
@@ -9,296 +10,279 @@ const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
-// Versículo del día — rota por día del año
-const VERSES = [
-  { ref: 'Salmo 119:105',   text: 'Lámpara es a mis pies tu palabra, y lumbrera a mi camino.' },
-  { ref: 'Josué 1:9',       text: 'Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en dondequiera que vayas.' },
-  { ref: 'Mateo 11:28',     text: 'Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.' },
-  { ref: 'Filipenses 4:7',  text: 'Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.' },
-  { ref: 'Isaías 40:31',    text: 'Los que esperan en Jehová tendrán nuevas fuerzas; levantarán alas como las águilas.' },
-  { ref: 'Romanos 8:28',    text: 'A los que aman a Dios, todas las cosas les ayudan a bien.' },
-  { ref: 'Salmo 23:1',      text: 'Jehová es mi pastor; nada me faltará.' },
-  { ref: 'Juan 3:16',       text: 'Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.' },
-  { ref: 'Proverbios 3:5',  text: 'Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.' },
-  { ref: 'Jeremías 29:11',  text: 'Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.' },
-  { ref: 'Gálatas 2:20',    text: 'Con Cristo estoy juntamente crucificado, y ya no vivo yo, mas vive Cristo en mí.' },
-  { ref: 'Filipenses 4:13', text: 'Todo lo puedo en Cristo que me fortalece.' },
-  { ref: 'Salmo 46:10',     text: 'Estad quietos, y conoced que yo soy Dios.' },
-  { ref: '2 Timoteo 3:16',  text: 'Toda la Escritura es inspirada por Dios, y útil para enseñar, para redargüir, para corregir, para instruir en justicia.' },
-]
-
-function getVerseOfDay() {
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000)
-  return VERSES[dayOfYear % VERSES.length]
-}
-
-// Pasajes bíblicos destacados para explorar
-const PASSAGES = [
-  { ref: 'Juan 1:1–18',        title: 'El Verbo hecho carne',         desc: 'El prólogo más profundo de la Escritura.' },
-  { ref: 'Romanos 8',           title: 'Vida en el Espíritu',          desc: 'El capítulo del triunfo cristiano.' },
-  { ref: 'Salmo 23',            title: 'El Buen Pastor',               desc: 'El salmo más conocido del mundo.' },
-  { ref: 'Mateo 5–7',           title: 'El Sermón del Monte',          desc: 'El corazón de la ética de Jesús.' },
-  { ref: '1 Corintios 13',      title: 'El Himno del Amor',            desc: 'La definición perfecta del amor bíblico.' },
-  { ref: 'Hebreos 11',          title: 'Galería de la Fe',             desc: 'Los héroes de la fe a lo largo de la historia.' },
-]
-
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
 function fmtDate(d: string) {
   const dt = new Date(d)
-  return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]}`
+  return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
 }
 
 export default async function BibliaPage() {
-  const supabase = await createClient()
-  const verse = getVerseOfDay()
+  const devocionales = await cmsGet<DDevocional>('devocionales', {
+    'filter[status][_eq]': 'published',
+    'sort': '-date_published,-date_created',
+    'limit': '13',
+  })
 
-  const { data: devocionales } = await supabase
-    .from('devocionales')
-    .select('id,title,content,author,verse,verse_ref,created_at')
-    .eq('published', true)
-    .order('created_at', { ascending: false })
-    .limit(6)
-
-  const devos = devocionales ?? []
+  const featured = devocionales[0] ?? null
+  const rest     = devocionales.slice(1)
+  const bibleOn  = hasBibleApi()
 
   return (
     <div>
 
-      {/* ══ HERO — versículo del día ════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '90vh' }}>
+      {/* ══ HERO ════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '72vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 55% 65% at 85% 30%, ${TEAL}10, transparent 65%)` }} />
+          style={{ background: `radial-gradient(ellipse 50% 70% at 85% 30%, rgba(118,171,174,0.10), transparent 65%)` }} />
+        <div className="pointer-events-none absolute right-0 bottom-0 select-none">
+          <span className="font-black leading-none" style={{ fontSize: 'clamp(12rem, 26vw, 24rem)', opacity: 0.04, color: TEAL }}>
+            BIB
+          </span>
+        </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-40 md:pb-24 flex flex-col justify-between"
-          style={{ minHeight: '90vh' }}>
-
-          {/* Eyebrow */}
-          <div className="flex items-center gap-5">
+        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-44 md:pb-20 flex flex-col justify-end"
+          style={{ minHeight: '72vh' }}>
+          <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
-              Biblia · Palabra de Dios para hoy
+              Biblia · Devocionales y lectura
             </p>
           </div>
-
-          {/* Versículo del día */}
-          <div className="py-16 md:py-20">
-            <p className="text-[9px] font-bold uppercase tracking-[0.5em] mb-8" style={{ color: `${TEAL}60` }}>
-              — Versículo del día
-            </p>
-            <div className="max-w-4xl">
-              <p className="font-display font-black tracking-tighter text-white leading-[0.88] mb-8"
-                style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                "{verse.text}"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+            <h1 className="font-display font-black tracking-tighter text-white"
+              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+              La Palabra<br /><em style={{ color: TEAL }}>que transforma.</em>
+            </h1>
+            <div>
+              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                Devocionales escritos por nuestros líderes y acceso a la Biblia completa en Reina-Valera 1960.
               </p>
-              <p className="text-[11px] font-black uppercase tracking-[0.4em]" style={{ color: TEAL }}>
-                — {verse.ref}
-              </p>
-            </div>
-          </div>
-
-          {/* Call to app */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-8"
-            style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: `${TEAL}20`, border: `1px solid ${TEAL}30` }}>
-                <BookOpen size={18} style={{ color: TEAL }} />
-              </div>
-              <div>
-                <p className="text-sm font-black text-white">Explora la Escritura</p>
-                <p className="text-[11px]" style={{ color: `rgba(246,243,235,0.45)` }}>
-                  Devocionales · Pasajes destacados · Reflexiones
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3 sm:ml-auto">
-              <Link href="/registro"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition"
-                style={{ background: TEAL, color: NAVY }}>
-                Crear cuenta <ChevronRight size={12} />
-              </Link>
-              <Link href="/login"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider transition"
-                style={{ border: `1px solid ${TEAL}30`, color: `rgba(246,243,235,0.55)` }}>
-                Entrar
-              </Link>
+              {bibleOn && (
+                <Link href="/biblia/lectura/JHN/1"
+                  className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
+                  style={{ background: TEAL, color: NAVY }}>
+                  <BookOpen size={12} /> Leer la Biblia
+                </Link>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ DEVOCIONALES ══════════════════════════════════════ */}
-      {devos.length > 0 ? (
+      {/* ══ DEVOCIONAL DESTACADO ════════════════════════════ */}
+      {featured && (
         <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
-          <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-            <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Devocionales</p>
-                <h2 className="font-display font-black tracking-tighter"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
-                  Reflexiones<br />para el alma.
-                </h2>
-              </div>
+          <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+            <div className="flex items-center gap-4 mb-10">
+              <Quote size={14} style={{ color: TEAL }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: TEAL }}>Devocional destacado</p>
             </div>
 
-            {/* Devocional destacado */}
-            <Link href={`/biblia/devocional/${devos[0].id}`}
-              className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden mb-5 transition"
-              style={{ border: '1px solid #D2CDB8' }}>
-              <div className="lg:col-span-5 flex items-center justify-center p-12 md:p-16"
-                style={{ background: NAVY }}>
-                {devos[0].verse && (
-                  <div className="text-center">
-                    <Quote size={20} style={{ color: `${TEAL}60`, margin: '0 auto 12px' }} />
-                    <p className="font-display font-black text-white tracking-tight leading-tight mb-4"
-                      style={{ fontSize: 'clamp(1.3rem, 3vw, 2rem)' }}>
-                      "{devos[0].verse}"
+            <Link href={`/biblia/devocional/${featured.id}`}
+              className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition"
+              style={{ borderColor: '#D2CDB8' }}>
+
+              {cmsImageUrl(featured.image) ? (
+                <div className="lg:col-span-5 overflow-hidden h-64 lg:h-auto min-h-[280px]">
+                  <img src={cmsImageUrl(featured.image)!} alt={featured.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                </div>
+              ) : (
+                <div className="lg:col-span-5 min-h-[280px] flex items-center justify-center"
+                  style={{ background: `linear-gradient(135deg, ${NAVY} 0%, #0D4A72 100%)` }}>
+                  {featured.verse && (
+                    <div className="p-8 text-center">
+                      <Quote size={24} style={{ color: `${TEAL}60`, margin: '0 auto 12px' }} />
+                      <p className="font-display font-black text-white leading-tight text-xl">"{featured.verse}"</p>
+                      {featured.verse_ref && (
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-4" style={{ color: TEAL }}>
+                          {featured.verse_ref}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="lg:col-span-7 p-10 lg:p-14 flex flex-col justify-center gap-6"
+                style={{ background: '#EDEAE0' }}>
+                <div>
+                  {featured.verse_ref && (
+                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: TEAL }}>
+                      {featured.verse_ref}
                     </p>
-                    {devos[0].verse_ref && (
-                      <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: TEAL }}>
-                        — {devos[0].verse_ref}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-center gap-4" style={{ background: CREAM }}>
-                <p className="text-[9px] font-bold uppercase tracking-[0.35em]" style={{ color: TEAL }}>
-                  Devocional reciente
-                </p>
-                <h3 className="font-black text-2xl md:text-3xl tracking-tight leading-tight" style={{ color: NAVY }}>
-                  {devos[0].title}
-                </h3>
-                <p className="text-sm leading-relaxed line-clamp-4" style={{ color: `${NAVY}65` }}>
-                  {devos[0].content}
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
-                    {devos[0].author}
+                  )}
+                  <h2 className="font-display font-black tracking-tight leading-tight mb-4"
+                    style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: NAVY }}>
+                    {featured.title}
+                  </h2>
+                  {featured.content && (
+                    <p className="text-sm leading-relaxed line-clamp-3" style={{ color: `${NAVY}65` }}>
+                      {featured.content}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] uppercase tracking-wider" style={{ color: SAGE }}>
+                    {featured.author} · {fmtDate(featured.date_published ?? featured.date_created)}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wider"
-                    style={{ color: TEAL }}>
-                    Leer <ArrowRight size={11} />
+                  <span className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl"
+                    style={{ background: NAVY, color: CREAM }}>
+                    Leer <ArrowRight size={12} />
                   </span>
                 </div>
               </div>
             </Link>
+          </div>
+        </section>
+      )}
 
-            {/* Otros devocionales */}
-            {devos.length > 1 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {devos.slice(1).map(d => (
-                  <Link key={d.id} href={`/biblia/devocional/${d.id}`}
-                    className="group p-7 rounded-2xl transition hover:brightness-95"
-                    style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
-                    <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: TEAL }}>
-                      {d.verse_ref ?? 'Devocional'}
-                    </p>
-                    <h4 className="font-black text-lg tracking-tight leading-tight mb-3 group-hover:opacity-70 transition" style={{ color: NAVY }}>
+      {/* ══ GRILLA DE DEVOCIONALES ══════════════════════════ */}
+      {rest.length > 0 && (
+        <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
+          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+            <div className="flex items-end justify-between mb-12 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: SAGE }}>— Más devocionales</p>
+              <p className="text-[11px] font-bold" style={{ color: SAGE }}>{rest.length} reflexiones</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {rest.map(d => (
+                <Link key={d.id} href={`/biblia/devocional/${d.id}`}
+                  className="group flex flex-col rounded-2xl overflow-hidden transition"
+                  style={{ border: '1px solid #D2CDB8', background: CREAM }}>
+                  {cmsImageUrl(d.image) ? (
+                    <div className="overflow-hidden" style={{ height: 160 }}>
+                      <img src={cmsImageUrl(d.image)!} alt={d.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                    </div>
+                  ) : d.verse ? (
+                    <div className="p-5 flex items-start gap-3" style={{ background: `${NAVY}08`, borderBottom: '1px solid #D2CDB8' }}>
+                      <Quote size={16} style={{ color: `${TEAL}60`, flexShrink: 0, marginTop: 2 }} />
+                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: `${NAVY}70` }}>"{d.verse}"</p>
+                    </div>
+                  ) : null}
+                  <div className="p-6 flex flex-col gap-3 flex-1">
+                    {d.verse_ref && (
+                      <p className="text-[9px] font-bold uppercase tracking-[0.3em]" style={{ color: TEAL }}>
+                        {d.verse_ref}
+                      </p>
+                    )}
+                    <h3 className="font-black text-lg tracking-tight leading-tight group-hover:opacity-70 transition" style={{ color: NAVY }}>
                       {d.title}
-                    </h4>
-                    <p className="text-[12px] leading-relaxed line-clamp-3 mb-4" style={{ color: `${NAVY}60` }}>
-                      {d.content}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: SAGE }}>
-                        {d.author}
+                    </h3>
+                    {d.content && (
+                      <p className="text-[12px] leading-relaxed line-clamp-3 flex-1" style={{ color: `${NAVY}60` }}>
+                        {d.content}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-between pt-3 mt-auto" style={{ borderTop: '1px solid #D2CDB8' }}>
+                      <p className="text-[10px]" style={{ color: SAGE }}>
+                        {fmtDate(d.date_published ?? d.date_created)}
                       </p>
                       <span className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1" style={{ color: TEAL }}>
                         Leer <ArrowRight size={10} />
                       </span>
                     </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      ) : (
-        <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
-          <div className="max-w-6xl mx-auto px-6 py-20">
-            <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Devocionales</p>
-                <h2 className="font-display font-black tracking-tighter"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
-                  Reflexiones<br />para el alma.
-                </h2>
-              </div>
-            </div>
-            <div className="text-center py-20">
-              <p className="text-sm" style={{ color: `${NAVY}50` }}>
-                Los devocionales estarán disponibles pronto.
-              </p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* ══ PASAJES DESTACADOS ════════════════════════════════ */}
-      <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Escritura</p>
-              <h2 className="font-display font-black tracking-tighter"
-                style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
-                Pasajes que<br />transforman.
-              </h2>
-            </div>
+      {/* ══ BIBLIA: SELECTOR DE LIBROS ══════════════════════ */}
+      <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
+        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+          <div className="flex items-center gap-5 mb-12 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
+            <BookOpen size={16} style={{ color: NAVY }} />
+            <h2 className="font-display font-black tracking-tighter" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: NAVY }}>
+              Leer la Biblia
+            </h2>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] px-2.5 py-1 rounded-full ml-2"
+              style={{ background: `${TEAL}18`, color: TEAL }}>
+              RVR1960
+            </span>
           </div>
 
-          <div className="space-y-px rounded-2xl overflow-hidden" style={{ border: '1px solid #D2CDB8' }}>
-            {PASSAGES.map(({ ref, title, desc }, idx) => (
-              <div key={ref}
-                className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 md:px-8 py-6 md:py-7"
-                style={{ background: idx % 2 === 0 ? CREAM : '#F4F1E8' }}>
-                <div className="flex-shrink-0 w-32">
-                  <p className="text-[10px] font-black uppercase tracking-wider" style={{ color: TEAL }}>{ref}</p>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-black text-base tracking-tight" style={{ color: NAVY }}>{title}</h3>
-                  <p className="text-[12px] mt-0.5" style={{ color: `${NAVY}60` }}>{desc}</p>
+          {bibleOn ? (
+            <div className="space-y-12">
+              {/* Antiguo Testamento */}
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6" style={{ color: SAGE }}>— Antiguo Testamento</p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                  {OT_BOOKS.map(book => (
+                    <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
+                      className="group px-3 py-2.5 rounded-lg text-center transition hover:opacity-80"
+                      style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
+                      <p className="text-[11px] font-black leading-tight" style={{ color: NAVY }}>{book.name}</p>
+                      <p className="text-[9px] mt-0.5" style={{ color: SAGE }}>{book.chapters} cap.</p>
+                    </Link>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
 
-          <p className="text-[11px] mt-6 text-center" style={{ color: `${NAVY}40` }}>
-            Consulta estos pasajes en tu Biblia o en aplicaciones como YouVersion, Bible Gateway o Blue Letter Bible.
-          </p>
+              {/* Nuevo Testamento */}
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6" style={{ color: SAGE }}>— Nuevo Testamento</p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                  {NT_BOOKS.map(book => (
+                    <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
+                      className="group px-3 py-2.5 rounded-lg text-center transition hover:opacity-80"
+                      style={{ background: `${TEAL}12`, border: `1px solid ${TEAL}25` }}>
+                      <p className="text-[11px] font-black leading-tight" style={{ color: NAVY }}>{book.name}</p>
+                      <p className="text-[9px] mt-0.5" style={{ color: SAGE }}>{book.chapters} cap.</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl p-10 text-center" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
+              <BookOpen size={36} style={{ color: TEAL, margin: '0 auto 16px', opacity: 0.6 }} />
+              <p className="font-black text-lg mb-2" style={{ color: NAVY }}>Lector bíblico próximamente</p>
+              <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}60` }}>
+                Mientras tanto, te recomendamos{' '}
+                <a href="https://www.bible.com/es" target="_blank" rel="noopener noreferrer"
+                  className="font-bold underline" style={{ color: TEAL }}>
+                  YouVersion
+                </a>{' '}
+                o{' '}
+                <a href="https://www.biblegateway.com/?search=Juan+3&version=RVR1960" target="_blank" rel="noopener noreferrer"
+                  className="font-bold underline" style={{ color: TEAL }}>
+                  Bible Gateway
+                </a>{' '}
+                para leer en RVR1960.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* ══ CTA ══════════════════════════════════════════════ */}
+      {/* ══ CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
-        <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
+        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
-                — Únete a la comunidad
+                — También en la comunidad
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"
                 style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.85 }}>
-                La Escritura<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
+                La Palabra<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
               </h2>
             </div>
             <div className="flex flex-col gap-4">
               <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                Únete a grupos de estudio, comparte versículos que te impactaron y lee la Biblia con toda la iglesia.
+                Únete para compartir reflexiones, pedir oración y crecer en la fe con nuestra comunidad en línea.
               </p>
               <Link href="/registro"
                 className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
                 style={{ background: CREAM, color: NAVY }}>
-                Crear mi cuenta <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="/educacion/estudio-biblico"
-                className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.60)' }}>
-                Ver estudio bíblico presencial <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
+                Crear mi cuenta <ArrowRight size={12} />
               </Link>
             </div>
           </div>

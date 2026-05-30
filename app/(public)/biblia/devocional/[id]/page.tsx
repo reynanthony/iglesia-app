@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, Quote } from 'lucide-react'
+import { cmsGet, cmsById, cmsImageUrl, type DDevocional } from '@/lib/directus'
 
 export const revalidate = 3600
 
@@ -22,25 +22,20 @@ export default async function DevocionalDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const supabase = await createClient()
 
-  const { data: devo } = await supabase
-    .from('devocionales')
-    .select('*')
-    .eq('id', id)
-    .eq('published', true)
-    .single()
+  const [devo, others] = await Promise.all([
+    cmsById<DDevocional>('devocionales', id),
+    cmsGet<DDevocional>('devocionales', {
+      'filter[status][_eq]': 'published',
+      'filter[id][_neq]': id,
+      'sort': '-date_published,-date_created',
+      'limit': '3',
+    }),
+  ])
 
-  if (!devo) notFound()
+  if (!devo || devo.status !== 'published') notFound()
 
-  // Other devocionales
-  const { data: others } = await supabase
-    .from('devocionales')
-    .select('id, title, author, verse_ref, created_at')
-    .eq('published', true)
-    .neq('id', id)
-    .order('created_at', { ascending: false })
-    .limit(3)
+  const imgUrl = cmsImageUrl(devo.image)
 
   return (
     <div>
@@ -85,18 +80,22 @@ export default async function DevocionalDetailPage({
           </h1>
 
           <div className="flex items-center gap-4 pt-5" style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
-            <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.55)' }}>{devo.author}</p>
+            {devo.author && (
+              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.55)' }}>{devo.author}</p>
+            )}
             <span style={{ color: 'rgba(118,171,174,0.25)' }}>·</span>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>{fmtDate(devo.created_at)}</p>
+            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              {fmtDate(devo.date_published ?? devo.date_created)}
+            </p>
           </div>
         </div>
       </section>
 
       {/* IMAGE */}
-      {devo.image_url && (
+      {imgUrl && (
         <div style={{ background: '#000' }}>
           <div className="max-w-4xl mx-auto">
-            <img src={devo.image_url} alt={devo.title} className="w-full object-cover" style={{ maxHeight: 400 }} />
+            <img src={imgUrl} alt={devo.title} className="w-full object-cover" style={{ maxHeight: 400 }} />
           </div>
         </div>
       )}
@@ -104,7 +103,7 @@ export default async function DevocionalDetailPage({
       {/* CONTENT */}
       <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
         <div className="max-w-2xl mx-auto px-6 py-16 md:py-20">
-          {devo.content.split('\n\n').map((paragraph: string, i: number) =>
+          {devo.content.split('\n\n').map((paragraph, i) =>
             paragraph.trim() ? (
               <p key={i} className="mb-6 text-base leading-relaxed" style={{ color: `${NAVY}85` }}>
                 {paragraph}
@@ -114,25 +113,27 @@ export default async function DevocionalDetailPage({
         </div>
       </section>
 
-      {/* OTHER DEVOCIONALES */}
-      {(others ?? []).length > 0 && (
+      {/* MORE DEVOCIONALES */}
+      {others.length > 0 && (
         <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
           <div className="max-w-4xl mx-auto px-6 py-14">
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-8" style={{ color: SAGE }}>
               — Más devocionales
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {(others ?? []).map((d: any) => (
+              {others.map(d => (
                 <Link key={d.id} href={`/biblia/devocional/${d.id}`}
                   className="group p-5 rounded-2xl transition"
                   style={{ background: CREAM, border: '1px solid #D2CDB8' }}>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: TEAL }}>
-                    {d.verse_ref ?? 'Devocional'}
-                  </p>
+                  {d.verse_ref && (
+                    <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: TEAL }}>
+                      {d.verse_ref}
+                    </p>
+                  )}
                   <h3 className="font-black text-sm tracking-tight leading-tight mb-2 group-hover:opacity-70 transition" style={{ color: NAVY }}>
                     {d.title}
                   </h3>
-                  <p className="text-[10px]" style={{ color: SAGE }}>{d.author}</p>
+                  {d.author && <p className="text-[10px]" style={{ color: SAGE }}>{d.author}</p>}
                 </Link>
               ))}
             </div>
