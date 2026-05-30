@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, Play, Calendar, User, Mic } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { cmsById, cmsGet, cmsImageUrl, type DPredica } from '@/lib/directus'
+import VideoPlayer from '@/components/VideoPlayer'
 
 export const revalidate = 300
 
@@ -58,15 +59,7 @@ export default async function AppPredicaPage({
 
       {/* VIDEO PLAYER */}
       {ytId ? (
-        <div className="bg-black w-full" style={{ aspectRatio: '16/9' }}>
-          <iframe
-            src={`https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowFullScreen
-            className="w-full h-full"
-            style={{ border: 'none', display: 'block' }}
-          />
-        </div>
+        <VideoPlayer ytId={ytId} thumbnail={thumb} title={predica.title} />
       ) : thumb ? (
         <div className="w-full bg-black" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
           <img src={thumb} alt={predica.title} className="w-full h-full object-cover opacity-60" />

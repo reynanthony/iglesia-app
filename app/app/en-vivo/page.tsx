@@ -13,12 +13,12 @@ function youtubeEmbedUrl(url: string): string | null {
     if (u.hostname.includes('youtu.be')) {
       id = u.pathname.slice(1)
     } else if (u.hostname.includes('youtube.com')) {
-      id = u.searchParams.get('v')
+      id = u.searchParams.get('v') ?? u.pathname.replace('/embed/', '')
     }
     if (!id) return null
-    return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`
+    return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
   } catch {
-    return url
+    return null
   }
 }
 

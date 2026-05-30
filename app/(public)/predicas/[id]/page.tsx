@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Play, Calendar, User, Mic } from 'lucide-react'
 import { cmsGet, cmsById, cmsImageUrl } from '@/lib/directus'
+import VideoPlayer from '@/components/VideoPlayer'
 
 export const revalidate = 300
 
@@ -63,17 +64,11 @@ export default async function PredicaDetailPage({
         </div>
       </div>
 
-      {/* VIDEO PLAYER or THUMBNAIL HERO */}
+      {/* VIDEO PLAYER */}
       {ytId ? (
         <div style={{ background: '#000' }}>
-          <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-            <iframe
-              className="absolute inset-0 w-full h-full"
-              src={`https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowFullScreen
-              style={{ border: 'none' }}
-            />
+          <div className="max-w-5xl mx-auto">
+            <VideoPlayer ytId={ytId} thumbnail={thumbUrl} title={predica.title} />
           </div>
         </div>
       ) : thumbUrl ? (
