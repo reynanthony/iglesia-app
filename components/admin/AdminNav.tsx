@@ -107,7 +107,7 @@ export default function AdminNav({
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
             style={{ color: 'rgba(246,243,235,0.40)' }}
           >
-            <ExternalLink size={14} /> Editar sitio (Strapi)
+            <ExternalLink size={14} /> Editar sitio (Directus)
           </a>
         )}
         <Link href="/" target="_blank"

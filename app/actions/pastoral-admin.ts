@@ -194,10 +194,11 @@ export async function updatePastoralEncounter(id: string, formData: FormData) {
 export async function answerPastoralQuestion(formData: FormData) {
   const { supabase } = await getPastoralClient()
   const id = formData.get('id') as string
-  const media = formData.get('media') as File
-  let answer_media_url: string | null = null
+  const mediaUrl  = (formData.get('media') as string ?? '').trim() || null
+  const mediaFile = formData.get('media_file') as File
+  let answer_media_url: string | null = mediaUrl
   const answer_media_type = (formData.get('answer_media_type') as string) || 'text'
-  if (media && media.size > 0) answer_media_url = await uploadPastoralFile(supabase, media, 'respuestas')
+  if (mediaFile && mediaFile.size > 0) answer_media_url = await uploadPastoralFile(supabase, mediaFile, 'respuestas')
 
   await supabase.from('pastoral_questions').update({
     answer_body: (formData.get('answer_body') as string).trim() || null,

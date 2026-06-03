@@ -19,26 +19,34 @@ export default function AnswerPastoralQuestionForm({ id }: { id: string }) {
           className={`${field} resize-none`} style={fieldStyle} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-            style={{ color: 'rgba(246,243,235,0.35)' }}>
-            Tipo de respuesta
-          </label>
-          <select name="answer_media_type" className={field} style={fieldStyle}>
-            <option value="text">Texto</option>
-            <option value="audio">Audio</option>
-            <option value="video">Video</option>
-          </select>
-        </div>
-        <div>
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-            style={{ color: 'rgba(246,243,235,0.35)' }}>
-            Archivo (opcional)
-          </label>
-          <input type="file" name="media" accept="audio/*,video/*"
-            className="w-full text-[12px] cursor-pointer pt-2" style={{ color: 'rgba(246,243,235,0.40)' }} />
-        </div>
+      <div>
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
+          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          Tipo de respuesta
+        </label>
+        <select name="answer_media_type" className={field} style={fieldStyle}>
+          <option value="text">Texto</option>
+          <option value="audio">Audio</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
+          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          URL de video / audio (YouTube, etc.)
+        </label>
+        <input type="url" name="media" placeholder="https://youtube.com/watch?v=..."
+          className={field} style={fieldStyle} />
+      </div>
+
+      <div>
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
+          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          O sube un archivo (tiene prioridad)
+        </label>
+        <input type="file" name="media_file" accept="audio/*,video/*"
+          className="w-full text-[12px] cursor-pointer pt-2" style={{ color: 'rgba(246,243,235,0.40)' }} />
       </div>
 
       <div className="flex items-center justify-between">
