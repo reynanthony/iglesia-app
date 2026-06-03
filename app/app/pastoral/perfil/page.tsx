@@ -49,7 +49,7 @@ export default async function PastoralPerfilPage() {
             <img src={pastor.avatar_url} alt={pastor?.name ?? ''} className="w-full h-full object-cover object-top"
               style={{ opacity: 0.60 }} />
             <div className="absolute inset-0"
-              style={{ background: `linear-gradient(to top, ${P.bg} 10%, rgba(6,14,7,0.45) 50%, transparent 100%)` }} />
+              style={{ background: `linear-gradient(to top, ${P.bg} 8%, rgba(6,14,7,0.28) 48%, transparent 100%)` }} />
           </div>
         )}
         <div className="relative px-5 pt-8 pb-6 flex flex-col items-start gap-4">

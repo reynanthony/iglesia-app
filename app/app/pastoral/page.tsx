@@ -86,7 +86,7 @@ export default async function PastoralRoomPage() {
               style={{ opacity: 0.55 }}
             />
             <div className="absolute inset-0"
-              style={{ background: `linear-gradient(to top, ${P.bg} 15%, rgba(6,14,7,0.55) 55%, transparent 100%)` }} />
+              style={{ background: `linear-gradient(to top, ${P.bg} 12%, rgba(6,14,7,0.30) 50%, transparent 100%)` }} />
           </div>
         ) : (
           <div className="absolute inset-0"
