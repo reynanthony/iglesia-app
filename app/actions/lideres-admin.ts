@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -14,12 +15,12 @@ async function requireAdmin() {
 }
 
 async function uploadAvatar(file: File, oldUrl?: string | null): Promise<string | null> {
-  const supabase = await createClient()
+  const svc = createServiceClient()
   const ext = file.name.split('.').pop() ?? 'jpg'
   const path = `lideres/${Date.now()}.${ext}`
-  const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
+  const { error } = await svc.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type })
   if (error) return oldUrl ?? null
-  const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+  const { data } = svc.storage.from('avatars').getPublicUrl(path)
   return data.publicUrl
 }
 
