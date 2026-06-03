@@ -83,10 +83,10 @@ export default async function PastoralRoomPage() {
               src={pastor.avatar_url}
               alt={pastor.name ?? 'Pastor'}
               className="w-full h-full object-cover object-top"
-              style={{ opacity: 0.18 }}
+              style={{ opacity: 0.55 }}
             />
             <div className="absolute inset-0"
-              style={{ background: `linear-gradient(to top, ${P.bg} 35%, transparent 100%)` }} />
+              style={{ background: `linear-gradient(to top, ${P.bg} 15%, rgba(6,14,7,0.55) 55%, transparent 100%)` }} />
           </div>
         ) : (
           <div className="absolute inset-0"
