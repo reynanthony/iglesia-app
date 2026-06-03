@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Users2, MessageCircle, Flame, Search, User,
-  UsersRound, BookOpen, Radio, MoreHorizontal, X,
+  UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross,
 } from 'lucide-react'
 
 const ACCENT   = '#76ABAE'
@@ -19,6 +19,7 @@ const navItems = [
   { href: '/app/oracion',     icon: Flame,          label: 'Oración',     exact: false },
   { href: '/app/en-vivo',     icon: Radio,          label: 'En Vivo',     exact: false },
   { href: '/app/discipulado', icon: BookOpen,       label: 'Discipulado', exact: true  },
+  { href: '/app/pastoral',   icon: Cross,           label: 'Pastoral',    exact: false },
 ]
 
 interface Props { profileHref: string }
@@ -34,11 +35,11 @@ export default function AppNav({ profileHref }: Props) {
         const active = isActive(href, exact)
         return (
           <Link key={href} href={href}
-            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
             style={{ background: active ? '#0D3352' : undefined, color: active ? '#F6F3EB' : INACTIVE }}>
-            <Icon size={18} style={{ color: active ? ACCENT : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
+            <Icon size={18} aria-hidden="true" style={{ color: active ? ACCENT : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
             <span className={active ? 'font-bold' : ''}>{label}</span>
-            {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: ACCENT }} />}
+            {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: ACCENT }} />}
           </Link>
         )
       })}
@@ -58,9 +59,10 @@ const MAIN_ITEMS = [
 
 // Ítems secundarios en la fila expandible
 const MORE_ITEMS = [
-  { href: '/app/grupos',  icon: UsersRound,    label: 'Grupos'  },
-  { href: '/app/chat',    icon: MessageCircle, label: 'Chat'    },
-  { href: '/app/buscar',  icon: Search,        label: 'Buscar'  },
+  { href: '/app/pastoral', icon: Cross,         label: 'Pastoral' },
+  { href: '/app/grupos',   icon: UsersRound,    label: 'Grupos'   },
+  { href: '/app/chat',     icon: MessageCircle, label: 'Chat'     },
+  { href: '/app/mentoria', icon: GraduationCap, label: 'Mentoría' },
 ]
 
 export function AppBottomNav({ profileHref }: Props) {
@@ -92,11 +94,12 @@ export function AppBottomNav({ profileHref }: Props) {
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className="flex-1 flex flex-col items-center justify-center gap-1"
-                style={{ WebkitTapHighlightColor: 'transparent', minWidth: 0 }}
+                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
               >
                 <Icon
                   size={20}
+                  aria-hidden="true"
                   strokeWidth={active ? 2.5 : 1.8}
                   style={{ color: active ? ACCENT : INACTIVE }}
                 />
@@ -121,11 +124,12 @@ export function AppBottomNav({ profileHref }: Props) {
               key={href}
               href={href}
               onClick={() => open && setOpen(false)}
-              className="flex-1 flex flex-col items-center justify-center gap-1"
-              style={{ WebkitTapHighlightColor: 'transparent', minWidth: 0 }}
+              className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+              style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
             >
               <Icon
                 size={22}
+                aria-hidden="true"
                 strokeWidth={active ? 2.5 : 1.8}
                 style={{ color: active ? ACCENT : INACTIVE }}
               />
@@ -142,9 +146,12 @@ export function AppBottomNav({ profileHref }: Props) {
         {/* Botón Más / Cerrar */}
         <button
           onClick={() => setOpen(v => !v)}
-          className="flex-1 flex flex-col items-center justify-center gap-1"
+          aria-expanded={open}
+          aria-label={open ? 'Cerrar más opciones' : 'Más opciones'}
+          className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
           style={{
             WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
             minWidth: 0,
             background: 'none',
             border: 'none',
@@ -152,9 +159,10 @@ export function AppBottomNav({ profileHref }: Props) {
           }}
         >
           {open
-            ? <X size={22} strokeWidth={2.5} style={{ color: ACCENT }} />
+            ? <X size={22} strokeWidth={2.5} aria-hidden="true" style={{ color: ACCENT }} />
             : <MoreHorizontal
                 size={22}
+                aria-hidden="true"
                 strokeWidth={anyMoreActive ? 2.5 : 1.8}
                 style={{ color: anyMoreActive ? ACCENT : INACTIVE }}
               />
