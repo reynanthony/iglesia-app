@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'admin') redirect('/app/comunidad')
+  if (!profile || !['admin', 'pastor', 'moderador'].includes(profile.role)) redirect('/app/comunidad')
 
   // Badge: mensajes no leídos
   const { count: unreadMessages } = await supabase

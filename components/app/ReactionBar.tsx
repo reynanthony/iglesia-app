@@ -65,7 +65,7 @@ export default function ReactionBar({
       <div className="relative flex items-center gap-1.5">
         <button
           onClick={() => setPickerOpen(p => !p)}
-          className="flex items-center gap-1.5 transition-transform active:scale-90"
+          className="flex items-center gap-1.5 transition-transform active:scale-90 motion-reduce:active:scale-100"
           aria-label="Reaccionar"
         >
           <Icon
@@ -82,7 +82,13 @@ export default function ReactionBar({
         </button>
         {pickerOpen && (
           <>
-            <div className="fixed inset-0 z-40" onClick={() => setPickerOpen(false)} />
+            <button
+              onClick={() => setPickerOpen(false)}
+              aria-label="Cerrar reacciones"
+              tabIndex={-1}
+              className="fixed inset-0 z-40 w-full h-full"
+              style={{ background: 'transparent', border: 'none', cursor: 'default' }}
+            />
             <div className="absolute z-50 flex flex-row gap-1 p-2 rounded-2xl shadow-xl"
               style={{ bottom: '32px', left: 0, background: '#0B2D47', border: '1px solid #0D3352' }}>
               {REACTIONS.map(r => {
@@ -90,7 +96,7 @@ export default function ReactionBar({
                 const isSelected = myReaction?.type === r.type
                 return (
                   <button key={r.type} onClick={() => handleSelect(r.type)}
-                    className="flex flex-col items-center gap-1 px-2.5 py-2 rounded-xl transition"
+                    className="flex flex-col items-center gap-1 px-2.5 py-2 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
                     style={{ background: isSelected ? 'rgba(118,171,174,0.15)' : 'transparent' }}>
                     <RIcon size={18} strokeWidth={isSelected ? 2.5 : 1.8}
                       style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.60)' }} />
@@ -114,7 +120,7 @@ export default function ReactionBar({
       {/* Main reaction button */}
       <button
         onClick={() => setPickerOpen(p => !p)}
-        className="w-11 h-11 rounded-full flex items-center justify-center transition-transform active:scale-90"
+        className="w-11 h-11 rounded-full flex items-center justify-center transition-transform active:scale-90 motion-reduce:active:scale-100"
         style={{
           background: myReaction ? 'rgba(118,171,174,0.20)' : 'rgba(0,0,0,0.5)',
           backdropFilter: 'blur(6px)',
@@ -136,7 +142,13 @@ export default function ReactionBar({
       {pickerOpen && (
         <>
           {/* Backdrop */}
-          <div className="fixed inset-0 z-40" onClick={() => setPickerOpen(false)} />
+          <button
+            onClick={() => setPickerOpen(false)}
+            aria-label="Cerrar reacciones"
+            tabIndex={-1}
+            className="fixed inset-0 z-40 w-full h-full"
+            style={{ background: 'transparent', border: 'none', cursor: 'default' }}
+          />
           {/* Picker panel */}
           <div
             className="absolute z-50 flex flex-col gap-1.5 p-2 rounded-2xl shadow-xl"

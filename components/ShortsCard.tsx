@@ -192,7 +192,7 @@ export default function ShortsCard({
       ══════════════════════════════════════════ */}
       {!hasMedia && (
         <div
-          className="absolute inset-0 flex items-center justify-center px-8"
+          className="absolute inset-0 flex items-center justify-center pl-8 pr-20 pb-32"
           style={{ zIndex: 3 }}
         >
           <p

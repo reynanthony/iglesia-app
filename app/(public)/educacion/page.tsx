@@ -38,7 +38,7 @@ export default function EducacionPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: NAVY, minHeight: '80vh' }}>
+      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '80vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"

@@ -35,7 +35,6 @@ export default async function PredicaDetailPage({
     .from('ministry_content')
     .select('id, title, body, video_url, image_url, pinned, created_at, profiles(full_name, avatar_url), ministries(name, slug)')
     .eq('id', id)
-    .eq('type', 'video')
     .single()
 
   if (!item) notFound()
@@ -88,7 +87,7 @@ export default async function PredicaDetailPage({
       ) : null}
 
       {/* META */}
-      <section style={{ background: NAVY }}>
+      <section style={{ background: '#051828' }}>
         <div className="max-w-5xl mx-auto px-6 py-10 md:py-14">
           {ministry && (
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-6 text-[9px] font-black uppercase tracking-[0.25em]"

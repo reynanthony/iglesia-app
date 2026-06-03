@@ -30,14 +30,14 @@ const placeholders = [
 export default async function MinisteriosPage() {
   const ministerios = await cmsGet<DMinisterio>('ministerios', {
     'filter[status][_eq]': 'published',
-    'sort': 'sort,name',
+    'sort': 'name',
   })
 
   return (
     <div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden" style={{ background: '#093C5D' }}>
+      <section className="relative overflow-hidden" style={{ background: '#051828' }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(118,171,174,0.12), transparent 70%)' }} />
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -77,8 +77,8 @@ export default async function MinisteriosPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
               {ministerios.map((m, idx) => {
-                const Icon    = getIcon(m.slug, m.name)
-                const imgUrl  = cmsImageUrl(m.image)
+                const Icon    = getIcon(m.slug ?? '', m.name)
+                const imgUrl  = cmsImageUrl(m.imagen)
                 const n       = String(idx + 1).padStart(2, '0')
                 return (
                   <Link key={m.id} href={`/ministerios/${m.slug}`} className="group block">

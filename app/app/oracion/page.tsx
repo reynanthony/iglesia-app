@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, Flame, Mic2, ChevronRight } from 'lucide-react'
+import { Plus, Flame, Mic2, ChevronRight, Sparkles } from 'lucide-react'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -28,7 +28,7 @@ export default async function OracionPage({
 
   let query = supabase
     .from('prayer_requests')
-    .select('id, title, is_anonymous, status, created_at, user_id, profiles!prayer_requests_user_id_fkey(full_name, username)')
+    .select('id, title, is_anonymous, status, created_at, user_id, testimony_post_id, profiles!prayer_requests_user_id_fkey(full_name, username)')
     .order('created_at', { ascending: false })
     .limit(50)
 
@@ -134,12 +134,16 @@ export default async function OracionPage({
         )}
 
         {requests?.map((req: any) => {
-          const sc = STATUS_COLOR[req.status] ?? '#76ABAE'
-          const isOwn = req.user_id === user?.id
+          const sc          = STATUS_COLOR[req.status] ?? '#76ABAE'
+          const isOwn       = req.user_id === user?.id
+          const hasTestimony = !!req.testimony_post_id
           return (
             <Link key={req.id} href={`/app/oracion/${req.id}`}
               className="group block rounded-2xl transition"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{
+                background: '#0B2D47',
+                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.25)' : '#0D3352'}`,
+              }}>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -147,7 +151,13 @@ export default async function OracionPage({
                       style={{ background: `${sc}18`, color: sc, border: `1px solid ${sc}30` }}>
                       {STATUS_LABEL[req.status]}
                     </span>
-                    {isOwn && (
+                    {hasTestimony && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                        style={{ background: 'rgba(118,171,174,0.12)', color: '#76ABAE' }}>
+                        <Sparkles size={9} /> Testimonio
+                      </span>
+                    )}
+                    {isOwn && !hasTestimony && (
                       <span className="text-[9px] font-bold uppercase tracking-wider"
                         style={{ color: 'rgba(246,243,235,0.30)' }}>
                         Mi petición

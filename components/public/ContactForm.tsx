@@ -19,7 +19,7 @@ export default function ContactForm() {
     })
   }
 
-  const inputClass = "w-full border border-edge focus:border-ink bg-surface px-5 py-4 text-sm text-ink placeholder:text-ink-3 focus:outline-none rounded-xl transition"
+  const inputClass = "w-full border border-edge focus:border-ink bg-surface px-5 py-4 text-sm text-ink placeholder:text-ink-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50 rounded-xl transition"
   const labelClass = "text-[10px] font-bold uppercase tracking-[0.2em] text-ink-3 block mb-2.5"
 
   return (
@@ -27,17 +27,17 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label htmlFor="nombre" className={labelClass}>Nombre *</label>
-          <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required className={inputClass} />
+          <input id="nombre" name="nombre" type="text" autoComplete="given-name" placeholder="Tu nombre…" required className={inputClass} />
         </div>
         <div>
           <label htmlFor="apellido" className={labelClass}>Apellido</label>
-          <input id="apellido" name="apellido" type="text" placeholder="Tu apellido" className={inputClass} />
+          <input id="apellido" name="apellido" type="text" autoComplete="family-name" placeholder="Tu apellido…" className={inputClass} />
         </div>
       </div>
 
       <div>
         <label htmlFor="email" className={labelClass}>Email *</label>
-        <input id="email" name="email" type="email" placeholder="tu@email.com" required className={inputClass} />
+        <input id="email" name="email" type="email" autoComplete="email" spellCheck={false} placeholder="tu@email.com" required className={inputClass} />
       </div>
 
       <div>
@@ -57,27 +57,28 @@ export default function ContactForm() {
           id="mensaje"
           name="mensaje"
           rows={6}
-          placeholder="¿En qué podemos ayudarte?"
+          placeholder="¿En qué podemos ayudarte?…"
           required
           className={`${inputClass} resize-none`}
         />
       </div>
 
-      {result?.success && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-green-500/8 border border-green-500/20">
-          <CheckCircle size={16} className="text-green-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm font-bold text-green-600 dark:text-green-400">
-            ¡Mensaje enviado! Nos pondremos en contacto contigo pronto.
-          </p>
-        </div>
-      )}
-
-      {result?.error && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/8 border border-red-500/20">
-          <AlertCircle size={16} className="text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm font-bold text-red-600 dark:text-red-400">{result.error}</p>
-        </div>
-      )}
+      <div aria-live="polite" aria-atomic="true">
+        {result?.success && (
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-green-500/8 border border-green-500/20">
+            <CheckCircle size={16} className="text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <p className="text-sm font-bold text-green-600 dark:text-green-400">
+              ¡Mensaje enviado! Nos pondremos en contacto contigo pronto.
+            </p>
+          </div>
+        )}
+        {result?.error && (
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/8 border border-red-500/20">
+            <AlertCircle size={16} className="text-red-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <p className="text-sm font-bold text-red-600 dark:text-red-400">{result.error}</p>
+          </div>
+        )}
+      </div>
 
       <button
         type="submit"

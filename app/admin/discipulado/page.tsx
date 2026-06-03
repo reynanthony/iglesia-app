@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { setUserStage, advanceUserStage } from '@/app/actions/discipleship'
-import { ChevronRight, BookOpen } from 'lucide-react'
+import { ChevronRight, BookOpen, GraduationCap, Users, BarChart2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function AdminDiscipuladoPage({
   searchParams,
@@ -10,10 +11,11 @@ export default async function AdminDiscipuladoPage({
   const { stage: stageFilter } = await searchParams
   const supabase = await createClient()
 
-  const [{ data: stages }, { data: allUsers }, { data: assignments }] = await Promise.all([
+  const [{ data: stages }, { data: allUsers }, { data: assignments }, { data: programs }] = await Promise.all([
     supabase.from('discipleship_stages').select('*').order('order_index'),
     supabase.from('profiles').select('id, full_name, username, avatar_url, role').order('full_name'),
     supabase.from('user_discipleship').select('*, discipleship_stages(*)'),
+    supabase.from('discipleship_programs').select('id, title, is_active, discipleship_courses(id)').order('order_index'),
   ])
 
   const assignmentMap = new Map(
@@ -50,6 +52,69 @@ export default async function AdminDiscipuladoPage({
             {users.length} usuarios · {unassigned} sin etapa asignada
           </p>
         </div>
+
+        {/* Acceso rápido a Contenido */}
+        <Link
+          href="/admin/discipulado/programas"
+          className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-6 transition hover:brightness-110"
+          style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)' }}
+        >
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
+            <GraduationCap size={18} style={{ color: '#76ABAE' }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Contenido del LMS</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              {programs?.length ?? 0} programa{programs?.length !== 1 ? 's' : ''} ·{' '}
+              {programs?.reduce((n: number, p: any) => n + (p.discipleship_courses?.length ?? 0), 0)} cursos
+            </p>
+          </div>
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+        </Link>
+
+        {/* Acceso rápido a Reportes */}
+        <Link
+          href="/admin/discipulado/reportes"
+          className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-4 transition hover:brightness-110"
+          style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}
+        >
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
+            <BarChart2 size={18} style={{ color: '#76ABAE' }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Dashboard Pastoral</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              Métricas, alertas y actividad reciente
+            </p>
+          </div>
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+        </Link>
+
+        {/* Acceso rápido a Mentoría */}
+        <Link
+          href="/admin/discipulado/mentores"
+          className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-4 transition hover:brightness-110"
+          style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
+        >
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid #0D3352' }}>
+            <Users size={18} style={{ color: 'rgba(118,171,174,0.70)' }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Asignaciones de Mentoría</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              Asignar mentores a discípulos y gestionar pares
+            </p>
+          </div>
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+        </Link>
+
+        {/* Separador seguimiento */}
+        <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>
+          Seguimiento de etapas
+        </p>
 
         {/* Stage summary cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">

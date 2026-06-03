@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
@@ -38,7 +38,7 @@ export default async function MensajesPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: NAVY, minHeight: '72vh' }}>
+      <section className="relative overflow-hidden min-h-[72svh] md:min-h-[72vh]" style={{ background: '#051828' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
@@ -50,8 +50,7 @@ export default async function MensajesPage() {
           </span>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-44 md:pb-20 flex flex-col justify-end"
-          style={{ minHeight: '72vh' }}>
+        <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-10 sm:pt-32 sm:pb-16 md:pt-44 md:pb-20 flex flex-col justify-end">
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
@@ -59,8 +58,8 @@ export default async function MensajesPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-            <h1 className="font-display font-black tracking-tighter text-white"
-              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+            <h1 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
+              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
               Crece en<br /><em style={{ color: TEAL }}>la Palabra.</em>
             </h1>
             <div>
@@ -80,7 +79,7 @@ export default async function MensajesPage() {
       {/* ARTÍCULO DESTACADO */}
       {featured && (
         <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
-          <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+          <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-20">
             <div className="flex items-center gap-4 mb-10">
               <BookOpen size={14} style={{ color: TEAL }} />
               <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: TEAL }}>Artículo destacado</p>
@@ -128,7 +127,7 @@ export default async function MensajesPage() {
       {/* GRILLA DE MENSAJES */}
       {rest.length > 0 && (
         <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
-          <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
+          <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-28">
             <div className="flex items-end justify-between mb-12 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: SAGE }}>— Más artículos</p>
               <p className="text-[11px] font-bold" style={{ color: SAGE }}>{rest.length} mensajes</p>
@@ -197,14 +196,14 @@ export default async function MensajesPage() {
       {/* CTA */}
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
+        <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
                 — También en la comunidad
               </p>
-              <h2 className="font-display font-black tracking-tighter text-white"
-                style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.85 }}>
+              <h2 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
+                style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
                 La Palabra<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
               </h2>
             </div>
@@ -213,12 +212,12 @@ export default async function MensajesPage() {
                 Únete a la comunidad en línea para comentar, compartir y discutir los mensajes con otros creyentes.
               </p>
               <Link href="/registro"
-                className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
+                className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"
                 style={{ background: CREAM, color: NAVY }}>
                 Crear mi cuenta <ArrowRight size={12} />
               </Link>
               <Link href="/en-vivo"
-                className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
+                className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"
                 style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.60)' }}>
                 Ver prédicas en video <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>

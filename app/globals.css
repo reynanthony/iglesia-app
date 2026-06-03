@@ -158,3 +158,87 @@ body {
   color: #F6F3EB;
   border-bottom-color: #76ABAE;
 }
+
+/* ── Lesson markdown body ──────────────────────────── */
+.prose-lesson {
+  color: rgba(246,243,235,0.80);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+.prose-lesson h1,
+.prose-lesson h2,
+.prose-lesson h3 {
+  color: #F6F3EB;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose-lesson h1 { font-size: 1.4rem; }
+.prose-lesson h2 { font-size: 1.2rem; }
+.prose-lesson h3 { font-size: 1rem; }
+.prose-lesson p  { margin-bottom: 1em; }
+.prose-lesson strong { color: #F6F3EB; font-weight: 700; }
+.prose-lesson em { font-style: italic; color: rgba(246,243,235,0.70); }
+.prose-lesson ul,
+.prose-lesson ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.prose-lesson li { margin-bottom: 0.3em; }
+.prose-lesson blockquote {
+  border-left: 3px solid #76ABAE;
+  padding-left: 1em;
+  color: rgba(246,243,235,0.60);
+  font-style: italic;
+  margin: 1.2em 0;
+}
+.prose-lesson code {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85em;
+  background: #0D3352;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: #76ABAE;
+}
+.prose-lesson a {
+  color: #76ABAE;
+  text-decoration: underline;
+}
+
+/* ── Mobile UX ──────────────────────────────────────────
+   Targeted improvements — no broad font-size overrides
+   that break layouts designed around specific sizes.
+   ──────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Minimum touch target for standalone interactive elements */
+  .btn-touch {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Prevent any time/number+AM/PM from splitting across lines */
+  .no-break { white-space: nowrap; }
+
+  /* Better paragraph readability on small screens */
+  p { line-height: 1.75; }
+}
+
+/* ── Native App (Capacitor) ─────────────────────────────
+   When running as a native app, improve tap responsiveness
+   and disable text selection for app-like feel.
+   ──────────────────────────────────────────────────── */
+.is-native-app {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.is-native-app input,
+.is-native-app textarea,
+.is-native-app [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}

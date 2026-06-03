@@ -2,7 +2,7 @@ import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { cmsGet, cmsImageUrl } from '@/lib/directus'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 type DirectusEvento = {
   id: string
@@ -67,7 +67,7 @@ export default async function EventosPage() {
     <div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
+      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: '#051828' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
@@ -78,15 +78,15 @@ export default async function EventosPage() {
         </div>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
-          <div className="flex items-center gap-5 mb-14">
+        <div className="relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32">
+          <div className="flex items-center gap-5 mb-10 sm:mb-14">
             <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
               Eventos · Agenda 2026
             </p>
           </div>
-          <h1 className="font-display font-black tracking-tighter text-white mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+          <h1 className="font-display font-black tracking-tighter text-white mb-8 leading-[0.9] md:leading-[0.85]"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
             Lo que<br />se viene.
           </h1>
           <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
@@ -123,7 +123,7 @@ export default async function EventosPage() {
 
       {/* Eventos especiales */}
       <section className="bg-card border-b border-edge">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+        <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-32">
           <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Próximamente</p>
             <p className="text-[11px] font-bold text-ink-3">{specialEvents.length} eventos</p>
@@ -138,7 +138,7 @@ export default async function EventosPage() {
                   className="group border border-edge hover:border-edge-2 rounded-2xl overflow-hidden transition bg-card hover:bg-muted">
                   <div className="grid grid-cols-1 md:grid-cols-12">
                     {/* Panel izquierdo — fecha */}
-                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-edge">
+                    <div className="md:col-span-3 p-5 sm:p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-edge">
                       <div>
                         <span className="inline-block text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-lg mb-6"
                           style={{ backgroundColor: bc + '18', color: bc, border: `1px solid ${bc}25` }}>
@@ -168,7 +168,7 @@ export default async function EventosPage() {
                             style={{ background: 'linear-gradient(135deg, rgba(9,60,93,0.82) 0%, rgba(9,60,93,0.60) 60%, rgba(118,171,174,0.40) 100%)' }} />
                         </>
                       )}
-                      <div className="relative p-8 md:p-10 flex flex-col justify-between h-full gap-6">
+                      <div className="relative p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full gap-6">
                         <div>
                           <p className={`text-[10px] font-bold uppercase tracking-[0.3em] mb-4 ${imgUrl ? 'text-white/60' : 'text-ink-3'}`}>
                             {event.categoria}
@@ -197,7 +197,7 @@ export default async function EventosPage() {
 
       {/* Dirección */}
       <section className="bg-muted border-b border-edge">
-        <div className="max-w-6xl mx-auto px-6 py-20 md:py-24">
+        <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="flex flex-col gap-6 justify-center">
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Cómo llegar</p>
@@ -252,7 +252,7 @@ export default async function EventosPage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
+        <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-10 sm:gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— ¿Primera vez?</p>
             <h2 className="font-display font-black leading-[0.85] tracking-tighter text-white"
@@ -260,13 +260,13 @@ export default async function EventosPage() {
               Ven y<br />sé parte.
             </h2>
           </div>
-          <div className="flex flex-col gap-4 flex-shrink-0">
+          <div className="flex flex-col gap-4 w-full md:w-auto md:flex-shrink-0">
             <Link href="/contacto"
-              className="inline-flex items-center justify-between gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
+              className="flex items-center justify-between gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-5 sm:py-4 rounded-xl transition group">
               Escríbenos <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link href="/login"
-              className="inline-flex items-center justify-between gap-3 border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group">
+              className="flex items-center justify-between gap-3 border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-5 sm:py-4 rounded-xl transition group">
               Comunidad en línea <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
             </Link>
           </div>

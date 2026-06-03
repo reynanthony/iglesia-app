@@ -99,12 +99,15 @@ export default function LiveChatBox({
       <div className="flex items-center gap-2 px-3 py-3"
         style={{ borderTop: '1px solid #0D3352' }}>
         <input
+          id="chat-input"
+          name="message"
+          aria-label="Escribe un mensaje"
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKey}
           placeholder="Escribe un mensaje…"
           maxLength={300}
-          className="flex-1 bg-transparent text-sm focus:outline-none"
+          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
           style={{
             background: '#0B2D47',
             border: '1px solid #0D3352',
@@ -114,9 +117,10 @@ export default function LiveChatBox({
           }}
         />
         <button onClick={send} disabled={!input.trim()}
-          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition"
+          aria-label="Enviar mensaje"
+          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
           style={{ background: '#76ABAE' }}>
-          <Send size={14} style={{ color: '#061E30' }} />
+          <Send size={14} style={{ color: '#061E30' }} aria-hidden="true" />
         </button>
       </div>
     </div>

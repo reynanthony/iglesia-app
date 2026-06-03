@@ -1,4 +1,3 @@
-import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
@@ -6,18 +5,13 @@ import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
 import { Globe, LogOut, Cross, ShieldCheck, Search } from 'lucide-react'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
+import { getUser, getProfile } from '@/lib/supabase/cached-user'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
+  const user = await getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+  const profile = await getProfile(user.id)
 
   const profileHref = profile?.username ? `/app/perfil/${profile.username}` : '/app/comunidad'
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
@@ -114,6 +108,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                   : initial}
               </div>
             </Link>
+            <form action={logout}>
+              <button type="submit" className="w-10 h-10 flex items-center justify-center rounded-xl transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Cerrar sesión">
+                <LogOut size={18} />
+              </button>
+            </form>
           </div>
         </div>
       </header>

@@ -3,6 +3,8 @@ import { Cross } from 'lucide-react'
 import MobileMenu from '@/components/public/MobileMenu'
 import PublicNav from '@/components/public/PublicNav'
 import { PublicStatusBar } from '@/components/public/PublicStatusBar'
+import { PublicAuthNav } from '@/components/public/PublicAuthNav'
+import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -16,28 +18,31 @@ const navLinks = [
   { href: '/contacto',    label: 'Contacto' },
 ]
 
+// Sync Server Component — no auth check here.
+// Auth state is detected client-side by PublicAuthNav and MobileMenu,
+// which makes all public routes statically renderable.
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
 
       <PublicStatusBar />
+      <NativeAppRedirect />
 
       {/* ── HEADER ─────────────────────────────────────── */}
       <header
         className="sticky top-0 z-50 backdrop-blur-md"
         style={{
-          background: 'rgba(5,24,40,0.97)',
-          borderBottom: '1px solid rgba(118,171,174,0.10)',
+          background: '#051828',
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
-          <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: '#0D3352' }}>
-              <Cross size={14} strokeWidth={2.5} style={{ color: '#F6F3EB' }} />
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+            <div className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: '#0D3352' }}>
+              <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
-            <span className="font-black text-base tracking-tight hidden sm:block" style={{ color: '#F6F3EB' }}>
+            <span className="font-black text-[15px] tracking-tight" style={{ color: '#F6F3EB' }}>
               El Manantial
             </span>
           </Link>
@@ -45,13 +50,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <PublicNav />
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Link
-              href="/login"
-              className="hidden md:inline-flex items-center font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl transition"
-              style={{ background: '#F6F3EB', color: '#093C5D' }}
-            >
-              Entrar
-            </Link>
+            <PublicAuthNav />
             <MobileMenu />
           </div>
         </div>

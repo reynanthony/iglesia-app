@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, UsersRound, Lock } from 'lucide-react'
+import { ArrowLeft, Plus, UsersRound, Lock, GraduationCap, ChevronRight } from 'lucide-react'
 import PostCard from '@/components/PostCard'
 import { joinGroup, leaveGroup } from '@/app/actions/groups'
 
@@ -22,7 +22,7 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
   const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: group }, { data: membership }, { data: posts }, { data: memberCount }] = await Promise.all([
-    supabase.from('groups').select('*').eq('id', id).single(),
+    supabase.from('groups').select('*, discipleship_programs(id, title, slug, discipleship_courses(id, title, slug))').eq('id', id).single(),
     supabase.from('group_members').select('role').eq('group_id', id).eq('user_id', user!.id).maybeSingle(),
     supabase
       .from('posts')
@@ -37,6 +37,7 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
 
   const isMember = !!membership
   const count    = (memberCount as any)?.[0]?.count ?? 0
+  const program  = (group as any)?.discipleship_programs ?? null
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -89,6 +90,33 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
           <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.50)' }}>
             {group.description}
           </p>
+        </div>
+      )}
+
+      {/* Programa de discipulado del grupo */}
+      {program && (
+        <div className="px-4 pb-4 max-w-2xl mx-auto">
+          <Link
+            href={`/educacion/discipulado/${program.slug}`}
+            className="flex items-center gap-3 p-4 rounded-2xl transition hover:brightness-110"
+            style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}
+          >
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(118,171,174,0.12)' }}>
+              <GraduationCap size={17} style={{ color: '#76ABAE' }} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-0.5"
+                style={{ color: 'rgba(118,171,174,0.55)' }}>
+                Programa de este grupo
+              </p>
+              <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{program.title}</p>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                {program.discipleship_courses?.length ?? 0} curso{program.discipleship_courses?.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)' }} />
+          </Link>
         </div>
       )}
 

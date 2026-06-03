@@ -29,8 +29,15 @@ export default function PublicNav() {
     function handler(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
     }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
     document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', handler)
+      document.removeEventListener('keydown', onKey)
+    }
   }, [])
 
   const moreActive = MORE_LINKS.some(l => pathname === l.href || pathname.startsWith(l.href + '/'))
@@ -54,10 +61,12 @@ export default function PublicNav() {
       <div ref={ref} className="relative">
         <button
           onClick={() => setOpen(v => !v)}
+          aria-expanded={open}
+          aria-haspopup="true"
           className={`public-nav-link flex items-center gap-1${moreActive ? ' active' : ''}`}
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
         >
-          Más <ChevronDown size={11} style={{ opacity: 0.6, transform: open ? 'rotate(180deg)' : undefined, transition: 'transform 0.2s' }} />
+          Más <span aria-hidden="true" className="motion-reduce:transition-none" style={{ opacity: 0.6, display: 'inline-flex', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}><ChevronDown size={11} /></span>
         </button>
         {open && (
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 rounded-xl overflow-hidden z-50"

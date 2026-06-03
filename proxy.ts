@@ -27,16 +27,18 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user && request.nextUrl.pathname.startsWith('/app')) {
+  const path = request.nextUrl.pathname
+
+  // Guard protected routes at the edge — before any Server Component renders
+  if (!user && (path.startsWith('/app') || path.startsWith('/admin'))) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    url.searchParams.set('redirectTo', path)
     return NextResponse.redirect(url)
   }
 
-  if (user && (
-    request.nextUrl.pathname === '/login' ||
-    request.nextUrl.pathname === '/registro'
-  )) {
+  // Skip login/registro for already authenticated users
+  if (user && (path === '/login' || path === '/registro')) {
     const url = request.nextUrl.clone()
     url.pathname = '/app/feed'
     return NextResponse.redirect(url)
@@ -46,5 +48,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/app/:path*', '/login', '/registro'],
+  matcher: ['/app/:path*', '/admin/:path*', '/login', '/registro'],
 }

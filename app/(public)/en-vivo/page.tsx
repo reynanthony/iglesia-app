@@ -121,7 +121,7 @@ export default async function EnVivoPage() {
 
       ) : (
         /* ─── OFFLINE HERO ───────────────────────────────── */
-        <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '85vh' }}>
+        <section className="relative overflow-hidden min-h-[85svh] md:min-h-[85vh]" style={{ background: '#051828' }}>
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
           <div className="pointer-events-none absolute inset-0"
@@ -133,8 +133,7 @@ export default async function EnVivoPage() {
             </span>
           </div>
 
-          <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-44 md:pb-24 flex flex-col justify-end"
-            style={{ minHeight: '85vh' }}>
+          <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-12 sm:pt-32 sm:pb-20 md:pt-44 md:pb-24 flex flex-col justify-end">
             <div className="flex items-center gap-5 mb-12">
               <div className="w-px h-10" style={{ background: TEAL }} />
               <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
@@ -143,8 +142,8 @@ export default async function EnVivoPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-end">
-              <h1 className="font-display font-black tracking-tighter text-white"
-                style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+              <h1 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
+                style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
                 La Palabra<br />donde<br /><em style={{ color: TEAL }}>estés.</em>
               </h1>
               <div>

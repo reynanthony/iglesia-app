@@ -19,10 +19,10 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(next)}
-      className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition"
+      className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
       aria-label="Cambiar tema"
     >
-      <Icon size={16} />
+      <Icon size={16} aria-hidden="true" />
     </button>
   )
 }

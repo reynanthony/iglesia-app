@@ -1,30 +1,49 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
 import { detectSocialEmbed } from '@/lib/social-embed'
 
-/**
- * Renders hero background video for any URL type:
- * - YouTube / Vimeo  → iframe embed (autoplay, muted, loop, no controls)
- * - Direct file URL  → <video> tag (mp4, webm, etc.)
- */
+function YTCover({ ytId, opacity }: { ytId: string; opacity: number }) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const frameRef = useRef<HTMLIFrameElement>(null)
+
+  useEffect(() => {
+    function fit() {
+      const wrap = wrapRef.current
+      const frame = frameRef.current
+      if (!wrap || !frame) return
+      const { width: w, height: h } = wrap.getBoundingClientRect()
+      // Size the iframe so it covers the container at 16:9
+      const iw = Math.max(w, h * (16 / 9))
+      const ih = Math.max(h, w * (9 / 16))
+      frame.style.width  = `${iw}px`
+      frame.style.height = `${ih}px`
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    if (wrapRef.current) ro.observe(wrapRef.current)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <div ref={wrapRef} className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>
+      <iframe
+        ref={frameRef}
+        src={`https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&playsinline=1`}
+        title="Video de fondo"
+        style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', border: 'none' }}
+        allow="autoplay; encrypted-media"
+      />
+    </div>
+  )
+}
+
 export function HeroVideo({ url, opacity = 0.60 }: { url: string; opacity?: number }) {
   const embed = detectSocialEmbed(url)
 
   if (embed?.platform === 'youtube') {
     const ytId = embed.embedUrl.replace('https://www.youtube.com/embed/', '').split('?')[0]
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>
-        <iframe
-          src={`https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&playsinline=1`}
-          style={{
-            position: 'absolute',
-            top: '50%', left: '50%',
-            width: '300%', height: '300%',
-            transform: 'translate(-50%, -50%)',
-            border: 'none',
-          }}
-          allow="autoplay; encrypted-media"
-        />
-      </div>
-    )
+    return <YTCover ytId={ytId} opacity={opacity} />
   }
 
   if (embed?.platform === 'vimeo') {
@@ -33,6 +52,7 @@ export function HeroVideo({ url, opacity = 0.60 }: { url: string; opacity?: numb
       <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>
         <iframe
           src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=1&loop=1&background=1`}
+          title="Video de fondo"
           className="absolute inset-0 w-full h-full"
           style={{ border: 'none' }}
           allow="autoplay; encrypted-media"

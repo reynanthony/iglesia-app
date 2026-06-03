@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Flame, CheckCircle, Clock, Users } from 'lucide-react'
+import { ArrowLeft, Flame, CheckCircle, Clock, Users, Sparkles, MessageSquareHeart, ChevronRight } from 'lucide-react'
 import { togglePrayerParticipation, markPrayerAnswered, markPrayerFollowUp } from '@/app/actions/prayer'
 
 const STATUS_LABEL: Record<string, string> = {
@@ -27,7 +27,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   const [{ data: req }, { data: participants }] = await Promise.all([
     supabase
       .from('prayer_requests')
-      .select('*, profiles!prayer_requests_user_id_fkey(full_name, username)')
+      .select('*, profiles!prayer_requests_user_id_fkey(full_name, username), posts!prayer_requests_testimony_post_id_fkey(id, content, created_at)')
       .eq('id', id)
       .single(),
     supabase
@@ -45,6 +45,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   const authorName   = req.is_anonymous
     ? 'Anónimo'
     : ((req.profiles as any)?.full_name ?? 'Usuario')
+  const testimony    = (req.posts as any) ?? null
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -144,15 +145,60 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
 
         {/* Estado respondida */}
         {req.status === 'respondida' && (
-          <div className="rounded-2xl p-5 flex items-center gap-4"
-            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.20)' }}>
-            <CheckCircle size={22} style={{ color: '#4ADE80', flexShrink: 0 }} />
-            <div>
-              <p className="font-black text-sm" style={{ color: '#4ADE80' }}>¡Oración respondida!</p>
-              <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.50)' }}>
-                Dios oyó el clamor de su pueblo. Gloria a Dios.
-              </p>
+          <div className="space-y-3">
+            {/* Badge respondida */}
+            <div className="rounded-2xl p-5 flex items-center gap-4"
+              style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.20)' }}>
+              <CheckCircle size={22} style={{ color: '#4ADE80', flexShrink: 0 }} />
+              <div>
+                <p className="font-black text-sm" style={{ color: '#4ADE80' }}>¡Oración respondida!</p>
+                <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                  Dios oyó el clamor de su pueblo. Gloria a Dios.
+                </p>
+              </div>
             </div>
+
+            {/* Testimonio — si existe */}
+            {testimony && (
+              <div className="rounded-2xl p-5 space-y-3"
+                style={{ background: 'rgba(118,171,174,0.07)', border: '1px solid rgba(118,171,174,0.20)' }}>
+                <div className="flex items-center gap-2">
+                  <Sparkles size={14} style={{ color: '#76ABAE' }} />
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em]"
+                    style={{ color: 'rgba(118,171,174,0.60)' }}>
+                    Testimonio compartido
+                  </p>
+                </div>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap"
+                  style={{ color: 'rgba(246,243,235,0.70)' }}>
+                  {testimony.content}
+                </p>
+                <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  {new Date(testimony.created_at).toLocaleDateString('es-ES', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                  })}
+                </p>
+              </div>
+            )}
+
+            {/* CTA para escribir testimonio (solo dueño, sin testimonio aún) */}
+            {isOwner && !testimony && (
+              <Link href={`/app/oracion/${id}/testimonio`}
+                className="flex items-center gap-3 p-5 rounded-2xl transition hover:brightness-110"
+                style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(118,171,174,0.12)' }}>
+                  <MessageSquareHeart size={16} style={{ color: '#76ABAE' }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Compartir testimonio</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    Cuéntale a la comunidad cómo Dios respondió
+                  </p>
+                </div>
+                <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)' }} />
+              </Link>
+            )}
           </div>
         )}
       </div>

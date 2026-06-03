@@ -71,3 +71,41 @@ export async function markPrayerFollowUp(requestId: string): Promise<void> {
   revalidatePath(`/app/oracion/${requestId}`)
   revalidatePath('/app/oracion')
 }
+
+export async function shareTestimony(requestId: string, formData: FormData): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const body = (formData.get('body') as string)?.trim()
+  if (!body) return
+
+  // Verify owner
+  const { data: req } = await supabase
+    .from('prayer_requests')
+    .select('id, title, status, user_id, testimony_post_id')
+    .eq('id', requestId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (!req || req.status !== 'respondida' || req.testimony_post_id) return
+
+  // Create post of category 'testimonio'
+  const { data: post } = await supabase.from('posts').insert({
+    user_id:  user.id,
+    content:  body,
+    category: 'testimonio',
+  }).select('id').single()
+
+  if (!post) return
+
+  // Link testimony post to prayer request
+  await supabase.from('prayer_requests')
+    .update({ testimony_post_id: post.id, updated_at: new Date().toISOString() })
+    .eq('id', requestId)
+
+  revalidatePath(`/app/oracion/${requestId}`)
+  revalidatePath('/app/oracion')
+  revalidatePath('/app/comunidad')
+  redirect(`/app/oracion/${requestId}`)
+}

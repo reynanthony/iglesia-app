@@ -26,10 +26,10 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
 
   if (!profile) notFound()
 
-  const [{ data: posts }, { data: discipleship }, { data: stages }] = await Promise.all([
+  const [{ data: posts }, { data: discipleship }, { data: stages }, { data: completedEnrollments }] = await Promise.all([
     supabase
       .from('posts')
-      .select('*, profiles(id, full_name, username, avatar_url), likes(id, user_id), comments(id, content, created_at, profiles(full_name, username))')
+      .select('*, profiles(id, full_name, username, avatar_url), reactions(id, user_id, type), comments(id, content, created_at, parent_id, profiles(full_name, username, avatar_url), comment_likes(id, user_id))')
       .eq('user_id', profile.id)
       .order('created_at', { ascending: false }),
     supabase
@@ -38,13 +38,19 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
       .eq('user_id', profile.id)
       .maybeSingle(),
     supabase.from('discipleship_stages').select('*').order('order_index'),
+    supabase
+      .from('user_course_enrollments')
+      .select('course_id', { count: 'exact', head: true })
+      .eq('user_id', profile.id)
+      .not('completed_at', 'is', null),
   ])
 
-  const isOwner      = user?.id === profile.id
-  const role         = roleMeta[profile.role]
-  const initial      = profile.full_name?.[0]?.toUpperCase() ?? 'U'
-  const postCount    = posts?.length ?? 0
-  const currentStage = (discipleship?.discipleship_stages as any) ?? null
+  const isOwner         = user?.id === profile.id
+  const role            = roleMeta[profile.role]
+  const initial         = profile.full_name?.[0]?.toUpperCase() ?? 'U'
+  const postCount       = posts?.length ?? 0
+  const completedCourses = (completedEnrollments as any)?.count ?? 0
+  const currentStage    = (discipleship?.discipleship_stages as any) ?? null
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -103,6 +109,14 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
                 {postCount === 1 ? 'Publicación' : 'Publicaciones'}
               </p>
             </div>
+            {(isOwner || completedCourses > 0) && (
+              <div>
+                <p className="font-black text-xl leading-none" style={{ color: '#76ABAE' }}>{completedCourses}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  {completedCourses === 1 ? 'Curso' : 'Cursos'}
+                </p>
+              </div>
+            )}
           </div>
 
           <DiscipleshipProgress

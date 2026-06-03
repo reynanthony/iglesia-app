@@ -2,14 +2,17 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import { cmsGet, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
+import { HeroVideo } from '@/components/public/HeroVideo'
 import {
   ArrowLeft, ArrowRight, Play, FileText, Megaphone, Video, Pin,
   Users, Music, Heart, Star, BookOpen, Mic, Baby, Flame, Home, Globe,
   Zap, Sparkles, type LucideIcon,
 } from 'lucide-react'
+import { VideoPlayButton } from '@/components/public/VideoModal'
 
 export const revalidate = 60
 
+const DARK  = '#051828'
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
@@ -162,24 +165,46 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
   const articulos = items.filter(i => i.type === 'articulo')
   const latestAnuncio = anuncios[0] ?? null
   const IconComponent = getIcon(slug)
-  const imgUrl    = cmsImageUrl(ministry.image)
+  const imgUrl    = cmsImageUrl(ministry.imagen)
   const leaderImg = cmsImageUrl(ministry.leader_photo)
 
   return (
     <div>
 
       {/* ══ HERO ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: NAVY }}>
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px)` }} />
-        <div className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 60% 80% at 80% 50%, ${TEAL}20, transparent 70%)` }} />
+      {(() => {
+        const overlayOpacity = ministry.hero_overlay_opacity ?? 0.80
+        const showGrid       = ministry.hero_show_grid !== false
+        const gridOpacity    = 0.04
+        return (
+      <section className="relative overflow-hidden" style={{ background: DARK, minHeight: '60vh' }}>
 
-        {/* Ministry image as background accent */}
-        {imgUrl && (
-          <div className="pointer-events-none absolute right-0 top-0 w-1/2 h-full hidden lg:block"
-            style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,0.3), transparent)' }}>
-            <img src={imgUrl} alt="" className="w-full h-full object-cover opacity-10" />
+        {/* Fondo: video tiene prioridad sobre foto */}
+        {ministry.video_url ? (
+          <HeroVideo url={ministry.video_url} opacity={0.45} />
+        ) : imgUrl ? (
+          <img src={imgUrl} alt="" aria-hidden
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.40 }} />
+        ) : null}
+
+        {/* Overlay degradado */}
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: `linear-gradient(160deg, rgba(5,24,40,${overlayOpacity}) 0%, rgba(9,60,93,${Math.max(0, overlayOpacity - 0.20)}) 60%, rgba(118,171,174,0.10) 100%)` }} />
+
+        {/* Grilla sutil */}
+        {showGrid && (
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ opacity: gridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px)` }} />
+        )}
+
+        {/* Watermark decorativo */}
+        {ministry.hero_watermark && (
+          <div className="pointer-events-none absolute select-none right-0 bottom-0 overflow-hidden"
+            aria-hidden>
+            <span className="font-black text-white leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(10rem, 30vw, 28rem)', opacity: 0.05, lineHeight: 1 }}>
+              {ministry.hero_watermark}
+            </span>
           </div>
         )}
 
@@ -207,9 +232,12 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                 {ministry.name}
               </h1>
               {ministry.description && (
-                <p className="text-sm leading-relaxed max-w-lg" style={{ color: 'rgba(246,243,235,0.60)' }}>
+                <p className="text-sm leading-relaxed max-w-lg mb-6" style={{ color: 'rgba(246,243,235,0.60)' }}>
                   {ministry.description}
                 </p>
+              )}
+              {ministry.video_url && (
+                <VideoPlayButton url={ministry.video_url} label="Ver video del ministerio" />
               )}
             </div>
 
@@ -237,6 +265,8 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
         </div>
         <div className="h-1 w-full" style={{ backgroundColor: TEAL }} />
       </section>
+        )
+      })()}
 
       {/* ══ LATEST ANNOUNCEMENT BANNER ══════════════════════ */}
       {latestAnuncio && (

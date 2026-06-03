@@ -2,6 +2,22 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen, Quote } from 'lucide-react'
 import { cmsGet, cmsImageUrl, type DDevocional } from '@/lib/directus'
 import { OT_BOOKS, NT_BOOKS, hasBibleApi } from '@/lib/bible'
+import BibleContinue from '@/components/public/BibleContinue'
+
+const OT_CATS = [
+  { label: 'Pentateuco',        books: OT_BOOKS.slice(0, 5)  },
+  { label: 'Libros históricos', books: OT_BOOKS.slice(5, 17) },
+  { label: 'Poética',           books: OT_BOOKS.slice(17, 22)},
+  { label: 'Profetas mayores',  books: OT_BOOKS.slice(22, 27)},
+  { label: 'Profetas menores',  books: OT_BOOKS.slice(27)    },
+]
+const NT_CATS = [
+  { label: 'Evangelios',            books: NT_BOOKS.slice(0, 4)  },
+  { label: 'Historia apostólica',   books: NT_BOOKS.slice(4, 5)  },
+  { label: 'Epístolas de Pablo',    books: NT_BOOKS.slice(5, 18) },
+  { label: 'Epístolas generales',   books: NT_BOOKS.slice(18, 26)},
+  { label: 'Profecía',              books: NT_BOOKS.slice(26)    },
+]
 
 export const revalidate = 3600
 
@@ -70,6 +86,9 @@ export default async function BibliaPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ CONTINUAR LEYENDO + MARCADORES ═════════════════ */}
+      <BibleContinue />
 
       {/* ══ DEVOCIONAL DESTACADO ════════════════════════════ */}
       {featured && (
@@ -208,36 +227,63 @@ export default async function BibliaPage() {
           </div>
 
           {bibleOn ? (
-            <div className="space-y-12">
-              {/* Antiguo Testamento */}
+            <div className="space-y-16">
+
+              {/* ── Antiguo Testamento ── */}
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6" style={{ color: SAGE }}>— Antiguo Testamento</p>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-                  {OT_BOOKS.map(book => (
-                    <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
-                      className="group px-3 py-2.5 rounded-lg text-center transition hover:opacity-80"
-                      style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
-                      <p className="text-[11px] font-black leading-tight" style={{ color: NAVY }}>{book.name}</p>
-                      <p className="text-[9px] mt-0.5" style={{ color: SAGE }}>{book.chapters} cap.</p>
-                    </Link>
+                <p className="text-[10px] font-bold uppercase tracking-[0.40em] mb-10"
+                  style={{ color: SAGE }}>— Antiguo Testamento</p>
+                <div className="space-y-8">
+                  {OT_CATS.map(cat => (
+                    <div key={cat.label}>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.38em] mb-3"
+                        style={{ color: `${TEAL}80` }}>{cat.label}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {cat.books.map(book => (
+                          <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
+                            className="flex flex-col items-center justify-center px-3.5 py-3 rounded-xl transition-all duration-150 bg-[#EDEAE0] border border-[#D2CDB8] hover:bg-[#E3DDD2] hover:border-[#76ABAE]"
+                            style={{ minWidth: 76, minHeight: 52 }}>
+                            <span className="text-[12px] font-black leading-tight text-center"
+                              style={{ color: NAVY }}>{book.name}</span>
+                            <span className="text-[9px] mt-0.5"
+                              style={{ color: SAGE }}>{book.chapters} cap.</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              {/* Nuevo Testamento */}
+              {/* ── Nuevo Testamento ── */}
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6" style={{ color: SAGE }}>— Nuevo Testamento</p>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-                  {NT_BOOKS.map(book => (
-                    <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
-                      className="group px-3 py-2.5 rounded-lg text-center transition hover:opacity-80"
-                      style={{ background: `${TEAL}12`, border: `1px solid ${TEAL}25` }}>
-                      <p className="text-[11px] font-black leading-tight" style={{ color: NAVY }}>{book.name}</p>
-                      <p className="text-[9px] mt-0.5" style={{ color: SAGE }}>{book.chapters} cap.</p>
-                    </Link>
+                <p className="text-[10px] font-bold uppercase tracking-[0.40em] mb-10"
+                  style={{ color: SAGE }}>— Nuevo Testamento</p>
+                <div className="space-y-8">
+                  {NT_CATS.map(cat => (
+                    <div key={cat.label}>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.38em] mb-3"
+                        style={{ color: `${TEAL}80` }}>{cat.label}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {cat.books.map(book => (
+                          <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
+                            className="flex flex-col items-center justify-center px-3.5 py-3 rounded-xl transition-all duration-150 border hover:bg-[#EAF2F2] hover:border-[#76ABAE]"
+                            style={{
+                              background: `${TEAL}10`, border: `1px solid ${TEAL}28`,
+                              minWidth: 76, minHeight: 52,
+                            }}>
+                            <span className="text-[12px] font-black leading-tight text-center"
+                              style={{ color: NAVY }}>{book.name}</span>
+                            <span className="text-[9px] mt-0.5"
+                              style={{ color: SAGE }}>{book.chapters} cap.</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
+
             </div>
           ) : (
             <div className="rounded-2xl p-10 text-center" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>

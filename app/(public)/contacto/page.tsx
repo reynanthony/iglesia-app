@@ -1,36 +1,28 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import ContactForm from '@/components/public/ContactForm'
-import { createClient } from '@/lib/supabase/server'
-import BlockRenderer from '@/components/BlockRenderer'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { cmsSingleton, cmsImageUrl, type DContacto } from '@/lib/directus'
 
 export const dynamic = 'force-dynamic'
 
 export default async function ContactoPage() {
-  const supabase = await createClient()
-  const { data } = await supabase.from('page_content').select('content').eq('page', 'contacto').single()
-  const content = (data?.content ?? {}) as Record<string, any>
-  if (Array.isArray(content.blocks) && content.blocks.length > 0) {
-    return <BlockRenderer blocks={content.blocks} />
-  }
-  const c = content as Record<string, string>
+  const cms = await cmsSingleton<DContacto>('contacto')
+  const c = cms ?? {} as DContacto
 
-  const address      = c.address      || 'Tu dirección aquí, Ciudad, País'
-  const phone        = c.phone        || '+1 (809) 000-0000'
-  const email        = c.email        || 'info@elmanantial.org'
-  const schedule     = [c.schedule_sun, c.schedule_wed, c.schedule_fri].filter(Boolean).join(' · ') || 'Dom 10AM · Mié 7PM · Vie 7PM'
-  const heroEyebrow  = c.hero_eyebrow  || 'Contacto · Estamos aquí para ti'
-  const heroTitle    = c.hero_title    || 'Visítanos.'
-  const heroSubtitle = c.hero_subtitle || 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.'
-
-  // New CMS fields
-  const infoEyebrow       = c.info_eyebrow       || '— Información'
-  const formEyebrow       = c.form_eyebrow        || '— Escríbenos'
-  const firstVisitTitle   = c.first_visit_title   || '¿Primera visita?'
-  const firstVisitSubtitle = c.first_visit_subtitle || 'No necesitas saber nada.'
-  const firstVisitBody    = c.first_visit_body    || 'Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.'
-  const heroImageUrl      = c.hero_image_url      || null
-  const heroVideoUrl      = c.hero_video_url      || null
+  const address      = c.address      ?? 'Tu dirección aquí, Ciudad, País'
+  const phone        = c.phone        ?? '+1 (809) 000-0000'
+  const email        = c.email        ?? 'info@elmanantial.org'
+  const schedule     = c.schedule     ?? 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const heroEyebrow  = c.hero_eyebrow ?? 'Contacto · Estamos aquí para ti'
+  const heroTitle    = c.hero_title   ?? 'Visítanos.'
+  const heroSubtitle = c.hero_subtitle ?? 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.'
+  const infoEyebrow       = c.info_eyebrow        ?? '— Información'
+  const formEyebrow       = c.form_eyebrow         ?? '— Escríbenos'
+  const firstVisitTitle   = c.first_visit_title    ?? '¿Primera visita?'
+  const firstVisitSubtitle = c.first_visit_subtitle ?? 'No necesitas saber nada.'
+  const firstVisitBody    = c.first_visit_body     ?? 'Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.'
+  const heroImageUrl      = cmsImageUrl(c.hero_image)
+  const heroVideoUrl      = c.hero_video_url       ?? null
 
   const infoItems = [
     { icon: MapPin, label: 'Dirección', value: address  },
@@ -44,7 +36,7 @@ export default async function ContactoPage() {
       {/* ═══════════════════════════════════════
           HERO — conversacional, íntimo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-[80vh] flex flex-col justify-center" style={{ background: '#093C5D' }}>
+      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: '#051828' }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.65 }} />
         )}
@@ -63,15 +55,15 @@ export default async function ContactoPage() {
         </div>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
-        <div className="relative max-w-6xl mx-auto w-full px-6 py-24 md:py-32">
-          <div className="flex items-center gap-5 mb-14">
+        <div className="relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32">
+          <div className="flex items-center gap-5 mb-10 sm:mb-14">
             <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
               {heroEyebrow}
             </p>
           </div>
-          <h1 className="font-display font-black tracking-tighter text-white mb-8"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
+          <h1 className="font-display font-black tracking-tighter text-white mb-8 leading-[0.9] md:leading-[0.85]"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
             {heroTitle}
           </h1>
           <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
@@ -84,8 +76,8 @@ export default async function ContactoPage() {
           INFO + FORMULARIO
       ═══════════════════════════════════════ */}
       <section className="bg-card border-b border-edge">
-        <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16">
 
             {/* Info lateral */}
             <div className="lg:col-span-4 space-y-6">

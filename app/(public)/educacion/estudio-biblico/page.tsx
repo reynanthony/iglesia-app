@@ -1,42 +1,39 @@
 import Link from 'next/link'
-import { ArrowRight, ArrowLeft, BookOpen, Clock, Users, ChevronRight, Calendar } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Clock, Users, ChevronRight, Calendar, BookOpen } from 'lucide-react'
+import { createClient } from '@/lib/supabase/server'
 
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
-const SERIES = [
-  { n: '01', book: 'Evangelio de Juan',   theme: 'La identidad de Cristo',           sessions: 12, status: 'activa',   color: TEAL },
-  { n: '02', book: 'Salmos selectos',      theme: 'Adoración y vida interior',        sessions: 8,  status: 'próxima',  color: SAGE },
-  { n: '03', book: 'Filipenses',           theme: 'Gozo en toda circunstancia',       sessions: 6,  status: 'próxima',  color: '#C084FC' },
-  { n: '04', book: 'Génesis 1–11',         theme: 'Los orígenes de todo',             sessions: 10, status: 'archivo',  color: '#60A5FA' },
-  { n: '05', book: 'Proverbios temático',  theme: 'Sabiduría para la vida diaria',   sessions: 7,  status: 'archivo',  color: '#F59E0B' },
-]
-
-const STATUS_LABEL: Record<string, string>   = { activa: 'En curso', próxima: 'Próximamente', archivo: 'Completada' }
-const STATUS_COLOR: Record<string, string>   = { activa: '#76ABAE', próxima: SAGE, archivo: '#94A3B8' }
+const STATUS_LABEL: Record<string, string> = { active: 'En curso', upcoming: 'Próximamente', archived: 'Completada' }
+const STATUS_COLOR: Record<string, string> = { active: '#76ABAE', upcoming: SAGE, archived: '#94A3B8' }
 
 const HOW = [
-  { n: '01', title: 'Contexto histórico',  desc: 'Quién escribió el libro, cuándo, para quién y en qué situación. El texto habla más cuando conoces su mundo.' },
+  { n: '01', title: 'Contexto histórico',   desc: 'Quién escribió el libro, cuándo, para quién y en qué situación. El texto habla más cuando conoces su mundo.' },
   { n: '02', title: 'Estructura del texto', desc: 'Analizamos párrafo por párrafo, idea por idea. No saltamos a aplicaciones antes de entender qué dice el texto.' },
-  { n: '03', title: 'Principio eterno',    desc: 'De cada pasaje extraemos la verdad universal que trasciende el tiempo y la cultura.' },
-  { n: '04', title: 'Aplicación práctica', desc: 'Cómo vive esa verdad una persona real, en 2026, en nuestra ciudad. El estudio se vuelve vida.' },
+  { n: '03', title: 'Principio eterno',     desc: 'De cada pasaje extraemos la verdad universal que trasciende el tiempo y la cultura.' },
+  { n: '04', title: 'Aplicación práctica',  desc: 'Cómo vive esa verdad una persona real, en nuestra ciudad, hoy. El estudio se vuelve vida.' },
 ]
 
-export default function EstudioBiblicoPage() {
+export default async function EstudioBiblicoPage() {
+  const supabase = await createClient()
+  const { data: series } = await supabase
+    .from('bible_study_series')
+    .select('id, title, slug, book, theme, cover_color, status, order_index, bible_study_sessions(count)')
+    .eq('is_active', true)
+    .order('order_index')
+
   return (
     <div>
 
       {/* HERO */}
       <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '85vh' }}>
-        {/* Grid texture */}
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
-        {/* Glow */}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: `radial-gradient(ellipse 50% 65% at 80% 35%, ${TEAL}10, transparent 65%)` }} />
-        {/* Decorative word */}
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
           <span className="font-black leading-none tracking-tighter"
             style={{ fontSize: 'clamp(10rem, 28vw, 26rem)', opacity: 0.05, color: TEAL, lineHeight: 1 }}>
@@ -67,18 +64,18 @@ export default function EstudioBiblicoPage() {
               <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.55)' }}>
                 Cada miércoles nos reunimos para estudiar la Biblia con rigor, comunidad y aplicación práctica. No interpretamos la Escritura solos — la interpretamos juntos.
               </p>
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2" style={{ color: `${TEAL}80` }}>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
                   <Calendar size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">Miércoles</span>
                 </div>
-                <div className="w-px h-4" style={{ background: `${TEAL}30` }} />
-                <div className="flex items-center gap-2" style={{ color: `${TEAL}80` }}>
+                <div className="hidden sm:block w-px h-4" style={{ background: `${TEAL}30` }} />
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
                   <Clock size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">7:00 PM</span>
                 </div>
-                <div className="w-px h-4" style={{ background: `${TEAL}30` }} />
-                <div className="flex items-center gap-2" style={{ color: `${TEAL}80` }}>
+                <div className="hidden sm:block w-px h-4" style={{ background: `${TEAL}30` }} />
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
                   <Users size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">Todas las edades</span>
                 </div>
@@ -88,7 +85,7 @@ export default function EstudioBiblicoPage() {
         </div>
       </section>
 
-      {/* SERIES — tabla editorial */}
+      {/* SERIES */}
       <section style={{ background: '#EDEAE0', borderBottom: '1px solid #D2CDB8' }}>
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="flex items-end justify-between mb-14 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
@@ -101,34 +98,55 @@ export default function EstudioBiblicoPage() {
             </div>
           </div>
 
-          <div className="space-y-px rounded-2xl overflow-hidden" style={{ border: '1px solid #D2CDB8' }}>
-            {SERIES.map(({ n, book, theme, sessions, status, color }, idx) => (
-              <div key={n}
-                className="group flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 md:px-8 py-6 md:py-7 transition hover:bg-white"
-                style={{ background: idx % 2 === 0 ? CREAM : '#F4F1E8', cursor: status === 'activa' ? 'pointer' : 'default' }}>
-                <span className="text-[9px] font-black tracking-widest flex-shrink-0" style={{ color: '#D2CDB8' }}>{n}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="font-black text-base tracking-tight" style={{ color: NAVY }}>{book}</h3>
-                    <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex-shrink-0"
-                      style={{ background: `${STATUS_COLOR[status]}20`, color: STATUS_COLOR[status], border: `1px solid ${STATUS_COLOR[status]}30` }}>
-                      {STATUS_LABEL[status]}
+          {!series || series.length === 0 ? (
+            <div className="text-center py-16">
+              <BookOpen size={32} style={{ color: `${NAVY}30`, margin: '0 auto 1rem' }} />
+              <p style={{ color: `${NAVY}60` }}>Las series se publicarán próximamente.</p>
+              <p className="text-sm mt-1" style={{ color: `${NAVY}40` }}>
+                ¿Tienes preguntas? <Link href="/contacto" style={{ color: TEAL }}>Contáctanos.</Link>
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-px rounded-2xl overflow-hidden" style={{ border: '1px solid #D2CDB8' }}>
+              {series.map((s: any, idx: number) => {
+                const sessionCount = (s.bible_study_sessions as any)?.[0]?.count ?? 0
+                const color = s.cover_color || TEAL
+                const isActive = s.status === 'active'
+                return (
+                  <div key={s.id}
+                    className="group flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 md:px-8 py-6 md:py-7 transition hover:bg-white"
+                    style={{ background: idx % 2 === 0 ? CREAM : '#F4F1E8', cursor: isActive ? 'pointer' : 'default' }}>
+                    <span className="text-[9px] font-black tracking-widest flex-shrink-0" style={{ color: '#D2CDB8' }}>
+                      {String(idx + 1).padStart(2, '0')}
                     </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="font-black text-base tracking-tight" style={{ color: NAVY }}>{s.book || s.title}</h3>
+                        <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full flex-shrink-0"
+                          style={{ background: `${STATUS_COLOR[s.status]}20`, color: STATUS_COLOR[s.status], border: `1px solid ${STATUS_COLOR[s.status]}30` }}>
+                          {STATUS_LABEL[s.status] ?? s.status}
+                        </span>
+                      </div>
+                      <p className="text-[12px]" style={{ color: `${NAVY}60` }}>{s.theme}</p>
+                    </div>
+                    <div className="flex items-center gap-4 flex-shrink-0">
+                      <div className="text-right">
+                        <p className="font-black text-xl leading-none" style={{ color }}>{sessionCount}</p>
+                        <p className="text-[9px] font-bold uppercase tracking-wider mt-0.5" style={{ color: `${NAVY}40` }}>sesiones</p>
+                      </div>
+                      {isActive && sessionCount > 0 && (
+                        <Link href={`/educacion/estudio-biblico/${s.slug}`}
+                          className="flex items-center"
+                          aria-label={`Ver serie ${s.title}`}>
+                          <ArrowRight size={14} style={{ color: TEAL }} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-[12px]" style={{ color: `${NAVY}60` }}>{theme}</p>
-                </div>
-                <div className="flex items-center gap-4 flex-shrink-0">
-                  <div className="text-right">
-                    <p className="font-black text-xl leading-none" style={{ color }}>{sessions}</p>
-                    <p className="text-[9px] font-bold uppercase tracking-wider mt-0.5" style={{ color: `${NAVY}40` }}>sesiones</p>
-                  </div>
-                  {status === 'activa' && (
-                    <ArrowRight size={14} style={{ color: TEAL }} className="group-hover:translate-x-1 transition-transform" />
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 
