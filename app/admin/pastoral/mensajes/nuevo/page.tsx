@@ -44,12 +44,21 @@ export default function NuevoPastoralMensajePage() {
           </div>
 
           <div>
-            <label className={label} style={labelStyle}>Archivo multimedia (audio, video o imagen)</label>
+            <label className={label} style={labelStyle}>URL de video / audio (YouTube, etc.)</label>
+            <input name="media_url_external" type="url" placeholder="https://youtube.com/watch?v=..."
+              className={field} style={fieldStyle} />
+            <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.30)' }}>
+              Usa esto para compartir videos de YouTube directamente en el canal
+            </p>
+          </div>
+
+          <div>
+            <label className={label} style={labelStyle}>O sube un archivo (audio, video o imagen)</label>
             <div className="rounded-xl border-2 border-dashed p-6 text-center" style={{ borderColor: '#0D3352' }}>
               <input type="file" name="media" accept="audio/*,video/*,image/*"
                 className="w-full text-sm cursor-pointer" style={{ color: 'rgba(246,243,235,0.40)' }} />
               <p className="text-[11px] mt-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
-                Opcional — sube el archivo si aplica
+                Si subes un archivo, tiene prioridad sobre la URL
               </p>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Play, Mic, Type, Clock, Star } from 'lucide-react'
+import VideoEmbed from '@/components/app/pastoral/VideoEmbed'
 
 const P = {
   bg: '#060E07', surface: '#0D1A0E', sage: '#869B7E',
@@ -130,11 +131,7 @@ function ReflectionCard({
               style={{ accentColor: P.sage }} />
           )}
           {item.media_url && item.media_type === 'video' && (
-            <a href={item.media_url} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-3 text-[12px] font-bold px-4 py-2 rounded-xl transition"
-              style={{ background: 'rgba(118,171,174,0.12)', color: P.teal }}>
-              <Play size={12} /> Ver video
-            </a>
+            <VideoEmbed url={item.media_url} className="mt-3" />
           )}
           <div className="flex items-center gap-3 mt-3">
             <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>

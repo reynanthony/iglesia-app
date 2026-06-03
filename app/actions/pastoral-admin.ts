@@ -33,7 +33,8 @@ async function uploadPastoralFile(
 export async function createPastoralMessage(formData: FormData) {
   const { supabase, userId } = await getPastoralClient()
   const media = formData.get('media') as File
-  let media_url: string | null = null
+  const externalUrl = (formData.get('media_url_external') as string ?? '').trim() || null
+  let media_url: string | null = externalUrl
   const media_type = (formData.get('media_type') as string) || 'text'
   if (media && media.size > 0) media_url = await uploadPastoralFile(supabase, media, 'mensajes')
 
@@ -139,6 +140,56 @@ export async function deletePastoralEncounter(id: string) {
 }
 
 // ── PREGUNTAS ───────────────────────────────────────────────
+
+export async function updatePastoralReflection(id: string, formData: FormData) {
+  const { supabase } = await getPastoralClient()
+  const media = formData.get('media') as File
+  const externalUrl = (formData.get('media_url_external') as string ?? '').trim() || null
+  const { data: current } = await supabase.from('pastoral_reflections').select('media_url').eq('id', id).single()
+  let media_url: string | null = externalUrl ?? current?.media_url ?? null
+  const media_type = (formData.get('media_type') as string) || 'text'
+  if (media && media.size > 0) media_url = await uploadPastoralFile(supabase, media, 'reflexiones')
+
+  const dur = formData.get('duration_seconds') as string
+  const weekFeatured = formData.get('week_featured') === 'on'
+  if (weekFeatured) {
+    await supabase.from('pastoral_reflections').update({ week_featured: false }).neq('id', id)
+  }
+  await supabase.from('pastoral_reflections').update({
+    title: (formData.get('title') as string).trim() || null,
+    body: (formData.get('body') as string).trim() || null,
+    media_url,
+    media_type,
+    duration_seconds: dur ? parseInt(dur) : null,
+    week_featured: weekFeatured,
+  }).eq('id', id)
+  revalidatePath('/admin/pastoral/reflexiones')
+  revalidatePath('/app/pastoral')
+  redirect('/admin/pastoral/reflexiones')
+}
+
+export async function updatePastoralEncounter(id: string, formData: FormData) {
+  const { supabase } = await getPastoralClient()
+  const thumb = formData.get('thumbnail') as File
+  const { data: current } = await supabase.from('pastoral_encounters').select('thumbnail_url').eq('id', id).single()
+  let thumbnail_url = current?.thumbnail_url ?? null
+  if (thumb && thumb.size > 0) thumbnail_url = await uploadPastoralFile(supabase, thumb, 'encuentros')
+
+  const scheduledRaw = formData.get('scheduled_at') as string
+  await supabase.from('pastoral_encounters').update({
+    title: (formData.get('title') as string).trim(),
+    description: (formData.get('description') as string).trim() || null,
+    type: formData.get('type') as string,
+    live_url: (formData.get('live_url') as string).trim() || null,
+    scheduled_at: scheduledRaw || null,
+    thumbnail_url,
+    notes_markdown: (formData.get('notes_markdown') as string).trim() || null,
+  }).eq('id', id)
+  revalidatePath('/admin/pastoral/encuentros')
+  revalidatePath('/app/pastoral')
+  revalidatePath(`/app/pastoral/encuentros/${id}`)
+  redirect('/admin/pastoral/encuentros')
+}
 
 export async function answerPastoralQuestion(formData: FormData) {
   const { supabase } = await getPastoralClient()

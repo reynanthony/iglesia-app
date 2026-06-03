@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, BookOpen, Star } from 'lucide-react'
+import { Plus, BookOpen, Star, Pencil } from 'lucide-react'
 import DeletePastoralItemButton from '@/components/admin/DeletePastoralItemButton'
 import ToggleWeekFeaturedButton from '@/components/admin/ToggleWeekFeaturedButton'
 
@@ -78,6 +78,11 @@ export default async function AdminPastoralReflexionesPage() {
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <ToggleWeekFeaturedButton id={item.id} current={!!item.week_featured} />
+              <Link href={`/admin/pastoral/reflexiones/${item.id}/editar`}
+                className="w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{ background: '#061E30' }}>
+                <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+              </Link>
               <DeletePastoralItemButton id={item.id} table="pastoral_reflections" />
             </div>
           </div>

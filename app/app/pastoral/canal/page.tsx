@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Pin, Mic, Play, Image as ImgIcon, Type } from 'lucide-react'
+import { ArrowLeft, Pin, Mic, Image as ImgIcon, Type } from 'lucide-react'
 import PastoralReactionBar from '@/components/app/pastoral/PastoralReactionBar'
+import VideoEmbed from '@/components/app/pastoral/VideoEmbed'
 
 const P = {
   bg: '#060E07', surface: '#0D1A0E',
@@ -11,7 +12,7 @@ const P = {
 }
 
 const TYPE_ICONS: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
-  text: Type, audio: Mic, video: Play, image: ImgIcon,
+  text: Type, audio: Mic, image: ImgIcon,
 }
 
 export default async function PastoralCanalPage() {
@@ -101,11 +102,7 @@ export default async function PastoralCanalPage() {
                   style={{ accentColor: P.sage }} />
               )}
               {(msg as any).media_url && (msg as any).media_type === 'video' && (
-                <a href={(msg as any).media_url} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[12px] font-bold px-4 py-2 rounded-xl mb-3 w-fit transition"
-                  style={{ background: 'rgba(118,171,174,0.10)', color: P.teal }}>
-                  <Play size={12} /> Ver video
-                </a>
+                <VideoEmbed url={(msg as any).media_url} className="mb-3" />
               )}
               {(msg as any).media_url && (msg as any).media_type === 'image' && (
                 <img src={(msg as any).media_url} alt="" className="w-full rounded-xl mb-3 object-cover"

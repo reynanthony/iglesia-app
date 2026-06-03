@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, Video, Radio, CheckCircle, Clock } from 'lucide-react'
+import { Plus, Video, Radio, CheckCircle, Clock, Pencil } from 'lucide-react'
 import DeletePastoralItemButton from '@/components/admin/DeletePastoralItemButton'
 import EncounterStatusButton from '@/components/admin/EncounterStatusButton'
 
@@ -80,6 +80,11 @@ export default async function AdminPastoralEncuentrosPage() {
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <EncounterStatusButton id={item.id} status={item.status} />
+                <Link href={`/admin/pastoral/encuentros/${item.id}/editar`}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center"
+                  style={{ background: '#061E30' }}>
+                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                </Link>
                 <DeletePastoralItemButton id={item.id} table="pastoral_encounters" />
               </div>
             </div>
