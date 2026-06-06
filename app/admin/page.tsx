@@ -70,37 +70,37 @@ export default async function AdminPage() {
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4 mb-5 md:mb-8">
         {stats.map(({ label, value, icon: Icon, iconColor, bgColor, change }) => (
-          <div key={label} className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: bgColor }}>
-                <Icon size={18} style={{ color: iconColor }} />
+          <div key={label} className="rounded-xl md:rounded-2xl p-3 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="flex items-start justify-between mb-2 md:mb-3">
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={{ background: bgColor }}>
+                <Icon size={15} style={{ color: iconColor }} />
               </div>
               {change && (
-                <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }}>
+                <span className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded-full" style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }}>
                   {change}
                 </span>
               )}
             </div>
-            <p className="text-3xl font-bold" style={{ color: '#F6F3EB' }}>{value.toLocaleString()}</p>
-            <p className="text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
+            <p className="text-xl md:text-3xl font-bold" style={{ color: '#F6F3EB' }}>{value.toLocaleString()}</p>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
           </div>
         ))}
       </div>
 
       {/* Graficas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6 mb-4 md:mb-6">
         <AdminChart title="Nuevos usuarios (7 días)" data={usersByDay ?? []} color="#76ABAE" />
         <AdminChart title="Nuevas publicaciones (7 días)" data={postsByDay ?? []} color="#76ABAE" />
       </div>
 
       {/* Tablas recientes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
 
         {/* Usuarios recientes */}
-        <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-semibold mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Usuarios recientes</h2>
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <h2 className="font-semibold mb-3 md:mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Usuarios recientes</h2>
           <div className="space-y-3">
             {recentUsers?.map((u: any) => {
               const badge = roleBadge(u.role)
@@ -129,8 +129,8 @@ export default async function AdminPage() {
         </div>
 
         {/* Posts recientes */}
-        <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-semibold mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Publicaciones recientes</h2>
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <h2 className="font-semibold mb-3 md:mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Publicaciones recientes</h2>
           <div className="space-y-3">
             {recentPosts?.map((p: any) => (
               <div key={p.id} className="flex items-start gap-3">

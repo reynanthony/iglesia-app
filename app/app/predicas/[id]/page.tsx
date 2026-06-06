@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, Play, Calendar, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import VideoPlayer from '@/components/VideoPlayer'
+import { cmsById, cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
 
 export const revalidate = 300
 
@@ -12,38 +13,24 @@ function getYoutubeId(url?: string | null) {
   return m ? m[1] : null
 }
 
-export default async function AppPredicaPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function AppPredicaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
-
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: item } = await supabase
-    .from('ministry_content')
-    .select('id, title, body, video_url, image_url, created_at, profiles(full_name, avatar_url), ministries(name, slug)')
-    .eq('id', id)
-    .eq('type', 'video')
-    .single()
-
+  const item = await cmsById<DPredica>('predicas', id)
   if (!item) notFound()
 
-  const { data: related } = await supabase
-    .from('ministry_content')
-    .select('id, title, video_url, image_url, created_at')
-    .eq('type', 'video')
-    .neq('id', id)
-    .order('created_at', { ascending: false })
-    .limit(4)
+  const related = (await cmsGet<DPredica>('predicas', { sort: '-id', limit: '5' }))
+    .filter(p => p.id !== item.id)
+    .slice(0, 4)
 
-  const profile  = item.profiles as any
-  const ytId     = getYoutubeId(item.video_url)
-  const thumb    = item.image_url ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
-  const fmtDate  = new Date(item.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
+  const ytId  = getYoutubeId(item.video_url)
+  const thumb = cmsImageUrl(item.thumbnail) ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
+  const fmtDate = item.date
+    ? new Date(item.date).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
+    : null
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -81,23 +68,25 @@ export default async function AppPredicaPage({
           {item.title}
         </h1>
         <div className="flex flex-wrap items-center gap-4">
-          {profile?.full_name && (
+          {item.speaker && (
             <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
               <User size={12} />
-              <span className="text-[12px] font-bold">{profile.full_name}</span>
+              <span className="text-[12px] font-bold">{item.speaker}</span>
             </div>
           )}
-          <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
-            <Calendar size={12} />
-            <span className="text-[12px]">{fmtDate}</span>
-          </div>
+          {fmtDate && (
+            <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <Calendar size={12} />
+              <span className="text-[12px]">{fmtDate}</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* BODY */}
-      {item.body && (
+      {/* DESCRIPTION */}
+      {item.description && (
         <div className="px-4 py-5" style={{ borderBottom: '1px solid #0D3352' }}>
-          {item.body.split('\n\n').map((p: string, i: number) =>
+          {item.description.split('\n\n').map((p, i) =>
             p.trim() ? (
               <p key={i} className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(246,243,235,0.55)' }}>
                 {p}
@@ -108,14 +97,14 @@ export default async function AppPredicaPage({
       )}
 
       {/* MORE */}
-      {(related ?? []).length > 0 && (
+      {related.length > 0 && (
         <div className="px-4 py-5">
           <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
             style={{ color: 'rgba(118,171,174,0.60)' }}>Más prédicas</p>
           <div className="space-y-2">
-            {(related ?? []).map((r: any) => {
+            {related.map(r => {
               const rYtId = getYoutubeId(r.video_url)
-              const rThumb = r.image_url ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
+              const rThumb = cmsImageUrl(r.thumbnail) ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
               return (
                 <Link key={r.id} href={`/app/predicas/${r.id}`}
                   className="flex items-center gap-3 p-3 rounded-2xl group transition"

@@ -69,14 +69,14 @@ export default async function AdminPostsPage({
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2.5 md:space-y-3">
         {posts?.map((post: any) => (
           <div key={post.id}
-            className="bg-[#0B2D47] border rounded-2xl overflow-hidden transition"
+            className="bg-[#0B2D47] border rounded-xl md:rounded-2xl overflow-hidden transition"
             style={{ borderColor: post.pinned ? 'rgba(118,171,174,0.20)' : '' }}>
-            <div className="p-5 flex items-start justify-between gap-4">
-              <div className="flex items-start gap-3 flex-1 min-w-0">
-                <div className="w-9 h-9 rounded-full overflow-hidden bg-[#0D3352] flex-shrink-0">
+            <div className="p-3.5 md:p-5">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-[#0D3352] flex-shrink-0">
                   {post.profiles?.avatar_url ? (
                     <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -87,7 +87,7 @@ export default async function AdminPostsPage({
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <div className="flex flex-wrap items-center gap-1.5 mb-1">
                     {post.pinned && (
                       <span className="flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
                         style={{ background: '#0D3352', color: '#76ABAE' }}>
@@ -111,11 +111,11 @@ export default async function AdminPostsPage({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 mt-2.5 justify-end">
                 <Link href={`/admin/posts/${post.id}/editar`}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition"
                   style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }}>
-                  <Pencil size={12} /> Editar
+                  <Pencil size={12} /><span className="hidden md:inline">Editar</span>
                 </Link>
                 <PinPostButton postId={post.id} pinned={post.pinned} />
                 <DeletePostButton postId={post.id} />

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { UsersRound, Lock } from 'lucide-react'
-import { joinGroup, leaveGroup } from '@/app/actions/groups'
+import { leaveGroup } from '@/app/actions/groups'
 
 const TYPE_LABELS: Record<string, string> = {
   jovenes:     'Jóvenes',
@@ -21,15 +21,11 @@ export default async function GruposPage() {
   if (!user) redirect('/login')
 
   const [{ data: groups }, { data: myMemberships }] = await Promise.all([
-    supabase
-      .from('groups')
-      .select('*, group_members(count)')
-      .eq('is_active', true)
-      .order('name'),
+    supabase.from('groups').select('*, group_members(count)').eq('is_active', true).order('name'),
     supabase.from('group_members').select('group_id').eq('user_id', user.id),
   ])
 
-  const myGroupIds = new Set((myMemberships ?? []).map((m: any) => m.group_id))
+  const myGroupIds  = new Set((myMemberships ?? []).map((m: any) => m.group_id))
   const myGroups    = (groups ?? []).filter((g: any) =>  myGroupIds.has(g.id))
   const otherGroups = (groups ?? []).filter((g: any) => !myGroupIds.has(g.id))
 
@@ -72,6 +68,9 @@ export default async function GruposPage() {
           <section>
             <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
               style={{ color: 'rgba(118,171,174,0.60)' }}>Explorar grupos</p>
+            <p className="text-[12px] mb-3" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              Los grupos son por invitación. Habla con tu líder para unirte.
+            </p>
             <div className="space-y-2">
               {otherGroups.map((g: any) => <GroupRow key={g.id} group={g} joined={false} />)}
             </div>
@@ -130,12 +129,10 @@ function GroupRow({ group, joined }: { group: any; joined: boolean }) {
           </button>
         </form>
       ) : (
-        <form action={joinGroup.bind(null, group.id)}>
-          <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl"
-            style={{ background: '#76ABAE', color: '#061E30' }}>
-            Unirse
-          </button>
-        </form>
+        <span className="flex items-center gap-1 text-[10px] font-black px-2.5 py-1.5 rounded-lg flex-shrink-0"
+          style={{ background: 'rgba(13,51,82,0.60)', color: 'rgba(246,243,235,0.30)', border: '1px solid #0D3352' }}>
+          <Lock size={9} /> Por invitación
+        </span>
       )}
     </div>
   )

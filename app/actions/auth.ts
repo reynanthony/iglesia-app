@@ -21,19 +21,26 @@ export async function login(formData: FormData) {
 export async function register(formData: FormData) {
   const supabase = await createClient()
 
+  const full_name = (formData.get('full_name') as string).trim()
+  const username  = (formData.get('username') as string).trim().toLowerCase()
+
   const { data, error } = await supabase.auth.signUp({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
-    options: {
-      data: {
-        full_name: formData.get('full_name') as string,
-        username: formData.get('username') as string,
-      }
-    }
+    options: { data: { full_name, username } }
   })
 
   if (error) {
     return { error: 'No se pudo crear la cuenta. Intenta con otro correo.' }
+  }
+
+  if (data.user) {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .upsert({ id: data.user.id, full_name, username }, { onConflict: 'id' })
+    if (profileError) {
+      return { error: 'El nombre de usuario ya está en uso.' }
+    }
   }
 
   // If session exists, email confirmation is disabled — go straight to feed

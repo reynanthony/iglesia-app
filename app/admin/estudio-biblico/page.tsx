@@ -16,17 +16,17 @@ export default async function EstudioBiblicoAdminPage() {
     <div className="p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Estudio Bíblico</h1>
-            <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <h1 className="text-xl md:text-2xl font-bold" style={{ color: '#F6F3EB' }}>Estudio Bíblico</h1>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
               {series?.length ?? 0} series
             </p>
           </div>
           <Link href="/admin/estudio-biblico/nueva"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold transition flex-shrink-0"
             style={{ background: '#F6F3EB', color: '#061E30' }}>
-            <Plus size={14} /> Nueva serie
+            <Plus size={13} /><span className="hidden sm:inline">Nueva serie</span><span className="sm:hidden">Nueva</span>
           </Link>
         </div>
 
@@ -47,7 +47,7 @@ export default async function EstudioBiblicoAdminPage() {
               const color = s.cover_color || '#76ABAE'
               return (
                 <Link key={s.id} href={`/admin/estudio-biblico/${s.id}`}
-                  className="flex items-center gap-4 px-5 py-4 border-b transition hover:bg-[#0D3352]"
+                  className="flex items-center gap-3 md:gap-4 px-3.5 md:px-5 py-3.5 md:py-4 border-b transition hover:bg-[#0D3352]"
                   style={{ borderColor: '#0D3352', textDecoration: 'none' }}>
                   <div className="w-2 h-10 rounded-full flex-shrink-0" style={{ background: color }} />
                   <div className="flex-1 min-w-0">

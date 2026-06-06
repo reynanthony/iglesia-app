@@ -17,48 +17,59 @@ export default async function AdminReportesPage() {
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-9 h-9 bg-[#000000]/10 rounded-xl flex items-center justify-center">
-          <AlertTriangle size={18} className="text-[#000000]" />
+        <div className="flex items-center gap-2.5 mb-4 md:mb-6">
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-lg md:rounded-xl flex items-center justify-center"
+            style={{ background: 'rgba(248,113,113,0.12)' }}>
+            <AlertTriangle size={15} style={{ color: '#F87171' }} />
+          </div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold">Reportes</h1>
+            <p className="text-xs md:text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              {reports?.length ?? 0} reportes recibidos
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold">Reportes</h1>
-          <p className="text-[rgba(246,243,235,0.40)] text-sm">{reports?.length ?? 0} reportes recibidos</p>
-        </div>
-      </div>
 
-      {!reports || reports.length === 0 ? (
-        <div className="text-center py-20 text-[rgba(246,243,235,0.40)]">
-          <p className="text-3xl mb-3">✅</p>
-          <p className="text-sm">Sin reportes pendientes</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {reports.map((report: any) => (
-            <div key={report.id} className="bg-[#0B2D47] border border-[#0D3352] rounded-2xl p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs bg-[#000000]/10 text-[#000000] px-2 py-0.5 rounded-full">
-                      Reportado por @{report.reporter?.username}
-                    </span>
-                    <span className="text-xs text-[rgba(246,243,235,0.30)]">
-                      {new Date(report.created_at).toLocaleDateString('es-DO')}
-                    </span>
+        {!reports || reports.length === 0 ? (
+          <div className="text-center py-16" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-2xl mb-2">✅</p>
+            <p className="text-sm">Sin reportes pendientes</p>
+          </div>
+        ) : (
+          <div className="space-y-2.5 md:space-y-3">
+            {reports.map((report: any) => (
+              <div key={report.id}
+                className="rounded-xl md:rounded-2xl p-3.5 md:p-5"
+                style={{ background: '#0B2D47', border: '1px solid rgba(248,113,113,0.20)' }}>
+                <div className="flex items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full"
+                        style={{ background: 'rgba(248,113,113,0.12)', color: '#F87171' }}>
+                        @{report.reporter?.username}
+                      </span>
+                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                        {new Date(report.created_at).toLocaleDateString('es-DO')}
+                      </span>
+                    </div>
+                    <p className="text-xs mb-1.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      Post de <span style={{ color: 'rgba(246,243,235,0.70)' }}>@{report.post?.profiles?.username}</span>
+                    </p>
+                    <p className="text-sm leading-relaxed line-clamp-2 px-3 py-2 rounded-lg"
+                      style={{ background: '#0D3352', color: 'rgba(246,243,235,0.70)' }}>
+                      {report.post?.content}
+                    </p>
                   </div>
-                  <p className="text-xs text-[rgba(246,243,235,0.40)] mb-1">
-                    Post de <span className="text-[rgba(246,243,235,0.70)]">@{report.post?.profiles?.username}</span>
-                  </p>
-                  <p className="text-sm text-[rgba(246,243,235,0.70)] line-clamp-2 bg-[#0D3352] rounded-xl p-3">
-                    {report.post?.content}
-                  </p>
+                  {report.post && (
+                    <div className="flex-shrink-0">
+                      <DeletePostButton postId={report.post.id} />
+                    </div>
+                  )}
                 </div>
-                {report.post && <DeletePostButton postId={report.post.id} />}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

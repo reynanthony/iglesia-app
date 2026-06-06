@@ -137,17 +137,6 @@ export async function reportPost(postId: string, reason: string) {
     .select('id')
     .eq('role', 'admin')
 
-  if (admins && admins.length > 0) {
-    await supabase.from('notifications').insert(
-      admins.map((admin: any) => ({
-        user_id: admin.id,
-        actor_id: user.id,
-        type: 'report',
-        post_id: postId,
-      }))
-    )
-  }
-
   return { success: true }
 }
 
@@ -177,7 +166,12 @@ export async function deleteOwnPost(postId: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'No autenticado' }
 
-  await supabase.from('posts').delete().eq('id', postId).eq('user_id', user.id)
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  const isModerator = ['admin', 'pastor', 'moderador'].includes(profile?.role ?? '')
+
+  let query = supabase.from('posts').delete().eq('id', postId)
+  if (!isModerator) query = query.eq('user_id', user.id)
+  await query
 
   revalidatePath('/app/feed')
   return { success: true }

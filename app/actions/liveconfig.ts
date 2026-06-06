@@ -20,16 +20,20 @@ async function setConfig(key: string, value: string) {
   revalidatePath('/admin/en-vivo')
   revalidatePath('/en-vivo')
   revalidatePath('/app/en-vivo')
+  revalidatePath('/app/pastoral/gestionar')
 }
 
 export async function setLiveUrl(formData: FormData): Promise<void> {
-  const url   = (formData.get('live_url') as string).trim()
-  const title = (formData.get('live_title') as string)?.trim() || 'Culto en vivo'
+  const url        = (formData.get('live_url') as string).trim()
+  const title      = (formData.get('live_title') as string)?.trim() || 'Culto en vivo'
+  const visibleWeb = formData.get('live_visible_web') === 'on' ? 'true' : 'false'
   await setConfig('live_url', url)
   await setConfig('live_title', title)
+  await setConfig('live_visible_web', visibleWeb)
 }
 
 export async function toggleLive(formData: FormData): Promise<void> {
   const value = formData.get('is_live') === 'on' ? 'true' : 'false'
   await setConfig('is_live', value)
 }
+

@@ -3,6 +3,7 @@ import ShortsCard from '@/components/ShortsCard'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import CommunityAnnouncement from '@/components/app/CommunityAnnouncement'
 
 const CATEGORIES = [
   { key: '', label: 'Todos' },
@@ -40,15 +41,37 @@ export default async function ComunidadPage({
 
   if (cat) query = query.eq('category', cat)
 
-  const { data: posts } = await query
+  const [{ data: posts }, bannerResult] = await Promise.all([
+    query,
+    supabase
+      .from('announcements')
+      .select('id, title, description, cta_label, cta_destination, video_url')
+      .eq('is_active', true)
+      .eq('is_banner', true)
+      .lte('start_date', new Date().toISOString())
+      .or(`end_date.is.null,end_date.gte.${new Date().toISOString()}`)
+      .order('priority', { ascending: false })
+      .limit(1),
+  ])
+
+  const banner = bannerResult.error ? null : (bannerResult.data?.[0] ?? null)
 
   return (
     <div
       className="flex flex-col app-content-height"
       style={{ background: '#061E30' }}
     >
+      {/* Banner de anuncio comunitario */}
+      {banner && (
+        <CommunityAnnouncement
+          text={banner.description ? `${banner.title} — ${banner.description}` : banner.title}
+          id={banner.id}
+          href={banner.cta_destination || banner.video_url || null}
+          ctaLabel={banner.cta_label || null}
+        />
+      )}
+
       {/* Filtros por categoría */}
-      {cat === undefined || cat === '' ? null : null}
       <div
         className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 overflow-x-auto no-scrollbar"
         style={{ borderBottom: '1px solid rgba(13,51,82,0.6)' }}

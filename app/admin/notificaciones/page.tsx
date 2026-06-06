@@ -27,16 +27,16 @@ export default async function NotificacionesAdminPage() {
     <div className="p-4 md:p-8">
       <div className="max-w-2xl mx-auto">
 
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">Notificaciones Push</h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+        <div className="mb-4 md:mb-6">
+          <h1 className="text-xl md:text-2xl font-bold">Notificaciones Push</h1>
+          <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
             {tokenCount ?? 0} dispositivo{tokenCount !== 1 ? 's' : ''} registrado{tokenCount !== 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Send form */}
-        <div className="rounded-2xl p-5 mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <div className="flex items-center gap-3 mb-5">
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="flex items-center gap-3 mb-4 md:mb-5">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
               <Bell size={17} style={{ color: '#76ABAE' }} />
@@ -75,7 +75,7 @@ export default async function NotificacionesAdminPage() {
         </div>
 
         {/* Devices summary */}
-        <div className="rounded-2xl p-5 mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
           <div className="flex items-center gap-3">
             <Users size={16} style={{ color: 'rgba(118,171,174,0.55)' }} />
             <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>

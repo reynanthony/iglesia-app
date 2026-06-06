@@ -17,18 +17,18 @@ export default async function AdminOracionPage() {
   return (
     <div>
       {/* Header */}
-      <div className="border-b px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
+      <div className="border-b px-4 md:px-8 py-4 md:py-5 flex items-center justify-between gap-3"
         style={{ borderColor: '#0D3352' }}>
         <div>
-          <h1 className="font-bold text-lg text-white">Salas de oración</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <h1 className="font-bold text-base md:text-lg text-white">Salas de oración</h1>
+          <p className="text-[11px] md:text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
             {rooms?.length ?? 0} salas · {active} activa{active !== 1 ? 's' : ''}
           </p>
         </div>
         <Link href="/admin/oracion/nuevo"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold transition"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold transition flex-shrink-0"
           style={{ background: '#F6F3EB', color: '#061E30' }}>
-          <Plus size={13} /> Nueva sala
+          <Plus size={13} /><span className="hidden sm:inline">Nueva sala</span><span className="sm:hidden">Nueva</span>
         </Link>
       </div>
 
@@ -47,9 +47,9 @@ export default async function AdminOracionPage() {
             style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
 
             {/* Icon */}
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ background: room.is_active ? 'rgba(100,200,100,0.08)' : '#0B2D47' }}>
-              <Radio size={18} style={{ color: room.is_active ? '#76ABAE' : '#333333' }} />
+              <Radio size={15} style={{ color: room.is_active ? '#76ABAE' : '#333333' }} />
             </div>
 
             {/* Info */}

@@ -23,7 +23,8 @@ const SECTIONS = [
       { href: '/educacion',                  label: 'Educación' },
       { href: '/educacion/discipulado',      label: 'Discipulado' },
       { href: '/educacion/estudio-biblico',  label: 'Estudio Bíblico' },
-      { href: '/biblia',                     label: 'Biblia y Devocionales' },
+      { href: '/biblia',                     label: 'Biblia' },
+      { href: '/devocionales',               label: 'Devocionales' },
     ],
   },
   {

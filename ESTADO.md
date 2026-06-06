@@ -27,7 +27,7 @@
 ### Directus CMS (Railway)
 - Panel admin: `https://directus-production-7860.up.railway.app/admin`
 - API URL: `https://directus-production-7860.up.railway.app`
-- Token (env `STRAPI_API_TOKEN`): `WvEjkm9_tLZEvOvYAzPycqwp6dLJGVS5`
+- Token: en `.env.local` → `STRAPI_API_TOKEN`
 - **Credenciales admin: RECUPERAR** — resetear desde Railway Variables con `ADMIN_EMAIL` + `ADMIN_PASSWORD` y redesplegar
 - Helper en código: `lib/directus.ts` → `cmsSingleton()`, `cmsGet()`, `cmsById()`, `cmsImageUrl()`
 

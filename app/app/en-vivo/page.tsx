@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveChatBox from '@/components/app/LiveChatBox'
 import LivePlayer from '@/components/LivePlayer'
+import { cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
@@ -30,21 +31,16 @@ export default async function EnVivoPage() {
   const liveTitle = cfg['live_title'] ?? 'Culto en vivo'
   const liveYtId  = getYoutubeId(liveUrl)
 
-  // Fetch last 4 predicas for offline state (from Supabase, same source as admin)
-  const { data: rawPredicas } = await supabase
-    .from('ministry_content')
-    .select('id, title, video_url, thumbnail:image_url, speaker:profiles(full_name), date:created_at')
-    .eq('type', 'video')
-    .order('created_at', { ascending: false })
-    .limit(4)
-  const predicas = (rawPredicas ?? []).map((p: any) => {
+  // Fetch last 4 predicas from Directus
+  const rawPredicas = await cmsGet<DPredica>('predicas', { sort: '-id', limit: '4' })
+  const predicas = rawPredicas.map(p => {
     const ytId = getYoutubeId(p.video_url ?? '')
     return {
       id: p.id,
       title: p.title,
-      speaker: p.speaker?.full_name ?? null,
+      speaker: p.speaker ?? null,
       date: p.date,
-      thumbnail: p.thumbnail ?? (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null),
+      thumbnail: cmsImageUrl(p.thumbnail) ?? (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null),
     }
   })
 

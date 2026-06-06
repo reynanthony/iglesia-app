@@ -71,10 +71,10 @@ export default function RegistroPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {[
             { name: 'full_name',  label: 'Nombre completo',    type: 'text',     placeholder: 'Juan Pérez',    autoComplete: 'name' },
-            { name: 'username',   label: 'Nombre de usuario',  type: 'text',     placeholder: 'juanperez',      autoComplete: 'username' },
+            { name: 'username',   label: 'Nombre de usuario',  type: 'text',     placeholder: 'juanperez',      autoComplete: 'username', pattern: '[a-zA-Z0-9_.\\-]+', title: 'Solo letras, números, puntos, guiones y guiones bajos. Sin espacios.' },
             { name: 'email',      label: 'Correo electrónico', type: 'email',    placeholder: 'tu@correo.com',  autoComplete: 'email' },
             { name: 'password',   label: 'Contraseña',         type: 'password', placeholder: '••••••••',       autoComplete: 'new-password', minLength: 6 },
-          ].map(({ name, label, type, placeholder, autoComplete, minLength }) => (
+          ].map(({ name, label, type, placeholder, autoComplete, minLength, pattern, title }: any) => (
             <div key={name}>
               <label
                 className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2.5"
@@ -89,6 +89,8 @@ export default function RegistroPage() {
                 placeholder={placeholder}
                 autoComplete={autoComplete}
                 minLength={minLength}
+                pattern={pattern}
+                title={title}
                 className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition"
                 style={{
                   background: '#0B2D47',
@@ -96,6 +98,11 @@ export default function RegistroPage() {
                   color: '#F6F3EB',
                 }}
               />
+              {name === 'username' && (
+                <p className="text-[10px] mt-1.5" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  Solo letras, números, puntos y guiones. Sin espacios.
+                </p>
+              )}
             </div>
           ))}
 

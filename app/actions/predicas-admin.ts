@@ -3,43 +3,31 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { cmsCreate, cmsUpdate, cmsDelete, cmsUploadFile } from '@/lib/directus'
 
 async function getAdminClient() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
-  const { data: profile } = await supabase.from('profiles').select('role, id').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (!profile || !['admin', 'pastor', 'lider'].includes(profile.role)) throw new Error('Sin permisos')
-  return { supabase, userId: profile.id as string }
-}
-
-async function uploadImage(supabase: Awaited<ReturnType<typeof createClient>>, file: File) {
-  const ext = file.name.split('.').pop() ?? 'jpg'
-  const path = `predicas/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-  const { error } = await supabase.storage.from('posts').upload(path, file, { contentType: file.type })
-  if (error) return null
-  const { data } = supabase.storage.from('posts').getPublicUrl(path)
-  return data.publicUrl
 }
 
 export async function createPredica(formData: FormData) {
-  const { supabase, userId } = await getAdminClient()
+  await getAdminClient()
   const image = formData.get('image') as File
+  let thumbnail: string | null = null
+  if (image && image.size > 0) thumbnail = await cmsUploadFile(image)
 
-  let image_url: string | null = null
-  if (image && image.size > 0) image_url = await uploadImage(supabase, image)
-
-  const ministry_id = (formData.get('ministry_id') as string) || null
-
-  await supabase.from('ministry_content').insert({
+  await cmsCreate('predicas', {
+    status: 'published',
     title: (formData.get('title') as string).trim(),
-    body: (formData.get('body') as string).trim(),
+    description: (formData.get('description') as string).trim() || null,
     video_url: (formData.get('video_url') as string).trim() || null,
-    image_url,
-    type: 'video',
-    ministry_id: ministry_id || null,
-    user_id: userId,
-    pinned: formData.get('pinned') === 'on',
+    series: (formData.get('series') as string).trim() || null,
+    speaker: (formData.get('speaker') as string).trim() || null,
+    date: (formData.get('date') as string) || null,
+    thumbnail,
   })
 
   revalidatePath('/admin/predicas')
@@ -48,23 +36,25 @@ export async function createPredica(formData: FormData) {
 }
 
 export async function updatePredica(id: string, formData: FormData) {
-  const { supabase } = await getAdminClient()
+  await getAdminClient()
   const image = formData.get('image') as File
 
   const updates: Record<string, unknown> = {
     title: (formData.get('title') as string).trim(),
-    body: (formData.get('body') as string).trim(),
+    description: (formData.get('description') as string).trim() || null,
     video_url: (formData.get('video_url') as string).trim() || null,
-    ministry_id: (formData.get('ministry_id') as string) || null,
-    pinned: formData.get('pinned') === 'on',
+    series: (formData.get('series') as string).trim() || null,
+    speaker: (formData.get('speaker') as string).trim() || null,
+    date: (formData.get('date') as string) || null,
   }
 
   if (image && image.size > 0) {
-    const url = await uploadImage(supabase, image)
-    if (url) updates.image_url = url
+    const uuid = await cmsUploadFile(image)
+    if (uuid) updates.thumbnail = uuid
   }
 
-  await supabase.from('ministry_content').update(updates).eq('id', id)
+  const result = await cmsUpdate('predicas', id, updates)
+  if (!result) redirect(`/admin/predicas/${id}/editar?error=1`)
 
   revalidatePath('/admin/predicas')
   revalidatePath('/predicas')
@@ -72,8 +62,8 @@ export async function updatePredica(id: string, formData: FormData) {
 }
 
 export async function deletePredica(id: string) {
-  const { supabase } = await getAdminClient()
-  await supabase.from('ministry_content').delete().eq('id', id)
+  await getAdminClient()
+  await cmsDelete('predicas', id)
   revalidatePath('/admin/predicas')
   revalidatePath('/predicas')
 }

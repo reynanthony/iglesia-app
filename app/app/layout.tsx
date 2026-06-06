@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross, ShieldCheck, Search } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
+import AnnouncementGate from '@/components/app/AnnouncementEngine/AnnouncementGate'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser()
@@ -19,6 +20,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen" style={{ background: '#061E30', color: '#F6F3EB' }}>
       <CapacitorBridge />
+      <AnnouncementGate
+        onboardingCompleted={profile?.onboarding_completed ?? false}
+        userId={user.id}
+        userRole={profile?.role ?? 'visitante'}
+      />
 
       {/* ── SIDEBAR (desktop) ── */}
       <aside
@@ -89,9 +95,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
           {/* Acciones */}
           <div className="flex items-center gap-0.5">
-            <Link href="/app/buscar" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Buscar">
-              <Search size={19} />
-            </Link>
             <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Sitio público">
               <Globe size={19} />
             </Link>

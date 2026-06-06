@@ -43,50 +43,45 @@ export default async function SeguridadPage() {
   return (
     <div>
       <div className="border-b" style={{ borderColor: '#0D3352' }}>
-        <div className="max-w-5xl mx-auto px-4 md:px-8 py-5 flex items-center gap-3">
-          <Shield size={20} style={{ color: '#76ABAE' }} />
+        <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-5 flex items-center gap-2.5">
+          <Shield size={18} style={{ color: '#76ABAE' }} />
           <div>
-            <h1 className="font-bold text-lg text-white">Seguridad</h1>
-            <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
-              Control de acceso y actividad del sistema
+            <h1 className="font-bold text-base md:text-lg text-white">Seguridad</h1>
+            <p className="text-[11px] md:text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              Control de acceso y actividad
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-8">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-6 space-y-5 md:space-y-8">
 
         {/* Usuarios con roles privilegiados */}
         <section>
-          <h2 className="text-[11px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
+            style={{ color: 'rgba(246,243,235,0.40)' }}>
             Accesos privilegiados ({privileged.length})
           </h2>
           <div className="space-y-2">
             {privileged.map(user => (
-              <div
-                key={user.id}
-                className="flex items-center gap-3 p-3.5 rounded-2xl border"
-                style={{ borderColor: '#0D3352', background: '#0B2D47' }}
-              >
-                <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0"
-                  style={{ background: '#0D3352' }}
-                >
+              <div key={user.id}
+                className="flex flex-wrap items-center gap-2.5 p-3 md:p-3.5 rounded-xl md:rounded-2xl border"
+                style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                <div className="w-8 h-8 md:w-9 md:h-9 rounded-lg md:rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0"
+                  style={{ background: '#0D3352', color: 'rgba(246,243,235,0.70)' }}>
                   {user.full_name?.[0]?.toUpperCase() ?? 'U'}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-[100px]">
                   <p className="font-bold text-white text-sm truncate">{user.full_name}</p>
                   <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
                     @{user.username}
                   </p>
                 </div>
-                <span
-                  className="text-[10px] font-black px-2.5 py-1 rounded-full flex-shrink-0"
-                  style={{ background: `${ROLE_COLOR[user.role]}20`, color: ROLE_COLOR[user.role], border: `1px solid ${ROLE_COLOR[user.role]}40` }}
-                >
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full flex-shrink-0"
+                  style={{ background: `${ROLE_COLOR[user.role]}20`, color: ROLE_COLOR[user.role], border: `1px solid ${ROLE_COLOR[user.role]}40` }}>
                   {ROLE_LABEL[user.role] ?? user.role}
                 </span>
-                <div className="flex-shrink-0">
+                <div className="w-full md:w-auto flex-shrink-0">
                   <RoleSelector userId={user.id} currentRole={user.role} />
                 </div>
               </div>
@@ -96,31 +91,29 @@ export default async function SeguridadPage() {
 
         {/* Log de actividad reciente */}
         <section>
-          <h2 className="text-[11px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
+            style={{ color: 'rgba(246,243,235,0.40)' }}>
             Actividad reciente
           </h2>
           {!logs || logs.length === 0 ? (
-            <div className="rounded-2xl border p-6 text-center" style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+            <div className="rounded-xl md:rounded-2xl border p-4 md:p-6 text-center"
+              style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
               <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
-                El log de actividad está vacío. Se llenará cuando los usuarios interactúen con el sistema.
+                El log de actividad está vacío.
               </p>
-              <p className="text-[11px] mt-2" style={{ color: 'rgba(246,243,235,0.25)' }}>
-                Requiere correr la migración SQL: supabase/v2_ecosystem.sql
+              <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                Requiere correr: supabase/v2_ecosystem.sql
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-1.5 md:space-y-2">
               {logs.map((log: any) => (
-                <div
-                  key={log.id}
-                  className="flex items-center gap-3 p-3 rounded-xl border"
-                  style={{ borderColor: '#0D3352', background: '#0B2D47' }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#0D3352' }}
-                  >
-                    <Clock size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                <div key={log.id}
+                  className="flex items-center gap-3 p-2.5 md:p-3 rounded-xl border"
+                  style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: '#0D3352' }}>
+                    <Clock size={12} style={{ color: 'rgba(246,243,235,0.40)' }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] font-bold text-white">
@@ -141,20 +134,24 @@ export default async function SeguridadPage() {
 
         {/* Resumen de miembros */}
         <section>
-          <h2 className="text-[11px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
+            style={{ color: 'rgba(246,243,235,0.40)' }}>
             Resumen de miembros
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
             {[
-              { label: 'Total', value: users?.length ?? 0, icon: UserCheck },
-              { label: 'Privilegiados', value: privileged.length, icon: Shield },
-              { label: 'Miembros', value: members.length, icon: UserCheck },
-              { label: 'Inactivos', value: users?.filter(u => u.is_active === false).length ?? 0, icon: UserX },
+              { label: 'Total',        value: users?.length ?? 0,                                    icon: UserCheck },
+              { label: 'Privilegiados',value: privileged.length,                                     icon: Shield    },
+              { label: 'Miembros',     value: members.length,                                        icon: UserCheck },
+              { label: 'Inactivos',    value: users?.filter(u => u.is_active === false).length ?? 0, icon: UserX     },
             ].map(stat => (
-              <div key={stat.label} className="p-4 rounded-2xl border" style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
-                <stat.icon size={16} style={{ color: '#76ABAE', marginBottom: 8 }} />
-                <p className="font-black text-2xl text-white leading-none">{stat.value}</p>
-                <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>{stat.label}</p>
+              <div key={stat.label} className="p-3 md:p-4 rounded-xl md:rounded-2xl border"
+                style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                <stat.icon size={14} style={{ color: '#76ABAE', marginBottom: 6 }} />
+                <p className="font-black text-xl md:text-2xl text-white leading-none">{stat.value}</p>
+                <p className="text-[10px] md:text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>

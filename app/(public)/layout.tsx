@@ -5,6 +5,7 @@ import PublicNav from '@/components/public/PublicNav'
 import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 import { PublicAuthNav } from '@/components/public/PublicAuthNav'
 import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
+import PublicAnnouncementGate from '@/components/public/PublicAnnouncementGate'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -27,6 +28,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
       <PublicStatusBar />
       <NativeAppRedirect />
+      <PublicAnnouncementGate />
 
       {/* ── HEADER ─────────────────────────────────────── */}
       <header

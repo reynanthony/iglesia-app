@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Plus, UsersRound, Lock, GraduationCap, ChevronRight } from 'lucide-react'
 import PostCard from '@/components/PostCard'
-import { joinGroup, leaveGroup } from '@/app/actions/groups'
+import { leaveGroup } from '@/app/actions/groups'
 
 const TYPE_LABELS: Record<string, string> = {
   jovenes:     'Jóvenes',
@@ -21,7 +21,7 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: group }, { data: membership }, { data: posts }, { data: memberCount }] = await Promise.all([
+  const [{ data: group }, { data: membership }, { data: posts }, { data: memberCount }, { data: currentProfile }] = await Promise.all([
     supabase.from('groups').select('*, discipleship_programs(id, title, slug, discipleship_courses(id, title, slug))').eq('id', id).single(),
     supabase.from('group_members').select('role').eq('group_id', id).eq('user_id', user!.id).maybeSingle(),
     supabase
@@ -31,13 +31,15 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
       .order('created_at', { ascending: false })
       .limit(30),
     supabase.from('group_members').select('count').eq('group_id', id),
+    supabase.from('profiles').select('role').eq('id', user!.id).single(),
   ])
 
   if (!group) notFound()
 
-  const isMember = !!membership
-  const count    = (memberCount as any)?.[0]?.count ?? 0
-  const program  = (group as any)?.discipleship_programs ?? null
+  const isMember        = !!membership
+  const count           = (memberCount as any)?.[0]?.count ?? 0
+  const program         = (group as any)?.discipleship_programs ?? null
+  const currentUserRole = currentProfile?.role ?? 'miembro'
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
@@ -66,18 +68,11 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
               <Plus size={16} />
             </Link>
           )}
-          {isMember ? (
+          {isMember && (
             <form action={leaveGroup.bind(null, group.id)}>
               <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl"
                 style={{ background: '#0D3352', color: 'rgba(246,243,235,0.50)' }}>
                 Salir
-              </button>
-            </form>
-          ) : (
-            <form action={joinGroup.bind(null, group.id)}>
-              <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl"
-                style={{ background: '#76ABAE', color: '#061E30' }}>
-                Unirse
               </button>
             </form>
           )}
@@ -120,35 +115,44 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
         </div>
       )}
 
-      {/* Posts */}
-      <div className="max-w-2xl mx-auto">
-        {!posts || posts.length === 0 ? (
-          <div className="text-center py-24 px-8">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <UsersRound size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
-            </div>
-            <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
-              Sin publicaciones aún
-            </p>
-            {isMember ? (
+      {/* Posts — solo visibles para miembros */}
+      {!isMember ? (
+        <div className="max-w-2xl mx-auto text-center py-24 px-8">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
+            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <Lock size={22} style={{ color: 'rgba(118,171,174,0.40)' }} />
+          </div>
+          <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+            Acceso por invitación
+          </p>
+          <p className="text-sm leading-relaxed max-w-[240px] mx-auto" style={{ color: 'rgba(246,243,235,0.45)' }}>
+            Este grupo es privado. Habla con tu líder para que te agreguen como miembro.
+          </p>
+        </div>
+      ) : (
+        <div className="max-w-2xl mx-auto">
+          {!posts || posts.length === 0 ? (
+            <div className="text-center py-24 px-8">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
+                style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                <UsersRound size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
+              </div>
+              <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+                Sin publicaciones aún
+              </p>
               <Link href={`/app/nuevo-post?group=${group.id}`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black mt-4"
                 style={{ background: '#F6F3EB', color: '#061E30' }}>
                 <Plus size={14} /> Primera publicación
               </Link>
-            ) : (
-              <p className="text-sm mt-2" style={{ color: 'rgba(246,243,235,0.45)' }}>
-                Únete al grupo para publicar
-              </p>
-            )}
-          </div>
-        ) : (
-          posts.map((post: any) => (
-            <PostCard key={post.id} post={post} currentUserId={user!.id} />
-          ))
-        )}
-      </div>
+            </div>
+          ) : (
+            posts.map((post: any) => (
+              <PostCard key={post.id} post={post} currentUserId={user!.id} currentUserRole={currentUserRole} />
+            ))
+          )}
+        </div>
+      )}
     </div>
   )
 }

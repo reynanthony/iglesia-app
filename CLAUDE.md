@@ -1,5 +1,8 @@
-# CLAUDE.md — El Manantial Church App
-> Última actualización: 2026-06-02
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> El Manantial Church App — Última actualización: 2026-06-05
 
 @AGENTS.md
 
@@ -9,8 +12,21 @@
 
 ```bash
 npm run dev       # http://localhost:3000
-vercel --prod     # deploy a producción
+npm run build     # build de producción (verificar antes de deploy)
+npm run lint      # ESLint
 npx tsc --noEmit  # type-check (debe ser limpio)
+
+# Deploy
+vercel --prod     # producción (sin --prod crea preview solamente)
+
+# Capacitor nativo
+npm run cap:sync     # sincronizar web → nativo (después de cambios)
+npm run cap:ios      # abrir en Xcode
+npm run cap:android  # abrir en Android Studio
+
+# Supabase
+npx supabase db query --linked --file supabase/<migración>.sql
+npx supabase functions deploy send-push --linked
 ```
 
 **Producción:** `https://iglesia-app-sigma.vercel.app`  
@@ -179,54 +195,6 @@ Archivos de acciones:
 
 ---
 
-## Estado de features — todo lo implementado
-
-### Sitio público `/`
-- ✅ Home con versículo del día (`lib/daily-verse.ts` — 52 versículos RVR1960)
-- ✅ Nosotros, Ministerios, Eventos, Predicaciones, Contacto
-- ✅ En vivo, Educación, Biblia (Bible API), Donaciones
-- ✅ Estudio bíblico público con series y sesiones
-
-### App comunidad `/app/*`
-- ✅ Feed con filtros por categoría
-- ✅ Reacciones espirituales (orando / amen / edifico / gracias)
-- ✅ Comentarios con respuestas y likes
-- ✅ Chat global en tiempo real (Supabase Realtime)
-- ✅ Peticiones de oración — ciclo completo: nueva → seguimiento → respondida → **testimonio**
-- ✅ Salas de oración por voz (LiveKit WebRTC)
-- ✅ Grupos con feed propio y vinculación a programa LMS
-- ✅ Perfil de usuario con stats (posts, cursos completados)
-- ✅ Búsqueda global
-- ✅ Discipulado — Mi camino, etapas, programas disponibles/bloqueados, continuar curso
-- ✅ Certificados digitales `/app/discipulado/certificados`
-- ✅ Mentoría `/app/mentoria` — panel del mentor, vista de estudiante, observaciones
-
-### LMS educativo `/educacion/discipulado/*`
-- ✅ Listado de programas
-- ✅ Detalle de programa con cursos
-- ✅ Detalle de curso con lecciones, progreso, inscripción
-- ✅ Lección con video embed, PDF, versículos, desafíos, reflexión (ReflectionForm)
-- ✅ Marcar lección completa → auto-emite certificado al completar todos los cursos
-
-### Panel admin `/admin/*`
-- ✅ Dashboard con métricas
-- ✅ Usuarios, Posts, Grupos, Ministerios, Eventos, Predicaciones
-- ✅ Mensajes de contacto (inbox)
-- ✅ Reportes de moderación, Seguridad (activity log)
-- ✅ En Vivo, Salas de oración
-- ✅ Discipulado: etapas, programas/cursos/lecciones (CRUD), reportes pastorales, asignación mentores
-- ✅ Estudio bíblico: series y sesiones (CRUD)
-- ✅ **Notificaciones push** `/admin/notificaciones` — envío masivo con historial
-
-### Capacitor (nativo)
-- ✅ `capacitor.config.ts` — appId `com.elmanantial.app`, carga URL de Vercel
-- ✅ `CapacitorBridge.tsx` — back button, registro automático de push, pull-to-refresh desactivado
-- ✅ `lib/offline-cache.ts` — caché de lecciones con `@capacitor/preferences` (7 días TTL)
-- ✅ `supabase/functions/send-push/` — Edge Function Deno para envío FCM
-- ⚠️ **Pendiente configurar**: Firebase project + `FCM_SERVER_KEY` en Supabase secrets + `npx cap sync`
-
----
-
 ## Pendiente
 
 ### Alta prioridad
@@ -265,27 +233,12 @@ Archivos de acciones:
 
 ---
 
-## Comandos útiles
+## Comandos Supabase útiles
 
 ```bash
-# Desarrollo
-npm run dev
-
-# Deploy
-vercel --prod
-
-# Type check
-npx tsc --noEmit
-
-# Ejecutar migración SQL en Supabase
-npx supabase db query --linked --file supabase/v6_push_notifications.sql
-
 # Listar usuarios con rol
 npx supabase db query --linked "SELECT full_name, role FROM profiles WHERE role IS NOT NULL"
 
-# Reset contraseña (SQL Editor en Supabase Dashboard)
+# Reset contraseña (o usar SQL Editor en Supabase Dashboard)
 UPDATE auth.users SET encrypted_password = crypt('nueva-clave', gen_salt('bf')) WHERE email = 'x@x.com';
-
-# Deploy Edge Function
-npx supabase functions deploy send-push --linked
 ```

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Radio, Clock, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import LivePlayer from '@/components/LivePlayer'
+import { cmsGet, cmsImageUrl, type DPredica } from '@/lib/directus'
 
 export const revalidate = 0
 
@@ -37,28 +38,25 @@ export default async function EnVivoPage() {
     cfg = Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value]))
   } catch { cfg = {} }
 
-  const isLive    = cfg['is_live'] === 'true'
+  const isLive    = cfg['is_live'] === 'true' && cfg['live_visible_web'] !== 'false'
   const liveUrl   = cfg['live_url']  ?? ''
   const liveTitle = cfg['live_title'] ?? 'Servicio en vivo'
   const ytId      = getYoutubeId(liveUrl)
 
-  // Predicas from Supabase (same source as admin)
-  const { data: rawPredicas } = await supabase
-    .from('ministry_content')
-    .select('id, title, body, video_url, image_url, created_at, profiles(full_name), ministries(name)')
-    .eq('type', 'video')
-    .order('pinned', { ascending: false })
-    .order('created_at', { ascending: false })
-    .limit(12)
+  const rawPredicas = await cmsGet<DPredica>('predicas', {
+    'filter[status][_eq]': 'published',
+    'sort': '-date_created',
+    'limit': '12',
+  })
 
-  const predicas = (rawPredicas ?? []).map((s: any) => ({
+  const predicas = rawPredicas.map(s => ({
     id: s.id,
     titulo: s.title,
-    pastor: s.profiles?.full_name ?? 'Pastor Principal',
-    fecha: fmtFecha(s.created_at),
-    serie: s.ministries?.name ?? '',
+    pastor: s.speaker ?? 'Pastor Principal',
+    fecha: s.date ? fmtFecha(s.date) : '',
+    serie: s.series ?? '',
     video_url: s.video_url ?? null,
-    image_url: s.image_url ?? null,
+    image_url: cmsImageUrl(s.thumbnail) ?? null,
   }))
 
   const featured = predicas[0] ?? null

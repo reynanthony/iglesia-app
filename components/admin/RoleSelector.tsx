@@ -22,7 +22,7 @@ export default function RoleSelector({ userId, currentRole }: { userId: string, 
       value={role}
       onChange={handleChange}
       disabled={saving}
-      className={`bg-[#0D3352] border border-slate-700 text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#000000] transition capitalize ${
+      className={`w-full md:w-auto bg-[#0D3352] border border-slate-700 text-sm rounded-lg px-2.5 py-1.5 focus:outline-none transition capitalize ${
         role === 'admin' ? 'text-red-400' :
         role === 'pastor' ? 'text-purple-400' :
         role === 'moderador' ? 'text-blue-400' :

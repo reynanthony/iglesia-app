@@ -9,7 +9,9 @@ import SocialEmbedCard from '@/components/SocialEmbedCard'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import ReactionBar from '@/components/app/ReactionBar'
 
-export default function PostCard({ post, currentUserId }: { post: any, currentUserId: string }) {
+const PRIVILEGED_ROLES = ['admin', 'pastor', 'moderador', 'lider']
+
+export default function PostCard({ post, currentUserId, currentUserRole }: { post: any, currentUserId: string, currentUserRole?: string }) {
   const [showMenu, setShowMenu] = useState(false)
   const [reporting, setReporting] = useState(false)
   const [reported, setReported] = useState(false)
@@ -19,6 +21,7 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
   const [saving, setSaving] = useState(false)
   const [deleted, setDeleted] = useState(false)
   const isOwn = post.user_id === currentUserId
+  const canDelete = PRIVILEGED_ROLES.includes(currentUserRole ?? '')
   const [commenting, setCommenting] = useState(false)
 
   const topLevelComments = post.comments?.filter((c: any) => !c.parent_id) ?? []
@@ -141,31 +144,33 @@ export default function PostCard({ post, currentUserId }: { post: any, currentUs
                 className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-44"
                 style={{ background: '#0B2D47', border: '1px solid #1A3D5C' }}
               >
-                {isOwn ? (
-                  <>
-                    <button
-                      onClick={() => { setEditing(true); setShowMenu(false) }}
-                      className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
-                      style={{ color: '#F6F3EB' }}
-                    >
-                      <Pencil size={14} />
-                      Editar
-                    </button>
-                    <button
-                      onClick={async () => {
-                        setShowMenu(false)
-                        if (!confirm('¿Eliminar esta publicación?')) return
-                        setDeleted(true)
-                        await deleteOwnPost(post.id)
-                      }}
-                      className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
-                      style={{ color: '#F87171' }}
-                    >
-                      <Trash2 size={14} />
-                      Eliminar
-                    </button>
-                  </>
-                ) : (
+                {isOwn && (
+                  <button
+                    onClick={() => { setEditing(true); setShowMenu(false) }}
+                    className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
+                    style={{ color: '#F6F3EB' }}
+                  >
+                    <Pencil size={14} />
+                    Editar
+                  </button>
+                )}
+                {canDelete && (
+                  <button
+                    onClick={async () => {
+                      setShowMenu(false)
+                      if (!confirm('¿Eliminar esta publicación?')) return
+                      setDeleted(true)
+                      const result = await deleteOwnPost(post.id)
+                      if (result?.error) setDeleted(false)
+                    }}
+                    className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
+                    style={{ color: '#F87171' }}
+                  >
+                    <Trash2 size={14} />
+                    Eliminar
+                  </button>
+                )}
+                {!isOwn && !canDelete && (
                   <button
                     onClick={async () => {
                       if (reported) return

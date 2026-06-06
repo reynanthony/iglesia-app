@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
+import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
   BookOpen, MessageSquare, Video, HelpCircle, ArrowRight,
-  Play, Mic, Type, Clock, Radio, Star,
+  Play, Mic, Type, Clock, Radio, Star, Users,
 } from 'lucide-react'
 
 const P = {
@@ -39,9 +40,13 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 export default async function PastoralRoomPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const user = await getUser()
   if (!user) redirect('/login')
+
+  const viewerProfile = await getProfile(user.id)
+  const isPastorOrAdmin = ['admin', 'pastor'].includes(viewerProfile?.role ?? '')
+
+  const supabase = await createClient()
 
   const [
     { data: pastor },
@@ -72,19 +77,17 @@ export default async function PastoralRoomPage() {
     <div style={{ background: P.bg, minHeight: '100%', color: P.cream }}>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden" style={{ minHeight: 340 }}>
-        {/* Atmospheric overlay */}
+      <div className="relative overflow-hidden" style={{ minHeight: 300 }}>
+
+        {/* Atmospheric overlay — always present */}
         <div className="absolute inset-0"
           style={{ background: `radial-gradient(ellipse 80% 60% at 70% 0%, rgba(134,155,126,0.12), transparent 65%)` }} />
 
+        {/* Background image: full-bleed on mobile, hidden on desktop */}
         {pastor?.avatar_url ? (
-          <div className="absolute inset-0">
-            <img
-              src={pastor.avatar_url}
-              alt={pastor.name ?? 'Pastor'}
-              className="w-full h-full object-cover object-top"
-              style={{ opacity: 0.55 }}
-            />
+          <div className="absolute inset-0 md:hidden">
+            <img src={pastor.avatar_url} alt={pastor.name ?? 'Pastor'}
+              className="w-full h-full object-cover object-top" style={{ opacity: 0.55 }} />
             <div className="absolute inset-0"
               style={{ background: `linear-gradient(to top, ${P.bg} 12%, rgba(6,14,7,0.30) 50%, transparent 100%)` }} />
           </div>
@@ -93,37 +96,54 @@ export default async function PastoralRoomPage() {
             style={{ background: `linear-gradient(135deg, ${P.surface} 0%, ${P.bg} 100%)` }} />
         )}
 
-        <div className="relative px-5 pt-8 pb-6 max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: P.gold }} />
-            <p className="text-[10px] font-black uppercase tracking-[0.45em]" style={{ color: P.gold }}>
-              Pastoral Room
+        {/* Content — desktop: flex row with contained photo */}
+        <div className="relative px-5 pt-8 pb-6 max-w-2xl mx-auto md:flex md:items-center md:gap-8 md:py-10">
+
+          {/* Text side */}
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: P.gold }} />
+                <p className="text-[10px] font-black uppercase tracking-[0.45em]" style={{ color: P.gold }}>
+                  Pastoral Room
+                </p>
+              </div>
+              {isPastorOrAdmin && (
+                <Link href="/app/pastoral/gestionar"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold"
+                  style={{ background: 'rgba(201,162,39,0.20)', color: '#C9A227', border: '1px solid rgba(201,162,39,0.40)' }}>
+                  <Radio size={11} /> Gestionar
+                </Link>
+              )}
+            </div>
+            <h1 className="font-black tracking-tighter leading-none mb-4"
+              style={{ fontSize: 'clamp(2.2rem, 8vw, 3rem)' }}>
+              {pastor?.name ?? 'El Pastor'}
+            </h1>
+            {pastor?.title && (
+              <p className="text-[12px] font-bold uppercase tracking-[0.25em] mb-5" style={{ color: P.sage }}>
+                {pastor.title}
+              </p>
+            )}
+            <p className="text-[14px] leading-relaxed max-w-xs mb-6" style={{ color: P.muted }}>
+              Bienvenido. Este espacio fue creado para acompañarte en tu crecimiento espiritual.
             </p>
+            {weekMessage && (
+              <Link href="/app/pastoral/reflexiones"
+                className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl text-[12px] font-black uppercase tracking-[0.15em] transition"
+                style={{ background: P.gold, color: '#0A0F0A' }}>
+                <Play size={12} /> Mensaje de esta semana
+              </Link>
+            )}
           </div>
 
-          <h1 className="font-black tracking-tighter leading-none mb-4"
-            style={{ fontSize: 'clamp(2.2rem, 8vw, 3.5rem)' }}>
-            {pastor?.name ?? 'El Pastor'}
-          </h1>
-
-          {pastor?.title && (
-            <p className="text-[12px] font-bold uppercase tracking-[0.25em] mb-5" style={{ color: P.sage }}>
-              {pastor.title}
-            </p>
-          )}
-
-          <p className="text-[14px] leading-relaxed max-w-xs mb-6" style={{ color: P.muted }}>
-            Bienvenido. Este espacio fue creado para acompañarte en tu crecimiento espiritual durante la semana.
-          </p>
-
-          {weekMessage && (
-            <Link
-              href={`/app/pastoral/reflexiones`}
-              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl text-[12px] font-black uppercase tracking-[0.15em] transition"
-              style={{ background: P.gold, color: '#0A0F0A' }}
-            >
-              <Play size={12} /> Ver mensaje de esta semana
-            </Link>
+          {/* Desktop-only photo card */}
+          {pastor?.avatar_url && (
+            <div className="hidden md:block flex-shrink-0 w-44 h-52 rounded-2xl overflow-hidden shadow-2xl"
+              style={{ border: `1px solid ${P.border}` }}>
+              <img src={pastor.avatar_url} alt={pastor.name ?? 'Pastor'}
+                className="w-full h-full object-cover object-top" />
+            </div>
           )}
         </div>
       </div>
@@ -139,11 +159,9 @@ export default async function PastoralRoomPage() {
                 Mensaje de la semana
               </p>
             </div>
-            <Link
-              href="/app/pastoral/reflexiones"
+            <Link href="/app/pastoral/reflexiones"
               className="flex items-start gap-4 p-5 rounded-2xl transition"
-              style={{ background: P.goldDim, border: `1px solid rgba(201,162,39,0.22)` }}
-            >
+              style={{ background: P.goldDim, border: `1px solid rgba(201,162,39,0.22)` }}>
               <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(201,162,39,0.20)' }}>
                 {(() => { const Icon = TYPE_ICONS[weekMessage.media_type ?? 'text'] ?? Type; return <Icon size={18} style={{ color: P.gold }} /> })()}
@@ -179,8 +197,7 @@ export default async function PastoralRoomPage() {
                 </p>
               </div>
               <Link href="/app/pastoral/reflexiones"
-                className="text-[11px] font-bold flex items-center gap-1"
-                style={{ color: 'rgba(134,155,126,0.60)' }}>
+                className="text-[11px] font-bold flex items-center gap-1" style={{ color: 'rgba(134,155,126,0.60)' }}>
                 Ver todas <ArrowRight size={10} />
               </Link>
             </div>
@@ -224,8 +241,7 @@ export default async function PastoralRoomPage() {
                 </p>
               </div>
               <Link href="/app/pastoral/encuentros"
-                className="text-[11px] font-bold flex items-center gap-1"
-                style={{ color: 'rgba(118,171,174,0.50)' }}>
+                className="text-[11px] font-bold flex items-center gap-1" style={{ color: 'rgba(118,171,174,0.50)' }}>
                 Ver todos <ArrowRight size={10} />
               </Link>
             </div>
@@ -239,9 +255,7 @@ export default async function PastoralRoomPage() {
                     style={{ background: isLive ? 'rgba(248,113,113,0.08)' : P.surface, border: `1px solid ${isLive ? 'rgba(248,113,113,0.25)' : P.border}` }}>
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: isLive ? 'rgba(248,113,113,0.15)' : 'rgba(118,171,174,0.10)' }}>
-                      {isLive
-                        ? <Radio size={15} style={{ color: '#F87171' }} />
-                        : <Clock size={15} style={{ color: P.teal }} />}
+                      {isLive ? <Radio size={15} style={{ color: '#F87171' }} /> : <Clock size={15} style={{ color: P.teal }} />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -280,8 +294,7 @@ export default async function PastoralRoomPage() {
                 </p>
               </div>
               <Link href="/app/pastoral/canal"
-                className="text-[11px] font-bold flex items-center gap-1"
-                style={{ color: 'rgba(134,155,126,0.60)' }}>
+                className="text-[11px] font-bold flex items-center gap-1" style={{ color: 'rgba(134,155,126,0.60)' }}>
                 Ver canal <ArrowRight size={10} />
               </Link>
             </div>
@@ -309,7 +322,7 @@ export default async function PastoralRoomPage() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { href: '/app/pastoral/preguntas', icon: HelpCircle, label: 'Pregunta al pastor',  color: P.teal },
-              { href: '/app/pastoral/perfil',    icon: BookOpen,   label: 'Perfil del pastor',   color: P.sage },
+              { href: '/app/pastoral/perfil',    icon: Users,      label: 'Conoce al equipo',    color: P.sage },
               { href: '/app/oracion',            icon: Type,       label: 'Solicitar oración',   color: P.gold },
               { href: '/app/discipulado',        icon: BookOpen,   label: 'Discipulado',          color: P.sage },
             ].map(({ href, icon: Icon, label, color }) => (

@@ -253,3 +253,78 @@ export function cmsImageUrl(fileId: string | null | undefined): string | null {
   if (!fileId || !CMS) return null
   return `${CMS}/assets/${fileId}`
 }
+
+// ── Write helpers ──────────────────────────────────────
+
+export async function cmsCreate<T>(
+  collection: string,
+  data: Record<string, unknown>,
+): Promise<T | null> {
+  if (!CMS) return null
+  try {
+    const res = await fetch(`${CMS}/items/${collection}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) { console.error(`[CMS] create ${collection} → HTTP ${res.status}`); return null }
+    const { data: result } = await res.json()
+    return result as T
+  } catch (e) {
+    console.error(`[CMS] create ${collection} error:`, e)
+    return null
+  }
+}
+
+export async function cmsUpdate<T>(
+  collection: string,
+  id: string | number,
+  data: Record<string, unknown>,
+): Promise<T | null> {
+  if (!CMS) return null
+  try {
+    const res = await fetch(`${CMS}/items/${collection}/${id}`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) { console.error(`[CMS] update ${collection}/${id} → HTTP ${res.status}`); return null }
+    const { data: result } = await res.json()
+    return result as T
+  } catch (e) {
+    console.error(`[CMS] update ${collection}/${id} error:`, e)
+    return null
+  }
+}
+
+export async function cmsDelete(collection: string, id: string | number): Promise<boolean> {
+  if (!CMS) return false
+  try {
+    const res = await fetch(`${CMS}/items/${collection}/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+export async function cmsUploadFile(file: File): Promise<string | null> {
+  if (!CMS) return null
+  try {
+    const form = new FormData()
+    form.append('file', file, file.name)
+    const res = await fetch(`${CMS}/files`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      body: form,
+    })
+    if (!res.ok) { console.error(`[CMS] upload file → HTTP ${res.status}`); return null }
+    const { data } = await res.json()
+    return (data?.id as string) ?? null
+  } catch (e) {
+    console.error(`[CMS] upload file error:`, e)
+    return null
+  }
+}

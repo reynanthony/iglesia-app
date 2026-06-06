@@ -43,6 +43,36 @@ body {
   background-color: var(--surface);
   color: var(--ink);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* Eliminate double-tap-to-zoom delay globally */
+  touch-action: manipulation;
+}
+
+/*
+  Eliminate 300ms tap delay and flash on ALL interactive elements.
+  touch-action: manipulation disables double-tap zoom on the element,
+  which is what browsers use to justify the delay.
+*/
+a, button, [role="button"], input, select, textarea, label,
+summary, [tabindex]:not([tabindex="-1"]) {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+  Minimum 44×44px tap target on mobile for small icon buttons.
+  Uses padding trick: visible size unchanged, hit area expanded.
+  Only applies to elements that look like icon buttons (square, small).
+*/
+@media (max-width: 767px) {
+  .tap-target {
+    position: relative;
+    cursor: pointer;
+  }
+  .tap-target::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
 }
 
 /* ── Display font (Playfair Display) ───────────────── */
@@ -137,6 +167,39 @@ body {
 @media (min-width: 768px) {
   .app-content-height { height: 100dvh; }
 }
+
+/* ── Admin mobile safe-area insets ─────────────────── */
+.admin-content-inset {
+  padding-top: calc(56px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+  .admin-content-inset {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* ── Announcement Engine animations ─────────────────── */
+@keyframes elm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes elm-slide-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes elm-scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.elm-fade-in   { animation: elm-fade-in  0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.elm-slide-up  { animation: elm-slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.elm-scale-in  { animation: elm-scale-in 0.40s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.elm-delay-1   { animation-delay: 0.08s; }
+.elm-delay-2   { animation-delay: 0.16s; }
+.elm-delay-3   { animation-delay: 0.24s; }
+.elm-delay-4   { animation-delay: 0.32s; }
 
 /* ── Public nav links ──────────────────────────────── */
 .public-nav-link {

@@ -78,10 +78,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
         style={{ background: '#061E30', borderColor: '#0D3352' }}>
-        <AdminMobileNav unreadMessages={unreadMessages ?? 0} />
+        <AdminMobileNav
+          unreadMessages={unreadMessages ?? 0}
+          logoutAction={logout}
+          strapiUrl={strapiUrl}
+        />
       </nav>
 
-      <main className="flex-1 md:ml-56 pt-14 md:pt-0 pb-20 md:pb-0 min-h-screen">{children}</main>
+      <main className="flex-1 md:ml-56 min-h-screen admin-content-inset overflow-x-hidden w-full">{children}</main>
     </div>
   )
 }

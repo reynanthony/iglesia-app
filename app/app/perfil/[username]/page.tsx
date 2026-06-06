@@ -45,6 +45,9 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
       .not('completed_at', 'is', null),
   ])
 
+  const { data: currentProfile } = await supabase.from('profiles').select('role').eq('id', user!.id).single()
+  const currentUserRole = currentProfile?.role ?? 'miembro'
+
   const isOwner         = user?.id === profile.id
   const role            = roleMeta[profile.role]
   const initial         = profile.full_name?.[0]?.toUpperCase() ?? 'U'
@@ -140,7 +143,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
         ) : (
           <div>
             {posts.map((post: any) => (
-              <PostCard key={post.id} post={post} currentUserId={user!.id} />
+              <PostCard key={post.id} post={post} currentUserId={user!.id} currentUserRole={currentUserRole} />
             ))}
           </div>
         )}
