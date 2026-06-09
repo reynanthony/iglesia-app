@@ -1,12 +1,24 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import ShortsCard from '@/components/ShortsCard'
 import Link from 'next/link'
 import { Plus, Loader2 } from 'lucide-react'
 import { fetchMorePosts } from '@/app/actions/posts'
+import { createClient } from '@/lib/supabase/client'
 
 const PAGE_SIZE = 20
+
+const POST_SELECT = `
+  *,
+  profiles(id, full_name, username, avatar_url),
+  reactions(id, user_id, type),
+  comments(
+    id, content, created_at, parent_id,
+    profiles(full_name, username, avatar_url),
+    comment_likes(id, user_id)
+  )
+`
 
 interface Props {
   initialPosts: any[]
@@ -20,6 +32,20 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId, categ
   const [hasMore, setHasMore]   = useState(initialPosts.length === PAGE_SIZE)
   const sentinelRef             = useRef<HTMLDivElement>(null)
   const observerRef             = useRef<IntersectionObserver | null>(null)
+  const supabase                = useRef(createClient()).current
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('posts-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, async (payload) => {
+        if (category && payload.new.category !== category) return
+        const { data } = await supabase.from('posts').select(POST_SELECT).eq('id', payload.new.id).single()
+        if (data) setPosts(prev => [data, ...prev])
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [category])
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore || posts.length === 0) return

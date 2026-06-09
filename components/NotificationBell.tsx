@@ -20,9 +20,21 @@ export default function NotificationBell({ userId }: { userId: string }) {
 
   useEffect(() => {
     loadUnread().catch(console.error)
-    const interval = setInterval(() => loadUnread().catch(console.error), 30000)
-    return () => clearInterval(interval)
-  }, [])
+
+    const channel = supabase
+      .channel(`notifications-${userId}`)
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${userId}` },
+        () => { loadUnread().catch(console.error) }
+      )
+      .on('postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'notifications', filter: `user_id=eq.${userId}` },
+        () => { loadUnread().catch(console.error) }
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [userId])
 
   return (
     <Link
