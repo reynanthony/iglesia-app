@@ -59,8 +59,13 @@ export default function BibleSelector() {
     setChapter(n)
     setLoading(true)
     const count = await fetchVerseCount(book!.id, n)
-    setVerseCount(count)
     setLoading(false)
+    if (count === 0) {
+      // API no disponible — ir directo al lector
+      router.push(`/biblia/lectura/${book!.id}/${n}`)
+      return
+    }
+    setVerseCount(count)
     transition(() => setStep('verses'))
     scroll()
   }

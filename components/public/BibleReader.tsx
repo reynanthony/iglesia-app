@@ -636,7 +636,16 @@ export function BibleReader({
           <div className="text-center py-24">
             <BookOpen size={38} style={{ color: `${TEAL}50`, margin: '0 auto 14px' }} />
             <p className="font-black text-lg mb-1.5" style={{ color: t.text }}>Contenido no disponible</p>
-            <p className="text-sm" style={{ color: t.muted }}>Verifica la clave BIBLE_API_KEY</p>
+            <p className="text-sm mb-6" style={{ color: t.muted }}>
+              No se pudo cargar este capítulo. Verifica tu conexión o intenta de nuevo.
+            </p>
+            <a
+              href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=RVR1960`}
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
+              style={{ background: TEAL, color: '#051828' }}>
+              Leer en Bible Gateway
+            </a>
           </div>
         )}
       </div>
