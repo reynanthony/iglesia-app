@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import OnboardingFlow from './OnboardingFlow'
 import AnnouncementScreen, { type AnnouncementData } from './AnnouncementScreen'
@@ -62,6 +62,8 @@ export default function AnnouncementGate({ onboardingCompleted, userId, userRole
   const [announcement, setAnnouncement] = useState<AnnouncementData | null>(null)
   const [floatAnn, setFloatAnn]         = useState<AnnouncementData | null>(null)
   const [isReplay, setIsReplay]         = useState(false)
+  const phaseRef                        = useRef<Phase>('checking')
+  useEffect(() => { phaseRef.current = phase }, [phase])
 
   // Returns next announcement to show respecting frequency rules
   const findNext = useCallback(async (): Promise<AnnouncementData | null> => {
@@ -129,14 +131,29 @@ export default function AnnouncementGate({ onboardingCompleted, userId, userRole
       }
       const [next, best] = await Promise.all([findNext(), findBestActive()])
       if (next) {
-        setAnnouncement(next)
-        setPhase('announcement')
+        setAnnouncement(next); setPhase('announcement'); phaseRef.current = 'announcement'
       } else {
-        setPhase('done')
+        setPhase('done'); phaseRef.current = 'done'
       }
       if (best) setFloatAnn(best)
     }
     run()
+
+    // Realtime: reacciona al instante cuando el admin publica o activa un anuncio.
+    const supabase = createClient()
+    const channel = supabase
+      .channel('announcements-live')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, async () => {
+        const best = await findBestActive()
+        setFloatAnn(best)
+        if (phaseRef.current === 'done') {
+          const next = await findNext()
+          if (next) { setAnnouncement(next); setPhase('announcement'); phaseRef.current = 'announcement' }
+        }
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
   }, [onboardingCompleted, userId, userRole, findNext, findBestActive])
 
   function handleDismiss() {
