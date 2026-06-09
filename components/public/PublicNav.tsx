@@ -15,10 +15,11 @@ const PRIMARY_LINKS = [
 ]
 
 const MORE_LINKS = [
-  { href: '/eventos',       label: 'Eventos' },
-  { href: '/biblia',        label: 'Biblia' },
-  { href: '/devocionales',  label: 'Devocionales' },
-  { href: '/donaciones',    label: 'Donaciones' },
+  { href: '/eventos',        label: 'Eventos' },
+  { href: '/publicaciones',  label: 'Publicaciones' },
+  { href: '/biblia',         label: 'Biblia' },
+  { href: '/devocionales',   label: 'Devocionales' },
+  { href: '/donaciones',     label: 'Donaciones' },
 ]
 
 export default function PublicNav() {

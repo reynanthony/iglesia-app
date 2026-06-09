@@ -11,8 +11,9 @@ async function getPastor() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
   const { data: profile } = await supabase
-    .from('profiles').select('role, id').eq('id', user.id).single()
-  if (!profile || !['admin', 'pastor'].includes(profile.role)) throw new Error('Sin permisos')
+    .from('profiles').select('role, id, is_consejo_pastoral').eq('id', user.id).single()
+  if (!profile || (!['admin', 'pastor'].includes(profile.role) && !profile.is_consejo_pastoral))
+    throw new Error('Sin permisos')
   return { supabase, userId: profile.id as string }
 }
 

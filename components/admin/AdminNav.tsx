@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, Shield, ShieldAlert,
-  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone,
+  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean; external?: boolean }
@@ -21,7 +21,8 @@ const sections: NavSection[] = [
     items: [
       { href: '/admin/usuarios',    icon: Users,       label: 'Usuarios' },
       { href: '/admin/lideres',     icon: UserCheck,   label: 'Líderes' },
-      { href: '/admin/posts',       icon: FileText,    label: 'Publicaciones' },
+      { href: '/admin/posts',          icon: FileText,    label: 'Posts' },
+      { href: '/admin/publicaciones', icon: Newspaper,   label: 'Publicaciones' },
       { href: '/admin/grupos',        icon: UsersRound,  label: 'Grupos' },
       { href: '/admin/discipulado',      icon: BookOpen, label: 'Discipulado' },
       { href: '/admin/estudio-biblico', icon: ScrollText, label: 'Estudio Bíblico' },

@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Users, Mail, ShieldAlert, Shield,
   Menu, X, FileText, UsersRound, BookOpen, Radio, ScrollText,
   Bell, UserCheck, Cross, Mic, Megaphone, Zap, ExternalLink,
-  Globe, ArrowLeft, LogOut,
+  Globe, ArrowLeft, LogOut, Newspaper,
 } from 'lucide-react'
 
 const ACCENT   = '#76ABAE'
@@ -31,7 +31,8 @@ const MENU_SECTIONS = [
     items: [
       { href: '/admin/usuarios',         icon: Users,        label: 'Usuarios'          },
       { href: '/admin/lideres',          icon: UserCheck,    label: 'Líderes'           },
-      { href: '/admin/posts',            icon: FileText,     label: 'Publicaciones'     },
+      { href: '/admin/posts',            icon: FileText,     label: 'Posts'             },
+      { href: '/admin/publicaciones',    icon: Newspaper,    label: 'Publicaciones'     },
       { href: '/admin/grupos',           icon: UsersRound,   label: 'Grupos'            },
       { href: '/admin/discipulado',      icon: BookOpen,     label: 'Discipulado'       },
       { href: '/admin/estudio-biblico',  icon: ScrollText,   label: 'Estudio Bíblico'  },

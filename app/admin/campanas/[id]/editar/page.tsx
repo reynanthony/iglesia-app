@@ -25,6 +25,12 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
   const { data: item } = await supabase.from('announcements').select('*').eq('id', id).single()
   if (!item) notFound()
 
+  const { data: publicaciones } = await supabase
+    .from('publicaciones')
+    .select('slug, title')
+    .eq('is_active', true)
+    .order('published_at', { ascending: false })
+
   async function handleUpdate(formData: FormData) {
     'use server'
     const result = await updateAnnouncement(id, formData)
@@ -110,7 +116,10 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
 
           <div>
             <label className={label} style={lStyle}>Destino del botón</label>
-            <CtaDestinationField defaultValue={item.cta_destination ?? ''} />
+            <CtaDestinationField
+              defaultValue={item.cta_destination ?? ''}
+              publicaciones={publicaciones ?? []}
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">

@@ -4,6 +4,7 @@ import { ArrowLeft, Megaphone } from 'lucide-react'
 import { createAnnouncement } from '@/app/actions/announcements'
 import ImageUploader from '@/components/admin/ImageUploader'
 import CtaDestinationField from '@/components/admin/CtaDestinationField'
+import { createClient } from '@/lib/supabase/server'
 
 const field   = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
 const fStyle  = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
@@ -16,7 +17,14 @@ async function handleCreate(formData: FormData) {
   if (!result?.error) redirect('/admin/campanas')
 }
 
-export default function NuevaCampanaPage() {
+export default async function NuevaCampanaPage() {
+  const supabase = await createClient()
+  const { data: publicaciones } = await supabase
+    .from('publicaciones')
+    .select('slug, title')
+    .eq('is_active', true)
+    .order('published_at', { ascending: false })
+
   const now = new Date()
   now.setSeconds(0, 0)
   const defaultStart = now.toISOString().slice(0, 16)
@@ -103,7 +111,7 @@ export default function NuevaCampanaPage() {
 
           <div>
             <label className={label} style={lStyle}>Destino del botón</label>
-            <CtaDestinationField />
+            <CtaDestinationField publicaciones={publicaciones ?? []} />
           </div>
 
           {/* Fechas */}
