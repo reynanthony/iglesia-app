@@ -15,7 +15,8 @@ export default function RealtimeRefresh({ watches, channelName }: { watches: Wat
 
   useEffect(() => {
     const supabase = createClient()
-    const channel = supabase.channel(channelName)
+    const uid = Math.random().toString(36).slice(2, 7)
+    const channel = supabase.channel(`${channelName}-${uid}`)
 
     watches.forEach(({ table, filter, events = ['INSERT', 'UPDATE', 'DELETE'] }) => {
       events.forEach(event => {

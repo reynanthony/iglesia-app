@@ -141,8 +141,9 @@ export default function AnnouncementGate({ onboardingCompleted, userId, userRole
 
     // Realtime: reacciona al instante cuando el admin publica o activa un anuncio.
     const supabase = createClient()
+    const uid = Math.random().toString(36).slice(2, 7)
     const channel = supabase
-      .channel('announcements-live')
+      .channel(`announcements-live-${uid}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, async () => {
         const best = await findBestActive()
         setFloatAnn(best)

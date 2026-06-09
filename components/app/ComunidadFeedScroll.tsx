@@ -35,8 +35,9 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId, categ
   const supabase                = useRef(createClient()).current
 
   useEffect(() => {
+    const uid = Math.random().toString(36).slice(2, 7)
     const channel = supabase
-      .channel('posts-live')
+      .channel(`posts-live-${uid}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, async (payload) => {
         if (category && payload.new.category !== category) return
         const { data } = await supabase.from('posts').select(POST_SELECT).eq('id', payload.new.id).single()
