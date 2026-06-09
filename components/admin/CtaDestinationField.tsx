@@ -50,9 +50,7 @@ export default function CtaDestinationField({
         style={fStyle}
       >
         <option value="url">URL o ruta interna</option>
-        {publicaciones.length > 0 && (
-          <option value="publicacion">Publicación editorial</option>
-        )}
+        <option value="publicacion">Publicación editorial</option>
         <option value="next">Ir a siguiente campaña activa</option>
       </select>
 
