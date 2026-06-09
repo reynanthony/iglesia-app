@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star, BookOpen } from 'lucide-react'
-import { cmsSingleton, cmsGet, cmsImageUrl, type DHomepage, type DPredica } from '@/lib/directus'
+import { cmsSingleton, cmsImageUrl, type DHomepage } from '@/lib/directus'
+import PWAInstallBanner from '@/components/public/PWAInstallBanner'
 import { getDailyVerse, getDailyVerseDate } from '@/lib/daily-verse'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { createClient } from '@/lib/supabase/server'
@@ -26,15 +27,18 @@ function fmtFechaCorta(iso: string) {
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const [cms, predicas, { data: pageData }] = await Promise.all([
+  const [cms, { data: pageData }, { data: predicasRows }] = await Promise.all([
     cmsSingleton<DHomepage>('homepage'),
-    cmsGet<DPredica>('predicas', {
-      'filter[status][_eq]': 'published',
-      'sort': '-date',
-      'limit': '5',
-    }),
     supabase.from('page_content').select('content').eq('page', 'home').single(),
+    supabase
+      .from('ministry_content')
+      .select('id, title, body, image_url, video_url, created_at, profiles(full_name), ministries(name, slug)')
+      .in('type', ['video', 'articulo', 'anuncio'])
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(5),
   ])
+  const predicas = predicasRows ?? []
 
   const c = cms ?? {} as Partial<DHomepage>
   // Admin panel image overrides (uploaded to Supabase Storage, stored as direct URLs)
@@ -120,7 +124,7 @@ export default async function HomePage() {
 
   const featured      = predicas[0] ?? null
   const moreSermons   = predicas.slice(1)
-  const featuredThumb = featured ? cmsImageUrl(featured.thumbnail) : null
+  const featuredThumb = featured?.image_url ?? null
 
   return (
     <div>
@@ -443,13 +447,13 @@ export default async function HomePage() {
               </div>
               <div className="lg:col-span-3 p-8 lg:p-10 flex flex-col justify-center" style={{ background: CREAM }}>
                 <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: TEAL }}>
-                  {featured.series ?? 'Prédica'}
+                  {(featured.ministries as any)?.name ?? 'Mensaje'}
                 </p>
                 <h3 className="text-2xl md:text-3xl font-black tracking-tight leading-tight mb-3" style={{ color: NAVY }}>
                   {featured.title}
                 </h3>
                 <p className="text-sm uppercase tracking-wider" style={{ color: SAGE }}>
-                  {featured.speaker ?? 'Pastor'}{featured.date ? ` · ${fmtFechaLarga(featured.date)}` : ''}
+                  {(featured.profiles as any)?.full_name ?? 'Pastor'}{featured.created_at ? ` · ${fmtFechaLarga(featured.created_at)}` : ''}
                 </p>
               </div>
             </Link>
@@ -474,11 +478,11 @@ export default async function HomePage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm truncate" style={{ color: NAVY }}>{p.title}</p>
-                    <p className="text-[11px] mt-0.5" style={{ color: SAGE }}>{p.series ?? ''}</p>
+                    <p className="text-[11px] mt-0.5" style={{ color: SAGE }}>{(p.ministries as any)?.name ?? ''}</p>
                   </div>
-                  {p.date && (
+                  {p.created_at && (
                     <p className="text-[11px] flex-shrink-0 hidden sm:block" style={{ color: SAGE }}>
-                      {fmtFechaCorta(p.date)}
+                      {fmtFechaCorta(p.created_at)}
                     </p>
                   )}
                   <ArrowRight size={13} className="flex-shrink-0 group-hover:translate-x-1 transition-all" style={{ color: SAGE }} />
@@ -552,7 +556,12 @@ export default async function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════
-          8. CTA FINAL
+          8. INSTALAR APP
+      ════════════════════════════════════════════════ */}
+      <PWAInstallBanner />
+
+      {/* ════════════════════════════════════════════════
+          9. CTA FINAL
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 55%, ${TEAL} 100%)` }}>
