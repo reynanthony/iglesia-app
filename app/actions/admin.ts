@@ -36,14 +36,26 @@ export async function updateUserRole(userId: string, role: string) {
 }
 
 // ── Ministry assignments ─────────────────────────────────────
-export async function assignUserToMinistry(userId: string, ministryId: string) {
+export async function assignUserToMinistry(userId: string, ministryId: string, role: 'lider' | 'colaborador' = 'colaborador') {
   const supabase = await checkAdmin()
   if (!supabase) return { error: 'No autorizado' }
   const { data: { user } } = await supabase.auth.getUser()
   const { error } = await supabase
     .from('ministry_assignments')
-    .insert({ user_id: userId, ministry_id: ministryId, assigned_by: user!.id })
+    .insert({ user_id: userId, ministry_id: ministryId, assigned_by: user!.id, role })
   if (error) return { error: 'No se pudo asignar' }
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+export async function updateMinistryAssignmentRole(userId: string, ministryId: string, role: 'lider' | 'colaborador') {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+  await supabase
+    .from('ministry_assignments')
+    .update({ role })
+    .eq('user_id', userId)
+    .eq('ministry_id', ministryId)
   revalidatePath('/admin/usuarios')
   return { success: true }
 }
@@ -56,6 +68,19 @@ export async function removeUserFromMinistry(userId: string, ministryId: string)
     .delete()
     .eq('user_id', userId)
     .eq('ministry_id', ministryId)
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+// ── Consejo Pastoral ─────────────────────────────────────────
+export async function toggleConsejoPastoral(userId: string, value: boolean) {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+  const { error } = await supabase
+    .from('profiles')
+    .update({ is_consejo_pastoral: value })
+    .eq('id', userId)
+  if (error) return { error: 'No se pudo actualizar' }
   revalidatePath('/admin/usuarios')
   return { success: true }
 }

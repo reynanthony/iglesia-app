@@ -43,8 +43,8 @@ export default async function PastoralGestionarPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (!profile || !['admin', 'pastor'].includes(profile.role)) redirect('/app/pastoral')
+  const { data: profile } = await supabase.from('profiles').select('role, is_consejo_pastoral').eq('id', user.id).single()
+  if (!profile || (!['admin', 'pastor'].includes(profile.role) && !profile.is_consejo_pastoral)) redirect('/app/pastoral')
 
   const [
     { data: configs },

@@ -2,6 +2,7 @@
 import RoleSelector from '@/components/admin/RoleSelector'
 import MinistryAssignment from '@/components/admin/MinistryAssignment'
 import DeleteUserButton from '@/components/admin/DeleteUserButton'
+import ConsejoToggle from '@/components/admin/ConsejoToggle'
 import { Search, Plus } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,7 +26,7 @@ export default async function AdminUsuariosPage({
 
   const { data: allAssignments } = await supabase
     .from('ministry_assignments')
-    .select('user_id, ministry_id, ministries(id, name)')
+    .select('user_id, ministry_id, role, ministries(id, name)')
 
   const { data: allMinistries } = await supabase
     .from('ministries')
@@ -117,7 +118,12 @@ export default async function AdminUsuariosPage({
               </div>
               <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
             </div>
-            <RoleSelector userId={user.id} currentRole={user.role} />
+            <div className="flex items-center gap-2 flex-wrap">
+                <RoleSelector userId={user.id} currentRole={user.role} />
+                {['lider', 'pastor'].includes(user.role) && (
+                  <ConsejoToggle userId={user.id} value={user.is_consejo_pastoral ?? false} />
+                )}
+              </div>
           </div>
         ))}
       </div>
@@ -163,7 +169,12 @@ export default async function AdminUsuariosPage({
                     </p>
                   </td>
                   <td className="px-5 py-3.5">
-                    <RoleSelector userId={user.id} currentRole={user.role} />
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <RoleSelector userId={user.id} currentRole={user.role} />
+                      {['lider', 'pastor'].includes(user.role) && (
+                        <ConsejoToggle userId={user.id} value={user.is_consejo_pastoral ?? false} />
+                      )}
+                    </div>
                   </td>
                   <td className="px-5 py-3.5 hidden lg:table-cell">
                     {showAssign ? (

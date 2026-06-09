@@ -44,7 +44,7 @@ export default async function PastoralRoomPage() {
   if (!user) redirect('/login')
 
   const viewerProfile = await getProfile(user.id)
-  const isPastorOrAdmin = ['admin', 'pastor'].includes(viewerProfile?.role ?? '')
+  const isPastorOrAdmin = ['admin', 'pastor'].includes(viewerProfile?.role ?? '') || viewerProfile?.is_consejo_pastoral === true
 
   const supabase = await createClient()
 
