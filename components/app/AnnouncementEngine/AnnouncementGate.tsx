@@ -18,7 +18,8 @@ interface Props {
 
 const ONBOARDING_KEY = 'elm_onboarding_v1'
 
-function audienceMatches(audience: string[], role: string): boolean {
+function audienceMatches(audience: string[] | null | undefined, role: string): boolean {
+  if (!audience?.length) return true
   if (audience.includes('all')) return true
   if (audience.includes('liderazgo') && ['admin', 'pastor', 'moderador', 'lider'].includes(role)) return true
   if (audience.includes('miembro')   && ['admin', 'pastor', 'moderador', 'lider', 'miembro'].includes(role)) return true
@@ -64,45 +65,58 @@ export default function AnnouncementGate({ onboardingCompleted, userId, userRole
 
   // Returns next announcement to show respecting frequency rules
   const findNext = useCallback(async (): Promise<AnnouncementData | null> => {
-    const supabase = createClient()
-    const now = new Date().toISOString()
-    const { data: rows } = await supabase
-      .from('announcements')
-      .select(SELECT_FIELDS)
-      .eq('is_active', true).eq('is_banner', false).lte('start_date', now)
-      .order('priority', { ascending: false }).limit(10)
-    if (!rows?.length) return null
-    rows.sort((a, b) => (PRIORITY_ORDER[b.priority] ?? 0) - (PRIORITY_ORDER[a.priority] ?? 0))
-    let seenIds = new Set<string>()
-    if (userId) {
-      const { data: views } = await supabase
-        .from('announcement_views').select('announcement_id').eq('user_id', userId)
-      seenIds = new Set(views?.map(v => v.announcement_id) ?? [])
+    try {
+      const supabase = createClient()
+      const now = new Date().toISOString()
+      const { data: rows, error } = await supabase
+        .from('announcements')
+        .select(SELECT_FIELDS)
+        .eq('is_active', true).eq('is_banner', false).lte('start_date', now)
+        .order('priority', { ascending: false }).limit(10)
+      if (error) { console.warn('[AnnouncementGate] findNext query error:', error.message); return null }
+      if (!rows?.length) { console.log('[AnnouncementGate] findNext: no rows returned'); return null }
+      rows.sort((a, b) => (PRIORITY_ORDER[b.priority] ?? 0) - (PRIORITY_ORDER[a.priority] ?? 0))
+      let seenIds = new Set<string>()
+      if (userId) {
+        const { data: views } = await supabase
+          .from('announcement_views').select('announcement_id').eq('user_id', userId)
+        seenIds = new Set(views?.map(v => v.announcement_id) ?? [])
+      }
+      const candidate = rows.find(ann => {
+        if (ann.end_date && new Date(ann.end_date) < new Date()) return false
+        if (!audienceMatches(ann.audience, userRole)) return false
+        return shouldShowByFrequency(ann as AnnouncementData, seenIds)
+      })
+      return (candidate as AnnouncementData) ?? null
+    } catch (e) {
+      console.error('[AnnouncementGate] findNext error:', e)
+      return null
     }
-    const candidate = rows.find(ann => {
-      if (ann.end_date && new Date(ann.end_date) < new Date()) return false
-      if (!audienceMatches(ann.audience, userRole)) return false
-      return shouldShowByFrequency(ann as AnnouncementData, seenIds)
-    })
-    return (candidate as AnnouncementData) ?? null
   }, [userId, userRole])
 
   // Returns highest-priority active announcement regardless of frequency (for float)
   const findBestActive = useCallback(async (): Promise<AnnouncementData | null> => {
-    const supabase = createClient()
-    const now = new Date().toISOString()
-    const { data: rows } = await supabase
-      .from('announcements')
-      .select(SELECT_FIELDS)
-      .eq('is_active', true).eq('is_banner', false).lte('start_date', now)
-      .order('priority', { ascending: false }).limit(10)
-    if (!rows?.length) return null
-    rows.sort((a, b) => (PRIORITY_ORDER[b.priority] ?? 0) - (PRIORITY_ORDER[a.priority] ?? 0))
-    const candidate = rows.find(ann => {
-      if (ann.end_date && new Date(ann.end_date) < new Date()) return false
-      return audienceMatches(ann.audience, userRole)
-    })
-    return (candidate as AnnouncementData) ?? null
+    try {
+      const supabase = createClient()
+      const now = new Date().toISOString()
+      const { data: rows, error } = await supabase
+        .from('announcements')
+        .select(SELECT_FIELDS)
+        .eq('is_active', true).eq('is_banner', false).lte('start_date', now)
+        .order('priority', { ascending: false }).limit(10)
+      if (error) { console.warn('[AnnouncementGate] findBestActive query error:', error.message); return null }
+      if (!rows?.length) { console.log('[AnnouncementGate] findBestActive: no rows returned'); return null }
+      rows.sort((a, b) => (PRIORITY_ORDER[b.priority] ?? 0) - (PRIORITY_ORDER[a.priority] ?? 0))
+      const candidate = rows.find(ann => {
+        if (ann.end_date && new Date(ann.end_date) < new Date()) return false
+        return audienceMatches(ann.audience, userRole)
+      })
+      console.log('[AnnouncementGate] findBestActive candidate:', candidate?.id ?? 'none', '| userRole:', userRole)
+      return (candidate as AnnouncementData) ?? null
+    } catch (e) {
+      console.error('[AnnouncementGate] findBestActive error:', e)
+      return null
+    }
   }, [userRole])
 
   useEffect(() => {

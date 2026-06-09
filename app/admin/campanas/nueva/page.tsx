@@ -145,7 +145,7 @@ export default function NuevaCampanaPage() {
           {/* Banner inline */}
           <label className="flex items-center gap-3 p-3.5 rounded-xl cursor-pointer"
             style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <input type="checkbox" name="is_banner" defaultChecked className="flex-shrink-0" />
+            <input type="checkbox" name="is_banner" className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Banner de texto (barra superior)</p>
               <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>

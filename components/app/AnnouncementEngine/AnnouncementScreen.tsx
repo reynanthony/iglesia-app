@@ -66,6 +66,7 @@ export interface AnnouncementData {
   cta_label: string | null
   cta_destination: string | null
   show_frequency: string
+  audience?: string[] | null
 }
 
 const PRIORITY_CONFIG = {
