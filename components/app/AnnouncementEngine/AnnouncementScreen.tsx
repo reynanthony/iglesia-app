@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Smartphone } from 'lucide-react'
+import { Smartphone, Volume2, VolumeX } from 'lucide-react'
 
 const NEXT_CAMPAIGN = '__next__'
 
@@ -16,7 +16,7 @@ function isVideoUrl(url: string | null): boolean {
   return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url)
 }
 
-function YTCover({ ytId }: { ytId: string }) {
+function YTCover({ ytId, isMuted }: { ytId: string; isMuted: boolean }) {
   const wrapRef  = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLIFrameElement>(null)
 
@@ -34,11 +34,19 @@ function YTCover({ ytId }: { ytId: string }) {
     return () => ro.disconnect()
   }, [])
 
+  useEffect(() => {
+    frameRef.current?.contentWindow?.postMessage(JSON.stringify({
+      event: 'command',
+      func: isMuted ? 'mute' : 'unMute',
+      args: [],
+    }), '*')
+  }, [isMuted])
+
   return (
     <div ref={wrapRef} className="absolute inset-0 overflow-hidden pointer-events-none">
       <iframe
         ref={frameRef}
-        src={`https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&playsinline=1`}
+        src={`https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&playsinline=1&enablejsapi=1`}
         title="Video"
         style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', border: 'none' }}
         allow="autoplay; encrypted-media"
@@ -93,7 +101,14 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
 
   const videoRef = useRef<HTMLVideoElement>(null)
 
+  const [isMuted, setIsMuted]               = useState(true)
   const [showRotateHint, setShowRotateHint] = useState(false)
+
+  function toggleMute() {
+    const next = !isMuted
+    if (videoRef.current) videoRef.current.muted = next
+    setIsMuted(next)
+  }
 
   // Forzar landscape en video y restaurar portrait al cerrar
   useEffect(() => {
@@ -141,9 +156,10 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
     >
       {/* Media — fills the full screen */}
       <div className="absolute inset-0">
-        {ytId ? <YTCover ytId={ytId} /> :
+        {ytId ? <YTCover ytId={ytId} isMuted={isMuted} /> :
          videoUrl ? (
            <video ref={videoRef} src={videoUrl} autoPlay muted loop playsInline
+             onCanPlay={() => { if (videoRef.current) videoRef.current.muted = isMuted }}
              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
          ) : announcement.image_url ? (
            <img src={announcement.image_url} alt={announcement.title ?? ''}
@@ -162,6 +178,25 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
           }} />
         )}
       </div>
+
+      {/* Botón mute/unmute — solo cuando hay video */}
+      {isVideo && (
+        <button
+          onClick={toggleMute}
+          className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full"
+          style={{
+            background: 'rgba(6,30,48,0.70)',
+            backdropFilter: 'blur(6px)',
+            border: `1px solid ${isMuted ? 'rgba(246,243,235,0.12)' : 'rgba(118,171,174,0.40)'}`,
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          {isMuted
+            ? <VolumeX size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
+            : <Volume2 size={16} style={{ color: '#76ABAE' }} />
+          }
+        </button>
+      )}
 
       {/* Badge "gira tu teléfono" — pequeño, no bloquea el video */}
       {showRotateHint && (
