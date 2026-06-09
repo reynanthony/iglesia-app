@@ -13,14 +13,13 @@ async function assertAdminClient() {
   return supabase
 }
 
-export async function completeOnboarding(): Promise<void> {
+export async function completeOnboarding(bio?: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
-  await supabase
-    .from('profiles')
-    .update({ onboarding_completed: true })
-    .eq('id', user.id)
+  const patch: Record<string, unknown> = { onboarding_completed: true }
+  if (bio?.trim()) patch.bio = bio.trim()
+  await supabase.from('profiles').update(patch).eq('id', user.id)
 }
 
 export async function markAnnouncementSeen(announcementId: string): Promise<void> {

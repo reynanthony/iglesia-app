@@ -3,6 +3,35 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+const POST_SELECT = `
+  *,
+  profiles(id, full_name, username, avatar_url),
+  reactions(id, user_id, type),
+  comments(
+    id, content, created_at, parent_id,
+    profiles(full_name, username, avatar_url),
+    comment_likes(id, user_id)
+  )
+`
+
+export async function fetchMorePosts(cursor: string, category?: string): Promise<any[]> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+
+  let query = supabase
+    .from('posts')
+    .select(POST_SELECT)
+    .lt('created_at', cursor)
+    .order('created_at', { ascending: false })
+    .limit(20)
+
+  if (category) query = query.eq('category', category)
+
+  const { data } = await query
+  return data ?? []
+}
+
 export async function createPost(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

@@ -57,7 +57,7 @@ export default function EducacionPage() {
               Educación · Formación espiritual
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <h1 className="font-display font-black tracking-tighter text-white"
               style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
               Antes de<br />servir,<br /><em style={{ color: TEAL }}>aprender.</em>

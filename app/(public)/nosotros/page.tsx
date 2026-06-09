@@ -129,9 +129,12 @@ export default async function NosotrosPage() {
         <div className="relative" style={{ borderTop: `1px solid rgba(118,171,174,0.18)` }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4">
-              {stats.map(({ value, label }) => (
-                <div key={label} className="px-3 py-5 first:pl-0 sm:px-6 sm:py-7 md:px-8"
-                  style={{ borderRight: `1px solid rgba(118,171,174,0.12)` }}>
+              {stats.map(({ value, label }, i) => (
+                <div key={label} className="px-3 py-5 sm:px-6 sm:py-7 md:px-8"
+                  style={{
+                    paddingLeft: i === 0 ? 0 : undefined,
+                    borderRight: i < stats.length - 1 ? `1px solid rgba(118,171,174,0.12)` : undefined,
+                  }}>
                   <p className="font-black tracking-tighter leading-none mb-1"
                     style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: TEAL }}>{value}</p>
                   <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em]"
@@ -185,7 +188,7 @@ export default async function NosotrosPage() {
             style={{ color: `rgba(118,171,174,0.50)` }}>— Lo que nos mueve</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-2xl overflow-hidden">
-            <div className="p-8 sm:p-12 md:p-16 rounded-2xl"
+            <div className="p-8 sm:p-12 md:p-16"
               style={{ background: CREAM }}>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6"
                 style={{ color: SAGE }}>Visión</p>
@@ -194,7 +197,7 @@ export default async function NosotrosPage() {
                 {visionText}
               </p>
             </div>
-            <div className="p-8 sm:p-12 md:p-16 rounded-2xl"
+            <div className="p-8 sm:p-12 md:p-16"
               style={{ background: CREAM }}>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-6"
                 style={{ color: SAGE }}>Misión</p>
@@ -287,7 +290,7 @@ export default async function NosotrosPage() {
           style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(0,0,0,0.30), transparent 70%)' }} />
 
         <div className="relative max-w-6xl mx-auto px-6 py-20 sm:py-28 md:py-48">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-12"
                 style={{ color: 'rgba(255,255,255,0.30)' }}>{nosCta_eyebrow}</p>
@@ -300,13 +303,13 @@ export default async function NosotrosPage() {
             </div>
             <div className="flex flex-col gap-3">
               <Link href={nosCta1_url}
-                className="flex items-center justify-between bg-white hover:bg-[#F4F4F4] text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                className="flex items-center justify-between bg-white hover:bg-[#F4F4F4] text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
                 style={{ color: DARK }}>
                 {nosCta1_label}
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href={nosCta2_url}
-                className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
                 style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.45)' }}>
                 {nosCta2_label}
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-all opacity-50 group-hover:opacity-100" />

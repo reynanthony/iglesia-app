@@ -60,7 +60,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
 
           <div>
             <label className={label} style={lStyle}>Título *</label>
-            <input name="title" required defaultValue={item.title}
+            <input name="title" defaultValue={item.title}
               className={field} style={fStyle} />
           </div>
 

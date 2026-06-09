@@ -24,6 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         onboardingCompleted={profile?.onboarding_completed ?? false}
         userId={user.id}
         userRole={profile?.role ?? 'visitante'}
+        hasBottomNav
       />
 
       {/* ── SIDEBAR (desktop) ── */}

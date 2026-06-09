@@ -49,7 +49,7 @@ export default function DonacionesPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
             <div>
               <h1 className="font-display font-black tracking-tighter text-white mb-6"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
@@ -238,7 +238,7 @@ export default function DonacionesPage() {
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <div className="w-2 h-14 rounded-full mb-8" style={{ background: TEAL }} />
               <p className="font-display font-black tracking-tighter text-white mb-6"

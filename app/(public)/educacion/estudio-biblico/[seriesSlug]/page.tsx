@@ -53,7 +53,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-[8px] font-black uppercase tracking-wider px-3 py-1 rounded-full"

@@ -24,11 +24,6 @@ export interface BookmarkItem {
   savedAt: string
 }
 
-type DrawerState =
-  | null
-  | { step: 'books' }
-  | { step: 'chapters'; bookId: string; bookName: string; chapters: number }
-
 interface VerseSelection { num: string; ref: string; text: string }
 
 export interface BibleReaderProps {
@@ -40,6 +35,7 @@ export interface BibleReaderProps {
   prev: { bookId: string; chapter: number } | null
   next: { bookId: string; chapter: number } | null
   allBooks: BibleBook[]
+  startVerse?: number
 }
 
 // ── Constants ─────────────────────────────────────────────────
@@ -227,14 +223,14 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
-  bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks,
+  bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
 }: BibleReaderProps) {
   const router = useRouter()
 
   const [theme, setTheme]           = useState<Theme>('cream')
   const [fontSize, setFontSize]     = useState<FontSize>('md')
   const [showPanel, setShowPanel]   = useState(false)
-  const [drawer, setDrawer]         = useState<DrawerState>(null)
+
   const [progress, setProgress]     = useState(0)
   const [verse, setVerse]           = useState<VerseSelection | null>(null)
   const [highlights, setHighlights] = useState<Highlights>({})
@@ -304,6 +300,21 @@ export function BibleReader({
   useEffect(() => { localStorage.setItem('bible-theme', theme) }, [theme])
   useEffect(() => { localStorage.setItem('bible-fontsize', fontSize) }, [fontSize])
 
+  // ── Scroll to start verse ──────────────────────────────────
+  useEffect(() => {
+    if (!startVerse) return
+    const id = setTimeout(() => {
+      const el = contentRef.current
+      if (!el) return
+      const vSpan = el.querySelector<HTMLElement>(`.v[data-number="${startVerse}"]`)
+      if (vSpan) {
+        const para = vSpan.closest<HTMLElement>('p, .q1, .q2, .q3') ?? vSpan
+        para.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
+    }, 400)
+    return () => clearTimeout(id)
+  }, [startVerse, content])
+
   // ── Save last reading position ──────────────────────────────
   useEffect(() => {
     localStorage.setItem('bible-last', JSON.stringify({ bookId, chapterNum, bookName }))
@@ -325,8 +336,12 @@ export function BibleReader({
 
   useLayoutEffect(() => {
     const stored = localStorage.getItem(`bible-hl-${bookId}-${chapterNum}`)
-    setHighlights(stored ? JSON.parse(stored) : {})
-  }, [bookId, chapterNum])
+    const hl: Highlights = stored ? JSON.parse(stored) : {}
+    if (startVerse && hl[String(startVerse)] === undefined) {
+      hl[String(startVerse)] = 0  // yellow highlight for the entry verse
+    }
+    setHighlights(hl)
+  }, [bookId, chapterNum, startVerse])
 
   useEffect(() => {
     localStorage.setItem(`bible-hl-${bookId}-${chapterNum}`, JSON.stringify(highlights))
@@ -436,10 +451,10 @@ export function BibleReader({
   const onTouchEnd = useCallback((e: React.TouchEvent) => {
     const dx = touchX.current - e.changedTouches[0].clientX
     const dy = Math.abs(touchY.current - e.changedTouches[0].clientY)
-    if (Math.abs(dx) < SWIPE_MIN || dy > 80 || drawer) return
+    if (Math.abs(dx) < SWIPE_MIN || dy > 80) return
     if (dx > 0 && next) { setNavigating(true); router.push(`/biblia/lectura/${next.bookId}/${next.chapter}`) }
     if (dx < 0 && prev) { setNavigating(true); router.push(`/biblia/lectura/${prev.bookId}/${prev.chapter}`) }
-  }, [prev, next, router, drawer])
+  }, [prev, next, router])
 
   // ── Share / copy ───────────────────────────────────────────
   const handleCopy = async () => {
@@ -480,7 +495,7 @@ export function BibleReader({
       const blob = await res.blob()
       const file = new File([blob], 'versiculo.png', { type: 'image/png' })
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: `${verse.ref} (RVR1960)` })
+        await navigator.share({ files: [file], title: `${verse.ref} (RVR1960)` })
       } else {
         const a = document.createElement('a')
         a.href     = shareCardUrl
@@ -527,15 +542,15 @@ export function BibleReader({
             style={{ color: `${TEAL}70` }}>
             <ArrowLeft size={11} /> Biblia
           </Link>
-          <button
+          <Link
+            href="/biblia"
             className="flex-1 flex items-center justify-center gap-2 text-[12px] font-black transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-            aria-label={`Ir a libro y capítulo. Actualmente: ${bookName} ${chapterNum}`}
-            onClick={() => setDrawer({ step: 'books' })}>
+            aria-label={`Cambiar libro o capítulo. Actualmente: ${bookName} ${chapterNum}`}>
             <span style={{ color: 'rgba(246,243,235,0.70)' }}>{bookName}</span>
             <span style={{ color: TEAL }}>{chapterNum}</span>
             <span className="text-[8px] font-bold uppercase tracking-[0.28em] px-2 py-0.5 rounded"
               style={{ background: `${TEAL}18`, color: TEAL }}>RVR1960</span>
-          </button>
+          </Link>
           <div className="flex-shrink-0 flex items-center gap-1">
             {prev ? (
               <Link href={`/biblia/lectura/${prev.bookId}/${prev.chapter}`}
@@ -571,11 +586,21 @@ export function BibleReader({
           <>
             <style suppressHydrationWarning>{`
               .br-content .v {
-                font-size: 0.58em; font-weight: 800; vertical-align: super;
-                margin-right: 3px; color: ${t.verse}; letter-spacing: 0.04em;
-                cursor: pointer; transition: color 0.2s; user-select: none;
+                font-size: 0.82em; font-weight: 900; vertical-align: super;
+                margin-right: 4px; color: ${t.verse}; letter-spacing: 0.03em;
+                cursor: pointer; user-select: none;
+                display: inline-flex; align-items: center; justify-content: center;
+                min-width: 1.7em; height: 1.55em; padding: 0 3px;
+                border-radius: 5px;
+                background: ${t.verse}14;
+                border: 1px solid ${t.verse}28;
+                transition: background 0.15s, color 0.15s, border-color 0.15s;
               }
-              .br-content .v:hover { opacity: 0.65; }
+              .br-content .v:hover {
+                background: ${t.verse}30;
+                border-color: ${t.verse}55;
+                color: ${t.verse};
+              }
               .br-content p {
                 margin-bottom: ${fs <= 17 ? '1.15rem' : '1.5rem'};
                 line-height: ${fs <= 17 ? 1.88 : fs <= 20 ? 1.92 : 2.0};
@@ -701,76 +726,6 @@ export function BibleReader({
           ) : <div className="flex-1" />}
         </div>
       </div>
-
-      {/* ── Book / chapter drawer ── */}
-      {drawer && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end"
-          style={{ background: 'rgba(5,24,40,0.80)', backdropFilter: 'blur(10px)' }}
-          onClick={() => setDrawer(null)}>
-          <div className="rounded-t-3xl flex flex-col overflow-hidden"
-            style={{
-              background: DARK_HEADER, border: '1px solid rgba(118,171,174,0.12)',
-              maxHeight: '82svh', paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-            }}
-            onClick={e => e.stopPropagation()}>
-            <div className="flex justify-center pt-3 pb-0">
-              <div className="w-10 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.10)' }} />
-            </div>
-            <div className="flex items-center justify-between px-5 py-3.5"
-              style={{ borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
-              {drawer.step === 'chapters' ? (
-                <button className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.28em] transition hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-                  style={{ color: `${TEAL}70` }}
-                  onClick={() => setDrawer({ step: 'books' })}>
-                  <ChevronLeft size={12} aria-hidden="true" /> Libros
-                </button>
-              ) : (
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: `${TEAL}70` }}>Ir a libro</p>
-              )}
-              {drawer.step === 'chapters' && (
-                <p className="text-[13px] font-black text-white">{drawer.bookName}</p>
-              )}
-              <button onClick={() => setDrawer(null)}
-                aria-label="Cerrar"
-                className="w-7 h-7 rounded-full flex items-center justify-center transition hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-                style={{ background: 'rgba(255,255,255,0.08)' }}>
-                <X size={12} style={{ color: 'rgba(246,243,235,0.70)' }} />
-              </button>
-            </div>
-            {drawer.step === 'books' && (
-              <div className="overflow-y-auto p-3 grid grid-cols-4 sm:grid-cols-6 gap-1.5">
-                {allBooks.map(b => (
-                  <button key={b.id}
-                    className="px-2 py-2.5 rounded-xl text-center transition hover:opacity-80 active:scale-95"
-                    style={{
-                      background: b.id === bookId ? TEAL : 'rgba(255,255,255,0.06)',
-                      color: b.id === bookId ? DARK_HEADER : 'rgba(246,243,235,0.72)',
-                      fontSize: 10, fontWeight: 700, minHeight: 44,
-                    }}
-                    onClick={() => setDrawer({ step: 'chapters', bookId: b.id, bookName: b.name, chapters: b.chapters })}>
-                    {b.name}
-                  </button>
-                ))}
-              </div>
-            )}
-            {drawer.step === 'chapters' && (
-              <div className="overflow-y-auto p-3 grid grid-cols-6 sm:grid-cols-8 gap-1.5">
-                {Array.from({ length: drawer.chapters }, (_, i) => i + 1).map(n => {
-                  const active = drawer.bookId === bookId && n === chapterNum
-                  return (
-                    <Link key={n} href={`/biblia/lectura/${drawer.bookId}/${n}`}
-                      onClick={() => setDrawer(null)}
-                      className="h-11 rounded-xl flex items-center justify-center font-black text-[13px] transition hover:opacity-80 active:scale-95"
-                      style={{ background: active ? TEAL : 'rgba(255,255,255,0.06)', color: active ? DARK_HEADER : 'rgba(246,243,235,0.72)' }}>
-                      {n}
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* ── Verse action sheet ── */}
       {verse && !shareCardUrl && (

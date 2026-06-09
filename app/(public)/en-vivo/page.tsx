@@ -139,7 +139,7 @@ export default async function EnVivoPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-end">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
               <h1 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
                 style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
                 La Palabra<br />donde<br /><em style={{ color: TEAL }}>estés.</em>
@@ -317,7 +317,7 @@ export default async function EnVivoPage() {
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
                 — La iglesia es más que una pantalla

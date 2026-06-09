@@ -47,7 +47,7 @@ export default async function EstudioBiblicoPage() {
             style={{ color: `${TEAL}60` }}>
             <ArrowLeft size={11} /> Educación
           </Link>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-px h-10" style={{ background: TEAL }} />
@@ -184,7 +184,7 @@ export default async function EstudioBiblicoPage() {
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 80% at 80% 50%, rgba(255,255,255,0.04), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <div className="w-2 h-14 rounded-full mb-8" style={{ background: TEAL }} />
               <p className="font-display font-black tracking-tighter text-white mb-6"

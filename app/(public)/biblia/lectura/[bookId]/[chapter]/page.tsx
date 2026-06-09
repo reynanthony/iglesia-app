@@ -6,10 +6,13 @@ export const revalidate = 86400
 
 export default async function BibleChapterPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ bookId: string; chapter: string }>
+  searchParams: Promise<{ verse?: string }>
 }) {
   const { bookId, chapter } = await params
+  const { verse } = await searchParams
   const book = findBook(bookId)
   if (!book) notFound()
 
@@ -19,6 +22,8 @@ export default async function BibleChapterPage({
   const content = await getChapterContent(book.id, chapterNum)
   const prev = prevChapter(book.id, chapterNum)
   const next = nextChapter(book.id, chapterNum)
+
+  const startVerse = verse ? parseInt(verse, 10) : undefined
 
   return (
     <BibleReader
@@ -30,6 +35,7 @@ export default async function BibleChapterPage({
       prev={prev}
       next={next}
       allBooks={ALL_BOOKS}
+      startVerse={startVerse}
     />
   )
 }

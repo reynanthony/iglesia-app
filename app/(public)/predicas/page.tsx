@@ -50,14 +50,15 @@ export default async function MensajesPage() {
           </span>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-10 sm:pt-32 sm:pb-16 md:pt-44 md:pb-20 flex flex-col justify-end">
+        <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-10 sm:pt-32 sm:pb-16 md:pt-44 md:pb-20 flex flex-col justify-end"
+          style={{ minHeight: '72vh' }}>
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
               Mensajes · Reflexiones y artículos
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <h1 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
               style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
               Crece en<br /><em style={{ color: TEAL }}>la Palabra.</em>
@@ -197,7 +198,7 @@ export default async function MensajesPage() {
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
                 — También en la comunidad

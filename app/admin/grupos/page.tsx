@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, Pencil, UsersRound, Lock } from 'lucide-react'
+import { Plus, Pencil, UsersRound, Lock, Users } from 'lucide-react'
 import { toggleGroupActive } from '@/app/actions/groups'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -78,6 +78,12 @@ export default async function AdminGruposPage() {
                 </div>
 
                 <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <Link href={`/admin/grupos/${group.id}/miembros`}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg"
+                    style={{ background: '#0D3352', color: 'rgba(246,243,235,0.55)' }}
+                    title="Gestionar miembros">
+                    <Users size={13} />
+                  </Link>
                   <Link href={`/admin/grupos/${group.id}/editar`}
                     className="w-8 h-8 flex items-center justify-center rounded-lg"
                     style={{ background: '#0D3352', color: 'rgba(246,243,235,0.55)' }}>

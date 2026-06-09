@@ -177,13 +177,13 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-col gap-3">
               <Link href={heroCta1Url}
-                className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-6 py-5 sm:py-4 rounded-xl transition group"
+                className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
                 style={{ background: CREAM, color: NAVY }}>
                 {heroCta1Label}
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href={heroCta2Url}
-                className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-5 sm:py-4 rounded-xl transition group"
+                className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
                 style={{ border: `1px solid ${TEAL}50`, color: `${CREAM}BB` }}>
                 <span className="flex items-center gap-2.5"><Play size={11} />{heroCta2Label}</span>
                 <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -424,7 +424,7 @@ export default async function HomePage() {
           </div>
 
           {featured ? (
-            <Link href="/predicas"
+            <Link href={`/predicas/${featured.id}`}
               className="group grid grid-cols-1 lg:grid-cols-5 rounded-2xl overflow-hidden mb-4 transition hover:shadow-lg"
               style={{ border: `1px solid #D2CDB8` }}>
               <div className="lg:col-span-2 relative min-h-[220px] flex items-center justify-center overflow-hidden"
@@ -462,7 +462,7 @@ export default async function HomePage() {
           {moreSermons.length > 0 && (
             <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid #D2CDB8` }}>
               {moreSermons.map((p, i) => (
-                <Link key={p.id} href="/predicas"
+                <Link key={p.id} href={`/predicas/${p.id}`}
                   className="group flex items-center gap-4 sm:gap-6 px-5 sm:px-6 py-5 transition"
                   style={{ background: CREAM, borderBottom: i < moreSermons.length - 1 ? `1px solid #D2CDB8` : undefined }}>
                   <span className="text-[10px] font-bold w-6 flex-shrink-0" style={{ color: SAGE }}>
@@ -566,7 +566,7 @@ export default async function HomePage() {
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 py-16 sm:py-24 md:py-48">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10 sm:mb-12"
                 style={{ color: `${TEAL}70` }}>
@@ -586,13 +586,13 @@ export default async function HomePage() {
               </p>
               <div className="flex flex-col gap-3 mt-4">
                 <Link href={cta1Url}
-                  className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                  className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
                   style={{ background: CREAM, color: NAVY }}>
                   {cta1Label}
                   <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link href={cta2Url}
-                  className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 rounded-xl transition group"
+                  className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
                   style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
                   {cta2Label}
                   <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />

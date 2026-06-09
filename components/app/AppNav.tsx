@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  Users2, MessageCircle, Flame, User, Bell,
+  Users2, Flame, User, Bell,
   UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross,
 } from 'lucide-react'
 
@@ -12,14 +12,13 @@ const ACCENT   = '#76ABAE'
 const INACTIVE = 'rgba(118,171,174,0.45)'
 
 const navItems = [
-  { href: '/app/comunidad',       icon: Users2,        label: 'Comunidad',        exact: false },
-  { href: '/app/grupos',          icon: UsersRound,    label: 'Grupos',           exact: false },
-  { href: '/app/chat',            icon: MessageCircle, label: 'Chat',             exact: false },
-  { href: '/app/oracion',         icon: Flame,         label: 'Oración',          exact: false },
-  { href: '/app/en-vivo',         icon: Radio,         label: 'En Vivo',          exact: false },
-  { href: '/app/discipulado',     icon: BookOpen,      label: 'Discipulado',      exact: true  },
-  { href: '/app/pastoral',        icon: Cross,         label: 'Pastoral',         exact: false },
-  { href: '/app/notificaciones',  icon: Bell,          label: 'Notificaciones',   exact: true  },
+  { href: '/app/comunidad',       icon: Users2,     label: 'Comunidad',      exact: false },
+  { href: '/app/grupos',          icon: UsersRound, label: 'Grupos',         exact: false },
+  { href: '/app/oracion',         icon: Flame,      label: 'Oración',        exact: false },
+  { href: '/app/en-vivo',         icon: Radio,      label: 'En Vivo',        exact: false },
+  { href: '/app/discipulado',     icon: BookOpen,   label: 'Discipulado',    exact: true  },
+  { href: '/app/pastoral',        icon: Cross,      label: 'Pastoral',       exact: false },
+  { href: '/app/notificaciones',  icon: Bell,       label: 'Notificaciones', exact: true  },
 ]
 
 interface Props { profileHref: string }
@@ -61,7 +60,6 @@ const MAIN_ITEMS = [
 const MORE_ITEMS = [
   { href: '/app/pastoral', icon: Cross,         label: 'Pastoral' },
   { href: '/app/grupos',   icon: UsersRound,    label: 'Grupos'   },
-  { href: '/app/chat',     icon: MessageCircle, label: 'Chat'     },
   { href: '/app/mentoria', icon: GraduationCap, label: 'Mentoría' },
 ]
 

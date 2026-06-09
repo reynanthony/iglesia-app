@@ -110,11 +110,13 @@ summary, [tabindex]:not([tabindex="-1"]) {
 }
 
 /* Sin scrollbar */
-.shorts-scroll {
+.shorts-scroll,
+.no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.shorts-scroll::-webkit-scrollbar {
+.shorts-scroll::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
@@ -200,6 +202,13 @@ summary, [tabindex]:not([tabindex="-1"]) {
 .elm-delay-2   { animation-delay: 0.16s; }
 .elm-delay-3   { animation-delay: 0.24s; }
 .elm-delay-4   { animation-delay: 0.32s; }
+
+@keyframes elm-phone-tilt {
+  0%, 20%  { transform: rotate(0deg); }
+  50%, 70% { transform: rotate(90deg); }
+  100%     { transform: rotate(0deg); }
+}
+.elm-phone-tilt { animation: elm-phone-tilt 2.8s ease-in-out infinite; display: inline-block; }
 
 /* ── Public nav links ──────────────────────────────── */
 .public-nav-link {

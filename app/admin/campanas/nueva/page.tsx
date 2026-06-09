@@ -48,8 +48,8 @@ export default function NuevaCampanaPage() {
 
           {/* Título */}
           <div>
-            <label className={label} style={lStyle}>Título *</label>
-            <input name="title" required placeholder="Ej: Conferencia de Familia 2026"
+            <label className={label} style={lStyle}>Título</label>
+            <input name="title" placeholder="Ej: Conferencia de Familia 2026 (opcional si la imagen lo dice todo)"
               className={field} style={fStyle} />
           </div>
 

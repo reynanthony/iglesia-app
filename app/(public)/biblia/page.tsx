@@ -1,27 +1,12 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
-import { OT_BOOKS, NT_BOOKS, hasBibleApi } from '@/lib/bible'
+import { hasBibleApi } from '@/lib/bible'
 import BibleContinue from '@/components/public/BibleContinue'
-
-const OT_CATS = [
-  { label: 'Pentateuco',        books: OT_BOOKS.slice(0, 5)  },
-  { label: 'Libros históricos', books: OT_BOOKS.slice(5, 17) },
-  { label: 'Poética',           books: OT_BOOKS.slice(17, 22)},
-  { label: 'Profetas mayores',  books: OT_BOOKS.slice(22, 27)},
-  { label: 'Profetas menores',  books: OT_BOOKS.slice(27)    },
-]
-const NT_CATS = [
-  { label: 'Evangelios',            books: NT_BOOKS.slice(0, 4)  },
-  { label: 'Historia apostólica',   books: NT_BOOKS.slice(4, 5)  },
-  { label: 'Epístolas de Pablo',    books: NT_BOOKS.slice(5, 18) },
-  { label: 'Epístolas generales',   books: NT_BOOKS.slice(18, 26)},
-  { label: 'Profecía',              books: NT_BOOKS.slice(26)    },
-]
+import BibleSelector from '@/components/public/BibleSelector'
 
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
-const SAGE  = '#869B7E'
 
 export default async function BibliaPage() {
   const bibleOn = hasBibleApi()
@@ -49,7 +34,7 @@ export default async function BibliaPage() {
               La Palabra · Reina-Valera 1960
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <h1 className="font-display font-black tracking-tighter text-white"
               style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
               La Palabra<br /><em style={{ color: TEAL }}>que transforma.</em>
@@ -81,105 +66,33 @@ export default async function BibliaPage() {
       <BibleContinue />
 
       {/* ══ SELECTOR DE LIBROS ══════════════════════════════ */}
-      <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
-        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
-          <div className="flex items-center gap-5 mb-12 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
-            <BookOpen size={16} style={{ color: NAVY }} />
-            <h2 className="font-display font-black tracking-tighter" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: NAVY }}>
-              Leer la Biblia
-            </h2>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] px-2.5 py-1 rounded-full ml-2"
-              style={{ background: `${TEAL}18`, color: TEAL }}>
-              RVR1960
-            </span>
-          </div>
-
-          {bibleOn ? (
-            <div className="space-y-16">
-
-              {/* ── Antiguo Testamento ── */}
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.40em] mb-10"
-                  style={{ color: SAGE }}>— Antiguo Testamento</p>
-                <div className="space-y-8">
-                  {OT_CATS.map(cat => (
-                    <div key={cat.label}>
-                      <p className="text-[9px] font-bold uppercase tracking-[0.38em] mb-3"
-                        style={{ color: `${TEAL}80` }}>{cat.label}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {cat.books.map(book => (
-                          <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
-                            className="flex flex-col items-center justify-center px-3.5 py-3 rounded-xl transition-all duration-150 bg-[#EDEAE0] border border-[#D2CDB8] hover:bg-[#E3DDD2] hover:border-[#76ABAE]"
-                            style={{ minWidth: 76, minHeight: 52 }}>
-                            <span className="text-[12px] font-black leading-tight text-center"
-                              style={{ color: NAVY }}>{book.name}</span>
-                            <span className="text-[9px] mt-0.5"
-                              style={{ color: SAGE }}>{book.chapters} cap.</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* ── Nuevo Testamento ── */}
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.40em] mb-10"
-                  style={{ color: SAGE }}>— Nuevo Testamento</p>
-                <div className="space-y-8">
-                  {NT_CATS.map(cat => (
-                    <div key={cat.label}>
-                      <p className="text-[9px] font-bold uppercase tracking-[0.38em] mb-3"
-                        style={{ color: `${TEAL}80` }}>{cat.label}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {cat.books.map(book => (
-                          <Link key={book.id} href={`/biblia/lectura/${book.id}/1`}
-                            className="flex flex-col items-center justify-center px-3.5 py-3 rounded-xl transition-all duration-150 border hover:bg-[#EAF2F2] hover:border-[#76ABAE]"
-                            style={{
-                              background: `${TEAL}10`, border: `1px solid ${TEAL}28`,
-                              minWidth: 76, minHeight: 52,
-                            }}>
-                            <span className="text-[12px] font-black leading-tight text-center"
-                              style={{ color: NAVY }}>{book.name}</span>
-                            <span className="text-[9px] mt-0.5"
-                              style={{ color: SAGE }}>{book.chapters} cap.</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-          ) : (
-            <div className="rounded-2xl p-10 text-center" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
+      {bibleOn ? (
+        <BibleSelector />
+      ) : (
+        <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
+          <div className="max-w-6xl mx-auto px-6 py-20 text-center">
+            <div className="rounded-2xl p-10" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
               <BookOpen size={36} style={{ color: TEAL, margin: '0 auto 16px', opacity: 0.6 }} />
               <p className="font-black text-lg mb-2" style={{ color: NAVY }}>Lector bíblico próximamente</p>
               <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}60` }}>
                 Mientras tanto, te recomendamos{' '}
                 <a href="https://www.bible.com/es" target="_blank" rel="noopener noreferrer"
-                  className="font-bold underline" style={{ color: TEAL }}>
-                  YouVersion
-                </a>{' '}
+                  className="font-bold underline" style={{ color: TEAL }}>YouVersion</a>{' '}
                 o{' '}
                 <a href="https://www.biblegateway.com/?search=Juan+3&version=RVR1960" target="_blank" rel="noopener noreferrer"
-                  className="font-bold underline" style={{ color: TEAL }}>
-                  Bible Gateway
-                </a>{' '}
+                  className="font-bold underline" style={{ color: TEAL }}>Bible Gateway</a>{' '}
                 para leer en RVR1960.
               </p>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* ══ CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
         style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
                 — También en la comunidad

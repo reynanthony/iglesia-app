@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Smartphone, Play } from 'lucide-react'
 
 const NEXT_CAMPAIGN = '__next__'
 
@@ -15,7 +16,6 @@ function isVideoUrl(url: string | null): boolean {
   return /\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(url)
 }
 
-// Mismo enfoque que HeroVideo — cubre el contenedor manteniendo 16:9
 function YTCover({ ytId }: { ytId: string }) {
   const wrapRef  = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLIFrameElement>(null)
@@ -89,13 +89,47 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
   const videoUrl = isVideoUrl(announcement.image_url) ? announcement.image_url
                  : isVideoUrl(announcement.video_url) ? announcement.video_url
                  : null
+  const isVideo = !!(ytId || videoUrl)
 
-  const isNext    = announcement.cta_destination === NEXT_CAMPAIGN
-  const ctaTarget = isNext
-    ? null
-    : (announcement.cta_destination ?? null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  const [showRotateHint, setShowRotateHint] = useState(false)
+  const [showPlayBtn, setShowPlayBtn]       = useState(false)
+
+  useEffect(() => {
+    if (!isVideo) return
+    const check = () => {
+      const portrait = window.matchMedia('(orientation: portrait)').matches
+      const mobile   = window.innerWidth < 768
+      setShowRotateHint(portrait && mobile)
+    }
+    check()
+    window.addEventListener('resize', check)
+    window.addEventListener('orientationchange', check)
+    return () => {
+      window.removeEventListener('resize', check)
+      window.removeEventListener('orientationchange', check)
+    }
+  }, [isVideo])
+
+  // Cuando el teléfono se gira a landscape, mostrar botón ▶
+  const prevRotateHint = useRef(showRotateHint)
+  useEffect(() => {
+    if (prevRotateHint.current && !showRotateHint && isVideo) {
+      setShowPlayBtn(true)
+      if (videoRef.current) {
+        videoRef.current.play().catch(() => {})
+      }
+    }
+    prevRotateHint.current = showRotateHint
+  }, [showRotateHint, isVideo])
+
+  const isNext     = announcement.cta_destination === NEXT_CAMPAIGN
+  const ctaTarget  = isNext ? null : (announcement.cta_destination ?? null)
   const showCtaBtn = isNext || !!ctaTarget
   const ctaLabel   = announcement.cta_label ?? (isNext ? 'Ver siguiente →' : 'Más información')
+
+  const hasText = !!(announcement.title?.trim() || announcement.description?.trim() || showCtaBtn)
 
   function handleCta() {
     if (isNext || !ctaTarget) { onContinue(); return }
@@ -105,66 +139,130 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
   }
 
   return (
-    <div className="elm-fade-in fixed inset-0 z-[9999] flex flex-col" style={{ background: '#000' }}>
-
-      {/* Hero visual */}
+    <div
+      className="elm-fade-in fixed inset-0 z-[9999] flex flex-col"
+      style={{ background: bg }}
+    >
+      {/* Media — fills the full screen */}
       <div className="absolute inset-0">
-        {ytId   ? <YTCover ytId={ytId} /> :
+        {ytId ? <YTCover ytId={ytId} /> :
          videoUrl ? (
-           <video src={videoUrl} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+           <video ref={videoRef} src={videoUrl} autoPlay muted loop playsInline
+             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
          ) : announcement.image_url ? (
-           <img src={announcement.image_url} alt={announcement.title} className="w-full h-full object-cover" />
-         ) : (
-           <div className="w-full h-full" style={{ background: bg }} />
-         )}
+           <img src={announcement.image_url} alt={announcement.title ?? ''}
+             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain' }} />
+         ) : null}
 
-        {/* Scrim */}
+          {/* Scrim — más suave en modo solo-imagen */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.10) 30%, rgba(6,30,48,0.85) 65%, rgba(6,30,48,0.98) 100%)',
+          background: hasText
+            ? 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 35%, rgba(6,30,48,0.40) 65%, rgba(6,30,48,0.72) 100%)'
+            : 'linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.50) 100%)',
         }} />
       </div>
 
-      {/* Content */}
-      <div
-        className="relative flex flex-col justify-end flex-1 px-6"
-        style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px) + 32px, 48px)' }}
-      >
-        <div className="elm-slide-up mb-5">
-          <span
-            className="text-[9px] font-black uppercase tracking-[0.35em] px-3 py-1.5 rounded-full"
-            style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.border}` }}
-          >
-            {pc.label}
-          </span>
-        </div>
-
-        <h1
-          className="elm-slide-up elm-delay-1 font-black tracking-tight leading-[0.92] mb-4"
-          style={{ fontSize: 'clamp(2rem, 8vw, 3.2rem)', color: '#F6F3EB' }}
+      {/* Botón ▶ al girar a landscape */}
+      {showPlayBtn && (
+        <button
+          onClick={() => {
+            videoRef.current?.play().catch(() => {})
+            setShowPlayBtn(false)
+          }}
+          className="elm-scale-in absolute inset-0 z-20 flex flex-col items-center justify-center gap-3"
+          style={{ background: 'rgba(0,0,0,0.35)', WebkitTapHighlightColor: 'transparent' }}
         >
-          {announcement.title}
-        </h1>
-
-        {announcement.description && (
-          <p
-            className="elm-slide-up elm-delay-2 text-sm leading-relaxed mb-8 max-w-sm"
-            style={{ color: 'rgba(246,243,235,0.60)' }}
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(246,243,235,0.15)', border: '2px solid rgba(246,243,235,0.35)' }}
           >
-            {announcement.description}
-          </p>
+            <Play size={32} style={{ color: '#F6F3EB', marginLeft: 4 }} fill="#F6F3EB" />
+          </div>
+          <span className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.70)' }}>
+            Toca para reproducir
+          </span>
+        </button>
+      )}
+
+      {/* Overlay "gira tu teléfono" — solo video en portrait mobile */}
+      {showRotateHint && (
+        <div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-6 px-8 text-center"
+          style={{ background: 'rgba(6,30,48,0.88)', backdropFilter: 'blur(6px)' }}
+        >
+          <div className="elm-phone-tilt">
+            <Smartphone size={56} style={{ color: '#76ABAE' }} strokeWidth={1.5} />
+          </div>
+          <div>
+            <p className="font-black text-xl tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+              Gira tu teléfono
+            </p>
+            <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              Coloca el teléfono en modo horizontal para ver el video en pantalla completa
+            </p>
+          </div>
+          <button
+            onClick={onContinue}
+            className="mt-2 px-6 py-3 rounded-2xl font-bold text-sm"
+            style={{ background: 'rgba(246,243,235,0.08)', color: 'rgba(246,243,235,0.55)', border: '1px solid rgba(246,243,235,0.12)' }}
+          >
+            Continuar de todos modos →
+          </button>
+        </div>
+      )}
+
+      {/* Bloque de contenido — SIEMPRE en el DOM para mantener el flex layout */}
+      <div
+        className="relative flex flex-col justify-end flex-1 px-6 md:px-14 lg:px-20"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px) + 32px, 48px)', minHeight: 0 }}
+      >
+        {hasText && (
+          <div className="w-full md:max-w-2xl">
+            {(announcement.title?.trim() || announcement.description?.trim()) && (
+              <div className="elm-slide-up mb-5">
+                <span
+                  className="text-[9px] font-black uppercase tracking-[0.35em] px-3 py-1.5 rounded-full"
+                  style={{ background: pc.bg, color: pc.color, border: `1px solid ${pc.border}` }}
+                >
+                  {pc.label}
+                </span>
+              </div>
+            )}
+
+            {announcement.title?.trim() && (
+              <h1
+                className="elm-slide-up elm-delay-1 font-black tracking-tight leading-[0.92] mb-4"
+                style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', color: '#F6F3EB' }}
+              >
+                {announcement.title}
+              </h1>
+            )}
+
+            {announcement.description?.trim() && (
+              <p
+                className="elm-slide-up elm-delay-2 leading-relaxed mb-8 md:max-w-lg"
+                style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.0625rem)', color: 'rgba(246,243,235,0.65)' }}
+              >
+                {announcement.description}
+              </p>
+            )}
+
+            {showCtaBtn && (
+              <div className="elm-slide-up elm-delay-3 mb-3 md:max-w-sm">
+                <button
+                  onClick={handleCta}
+                  className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-transform active:scale-[0.97]"
+                  style={{ background: '#F6F3EB', color: '#061E30' }}
+                >
+                  {ctaLabel}
+                </button>
+              </div>
+            )}
+          </div>
         )}
 
-        <div className="elm-slide-up elm-delay-3 space-y-3">
-          {showCtaBtn && (
-            <button
-              onClick={handleCta}
-              className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-transform active:scale-[0.97]"
-              style={{ background: '#F6F3EB', color: '#061E30' }}
-            >
-              {ctaLabel}
-            </button>
-          )}
-
+        {/* Continuar — SIEMPRE visible */}
+        <div className="elm-slide-up elm-delay-3 md:max-w-sm">
           <button
             onClick={onContinue}
             className="w-full py-3.5 rounded-2xl font-bold text-sm transition-transform active:scale-[0.97]"

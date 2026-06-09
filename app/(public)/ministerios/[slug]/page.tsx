@@ -219,7 +219,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             <span className="text-white/65">{ministry.name}</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pb-16">
 
             {/* Left: identity */}
             <div className="lg:col-span-7">

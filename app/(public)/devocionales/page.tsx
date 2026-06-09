@@ -48,7 +48,7 @@ export default async function DevoccionalesPage() {
               Reflexiones · Devocionales
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <h1 className="font-display font-black tracking-tighter text-white"
               style={{ fontSize: 'clamp(3rem, 9vw, 7.5rem)', lineHeight: 0.88 }}>
               Palabra<br />para hoy.

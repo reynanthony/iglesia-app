@@ -1,21 +1,14 @@
 import Link from 'next/link'
-import { ArrowRight, ArrowLeft, Users, Heart, BookOpen, Droplets, HandHeart, UserCheck, Crown, GraduationCap, ChevronRight, Lock, BookMarked } from 'lucide-react'
+import { ArrowRight, ArrowLeft, GraduationCap, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { StageCard } from '@/components/ui/stage-card'
 
 const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
 const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
-const STAGE_META = [
-  { icon: Users,     color: '#94A3B8' },
-  { icon: Heart,     color: '#86EFAC' },
-  { icon: BookOpen,  color: '#6EE7B7' },
-  { icon: Droplets,  color: '#60A5FA' },
-  { icon: HandHeart, color: '#C084FC' },
-  { icon: UserCheck, color: '#F59E0B' },
-  { icon: Crown,     color: '#F87171' },
-]
+const STAGE_COLORS = ['#94A3B8','#86EFAC','#6EE7B7','#60A5FA','#C084FC','#F59E0B','#F87171']
 
 export default async function DiscipuladoPage() {
   const supabase = await createClient()
@@ -41,10 +34,17 @@ export default async function DiscipuladoPage() {
   const openPrograms = (programs ?? []).filter((p: any) => !p.required_stage_id)
 
   const stages = (dbStages ?? []).map((s: any, i: number) => ({
-    ...s,
-    icon: STAGE_META[i]?.icon ?? GraduationCap,
-    color: s.color || STAGE_META[i]?.color || TEAL,
-    programs: programsByStage.get(s.id) ?? [],
+    id:          s.id,
+    name:        s.name,
+    order_index: s.order_index,
+    color:       s.color || STAGE_COLORS[i] || TEAL,
+    description: s.description,
+    programs:    (programsByStage.get(s.id) ?? []).map((p: any) => ({
+      id:          p.id,
+      title:       p.title,
+      description: p.description,
+      courses:     (p.discipleship_courses ?? []) as Array<{ id: string; title: string; level?: string; is_active: boolean }>,
+    })),
   }))
 
   return (
@@ -69,7 +69,7 @@ export default async function DiscipuladoPage() {
             style={{ color: `${TEAL}60` }}>
             <ArrowLeft size={11} /> Educación
           </Link>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-px h-10" style={{ background: TEAL }} />
@@ -128,146 +128,17 @@ export default async function DiscipuladoPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {stages.map((stage: any) => {
-              const Icon = stage.icon
-              const color = stage.color
-              const stagePrograms = stage.programs
-
-              return (
-                <div key={stage.id}
-                  className="rounded-2xl overflow-hidden"
-                  style={{
-                    background: '#243D52',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderLeft: `4px solid ${color}`,
-                  }}>
-
-                  {/* Stage header */}
-                  <div className="flex items-start gap-5 px-5 md:px-7 py-5 md:py-6">
-                    <div className="flex-shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center"
-                        style={{ background: `${color}20`, border: `1px solid ${color}40` }}>
-                        <Icon size={20} style={{ color }} strokeWidth={1.8} />
-                      </div>
-                      <span className="text-[8px] font-black tracking-widest"
-                        style={{ color: `${color}55` }}>
-                        {String(stage.order_index).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                        <h3 className="font-black text-lg md:text-xl tracking-tight" style={{ color: CREAM }}>
-                          {stage.name}
-                        </h3>
-                        {stage.order_index === 1 && (
-                          <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={{ background: `${TEAL}25`, color: TEAL }}>
-                            Punto de entrada
-                          </span>
-                        )}
-                        {stage.order_index === 7 && (
-                          <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={{ background: `${color}25`, color }}>
-                            Meta
-                          </span>
-                        )}
-                        {stagePrograms.length > 0 && (
-                          <span className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={{ background: `${color}18`, color: `${color}CC` }}>
-                            {stagePrograms.length} programa{stagePrograms.length !== 1 ? 's' : ''}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.78)' }}>
-                        {stage.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Programs */}
-                  {stagePrograms.length > 0 && (
-                    <div style={{ borderTop: `1px solid rgba(255,255,255,0.07)`, background: 'rgba(0,0,0,0.18)' }}>
-                      <div className="px-5 md:px-7 pt-4 pb-1">
-                        <p className="text-[9px] font-black uppercase tracking-[0.3em]"
-                          style={{ color: `${color}70` }}>
-                          Programas recomendados
-                        </p>
-                      </div>
-                      <div className="px-4 md:px-5 pb-4 mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {stagePrograms.map((p: any) => {
-                          const activeCourses = (p.discipleship_courses ?? []).filter((c: any) => c.is_active)
-                          return (
-                            <Link key={p.id} href={`/educacion/discipulado/${p.slug}`}
-                              className="group flex items-start gap-3 p-4 rounded-xl transition hover:brightness-125"
-                              style={{
-                                background: 'rgba(255,255,255,0.05)',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                              }}>
-                              <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
-                                style={{ background: `${color}18`, border: `1px solid ${color}30` }}>
-                                <BookMarked size={15} style={{ color }} strokeWidth={1.8} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-black text-sm leading-tight mb-1" style={{ color: CREAM }}>
-                                  {p.title}
-                                </p>
-                                {p.description && (
-                                  <p className="text-[11px] leading-relaxed line-clamp-2 mb-2"
-                                    style={{ color: 'rgba(246,243,235,0.62)' }}>
-                                    {p.description}
-                                  </p>
-                                )}
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                                    style={{ background: `${color}18`, color: `${color}CC` }}>
-                                    {activeCourses.length} curso{activeCourses.length !== 1 ? 's' : ''}
-                                  </span>
-                                  {activeCourses.slice(0, 2).map((c: any) => (
-                                    <span key={c.id} className="text-[10px] px-2 py-0.5 rounded-full"
-                                      style={{ background: 'rgba(246,243,235,0.09)', color: 'rgba(246,243,235,0.55)' }}>
-                                      {c.title}
-                                    </span>
-                                  ))}
-                                  {activeCourses.length > 2 && (
-                                    <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
-                                      +{activeCourses.length - 2}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              <ChevronRight size={13}
-                                className="flex-shrink-0 mt-1 transition-transform group-hover:translate-x-0.5"
-                                style={{ color: 'rgba(246,243,235,0.25)' }} />
-                            </Link>
-                          )
-                        })}
-                      </div>
-                      <div className="px-5 md:px-7 pb-4 flex items-center gap-2">
-                        <Lock size={10} style={{ color: 'rgba(246,243,235,0.22)', flexShrink: 0 }} />
-                        <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.28)' }}>
-                          El contenido completo requiere una cuenta gratuita ·{' '}
-                          <Link href={`/educacion/discipulado/${stagePrograms[0]?.slug}`}
-                            className="underline hover:opacity-80"
-                            style={{ color: `${color}80` }}>
-                            ver programa
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {stagePrograms.length === 0 && (
-                    <div className="px-5 md:px-7 pb-5 pt-0">
-                      <p className="text-xs italic" style={{ color: 'rgba(246,243,235,0.22)' }}>
-                        Próximamente.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {stages.map((stage) => (
+              <StageCard
+                key={stage.id}
+                name={stage.name}
+                orderIndex={stage.order_index}
+                color={stage.color}
+                description={stage.description}
+                programs={stage.programs}
+              />
+            ))}
           </div>
         </div>
       </section>
