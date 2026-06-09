@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Flame, Mic2, ChevronRight, Sparkles } from 'lucide-react'
+import RealtimeRefresh from '@/components/RealtimeRefresh'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -47,6 +48,7 @@ export default async function OracionPage({
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
+      <RealtimeRefresh channelName="oracion-list" watches={[{ table: 'prayer_requests' }]} />
 
       {/* Header */}
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>

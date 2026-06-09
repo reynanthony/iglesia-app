@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Flame, CheckCircle, Clock, Users, Sparkles, MessageSquareHeart, ChevronRight } from 'lucide-react'
 import { togglePrayerParticipation, markPrayerAnswered, markPrayerFollowUp } from '@/app/actions/prayer'
+import RealtimeRefresh from '@/components/RealtimeRefresh'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -49,6 +50,13 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
+      <RealtimeRefresh
+        channelName={`oracion-detail-${id}`}
+        watches={[
+          { table: 'prayer_participants', filter: `request_id=eq.${id}` },
+          { table: 'prayer_requests',    filter: `id=eq.${id}` },
+        ]}
+      />
 
       {/* Header */}
       <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-4"
