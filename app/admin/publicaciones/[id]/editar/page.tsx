@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Newspaper } from 'lucide-react'
+import { ArrowLeft, Newspaper, Layout, ArrowRight } from 'lucide-react'
 import { updatePublicacion } from '@/app/actions/publicaciones'
 import ImageUploader from '@/components/admin/ImageUploader'
 
@@ -46,6 +46,15 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
             </div>
           </div>
         </div>
+
+        {/* Editor de bloques link */}
+        <Link href={`/admin/publicaciones/${id}/editor`}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition mb-6"
+          style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.25)', color: '#76ABAE' }}>
+          <Layout size={15} className="flex-shrink-0" />
+          <span className="flex-1">Editor de bloques</span>
+          <ArrowRight size={14} />
+        </Link>
 
         <form action={handleUpdate} className="space-y-4">
 

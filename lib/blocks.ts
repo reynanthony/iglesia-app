@@ -12,6 +12,12 @@ export type BlockType =
   | 'video'
   | 'columns'
   | 'spacer'
+  | 'detalle'
+  | 'agenda'
+  | 'galeria'
+  | 'ponentes'
+  | 'faq'
+  | 'separador'
 
 export interface Block {
   id: string
@@ -21,7 +27,7 @@ export interface Block {
 
 export interface BlockMeta {
   label: string
-  group: 'Estructura' | 'Texto' | 'Contenido' | 'Multimedia' | 'Especial'
+  group: 'Estructura' | 'Texto' | 'Contenido' | 'Multimedia' | 'Especial' | 'Evento'
   description: string
 }
 
@@ -39,6 +45,12 @@ export const BLOCK_META: Record<BlockType, BlockMeta> = {
   cta:          { label: 'Llamada a acción',group: 'Contenido',  description: 'Sección CTA con botones' },
   verse:        { label: 'Versículo',       group: 'Especial',   description: 'Cita bíblica destacada' },
   services:     { label: 'Horarios',        group: 'Especial',   description: 'Tabla de horarios de servicios' },
+  detalle:      { label: 'Detalle',         group: 'Evento',     description: 'Fecha, lugar, precio y detalles clave' },
+  agenda:       { label: 'Agenda',          group: 'Evento',     description: 'Programa / cronograma del evento' },
+  galeria:      { label: 'Galería',         group: 'Evento',     description: 'Grid de imágenes fotográficas' },
+  ponentes:     { label: 'Ponentes',        group: 'Evento',     description: 'Perfiles de oradores o facilitadores' },
+  faq:          { label: 'Preguntas',       group: 'Evento',     description: 'Preguntas frecuentes con respuestas' },
+  separador:    { label: 'Separador',       group: 'Evento',     description: 'Línea divisoria con etiqueta opcional' },
 }
 
 export const BLOCK_DEFAULTS: Record<BlockType, Record<string, any>> = {
@@ -141,6 +153,44 @@ export const BLOCK_DEFAULTS: Record<BlockType, Record<string, any>> = {
   spacer: {
     size: 'md',
   },
+  detalle: {
+    heading: 'Detalles',
+    items: [
+      { icon: '📅', label: 'Fecha', value: 'Sábado, 15 de junio 2026' },
+      { icon: '🕐', label: 'Hora',  value: '7:00 PM' },
+      { icon: '📍', label: 'Lugar', value: 'Iglesia El Manantial' },
+      { icon: '💰', label: 'Entrada', value: 'Libre' },
+    ],
+  },
+  agenda: {
+    heading: 'Programa',
+    items: [
+      { time: '6:30 PM', title: 'Recibimiento y registro', speaker: '' },
+      { time: '7:00 PM', title: 'Alabanza y adoración',   speaker: '' },
+      { time: '7:30 PM', title: 'Mensaje principal',       speaker: 'Pastor' },
+      { time: '8:30 PM', title: 'Ministerio y oración',   speaker: '' },
+    ],
+  },
+  galeria: {
+    images: [] as string[],
+    columns: 3,
+  },
+  ponentes: {
+    heading: 'Ponentes',
+    items: [
+      { photo: '', name: 'Nombre del ponente', title: 'Pastor / Conferencista', bio: 'Descripción breve del ponente.' },
+    ],
+  },
+  faq: {
+    heading: 'Preguntas frecuentes',
+    items: [
+      { question: '¿Necesito registrarme?',  answer: 'No, la entrada es libre y abierta a todos.' },
+      { question: '¿Hay estacionamiento?', answer: 'Sí, contamos con estacionamiento disponible.' },
+    ],
+  },
+  separador: {
+    label: '',
+  },
 }
 
 export function createBlock(type: BlockType): Block {
@@ -152,6 +202,7 @@ export function createBlock(type: BlockType): Block {
 }
 
 export const BLOCK_GROUPS: { name: BlockMeta['group']; types: BlockType[] }[] = [
+  { name: 'Evento',     types: ['detalle', 'agenda', 'galeria', 'ponentes', 'faq', 'separador'] },
   { name: 'Estructura', types: ['hero', 'columns', 'spacer'] },
   { name: 'Texto',      types: ['heading', 'text'] },
   { name: 'Multimedia', types: ['image', 'video'] },

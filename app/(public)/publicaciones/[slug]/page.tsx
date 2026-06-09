@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { marked } from 'marked'
 import type { Metadata } from 'next'
+import PublicacionBlockRenderer from '@/components/PublicacionBlockRenderer'
 
 export const revalidate = 60
 
@@ -51,6 +52,8 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
 
   const cc = CAT_COLOR[item.category] ?? '#76ABAE'
   const htmlBody = item.body ? await marked.parse(item.body) : null
+  const blocks: any[] = Array.isArray(item.blocks) ? item.blocks : []
+  const hasBlocks = blocks.length > 0
 
   // Other publications for footer nav
   const { data: others } = await supabase
@@ -122,98 +125,111 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         </div>
       </section>
 
-      {/* ── BODY ─────────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 lg:gap-16">
+      {/* ── BODY / BLOCKS ────────────────────────────────────────── */}
 
-          {/* Main content */}
-          <div>
-            {/* Excerpt as lead */}
-            {item.excerpt && (
-              <p className="text-lg md:text-xl leading-relaxed font-medium mb-8 pb-8"
-                style={{ color: 'rgba(246,243,235,0.75)', borderBottom: '1px solid rgba(246,243,235,0.08)' }}>
-                {item.excerpt}
-              </p>
-            )}
+      {/* Excerpt (always shown) */}
+      {item.excerpt && (
+        <div className="max-w-4xl mx-auto px-6 pt-10">
+          <p className="text-lg md:text-xl leading-relaxed font-medium pb-8"
+            style={{ color: 'rgba(246,243,235,0.75)', borderBottom: '1px solid rgba(246,243,235,0.08)' }}>
+            {item.excerpt}
+          </p>
+        </div>
+      )}
 
-            {/* Body markdown */}
-            {htmlBody && (
+      {/* Block content (if blocks exist) */}
+      {hasBlocks && (
+        <PublicacionBlockRenderer blocks={blocks} />
+      )}
+
+      {/* Markdown fallback (if no blocks) */}
+      {!hasBlocks && htmlBody && (
+        <div className="max-w-4xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 lg:gap-16">
+            <div>
               <div
                 className="publicacion-body"
                 dangerouslySetInnerHTML={{ __html: htmlBody }}
-                style={{
-                  color: 'rgba(246,243,235,0.80)',
-                  fontSize: 16,
-                  lineHeight: 1.8,
-                }}
+                style={{ color: 'rgba(246,243,235,0.80)', fontSize: 16, lineHeight: 1.8 }}
               />
-            )}
-
-            {/* CTA */}
-            {item.cta_url && (
-              <div className="mt-10 pt-8" style={{ borderTop: '1px solid rgba(246,243,235,0.08)' }}>
-                <Link href={item.cta_url}
-                  className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl text-sm font-bold transition hover:opacity-90"
-                  style={{ background: '#F6F3EB', color: '#061E30' }}>
-                  {item.cta_label ?? 'Más información'} <ArrowRight size={15} />
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Meta card */}
-            <div className="rounded-xl p-5" style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>Información</p>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Categoría</p>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                    style={{ background: `${cc}20`, color: cc }}>
-                    {CAT_LABEL[item.category] ?? item.category}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Publicado</p>
-                  <p className="text-sm" style={{ color: '#F6F3EB' }}>
-                    {new Date(item.published_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </p>
-                </div>
-              </div>
             </div>
-
-            {/* Other publications */}
-            {others && others.length > 0 && (
-              <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3"
-                  style={{ color: 'rgba(246,243,235,0.30)' }}>
-                  Otras publicaciones
-                </p>
-                <div className="space-y-2">
-                  {others.map(o => (
-                    <Link key={o.id} href={`/publicaciones/${o.slug}`}
-                      className="flex items-center gap-3 p-3 rounded-xl transition hover:opacity-80"
-                      style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-                      <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"
-                        style={{ background: o.cover_color ?? '#093C5D' }}>
-                        {o.cover_image && (
-                          <img src={o.cover_image} alt="" className="w-full h-full object-cover" />
-                        )}
-                      </div>
-                      <p className="text-[12px] font-medium leading-tight line-clamp-2"
-                        style={{ color: 'rgba(246,243,235,0.75)' }}>
-                        {o.title}
-                      </p>
-                    </Link>
-                  ))}
+            <aside className="space-y-6">
+              <div className="rounded-xl p-5" style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>Información</p>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Categoría</p>
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${cc}20`, color: cc }}>
+                      {CAT_LABEL[item.category] ?? item.category}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Publicado</p>
+                    <p className="text-sm" style={{ color: '#F6F3EB' }}>
+                      {new Date(item.published_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
-          </aside>
+              {others && others.length > 0 && (
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                    Otras publicaciones
+                  </p>
+                  <div className="space-y-2">
+                    {others.map(o => (
+                      <Link key={o.id} href={`/publicaciones/${o.slug}`}
+                        className="flex items-center gap-3 p-3 rounded-xl transition hover:opacity-80"
+                        style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
+                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? '#093C5D' }}>
+                          {o.cover_image && <img src={o.cover_image} alt="" className="w-full h-full object-cover" />}
+                        </div>
+                        <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: 'rgba(246,243,235,0.75)' }}>
+                          {o.title}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </aside>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* CTA button (shown when blocks exist, or when no blocks and no body) */}
+      {item.cta_url && (hasBlocks || !htmlBody) && (
+        <div className="max-w-4xl mx-auto px-6 pb-10 pt-4">
+          <Link href={item.cta_url}
+            className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl text-sm font-bold transition hover:opacity-90"
+            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            {item.cta_label ?? 'Más información'} <ArrowRight size={15} />
+          </Link>
+        </div>
+      )}
+
+      {/* Related publicaciones (shown after blocks) */}
+      {hasBlocks && others && others.length > 0 && (
+        <div className="max-w-4xl mx-auto px-6 py-10" style={{ borderTop: '1px solid rgba(246,243,235,0.06)' }}>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            Otras publicaciones
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {others.map(o => (
+              <Link key={o.id} href={`/publicaciones/${o.slug}`}
+                className="flex items-center gap-3 p-3 rounded-xl transition hover:opacity-80"
+                style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
+                <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? '#093C5D' }}>
+                  {o.cover_image && <img src={o.cover_image} alt="" className="w-full h-full object-cover" />}
+                </div>
+                <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: 'rgba(246,243,235,0.75)' }}>
+                  {o.title}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── FOOTER RULE ─────────────────────────────────────────── */}
       <div className="max-w-4xl mx-auto px-6 pb-12">

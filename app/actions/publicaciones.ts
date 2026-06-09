@@ -96,3 +96,15 @@ export async function deletePublicacion(id: string) {
   revalidatePath('/admin/publicaciones')
   revalidatePath('/publicaciones')
 }
+
+export async function savePublicacionBlocks(id: string, blocks: any[]) {
+  const { supabase } = await assertAdmin()
+  const { error } = await supabase
+    .from('publicaciones')
+    .update({ blocks, updated_at: new Date().toISOString() })
+    .eq('id', id)
+  if (error) return { error: error.message }
+  revalidatePath(`/publicaciones`)
+  revalidatePath(`/admin/publicaciones`)
+  return { ok: true }
+}

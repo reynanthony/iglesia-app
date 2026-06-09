@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertCircle, Eye, Layers, Trash2,
   Type, AlignLeft, Image, Megaphone, BarChart2, LayoutGrid,
   MousePointerClick, Quote, Clock, Play, Columns2, Space,
+  List, Calendar, Users, HelpCircle, Minus,
 } from 'lucide-react'
 import type { Block, BlockType } from '@/lib/blocks'
 import { BLOCK_META, BLOCK_GROUPS, createBlock } from '@/lib/blocks'
@@ -27,6 +28,8 @@ const ICONS: Record<BlockType, React.ComponentType<any>> = {
   announcement: Megaphone, stats: BarChart2, cards: LayoutGrid,
   cta: MousePointerClick, verse: Quote, services: Clock,
   video: Play, columns: Columns2, spacer: Space,
+  detalle: List, agenda: Calendar, galeria: Image, ponentes: Users,
+  faq: HelpCircle, separador: Minus,
 }
 
 /* ── background color helper ────────────────────────────────── */
@@ -760,6 +763,8 @@ const SECTION_LABELS: Record<BlockType, string> = {
   announcement: 'Anuncio', stats: 'Estadísticas', cards: 'Tarjetas',
   cta: 'CTA', verse: 'Versículo', services: 'Horarios',
   video: 'Video', columns: 'Columnas', spacer: 'Espaciado',
+  detalle: 'Detalle', agenda: 'Agenda', galeria: 'Galería',
+  ponentes: 'Ponentes', faq: 'Preguntas', separador: 'Separador',
 }
 
 /* ── main component ─────────────────────────────────────────── */
