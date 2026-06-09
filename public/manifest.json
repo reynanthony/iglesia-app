@@ -4,7 +4,7 @@
   "description": "Comunidad de fe — El Manantial",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#093C5D",
   "theme_color": "#093C5D",
   "lang": "es",

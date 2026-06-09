@@ -95,15 +95,13 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
 
   const [showRotateHint, setShowRotateHint] = useState(false)
 
-  // Desbloquear orientación cuando hay video para permitir landscape
+  // Forzar landscape en video y restaurar portrait al cerrar
   useEffect(() => {
     if (!isVideo) return
     const so = (screen as any)?.orientation
-    try { so?.unlock?.() } catch {}
-    return () => {
-      // Volver a portrait al cerrar
-      try { so?.lock?.('portrait').catch(() => {}) } catch {}
-    }
+    if (!so?.lock) return
+    so.lock('landscape').catch(() => {})
+    return () => { so.lock('portrait').catch(() => {}) }
   }, [isVideo])
 
   useEffect(() => {
