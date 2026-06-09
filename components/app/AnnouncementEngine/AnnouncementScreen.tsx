@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Smartphone, Play } from 'lucide-react'
+import { Smartphone } from 'lucide-react'
 
 const NEXT_CAMPAIGN = '__next__'
 
@@ -94,7 +94,6 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const [showRotateHint, setShowRotateHint] = useState(false)
-  const [showPlayBtn, setShowPlayBtn]       = useState(false)
 
   useEffect(() => {
     if (!isVideo) return
@@ -111,18 +110,6 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
       window.removeEventListener('orientationchange', check)
     }
   }, [isVideo])
-
-  // Cuando el teléfono se gira a landscape, mostrar botón ▶
-  const prevRotateHint = useRef(showRotateHint)
-  useEffect(() => {
-    if (prevRotateHint.current && !showRotateHint && isVideo) {
-      setShowPlayBtn(true)
-      if (videoRef.current) {
-        videoRef.current.play().catch(() => {})
-      }
-    }
-    prevRotateHint.current = showRotateHint
-  }, [showRotateHint, isVideo])
 
   const isNext     = announcement.cta_destination === NEXT_CAMPAIGN
   const ctaTarget  = isNext ? null : (announcement.cta_destination ?? null)
@@ -154,60 +141,31 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain' }} />
          ) : null}
 
-          {/* Scrim — más suave en modo solo-imagen */}
-        <div className="absolute inset-0" style={{
-          background: hasText
-            ? 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 35%, rgba(6,30,48,0.40) 65%, rgba(6,30,48,0.72) 100%)'
-            : 'linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.50) 100%)',
-        }} />
+          {/* Scrim — solo cuando hay texto, nunca en video puro */}
+        {hasText && !isVideo && (
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 35%, rgba(6,30,48,0.40) 65%, rgba(6,30,48,0.72) 100%)',
+          }} />
+        )}
+        {hasText && isVideo && (
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(to bottom, transparent 50%, rgba(6,30,48,0.65) 100%)',
+          }} />
+        )}
       </div>
 
-      {/* Botón ▶ al girar a landscape */}
-      {showPlayBtn && (
-        <button
-          onClick={() => {
-            videoRef.current?.play().catch(() => {})
-            setShowPlayBtn(false)
-          }}
-          className="elm-scale-in absolute inset-0 z-20 flex flex-col items-center justify-center gap-3"
-          style={{ background: 'rgba(0,0,0,0.35)', WebkitTapHighlightColor: 'transparent' }}
-        >
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(246,243,235,0.15)', border: '2px solid rgba(246,243,235,0.35)' }}
-          >
-            <Play size={32} style={{ color: '#F6F3EB', marginLeft: 4 }} fill="#F6F3EB" />
-          </div>
-          <span className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.70)' }}>
-            Toca para reproducir
-          </span>
-        </button>
-      )}
-
-      {/* Overlay "gira tu teléfono" — solo video en portrait mobile */}
+      {/* Badge "gira tu teléfono" — pequeño, no bloquea el video */}
       {showRotateHint && (
         <div
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-6 px-8 text-center"
-          style={{ background: 'rgba(6,30,48,0.88)', backdropFilter: 'blur(6px)' }}
+          className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-2 rounded-full"
+          style={{ background: 'rgba(6,30,48,0.70)', backdropFilter: 'blur(6px)', border: '1px solid rgba(246,243,235,0.12)' }}
         >
           <div className="elm-phone-tilt">
-            <Smartphone size={56} style={{ color: '#76ABAE' }} strokeWidth={1.5} />
+            <Smartphone size={13} style={{ color: '#76ABAE' }} strokeWidth={1.5} />
           </div>
-          <div>
-            <p className="font-black text-xl tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
-              Gira tu teléfono
-            </p>
-            <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.55)' }}>
-              Coloca el teléfono en modo horizontal para ver el video en pantalla completa
-            </p>
-          </div>
-          <button
-            onClick={onContinue}
-            className="mt-2 px-6 py-3 rounded-2xl font-bold text-sm"
-            style={{ background: 'rgba(246,243,235,0.08)', color: 'rgba(246,243,235,0.55)', border: '1px solid rgba(246,243,235,0.12)' }}
-          >
-            Continuar de todos modos →
-          </button>
+          <span className="text-[10px] font-bold" style={{ color: 'rgba(246,243,235,0.75)' }}>
+            Gira para pantalla completa
+          </span>
         </div>
       )}
 
