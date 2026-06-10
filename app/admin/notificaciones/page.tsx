@@ -13,7 +13,7 @@ export default async function NotificacionesAdminPage() {
     .from('profiles').select('role').eq('id', user.id).single()
   if (!profile || !['admin', 'pastor'].includes(profile.role)) redirect('/admin')
 
-  const [{ count: webPushCount }, { data: logs }, { data: readCounts }] = await Promise.all([
+  const [{ count: webPushCount }, { data: logs }] = await Promise.all([
     supabase.from('device_tokens')
       .select('*', { count: 'exact', head: true })
       .eq('platform', 'web')
@@ -22,17 +22,27 @@ export default async function NotificacionesAdminPage() {
       .select('*, profiles!push_notifications_log_sent_by_fkey(full_name)')
       .order('sent_at', { ascending: false })
       .limit(20),
-    supabase.from('notifications')
-      .select('push_log_id')
-      .eq('type', 'announcement')
-      .eq('read', true)
-      .not('push_log_id', 'is', null),
   ])
 
-  // Count reads per log entry
+  // Read counts: try push_log_id first, fall back to title matching
   const readMap: Record<string, number> = {}
+  const { data: readCounts } = await supabase
+    .from('notifications')
+    .select('push_log_id, title')
+    .eq('type', 'announcement')
+    .eq('read', true)
+
   for (const n of (readCounts ?? [])) {
-    if (n.push_log_id) readMap[n.push_log_id] = (readMap[n.push_log_id] ?? 0) + 1
+    if (n.push_log_id) {
+      readMap[n.push_log_id] = (readMap[n.push_log_id] ?? 0) + 1
+    }
+  }
+  // Fallback: match by title for notifications without push_log_id
+  const titleMap: Record<string, number> = {}
+  for (const n of (readCounts ?? [])) {
+    if (!n.push_log_id && n.title) {
+      titleMap[n.title] = (titleMap[n.title] ?? 0) + 1
+    }
   }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none"
@@ -121,7 +131,7 @@ export default async function NotificacionesAdminPage() {
                 const date    = new Date(log.sent_at).toLocaleDateString('es-ES', {
                   month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
                 })
-                const viewed  = readMap[log.id] ?? 0
+                const viewed  = readMap[log.id] ?? titleMap[log.title] ?? 0
                 return (
                   <div key={log.id} className="px-4 md:px-5 py-4 border-b last:border-0"
                     style={{ borderColor: '#0D3352' }}>

@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
@@ -62,7 +63,13 @@ export async function sendPushNotification(formData: FormData): Promise<void> {
 }
 
 export async function deletePushLog(id: string): Promise<void> {
-  const { supabase } = await requireLeader()
-  await supabase.from('push_notifications_log').delete().eq('id', id)
+  await requireLeader()
+  try {
+    const svc = createServiceClient()
+    await svc.from('push_notifications_log').delete().eq('id', id)
+  } catch {
+    const { supabase } = await requireLeader()
+    await supabase.from('push_notifications_log').delete().eq('id', id)
+  }
   revalidatePath('/admin/notificaciones')
 }
