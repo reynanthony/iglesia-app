@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Bell, Heart, MessageCircle, MessageSquare, AlertTriangle } from 'lucide-react'
+import PushNotificationToggle from '@/components/app/PushNotificationToggle'
 
 type Notification = {
   id: string
@@ -82,6 +83,10 @@ export default async function NotificacionesPage() {
       </div>
 
       <div className="max-w-xl mx-auto pb-8">
+        <div className="px-4 pt-4">
+          <PushNotificationToggle />
+        </div>
+
         {!notifications || notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-center px-8">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center"

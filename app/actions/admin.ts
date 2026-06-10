@@ -514,6 +514,17 @@ export async function savePageFields(page: string, fields: Record<string, unknow
   return { success: true }
 }
 
+// ── Prayer requests (admin) ──────────────────────────────────
+export async function deletePrayerRequest(id: string) {
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  await ctx.supabase.from('prayer_participants').delete().eq('request_id', id)
+  await ctx.supabase.from('prayer_requests').delete().eq('id', id)
+  revalidatePath('/admin/oracion')
+  revalidatePath('/app/oracion')
+  return { success: true }
+}
+
 // ── Mensajes de contacto ─────────────────────────────────────
 export async function markMessageRead(id: string): Promise<void> {
   const supabase = await checkAdmin()
@@ -524,4 +535,12 @@ export async function markMessageRead(id: string): Promise<void> {
     .update({ read: true, read_by: user!.id, read_at: new Date().toISOString() })
     .eq('id', id)
   revalidatePath('/admin/mensajes')
+}
+
+export async function deleteContactMessage(id: string) {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+  await supabase.from('contact_messages').delete().eq('id', id)
+  revalidatePath('/admin/mensajes')
+  return { success: true }
 }

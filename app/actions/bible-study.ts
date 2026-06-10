@@ -45,7 +45,7 @@ export async function createSeries(formData: FormData) {
     is_active:    formData.get('is_active') !== 'false',
   }).select('id').single()
 
-  if (error) throw new Error(error.message)
+  if (error || !data) redirect('/admin/estudio-biblico')
   revalidatePath('/admin/estudio-biblico')
   revalidatePath('/educacion/estudio-biblico')
   redirect(`/admin/estudio-biblico/${data.id}`)
@@ -69,7 +69,7 @@ export async function updateSeries(id: string, formData: FormData) {
     updated_at:   new Date().toISOString(),
   }).eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) redirect('/admin/estudio-biblico')
   revalidatePath('/admin/estudio-biblico')
   revalidatePath('/educacion/estudio-biblico')
   redirect(`/admin/estudio-biblico/${id}`)

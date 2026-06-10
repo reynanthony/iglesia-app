@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Pencil, ExternalLink, Trash2 } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { deleteSeries, deleteSession } from '@/app/actions/bible-study'
+import { deleteSeries } from '@/app/actions/bible-study'
+import DeleteSessionButton from '@/components/admin/DeleteSessionButton'
 
 const STATUS_LABEL: Record<string, string> = { active: 'En curso', upcoming: 'Próximamente', archived: 'Completada' }
 
@@ -25,7 +26,6 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
     .order('order_index')
 
   const color = series.cover_color || '#76ABAE'
-  const deleteSeriesAction = deleteSeries.bind(null, id)
 
   return (
     <div>
@@ -120,7 +120,6 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
           ) : (
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               {sessions.map((sess: any, idx: number) => {
-                const deleteSessionAction = deleteSession.bind(null, sess.id, id)
                 return (
                   <div key={sess.id} className="flex items-center gap-4 px-5 py-4 border-b"
                     style={{ borderColor: '#0D3352' }}>
@@ -148,14 +147,7 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
                         style={{ color: 'rgba(246,243,235,0.40)' }}>
                         <Pencil size={13} />
                       </Link>
-                      <form action={deleteSessionAction} onSubmit={() => confirm('¿Eliminar esta sesión?')}>
-                        <button type="submit"
-                          className="w-8 h-8 flex items-center justify-center rounded-lg transition hover:bg-red-900/20"
-                          style={{ color: 'rgba(248,113,113,0.50)' }}
-                          title="Eliminar sesión">
-                          <Trash2 size={13} />
-                        </button>
-                      </form>
+                      <DeleteSessionButton sessionId={sess.id} seriesId={id} />
                     </div>
                   </div>
                 )
@@ -169,11 +161,10 @@ export default async function SeriesDetailPage({ params }: { params: Promise<{ i
           <p className="text-xs font-black uppercase tracking-[0.2em] mb-3" style={{ color: 'rgba(248,113,113,0.50)' }}>
             Zona de peligro
           </p>
-          <form action={deleteSeriesAction}>
+          <form action={deleteSeries.bind(null, id)}>
             <button type="submit"
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold"
-              style={{ background: 'rgba(248,113,113,0.10)', color: '#F87171', border: '1px solid rgba(248,113,113,0.20)' }}
-              onClick={() => {}}>
+              style={{ background: 'rgba(248,113,113,0.10)', color: '#F87171', border: '1px solid rgba(248,113,113,0.20)' }}>
               <Trash2 size={13} /> Eliminar serie y todas sus sesiones
             </button>
           </form>

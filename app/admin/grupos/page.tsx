@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Pencil, UsersRound, Lock, Users } from 'lucide-react'
 import { toggleGroupActive } from '@/app/actions/groups'
+import DeleteGroupButton from '@/components/admin/DeleteGroupButton'
 
 const TYPE_LABELS: Record<string, string> = {
   jovenes:     'Jóvenes',
@@ -99,6 +100,7 @@ export default async function AdminGruposPage() {
                       {group.is_active ? 'Desactivar' : 'Activar'}
                     </button>
                   </form>
+                  <DeleteGroupButton groupId={group.id} />
                 </div>
               </div>
             )

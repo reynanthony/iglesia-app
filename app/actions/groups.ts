@@ -69,6 +69,22 @@ export async function updateGroup(id: string, formData: FormData): Promise<void>
   redirect('/admin/grupos')
 }
 
+export async function deleteGroup(id: string): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (!['admin', 'pastor'].includes(profile?.role ?? '')) return
+
+  // Remove members and messages first (FK constraints)
+  await supabase.from('group_members').delete().eq('group_id', id)
+  await supabase.from('group_messages').delete().eq('group_id', id)
+  await supabase.from('groups').delete().eq('id', id)
+  revalidatePath('/admin/grupos')
+  revalidatePath('/app/grupos')
+}
+
 export async function toggleGroupActive(id: string, is_active: boolean): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

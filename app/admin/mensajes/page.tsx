@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Mail, MailOpen, Clock, User } from 'lucide-react'
 import { markMessageRead } from '@/app/actions/admin'
+import DeleteContactMessageButton from '@/components/admin/DeleteContactMessageButton'
 
 export default async function AdminMensajesPage() {
   const supabase = await createClient()
@@ -128,7 +129,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
         >
           {msg.mensaje}
         </p>
-        <div className="flex gap-2 pt-1">
+        <div className="flex gap-2 pt-1 flex-wrap">
           <a
             href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.asunto ?? '')}`}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] font-bold transition"
@@ -147,6 +148,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
               </button>
             </form>
           )}
+          <DeleteContactMessageButton messageId={msg.id} />
         </div>
       </div>
     </details>

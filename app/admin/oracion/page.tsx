@@ -1,16 +1,24 @@
 ﻿import { createClient } from '@/lib/supabase/server'
-import { Mic2, Users, Radio, Plus, Pencil } from 'lucide-react'
+import { Mic2, Users, Radio, Plus, Pencil, HandHeart } from 'lucide-react'
 import Link from 'next/link'
 import ToggleRoomButton from '@/components/admin/ToggleRoomButton'
 import DeleteRoomButton from '@/components/admin/DeleteRoomButton'
+import DeletePrayerRequestButton from '@/components/admin/DeletePrayerRequestButton'
 
 export default async function AdminOracionPage() {
   const supabase = await createClient()
 
-  const { data: rooms } = await supabase
-    .from('rooms')
-    .select('*, profiles(full_name, username)')
-    .order('created_at', { ascending: false })
+  const [{ data: rooms }, { data: requests }] = await Promise.all([
+    supabase
+      .from('rooms')
+      .select('*, profiles(full_name, username)')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('prayer_requests')
+      .select('id, title, status, is_anonymous, created_at, profiles:user_id(full_name, username)')
+      .order('created_at', { ascending: false })
+      .limit(50),
+  ])
 
   const active = rooms?.filter(r => r.is_active).length ?? 0
 
@@ -89,6 +97,48 @@ export default async function AdminOracionPage() {
             </div>
           </div>
         ))}
+      </div>
+      {/* Prayer requests section */}
+      <div className="border-t px-4 md:px-8 py-5" style={{ borderColor: '#0D3352' }}>
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-4"
+          style={{ color: 'rgba(246,243,235,0.30)' }}>
+          Peticiones de oración · {requests?.length ?? 0}
+        </p>
+
+        {(!requests || requests.length === 0) && (
+          <div className="py-10 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
+            <HandHeart size={24} className="mx-auto mb-2" style={{ color: '#0D3352' }} />
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay peticiones.</p>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          {requests?.map((req: any) => {
+            const author = req.is_anonymous ? 'Anónimo' : (req.profiles?.full_name ?? '—')
+            const STATUS_COLOR: Record<string, string> = {
+              activa: '#76ABAE', respondida: '#869B7E', seguimiento: '#C9A227',
+            }
+            return (
+              <div key={req.id}
+                className="flex items-center gap-3 p-3 rounded-xl border"
+                style={{ background: '#0B2D47', borderColor: '#0D3352' }}>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{req.title}</p>
+                    <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full flex-shrink-0"
+                      style={{ background: `${STATUS_COLOR[req.status] ?? '#76ABAE'}20`, color: STATUS_COLOR[req.status] ?? '#76ABAE' }}>
+                      {req.status}
+                    </span>
+                  </div>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    {author} · {new Date(req.created_at).toLocaleDateString('es-DO')}
+                  </p>
+                </div>
+                <DeletePrayerRequestButton requestId={req.id} />
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
