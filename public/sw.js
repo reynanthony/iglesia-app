@@ -1,4 +1,4 @@
-const CACHE = 'el-manantial-v3'
+const CACHE = 'el-manantial-v4'
 
 // Páginas que cacheamos para offline
 const OFFLINE_URLS = ['/offline']
@@ -57,15 +57,14 @@ self.addEventListener('fetch', (event) => {
 // ── Push notifications ───────────────────────────────────────
 self.addEventListener('push', (event) => {
   if (!event.data) return
-  let payload = { title: 'El Manantial', body: '', url: '/app/comunidad', icon: '/icon-192.png' }
+  let payload = { title: 'El Manantial', body: '', url: '/app/comunidad', icon: '/api/pwa-icon?size=192' }
   try { payload = { ...payload, ...event.data.json() } } catch {}
 
   event.waitUntil(
     self.registration.showNotification(payload.title, {
-      body:    payload.body,
-      icon:    payload.icon,
-      badge:   '/icon-72.png',
-      data:    { url: payload.url },
+      body:  payload.body,
+      icon:  payload.icon || '/api/pwa-icon?size=192',
+      data:  { url: payload.url },
       vibrate: [100, 50, 100],
     })
   )

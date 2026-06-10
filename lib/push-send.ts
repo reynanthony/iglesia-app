@@ -39,7 +39,7 @@ export async function sendPush({
   const { data: tokens } = await query
   if (!tokens?.length) return { success: 0, failed: 0 }
 
-  const payload = JSON.stringify({ title, body, url, icon: '/icon-192.png' })
+  const payload = JSON.stringify({ title, body, url, icon: '/api/pwa-icon?size=192' })
   let success = 0
   let failed = 0
   const staleEndpoints: string[] = []
