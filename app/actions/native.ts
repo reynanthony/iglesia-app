@@ -42,32 +42,21 @@ export async function removeDeviceToken(token: string): Promise<void> {
 // ── PUSH NOTIFICATIONS (ADMIN) ────────────────────────────────
 
 export async function sendPushNotification(formData: FormData): Promise<void> {
-  const { supabase, userId } = await requireLeader()
+  const { userId } = await requireLeader()
 
   const title  = (formData.get('title') as string)?.trim()
   const body   = (formData.get('body')  as string)?.trim()
-  const target = (formData.get('target') as string) ?? 'all'  // 'all' | specific user_id
+  const target = (formData.get('target') as string) ?? 'all'
 
   if (!title || !body) return
 
-  // Delegate to internal API route (Web Push / VAPID)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
-    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
-
-  try {
-    await fetch(`${baseUrl}/api/push/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title,
-        body,
-        targetUserId: target !== 'all' ? target : undefined,
-      }),
-    })
-  } catch (err) {
-    console.error('[sendPushNotification]', err)
-  }
-  // Log + cleanup handled inside /api/push/send
+  const { sendPush } = await import('@/lib/push-send')
+  await sendPush({
+    title,
+    body,
+    targetUserId: target !== 'all' ? target : undefined,
+    sentBy: userId,
+  })
 
   revalidatePath('/admin/notificaciones')
 }
