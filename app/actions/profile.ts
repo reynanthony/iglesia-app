@@ -14,17 +14,21 @@ export async function updateProfile(formData: FormData) {
 
   let avatar_url: string | undefined
 
+  const AVATAR_TYPES: Record<string, string> = {
+    'image/jpeg': 'jpg', 'image/jpg': 'jpg',
+    'image/png': 'png', 'image/webp': 'webp',
+  }
   if (avatarFile && avatarFile.size > 0) {
-    const ext = avatarFile.name.split('.').pop()
-    const path = `${user.id}/avatar.${ext}`
-
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(path, avatarFile, { upsert: true })
-
-    if (!uploadError) {
-      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-      avatar_url = `${data.publicUrl}?t=${Date.now()}`
+    const ext = AVATAR_TYPES[avatarFile.type]
+    if (ext && avatarFile.size <= 5 * 1024 * 1024) {
+      const path = `${user.id}/avatar.${ext}`
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(path, avatarFile, { upsert: true, contentType: avatarFile.type })
+      if (!uploadError) {
+        const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+        avatar_url = `${data.publicUrl}?t=${Date.now()}`
+      }
     }
   }
 

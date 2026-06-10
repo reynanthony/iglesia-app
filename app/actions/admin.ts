@@ -159,12 +159,23 @@ export async function toggleRoom(roomId: string, isActive: boolean) {
 }
 
 // ── Ministry content (admin full access) ────────────────────
+const ALLOWED_IMAGE_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg':  'jpg',
+  'image/png':  'png',
+  'image/webp': 'webp',
+  'image/gif':  'gif',
+}
+const MAX_UPLOAD_SIZE = 10 * 1024 * 1024 // 10 MB
+
 async function uploadToStorage(
   supabase: Awaited<ReturnType<typeof import('@/lib/supabase/server').createClient>>,
   file: File,
   bucket: string
 ) {
-  const ext = file.name.split('.').pop() ?? 'jpg'
+  if (file.size > MAX_UPLOAD_SIZE) return null
+  const ext = ALLOWED_IMAGE_TYPES[file.type]
+  if (!ext) return null
   const path = `admin/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
   const { error } = await supabase.storage.from(bucket).upload(path, file, { contentType: file.type })
   if (error) return null
@@ -394,10 +405,20 @@ export async function uploadPageImage(formData: FormData): Promise<{ url?: strin
   const file = formData.get('file') as File
   if (!file || file.size === 0) return { error: 'No se seleccionó archivo' }
 
-  const ext = file.name.split('.').pop() ?? 'jpg'
+  const ALLOWED_PAGE_TYPES: Record<string, string> = {
+    ...ALLOWED_IMAGE_TYPES,
+    'video/mp4':  'mp4',
+    'video/webm': 'webm',
+    'video/ogg':  'ogv',
+  }
+  const PAGE_MAX_SIZE = 500 * 1024 * 1024 // 500 MB (videos)
+  if (file.size > PAGE_MAX_SIZE) return { error: 'Archivo demasiado grande (máx. 500 MB)' }
+  const ext = ALLOWED_PAGE_TYPES[file.type]
+  if (!ext) return { error: 'Tipo de archivo no permitido' }
+
   const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
   const { error } = await ctx.supabase.storage.from('paginas').upload(path, file, { contentType: file.type })
-  if (error) return { error: 'Error al subir imagen' }
+  if (error) return { error: 'Error al subir archivo' }
   const { data } = ctx.supabase.storage.from('paginas').getPublicUrl(path)
   return { url: data.publicUrl }
 }

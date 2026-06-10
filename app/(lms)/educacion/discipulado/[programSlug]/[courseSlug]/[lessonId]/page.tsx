@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ChevronRight, CheckCircle2, Video, FileText, BookMarked, Zap } from 'lucide-react'
 import { marked } from 'marked'
+import DOMPurify from 'isomorphic-dompurify'
 import { markLessonComplete } from '@/app/actions/discipleship-lms'
 import { ReflectionForm } from '@/components/lms/ReflectionForm'
 
@@ -82,7 +83,7 @@ export default async function LessonPage({
   const nextLesson   = currentIdx < sortedLessons.length - 1 ? sortedLessons[currentIdx + 1] : null
 
   const htmlBody = lesson.body
-    ? (await marked.parse(lesson.body as string, { breaks: true }))
+    ? DOMPurify.sanitize(await marked.parse(lesson.body as string, { breaks: true }))
     : null
 
   const completeAction = markLessonComplete.bind(null, lessonId, course.id)

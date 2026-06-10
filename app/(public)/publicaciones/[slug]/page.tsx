@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { marked } from 'marked'
+import DOMPurify from 'isomorphic-dompurify'
 import type { Metadata } from 'next'
 import PublicacionBlockRenderer from '@/components/PublicacionBlockRenderer'
 
@@ -51,7 +52,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
   if (!item) notFound()
 
   const cc = CAT_COLOR[item.category] ?? '#76ABAE'
-  const htmlBody = item.body ? await marked.parse(item.body) : null
+  const htmlBody = item.body ? DOMPurify.sanitize(await marked.parse(item.body)) : null
   const blocks: any[] = Array.isArray(item.blocks) ? item.blocks : []
   const hasBlocks = blocks.length > 0
 

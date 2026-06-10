@@ -13,6 +13,11 @@ export async function sendContactMessage(formData: FormData) {
     return { error: 'Por favor completa los campos requeridos.' }
   }
 
+  if (nombre.length > 100)   return { error: 'Nombre demasiado largo.' }
+  if (email.length > 254)    return { error: 'Email inválido.' }
+  if (asunto && asunto.length > 200) return { error: 'Asunto demasiado largo.' }
+  if (mensaje.length > 3000) return { error: 'Mensaje demasiado largo (máx. 3000 caracteres).' }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
     return { error: 'Por favor ingresa un email válido.' }
