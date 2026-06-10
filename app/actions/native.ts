@@ -50,51 +50,24 @@ export async function sendPushNotification(formData: FormData): Promise<void> {
 
   if (!title || !body) return
 
-  // Fetch tokens
-  const query = supabase.from('device_tokens').select('token, platform, user_id')
-  if (target !== 'all') query.eq('user_id', target)
-  const { data: tokens } = await query
-
-  if (!tokens || tokens.length === 0) {
-    await supabase.from('push_notifications_log').insert({
-      sent_by: userId, title, body, target, success: 0, failed: 0,
-    })
-    return
-  }
-
-  // Send via Supabase Edge Function
-  const { data: { session } } = await supabase.auth.getSession()
-  let successCount = 0
-  let failedCount  = 0
+  // Delegate to internal API route (Web Push / VAPID)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-push`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify({ title, body, tokens: tokens.map(t => t.token) }),
-      }
-    )
-    if (res.ok) {
-      const result = await res.json()
-      successCount = result.success ?? tokens.length
-      failedCount  = result.failed ?? 0
-    } else {
-      failedCount = tokens.length
-    }
-  } catch {
-    failedCount = tokens.length
+    await fetch(`${baseUrl}/api/push/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title,
+        body,
+        targetUserId: target !== 'all' ? target : undefined,
+      }),
+    })
+  } catch (err) {
+    console.error('[sendPushNotification]', err)
   }
-
-  await supabase.from('push_notifications_log').insert({
-    sent_by: userId, title, body, target,
-    success: successCount,
-    failed:  failedCount,
-  })
+  // Log + cleanup handled inside /api/push/send
 
   revalidatePath('/admin/notificaciones')
 }
