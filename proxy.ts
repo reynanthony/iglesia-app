@@ -37,6 +37,20 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // /admin/* — require admin/pastor/moderador role
+  if (user && path.startsWith('/admin')) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (!profile || !['admin', 'pastor', 'moderador'].includes(profile.role)) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/app/comunidad'
+      return NextResponse.redirect(url)
+    }
+  }
+
   // Skip login/registro for already authenticated users
   if (user && (path === '/login' || path === '/registro')) {
     const url = request.nextUrl.clone()
