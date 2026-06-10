@@ -1,15 +1,17 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Bell, Heart, MessageCircle, MessageSquare, AlertTriangle } from 'lucide-react'
+import { Bell, Heart, MessageCircle, MessageSquare, AlertTriangle, Megaphone } from 'lucide-react'
 import PushNotificationToggle from '@/components/app/PushNotificationToggle'
 
 type Notification = {
   id: string
-  type: 'like' | 'comment' | 'reply' | 'report'
+  type: 'like' | 'comment' | 'reply' | 'report' | 'announcement'
   read: boolean
   created_at: string
   post_id: string | null
+  title: string | null
+  body: string | null
   profiles: { full_name: string; username: string | null; avatar_url: string | null } | null
 }
 
@@ -24,6 +26,7 @@ function timeAgo(date: string) {
 
 function notifText(n: Notification) {
   const name = n.profiles?.full_name ?? 'Alguien'
+  if (n.type === 'announcement') return n.title ?? 'Nuevo anuncio'
   if (n.type === 'like')    return `${name} reaccionó a tu publicación`
   if (n.type === 'comment') return `${name} comentó en tu publicación`
   if (n.type === 'reply')   return `${name} respondió a tu comentario`
@@ -31,6 +34,7 @@ function notifText(n: Notification) {
 }
 
 function NotifIcon({ type }: { type: string }) {
+  if (type === 'announcement') return <Megaphone size={13} style={{ color: '#76ABAE' }} />
   if (type === 'like')    return <Heart size={13} className="text-red-400 fill-red-400" />
   if (type === 'comment') return <MessageCircle size={13} style={{ color: '#76ABAE' }} />
   if (type === 'reply')   return <MessageSquare size={13} style={{ color: '#869B7E' }} />
@@ -45,7 +49,7 @@ export default async function NotificacionesPage() {
   const [{ data: notifications }] = await Promise.all([
     supabase
       .from('notifications')
-      .select('*, profiles:actor_id(full_name, username, avatar_url)')
+      .select('*, profiles:actor_id(full_name, username, avatar_url), title, body')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(50),
@@ -137,6 +141,11 @@ export default async function NotificacionesPage() {
                       <p className="text-[13px] leading-snug" style={{ color: '#F6F3EB' }}>
                         {notifText(n)}
                       </p>
+                      {n.type === 'announcement' && n.body && (
+                        <p className="text-[11px] mt-0.5 line-clamp-2" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                          {n.body}
+                        </p>
+                      )}
                       <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
                         {timeAgo(n.created_at)}
                       </p>

@@ -1,5 +1,6 @@
 import webpush from 'web-push'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 let vapidSet = false
 function ensureVapid() {
@@ -71,6 +72,24 @@ export async function sendPush({
     success,
     failed,
   })
+
+  // Also create in-app notification records so users see them in /app/notificaciones
+  if (success > 0) {
+    const userIds = [...new Set(tokens.map(t => t.user_id).filter(Boolean))]
+    const records = userIds.map(uid => ({
+      user_id:  uid,
+      actor_id: sentBy,
+      type:     'announcement',
+      title,
+      body,
+    }))
+    try {
+      const svc = createServiceClient()
+      await svc.from('notifications').insert(records)
+    } catch {
+      await supabase.from('notifications').insert(records)
+    }
+  }
 
   return { success, failed }
 }
