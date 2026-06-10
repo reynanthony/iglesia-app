@@ -185,9 +185,10 @@ export async function cmsGet<T>(
     if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
     const headers: Record<string, string> = TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}
     const res = await fetch(url.toString(), { headers, cache: 'no-store' })
-    if (!res.ok) { console.error(`[CMS] ${collection} → HTTP ${res.status}`); return [] }
-    const { data } = await res.json()
-    return (data ?? []) as T[]
+    if (!res.ok) { console.error(`[CMS] ${collection} → HTTP ${res.status} ${await res.text()}`); return [] }
+    const json = await res.json()
+    console.log(`[CMS] ${collection} → ${(json.data ?? []).length} items`)
+    return (json.data ?? []) as T[]
   } catch (e) {
     console.error(`[CMS] ${collection} fetch error:`, e)
     return []

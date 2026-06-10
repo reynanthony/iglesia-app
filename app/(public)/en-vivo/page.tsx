@@ -44,7 +44,7 @@ export default async function EnVivoPage() {
   const ytId      = getYoutubeId(liveUrl)
 
   const rawPredicas = await cmsGet<DPredica>('predicas', {
-    'sort': '-date_created',
+    'sort': '-id',
     'limit': '12',
   })
 
