@@ -60,3 +60,9 @@ export async function sendPushNotification(formData: FormData): Promise<void> {
 
   revalidatePath('/admin/notificaciones')
 }
+
+export async function deletePushLog(id: string): Promise<void> {
+  const { supabase } = await requireLeader()
+  await supabase.from('push_notifications_log').delete().eq('id', id)
+  revalidatePath('/admin/notificaciones')
+}

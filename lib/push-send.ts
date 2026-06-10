@@ -64,24 +64,25 @@ export async function sendPush({
     await supabase.from('device_tokens').delete().in('token', staleEndpoints)
   }
 
-  await supabase.from('push_notifications_log').insert({
+  const { data: logRow } = await supabase.from('push_notifications_log').insert({
     sent_by: sentBy,
     title,
     body,
     target: targetUserId ?? 'all',
     success,
     failed,
-  })
+  }).select('id').single()
 
   // Also create in-app notification records so users see them in /app/notificaciones
   if (success > 0) {
     const userIds = [...new Set(tokens.map(t => t.user_id).filter(Boolean))]
     const records = userIds.map(uid => ({
-      user_id:  uid,
-      actor_id: sentBy,
-      type:     'announcement',
+      user_id:    uid,
+      actor_id:   sentBy,
+      type:       'announcement',
       title,
       body,
+      push_log_id: logRow?.id ?? null,
     }))
     try {
       const svc = createServiceClient()

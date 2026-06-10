@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { sendPushNotification } from '@/app/actions/native'
-import { Bell, Users, CheckCircle2, XCircle } from 'lucide-react'
+import { Bell, Users, CheckCircle2, XCircle, Eye } from 'lucide-react'
+import DeletePushLogButton from '@/components/admin/DeletePushLogButton'
 
 export default async function NotificacionesAdminPage() {
   const supabase = await createClient()
@@ -12,7 +13,7 @@ export default async function NotificacionesAdminPage() {
     .from('profiles').select('role').eq('id', user.id).single()
   if (!profile || !['admin', 'pastor'].includes(profile.role)) redirect('/admin')
 
-  const [{ count: webPushCount }, { data: logs }] = await Promise.all([
+  const [{ count: webPushCount }, { data: logs }, { data: readCounts }] = await Promise.all([
     supabase.from('device_tokens')
       .select('*', { count: 'exact', head: true })
       .eq('platform', 'web')
@@ -21,7 +22,18 @@ export default async function NotificacionesAdminPage() {
       .select('*, profiles!push_notifications_log_sent_by_fkey(full_name)')
       .order('sent_at', { ascending: false })
       .limit(20),
+    supabase.from('notifications')
+      .select('push_log_id')
+      .eq('type', 'announcement')
+      .eq('read', true)
+      .not('push_log_id', 'is', null),
   ])
+
+  // Count reads per log entry
+  const readMap: Record<string, number> = {}
+  for (const n of (readCounts ?? [])) {
+    if (n.push_log_id) readMap[n.push_log_id] = (readMap[n.push_log_id] ?? 0) + 1
+  }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
@@ -105,14 +117,15 @@ export default async function NotificacionesAdminPage() {
             </p>
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               {logs.map((log: any) => {
-                const sender = (log.profiles as any)?.full_name ?? 'Sistema'
-                const date   = new Date(log.sent_at).toLocaleDateString('es-ES', {
+                const sender  = (log.profiles as any)?.full_name ?? 'Sistema'
+                const date    = new Date(log.sent_at).toLocaleDateString('es-ES', {
                   month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
                 })
+                const viewed  = readMap[log.id] ?? 0
                 return (
-                  <div key={log.id} className="px-5 py-4 border-b last:border-0"
+                  <div key={log.id} className="px-4 md:px-5 py-4 border-b last:border-0"
                     style={{ borderColor: '#0D3352' }}>
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-sm truncate" style={{ color: '#F6F3EB' }}>{log.title}</p>
                         <p className="text-xs mt-0.5 line-clamp-1" style={{ color: 'rgba(246,243,235,0.45)' }}>{log.body}</p>
@@ -120,17 +133,26 @@ export default async function NotificacionesAdminPage() {
                           {sender} · {date}
                         </p>
                       </div>
-                      <div className="flex items-center gap-3 flex-shrink-0 text-xs">
-                        {log.success > 0 && (
-                          <span className="flex items-center gap-1" style={{ color: '#76ABAE' }}>
-                            <CheckCircle2 size={12} /> {log.success}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2 text-xs">
+                          {log.success > 0 && (
+                            <span className="flex items-center gap-1" style={{ color: '#76ABAE' }}
+                              title="Enviados">
+                              <CheckCircle2 size={12} /> {log.success}
+                            </span>
+                          )}
+                          {log.failed > 0 && (
+                            <span className="flex items-center gap-1" style={{ color: '#F87171' }}
+                              title="Fallidos">
+                              <XCircle size={12} /> {log.failed}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1" style={{ color: 'rgba(246,243,235,0.35)' }}
+                            title="Visualizados">
+                            <Eye size={12} /> {viewed}
                           </span>
-                        )}
-                        {log.failed > 0 && (
-                          <span className="flex items-center gap-1" style={{ color: '#F87171' }}>
-                            <XCircle size={12} /> {log.failed}
-                          </span>
-                        )}
+                        </div>
+                        <DeletePushLogButton logId={log.id} />
                       </div>
                     </div>
                   </div>
