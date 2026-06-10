@@ -42,7 +42,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
       href="/app/notificaciones"
       onClick={() => setUnread(0)}
       className="relative p-2.5 rounded-xl transition block"
-      style={{ color: 'rgba(26,26,26,0.45)' }}
+      style={{ color: 'rgba(246,243,235,0.60)' }}
       title="Notificaciones"
     >
       <Bell size={20} />
