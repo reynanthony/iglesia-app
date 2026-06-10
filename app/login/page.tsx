@@ -154,11 +154,16 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 pt-8" style={{ borderTop: '1px solid #EBEBEB' }}>
+          <div className="mt-8 pt-8 space-y-3" style={{ borderTop: '1px solid #EBEBEB' }}>
             <p className="text-center text-sm text-[#111111]/50">
               ¿No tienes cuenta?{' '}
               <Link href="/registro" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
                 Regístrate
+              </Link>
+            </p>
+            <p className="text-center text-sm text-[#111111]/50">
+              <Link href="/" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
+                ← Volver al inicio
               </Link>
             </p>
           </div>
