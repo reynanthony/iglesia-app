@@ -518,8 +518,14 @@ export async function savePageFields(page: string, fields: Record<string, unknow
 export async function deletePrayerRequest(id: string) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
-  await ctx.supabase.from('prayer_participants').delete().eq('request_id', id)
-  await ctx.supabase.from('prayer_requests').delete().eq('id', id)
+  try {
+    const svc = createServiceClient()
+    await svc.from('prayer_participants').delete().eq('request_id', id)
+    await svc.from('prayer_requests').delete().eq('id', id)
+  } catch {
+    await ctx.supabase.from('prayer_participants').delete().eq('request_id', id)
+    await ctx.supabase.from('prayer_requests').delete().eq('id', id)
+  }
   revalidatePath('/admin/oracion')
   revalidatePath('/app/oracion')
   return { success: true }
@@ -538,9 +544,14 @@ export async function markMessageRead(id: string): Promise<void> {
 }
 
 export async function deleteContactMessage(id: string) {
-  const supabase = await checkAdmin()
-  if (!supabase) return { error: 'No autorizado' }
-  await supabase.from('contact_messages').delete().eq('id', id)
+  const ctx = await checkAdminOrPastor()
+  if (!ctx) return { error: 'No autorizado' }
+  try {
+    const svc = createServiceClient()
+    await svc.from('contact_messages').delete().eq('id', id)
+  } catch {
+    await ctx.supabase.from('contact_messages').delete().eq('id', id)
+  }
   revalidatePath('/admin/mensajes')
   return { success: true }
 }

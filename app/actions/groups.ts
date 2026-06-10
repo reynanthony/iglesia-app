@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -77,10 +78,16 @@ export async function deleteGroup(id: string): Promise<void> {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (!['admin', 'pastor'].includes(profile?.role ?? '')) return
 
-  // Remove members and messages first (FK constraints)
-  await supabase.from('group_members').delete().eq('group_id', id)
-  await supabase.from('group_messages').delete().eq('group_id', id)
-  await supabase.from('groups').delete().eq('id', id)
+  try {
+    const svc = createServiceClient()
+    await svc.from('group_members').delete().eq('group_id', id)
+    await svc.from('group_messages').delete().eq('group_id', id)
+    await svc.from('groups').delete().eq('id', id)
+  } catch {
+    await supabase.from('group_members').delete().eq('group_id', id)
+    await supabase.from('group_messages').delete().eq('group_id', id)
+    await supabase.from('groups').delete().eq('id', id)
+  }
   revalidatePath('/admin/grupos')
   revalidatePath('/app/grupos')
 }
