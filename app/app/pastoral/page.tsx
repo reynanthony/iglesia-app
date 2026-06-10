@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -16,7 +16,7 @@ const P = {
   goldDim:  'rgba(201,162,39,0.12)',
   teal:     '#76ABAE',
   cream:    '#F6F3EB',
-  muted:    'rgba(246,243,235,0.45)',
+  muted:    'rgba(246,243,235,0.72)',
   border:   'rgba(134,155,126,0.15)',
 }
 
@@ -30,7 +30,7 @@ function fmtDuration(secs: number) {
 }
 
 const STATUS_CONFIG = {
-  scheduled: { label: 'Programado', color: 'rgba(246,243,235,0.45)' },
+  scheduled: { label: 'Programado', color: 'rgba(246,243,235,0.72)' },
   live:      { label: 'En Vivo',    color: '#F87171' },
   finished:  { label: 'Finalizado', color: 'rgba(118,171,174,0.45)' },
 }
@@ -217,7 +217,7 @@ export default async function PastoralRoomPage() {
                         {item.title ?? 'Reflexión'}
                       </p>
                       {item.duration_seconds && (
-                        <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {fmtDuration(item.duration_seconds)}
                         </p>
                       )}

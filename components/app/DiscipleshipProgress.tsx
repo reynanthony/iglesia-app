@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 interface Stage {
   id: string
@@ -77,13 +77,13 @@ export default function DiscipleshipProgress({ stages, currentStage, isOwner }: 
             <p className="text-sm font-bold" style={{ color: currentStage.color }}>
               {currentStage.name}
             </p>
-            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>
               Etapa {currentStage.order_index} de {sorted.length}
             </span>
           </div>
         </>
       ) : (
-        <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+        <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
           Sin etapa asignada — un líder puede asignarte una desde el panel.
         </p>
       )}

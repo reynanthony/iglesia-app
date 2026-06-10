@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Users, ChevronRight, BookOpen, CheckCircle2 } from 'lucide-react'
@@ -55,7 +55,7 @@ export default async function MentoriaPage() {
             style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: '#F6F3EB' }}>
             Mis discípulos.
           </h1>
-          <p className="text-sm mt-2" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-sm mt-2" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {students.length === 0
               ? 'Aún no tienes discípulos asignados'
               : `${students.length} discípulo${students.length !== 1 ? 's' : ''} activo${students.length !== 1 ? 's' : ''}`}
@@ -71,7 +71,7 @@ export default async function MentoriaPage() {
               style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               <Users size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
             </div>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
               Un pastor o líder te asignará discípulos cuando estés listo para acompañar a otros.
             </p>
           </div>
@@ -115,10 +115,10 @@ export default async function MentoriaPage() {
                           {stage.order_index}. {stage.name}
                         </span>
                       ) : (
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>Sin etapa</span>
+                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Sin etapa</span>
                       )}
                       {active.length > 0 && (
-                        <span className="text-[10px] flex items-center gap-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                        <span className="text-[10px] flex items-center gap-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
                           <BookOpen size={9} /> {active.length} en curso · {avgPct}%
                         </span>
                       )}

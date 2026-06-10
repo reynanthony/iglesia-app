@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+﻿import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
@@ -39,17 +39,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             </div>
             <div>
               <p className="font-black text-[13px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.35)' }}>Comunidad</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.62)' }}>Comunidad</p>
             </div>
           </Link>
         </div>
         <AppNav profileHref={profileHref} />
         <div className="px-3 pb-5" style={{ borderTop: '1px solid #0D3352', paddingTop: '1rem' }}>
-          <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.68)' }}>
             <Globe size={16} /><span>Página principal</span>
           </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: 'rgba(246,243,235,0.68)' }}>
               <ShieldCheck size={16} /><span>Panel Admin</span>
             </Link>
           )}
@@ -60,12 +60,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </div>
               <div className="min-w-0">
                 <p className="text-[13px] font-bold truncate leading-tight" style={{ color: '#F6F3EB' }}>{profile?.full_name ?? 'Usuario'}</p>
-                <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>@{profile?.username ?? ''}</p>
+                <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>@{profile?.username ?? ''}</p>
               </div>
             </Link>
             <NotificationBell userId={user.id} />
             <form action={logout}>
-              <button type="submit" className="w-9 h-9 flex items-center justify-center rounded-lg transition hover:text-white" style={{ color: 'rgba(246,243,235,0.40)' }} title="Cerrar sesión">
+              <button type="submit" className="w-9 h-9 flex items-center justify-center rounded-lg transition hover:text-white" style={{ color: 'rgba(246,243,235,0.68)' }} title="Cerrar sesión">
                 <LogOut size={15} />
               </button>
             </form>
@@ -96,11 +96,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
           {/* Acciones */}
           <div className="flex items-center gap-0.5">
-            <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }} title="Sitio público">
+            <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.72)' }} title="Sitio público">
               <Globe size={19} />
             </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-              <Link href="/admin" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.45)' }}>
+              <Link href="/admin" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.72)' }}>
                 <ShieldCheck size={19} />
               </Link>
             )}
@@ -113,7 +113,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </div>
             </Link>
             <form action={logout}>
-              <button type="submit" className="w-10 h-10 flex items-center justify-center rounded-xl transition" style={{ color: 'rgba(246,243,235,0.40)' }} title="Cerrar sesión">
+              <button type="submit" className="w-10 h-10 flex items-center justify-center rounded-xl transition" style={{ color: 'rgba(246,243,235,0.68)' }} title="Cerrar sesión">
                 <LogOut size={18} />
               </button>
             </form>

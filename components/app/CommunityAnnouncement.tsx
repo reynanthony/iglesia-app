@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { X, Megaphone, ChevronRight } from 'lucide-react'
@@ -68,7 +68,7 @@ export default function CommunityAnnouncement({
         )
       )}
       <button onClick={dismiss} className="flex-shrink-0 p-1 rounded-lg transition"
-        style={{ color: 'rgba(246,243,235,0.35)' }} aria-label="Cerrar anuncio">
+        style={{ color: 'rgba(246,243,235,0.62)' }} aria-label="Cerrar anuncio">
         <X size={13} />
       </button>
     </div>

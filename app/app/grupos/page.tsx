@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { UsersRound, Lock, Bell } from 'lucide-react'
@@ -54,7 +54,7 @@ export default async function GruposPage() {
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Grupos<br /><span style={{ color: '#76ABAE' }}>de Comunidad.</span>
           </h1>
-          <p className="text-sm mt-3 max-w-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.45)' }}>
+          <p className="text-sm mt-3 max-w-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
             Conéctate con quienes comparten tu llamado.
           </p>
         </div>
@@ -85,14 +85,14 @@ export default async function GruposPage() {
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
                         <p className="font-black text-sm truncate" style={{ color: '#F6F3EB' }}>{g.name}</p>
-                        {g.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.35)', flexShrink: 0 }} />}
+                        {g.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.62)', flexShrink: 0 }} />}
                       </div>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[11px]" style={{ color: 'rgba(118,171,174,0.70)' }}>
                           {TYPE_LABELS[g.type] ?? g.type}
                         </span>
                         <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-                        <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                        <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                           {g.group_members?.[0]?.count ?? 0} miembros
                         </span>
                       </div>
@@ -152,7 +152,7 @@ export default async function GruposPage() {
             <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
               Aún no tienes grupos
             </p>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.45)' }}>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.72)' }}>
               Habla con tu líder para que te invite a un grupo.
             </p>
           </div>
@@ -177,12 +177,12 @@ function GroupRow({ group, joined }: { group: any; joined: boolean }) {
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
             <p className="font-black text-sm truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
-            {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.35)', flexShrink: 0 }} />}
+            {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.62)', flexShrink: 0 }} />}
           </div>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[11px]" style={{ color: 'rgba(118,171,174,0.70)' }}>{type}</span>
             <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>{count} miembros</span>
+            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{count} miembros</span>
           </div>
         </div>
       </Link>

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Flame, Mic2, ChevronRight, Sparkles } from 'lucide-react'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
@@ -66,7 +66,7 @@ export default async function OracionPage({
                 Peticiones de<br /><span style={{ color: '#76ABAE' }}>Oración.</span>
               </h1>
               <p className="text-sm mt-3 max-w-xs leading-relaxed"
-                style={{ color: 'rgba(246,243,235,0.45)' }}>
+                style={{ color: 'rgba(246,243,235,0.72)' }}>
                 Comparte tu petición y deja que la comunidad ore contigo.
               </p>
             </div>
@@ -85,7 +85,7 @@ export default async function OracionPage({
                 className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition"
                 style={{
                   background: activeTab === tab.key ? '#0D3352' : 'transparent',
-                  color: activeTab === tab.key ? '#F6F3EB' : 'rgba(246,243,235,0.40)',
+                  color: activeTab === tab.key ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
                   border: activeTab === tab.key ? '1px solid #1A4A6E' : '1px solid transparent',
                 }}>
                 {tab.label}
@@ -103,7 +103,7 @@ export default async function OracionPage({
             <p className="text-sm font-bold mb-1" style={{ color: '#F87171' }}>
               {error.code === '42P01' ? 'Tabla no encontrada' : 'Error al cargar peticiones'}
             </p>
-            <p className="text-[12px] mb-2" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[12px] mb-2" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {error.code === '42P01'
                 ? 'Ejecuta la migración SQL en Supabase Dashboard → SQL Editor → supabase/v2_ecosystem.sql'
                 : error.message}
@@ -124,7 +124,7 @@ export default async function OracionPage({
               No hay peticiones aún
             </p>
             <p className="text-sm mb-8 max-w-[220px] leading-relaxed mx-auto"
-              style={{ color: 'rgba(246,243,235,0.45)' }}>
+              style={{ color: 'rgba(246,243,235,0.72)' }}>
               Sé el primero en compartir una petición de oración con la comunidad
             </p>
             <Link href="/app/oracion/nueva"
@@ -161,7 +161,7 @@ export default async function OracionPage({
                     )}
                     {isOwn && !hasTestimony && (
                       <span className="text-[9px] font-bold uppercase tracking-wider"
-                        style={{ color: 'rgba(246,243,235,0.30)' }}>
+                        style={{ color: 'rgba(246,243,235,0.55)' }}>
                         Mi petición
                       </span>
                     )}
@@ -173,11 +173,11 @@ export default async function OracionPage({
                   {req.title}
                 </p>
                 <div className="flex items-center gap-3">
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Usuario')}
                   </p>
                   <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {timeAgo(req.created_at)}
                   </p>
                 </div>
@@ -197,12 +197,12 @@ export default async function OracionPage({
             </div>
             <div>
               <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Salas de oración en vivo</p>
-              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Oración grupal por voz en tiempo real
               </p>
             </div>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
         </Link>
       </div>
     </div>

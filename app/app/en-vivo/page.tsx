@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
@@ -119,7 +119,7 @@ export default async function EnVivoPage() {
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Iglesia<br /><span style={{ color: '#76ABAE' }}>en Vivo.</span>
           </h1>
-          <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(246,243,235,0.45)' }}>
+          <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
             No hay transmisión activa en este momento. Te avisamos cada domingo.
           </p>
         </div>
@@ -159,11 +159,11 @@ export default async function EnVivoPage() {
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm truncate group-hover:text-[#76ABAE] transition"
                       style={{ color: '#F6F3EB' }}>{p.title}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                       {p.speaker}{p.date ? ` · ${new Date(p.date).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })}` : ''}
                     </p>
                   </div>
-                  <Play size={14} style={{ color: 'rgba(246,243,235,0.30)', flexShrink: 0 }} />
+                  <Play size={14} style={{ color: 'rgba(246,243,235,0.55)', flexShrink: 0 }} />
                 </Link>
               ))}
             </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -57,7 +57,7 @@ export default function BuscarPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3" style={{ color: 'rgba(246,243,235,0.68)' }}>
             — Comunidad
           </p>
           <h1 className="font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
@@ -89,7 +89,7 @@ export default function BuscarPage() {
               className="w-11 h-11 flex items-center justify-center rounded-full flex-shrink-0 transition hover:bg-[#0D3352]"
               aria-label="Limpiar búsqueda"
             >
-              <X size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
+              <X size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
             </button>
           )}
         </div>
@@ -124,7 +124,7 @@ export default function BuscarPage() {
               <path d="M61 44 Q56 54 48 48" stroke="#76ABAE" strokeWidth="1" strokeOpacity="0.18" fill="none" strokeLinecap="round"/>
             </svg>
             <p className="font-bold mb-1" style={{ color: '#F6F3EB' }}>Sin resultados</p>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No encontramos a &quot;{query}&quot; en la comunidad</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>No encontramos a &quot;{query}&quot; en la comunidad</p>
           </div>
         )}
 
@@ -136,14 +136,14 @@ export default function BuscarPage() {
               <line x1="34" y1="34" x2="48" y2="48" stroke="#0D3352" strokeWidth="2.5" strokeLinecap="round"/>
               <circle cx="24" cy="24" r="7" stroke="#76ABAE" strokeWidth="1.2" strokeOpacity="0.5" fill="none"/>
             </svg>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>Escribe un nombre o @usuario para buscar</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>Escribe un nombre o @usuario para buscar</p>
           </div>
         )}
 
         {/* Resultados */}
         {!loading && users.length > 0 && (
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {users.length} resultado{users.length !== 1 ? 's' : ''}
             </p>
             <div className="space-y-px rounded-2xl overflow-hidden" style={{ background: '#0D3352' }}>
@@ -168,7 +168,7 @@ export default function BuscarPage() {
                       <p className="font-bold text-sm truncate transition" style={{ color: '#F6F3EB' }}>
                         {user.full_name}
                       </p>
-                      <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>@{user.username}</p>
+                      <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>@{user.username}</p>
                     </div>
                     {badge && (
                       <span

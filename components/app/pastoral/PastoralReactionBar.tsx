@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -70,7 +70,7 @@ export default function PastoralReactionBar({
             <span style={{ fontSize: 14 }}>{r.emoji}</span>
             {count > 0 && (
               <span className="text-[11px] font-bold"
-                style={{ color: isSelected ? '#869B7E' : 'rgba(246,243,235,0.35)' }}>
+                style={{ color: isSelected ? '#869B7E' : 'rgba(246,243,235,0.62)' }}>
                 {count}
               </span>
             )}

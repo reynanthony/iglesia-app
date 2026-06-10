@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Award } from 'lucide-react'
@@ -31,7 +31,7 @@ export default async function CertificadosPage() {
         </Link>
         <div>
           <p className="font-black text-sm" style={{ color: '#F6F3EB' }}>Mis certificados</p>
-          <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {certs?.length ?? 0} logro{certs?.length !== 1 ? 's' : ''} desbloqueado{certs?.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -45,7 +45,7 @@ export default async function CertificadosPage() {
               <Award size={28} style={{ color: 'rgba(118,171,174,0.30)' }} />
             </div>
             <p className="font-black text-lg" style={{ color: '#F6F3EB' }}>Sin certificados aún</p>
-            <p className="text-sm mt-2 max-w-xs mx-auto leading-relaxed" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-sm mt-2 max-w-xs mx-auto leading-relaxed" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Completa todos los cursos de un programa para obtener tu certificado digital
             </p>
             <Link href="/app/discipulado"
@@ -90,7 +90,7 @@ export default async function CertificadosPage() {
                         </p>
                         {program?.description && (
                           <p className="text-xs mt-1.5 leading-relaxed line-clamp-2"
-                            style={{ color: 'rgba(246,243,235,0.45)' }}>
+                            style={{ color: 'rgba(246,243,235,0.72)' }}>
                             {program.description}
                           </p>
                         )}
@@ -101,7 +101,7 @@ export default async function CertificadosPage() {
                       style={{ borderTop: '1px solid rgba(118,171,174,0.12)' }}>
                       <div>
                         <p className="text-[9px] font-black uppercase tracking-wider"
-                          style={{ color: 'rgba(246,243,235,0.30)' }}>
+                          style={{ color: 'rgba(246,243,235,0.55)' }}>
                           Emitido el
                         </p>
                         <p className="text-xs font-bold mt-0.5" style={{ color: 'rgba(246,243,235,0.60)' }}>
@@ -111,7 +111,7 @@ export default async function CertificadosPage() {
                       {issuedBy && (
                         <div>
                           <p className="text-[9px] font-black uppercase tracking-wider"
-                            style={{ color: 'rgba(246,243,235,0.30)' }}>
+                            style={{ color: 'rgba(246,243,235,0.55)' }}>
                             Firmado por
                           </p>
                           <p className="text-xs font-bold mt-0.5" style={{ color: 'rgba(246,243,235,0.60)' }}>

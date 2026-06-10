@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 const P = {
   sage: '#869B7E', teal: '#76ABAE',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)',
   surface: '#0D1A0E', border: 'rgba(134,155,126,0.15)',
 }
 
@@ -57,7 +57,7 @@ export default function PastoralQuestionForm({ userId }: { userId: string }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.3em] block mb-2"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>Categoría</label>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>Categoría</label>
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map(c => (
             <button key={c.value} type="button"
@@ -76,7 +76,7 @@ export default function PastoralQuestionForm({ userId }: { userId: string }) {
 
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.3em] block mb-2"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>Tu pregunta</label>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>Tu pregunta</label>
         <textarea
           value={question}
           onChange={e => setQuestion(e.target.value)}

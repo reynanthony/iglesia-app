@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Pin, Mic, Image as ImgIcon, Type } from 'lucide-react'
@@ -8,7 +8,7 @@ import VideoEmbed from '@/components/app/pastoral/VideoEmbed'
 const P = {
   bg: '#060E07', surface: '#0D1A0E',
   sage: '#869B7E', gold: '#C9A227', teal: '#76ABAE',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
 }
 
 const TYPE_ICONS: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
@@ -81,7 +81,7 @@ export default async function PastoralCanalPage() {
                   <p className="text-[13px] font-black" style={{ color: P.cream }}>
                     {(msg as any).profiles?.full_name ?? 'Pastor'}
                   </p>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>
                     {new Date(msg.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
                 </div>

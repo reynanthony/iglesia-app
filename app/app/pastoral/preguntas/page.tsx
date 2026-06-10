@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle, Clock } from 'lucide-react'
@@ -7,7 +7,7 @@ import PastoralQuestionForm from '@/components/app/pastoral/PastoralQuestionForm
 const P = {
   bg: '#060E07', surface: '#0D1A0E',
   sage: '#869B7E', teal: '#76ABAE', gold: '#C9A227',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
 }
 
 const CAT_LABELS: Record<string, string> = {
@@ -80,7 +80,7 @@ export default async function PastoralPreguntasPage() {
                           ? <span className="flex items-center gap-1 text-[10px] font-bold" style={{ color: P.teal }}>
                               <CheckCircle size={10} /> Respondida
                             </span>
-                          : <span className="flex items-center gap-1 text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                          : <span className="flex items-center gap-1 text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                               <Clock size={10} /> Pendiente
                             </span>}
                       </div>

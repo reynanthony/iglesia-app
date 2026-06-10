@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Users, Radio, ArrowLeft, Mic2 } from 'lucide-react'
 
@@ -39,7 +39,7 @@ export default async function SalasPage() {
                     <div className="w-1.5 h-1.5 rounded-full bg-green-400"
                       style={{ boxShadow: '0 0 6px rgba(74,222,128,0.8)' }} />
                     <span className="text-[11px] font-bold uppercase tracking-widest"
-                      style={{ color: 'rgba(246,243,235,0.45)' }}>
+                      style={{ color: 'rgba(246,243,235,0.72)' }}>
                       {count} activa{count !== 1 ? 's' : ''}
                     </span>
                   </div>
@@ -50,7 +50,7 @@ export default async function SalasPage() {
                 Salas de<br /><span style={{ color: '#76ABAE' }}>Oración.</span>
               </h1>
               <p className="text-sm mt-3 leading-relaxed max-w-xs"
-                style={{ color: 'rgba(246,243,235,0.45)' }}>
+                style={{ color: 'rgba(246,243,235,0.72)' }}>
                 Oración grupal en tiempo real con voz en vivo.
               </p>
             </div>
@@ -74,7 +74,7 @@ export default async function SalasPage() {
               No hay salas activas
             </p>
             <p className="text-sm mb-8 max-w-[200px] leading-relaxed mx-auto"
-              style={{ color: 'rgba(246,243,235,0.45)' }}>
+              style={{ color: 'rgba(246,243,235,0.72)' }}>
               Crea una sala y comienza a orar con tu comunidad
             </p>
             <Link href="/app/oracion/salas/nueva"
@@ -95,9 +95,9 @@ export default async function SalasPage() {
                       <div className="w-2 h-2 rounded-full bg-green-400"
                         style={{ boxShadow: '0 0 8px rgba(74,222,128,0.7)', animation: 'pulse 2s infinite' }} />
                       <span className="text-[10px] font-bold uppercase tracking-widest"
-                        style={{ color: 'rgba(246,243,235,0.45)' }}>En vivo</span>
+                        style={{ color: 'rgba(246,243,235,0.72)' }}>En vivo</span>
                     </div>
-                    <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                       <Users size={12} />
                       <span className="text-[11px] font-bold">Máx {room.max_participants}</span>
                     </div>
@@ -116,7 +116,7 @@ export default async function SalasPage() {
                           {room.description}
                         </p>
                       )}
-                      <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         Creada por {room.profiles?.full_name}
                       </p>
                     </div>

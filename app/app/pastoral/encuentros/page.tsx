@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Clock, Radio, CheckCircle } from 'lucide-react'
@@ -6,11 +6,11 @@ import { ArrowLeft, ArrowRight, Clock, Radio, CheckCircle } from 'lucide-react'
 const P = {
   bg: '#060E07', surface: '#0D1A0E',
   sage: '#869B7E', teal: '#76ABAE',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
 }
 
 const STATUS = {
-  scheduled: { label: 'Programado', icon: Clock,        color: 'rgba(246,243,235,0.45)' },
+  scheduled: { label: 'Programado', icon: Clock,        color: 'rgba(246,243,235,0.72)' },
   live:      { label: 'En Vivo',    icon: Radio,        color: '#F87171' },
   finished:  { label: 'Finalizado', icon: CheckCircle,  color: 'rgba(118,171,174,0.45)' },
 }
@@ -112,7 +112,7 @@ function EncounterCard({ item, highlight = false }: { item: any; highlight?: boo
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full"
-            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(246,243,235,0.45)' }}>
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(246,243,235,0.72)' }}>
             {TYPE_LABELS[item.type] ?? item.type}
           </span>
           <span className="flex items-center gap-1 text-[10px] font-bold" style={{ color: st.color }}>
@@ -125,7 +125,7 @@ function EncounterCard({ item, highlight = false }: { item: any; highlight?: boo
           <p className="text-[12px] mt-0.5 line-clamp-1" style={{ color: P.muted }}>{item.description}</p>
         )}
         {item.scheduled_at && (
-          <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+          <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
             {new Date(item.scheduled_at).toLocaleDateString('es-DO', {
               weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
             })}

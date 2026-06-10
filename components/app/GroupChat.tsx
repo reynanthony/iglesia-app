@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -116,7 +116,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
         {messages.length === 0 && (
           <div className="flex justify-center mt-10">
             <span className="text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>
+              style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
               Sé el primero en escribir
             </span>
           </div>
@@ -126,7 +126,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
           <div key={dateKey}>
             <div className="flex justify-center my-4">
               <span className="text-[11px] font-bold px-3 py-1 rounded-full"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>
+                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
                 {fmtDate(msgs[0].created_at)}
               </span>
             </div>
@@ -165,7 +165,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
                   <div style={{ maxWidth: '70%' }}>
                     {!isMe && isFirst && (
                       <p className="text-[11px] font-bold mb-1"
-                        style={{ color: 'rgba(246,243,235,0.40)', paddingLeft: 12 }}>
+                        style={{ color: 'rgba(246,243,235,0.68)', paddingLeft: 12 }}>
                         {msg.profiles?.full_name}
                       </p>
                     )}
@@ -180,7 +180,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
                           {msg.content}
                         </p>
                         <span className="text-[10px] flex-shrink-0 self-end whitespace-nowrap"
-                          style={{ color: 'rgba(246,243,235,0.35)' }}>
+                          style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {fmt(msg.created_at)}
                         </span>
                       </div>

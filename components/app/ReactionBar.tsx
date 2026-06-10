@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Flame, ThumbsUp, BookOpen, Sparkles, X } from 'lucide-react'
@@ -71,11 +71,11 @@ export default function ReactionBar({
           <Icon
             size={20}
             strokeWidth={1.8}
-            style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.40)' }}
+            style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.68)' }}
           />
           {totalCount > 0 && (
             <span className="text-xs font-bold"
-              style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.40)' }}>
+              style={{ color: myReaction ? (currentDef?.activeColor ?? '#76ABAE') : 'rgba(246,243,235,0.68)' }}>
               {totalCount}
             </span>
           )}
@@ -101,7 +101,7 @@ export default function ReactionBar({
                     <RIcon size={18} strokeWidth={isSelected ? 2.5 : 1.8}
                       style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.60)' }} />
                     <span className="text-[9px] font-bold leading-none"
-                      style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.40)' }}>
+                      style={{ color: isSelected ? r.activeColor : 'rgba(246,243,235,0.68)' }}>
                       {r.label}
                     </span>
                   </button>
@@ -181,7 +181,7 @@ export default function ReactionBar({
                   <div className="min-w-0">
                     <p className="text-[12px] font-bold leading-none">{r.label}</p>
                     {counts[r.type] > 0 && (
-                      <p className="text-[10px] mt-0.5 leading-none" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <p className="text-[10px] mt-0.5 leading-none" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         {counts[r.type]}
                       </p>
                     )}

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Bell, Heart, MessageCircle, MessageSquare, AlertTriangle, Megaphone } from 'lucide-react'
@@ -79,7 +79,7 @@ export default async function NotificacionesPage() {
           </div>
           <div>
             <h1 className="font-black text-lg" style={{ color: '#F6F3EB' }}>Notificaciones</h1>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
               {notifications?.length ?? 0} en total
             </p>
           </div>
@@ -99,7 +99,7 @@ export default async function NotificacionesPage() {
             </div>
             <div>
               <p className="font-black text-base" style={{ color: '#F6F3EB' }}>Sin notificaciones</p>
-              <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
                 Cuando alguien reaccione o comente, aparecerá aquí.
               </p>
             </div>
@@ -146,7 +146,7 @@ export default async function NotificacionesPage() {
                           {n.body}
                         </p>
                       )}
-                      <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                      <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
                         {timeAgo(n.created_at)}
                       </p>
                     </div>

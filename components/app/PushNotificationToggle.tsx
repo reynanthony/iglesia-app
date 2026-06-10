@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { Bell, BellOff, BellRing } from 'lucide-react'
@@ -32,12 +32,12 @@ export default function PushNotificationToggle() {
             ? <BellRing size={16} style={{ color: '#76ABAE' }} />
             : status === 'denied'
               ? <BellOff size={16} style={{ color: 'rgba(248,113,113,0.60)' }} />
-              : <Bell size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
+              : <Bell size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
           }
         </div>
         <div>
           <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Notificaciones push</p>
-          <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {status === 'granted' && 'Activas — recibirás alertas del pastor y anuncios'}
             {status === 'denied' && 'Bloqueadas — actívalas desde la configuración del navegador'}
             {status === 'default' && 'Recibe alertas de mensajes y anuncios importantes'}

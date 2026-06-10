@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import ShortsCard from '@/components/ShortsCard'
@@ -88,7 +88,7 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId, categ
           <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
             Sé el primero en publicar
           </p>
-          <p className="text-sm leading-relaxed max-w-[220px] mx-auto" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-sm leading-relaxed max-w-[220px] mx-auto" style={{ color: 'rgba(246,243,235,0.68)' }}>
             Comparte lo que Dios puso en tu corazón
           </p>
         </div>

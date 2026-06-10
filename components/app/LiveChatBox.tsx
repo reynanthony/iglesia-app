@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -59,7 +59,7 @@ export default function LiveChatBox({
         style={{ scrollbarWidth: 'none' }}>
         {messages.length === 0 && (
           <p className="text-center text-[12px] py-8"
-            style={{ color: 'rgba(246,243,235,0.30)' }}>
+            style={{ color: 'rgba(246,243,235,0.55)' }}>
             Sé el primero en saludar 👋
           </p>
         )}

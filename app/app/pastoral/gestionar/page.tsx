@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -15,7 +15,7 @@ import {
 const P = {
   bg: '#060E07', surface: '#0D1A0E', surface2: '#111F12',
   sage: '#869B7E', teal: '#76ABAE', gold: '#C9A227', red: '#F87171',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
   blue: '#0B2D47', blueBorder: '#0D3352',
 }
 
@@ -104,20 +104,20 @@ export default async function PastoralGestionarPage() {
               <div className="flex items-center gap-2">
                 {isLive && <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />}
                 <p className="font-bold text-sm"
-                  style={{ color: isLive ? P.red : 'rgba(246,243,235,0.40)' }}>
+                  style={{ color: isLive ? P.red : 'rgba(246,243,235,0.68)' }}>
                   {isLive ? 'Transmisión activa' : 'Sin transmisión'}
                 </p>
               </div>
               <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
                 style={{
                   background: isLive ? 'rgba(248,113,113,0.15)' : P.surface,
-                  color:      isLive ? P.red : 'rgba(246,243,235,0.30)',
+                  color:      isLive ? P.red : 'rgba(246,243,235,0.55)',
                 }}>
                 {isLive ? 'EN VIVO' : 'OFFLINE'}
               </span>
             </div>
             {liveUrl && (
-              <p className="text-[11px] mt-2 truncate" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <p className="text-[11px] mt-2 truncate" style={{ color: 'rgba(246,243,235,0.62)' }}>
                 {liveUrl}
               </p>
             )}
@@ -141,7 +141,7 @@ export default async function PastoralGestionarPage() {
           <form action={setLiveUrl} className="space-y-3">
             <div>
               <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.40)' }}>
+                style={{ color: 'rgba(246,243,235,0.68)' }}>
                 URL del stream (YouTube)
               </label>
               <input name="live_url" type="url" defaultValue={liveUrl}
@@ -151,7 +151,7 @@ export default async function PastoralGestionarPage() {
             </div>
             <div>
               <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.40)' }}>
+                style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Título de la transmisión
               </label>
               <input name="live_title" type="text" defaultValue={liveTitle}
@@ -254,7 +254,7 @@ export default async function PastoralGestionarPage() {
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1"
-                    style={{ color: 'rgba(246,243,235,0.35)' }}>Tipo</label>
+                    style={{ color: 'rgba(246,243,235,0.62)' }}>Tipo</label>
                   <select name="media_type"
                     className="w-full px-3 py-2 text-sm focus:outline-none"
                     style={{ background: P.bg, border: `1px solid ${P.border}`, borderRadius: 8, color: P.cream }}>
@@ -265,7 +265,7 @@ export default async function PastoralGestionarPage() {
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1"
-                    style={{ color: 'rgba(246,243,235,0.35)' }}>Duración (seg)</label>
+                    style={{ color: 'rgba(246,243,235,0.62)' }}>Duración (seg)</label>
                   <input name="duration_seconds" type="number" placeholder="300"
                     className="w-full px-3 py-2 text-sm focus:outline-none"
                     style={{ background: P.bg, border: `1px solid ${P.border}`, borderRadius: 8, color: P.cream }} />
@@ -297,7 +297,7 @@ export default async function PastoralGestionarPage() {
                       {r.week_featured && <span className="text-[10px] font-black mr-1.5" style={{ color: P.gold }}>★</span>}
                       {r.title ?? 'Sin título'}
                     </p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>
                       {r.media_type} · {new Date(r.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })}
                     </p>
                   </div>
@@ -338,7 +338,7 @@ export default async function PastoralGestionarPage() {
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1"
-                    style={{ color: 'rgba(246,243,235,0.35)' }}>Tipo</label>
+                    style={{ color: 'rgba(246,243,235,0.62)' }}>Tipo</label>
                   <select name="type" required
                     className="w-full px-3 py-2 text-sm focus:outline-none"
                     style={{ background: P.bg, border: `1px solid ${P.border}`, borderRadius: 8, color: P.cream }}>
@@ -347,7 +347,7 @@ export default async function PastoralGestionarPage() {
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-wider mb-1"
-                    style={{ color: 'rgba(246,243,235,0.35)' }}>Fecha y hora</label>
+                    style={{ color: 'rgba(246,243,235,0.62)' }}>Fecha y hora</label>
                   <input name="scheduled_at" type="datetime-local"
                     className="w-full px-3 py-2 text-sm focus:outline-none"
                     style={{ background: P.bg, border: `1px solid ${P.border}`, borderRadius: 8, color: P.cream }} />
@@ -380,7 +380,7 @@ export default async function PastoralGestionarPage() {
                       <p className="text-[13px] font-bold truncate" style={{ color: P.cream }}>
                         {e.title}
                       </p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                         {TYPE_LABELS[e.type] ?? e.type}
                         {e.scheduled_at
                           ? ` · ${new Date(e.scheduled_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`

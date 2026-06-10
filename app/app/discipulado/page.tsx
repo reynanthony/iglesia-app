@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronRight, GraduationCap, User, Lock, ArrowRight, CheckCircle2, Award } from 'lucide-react'
@@ -103,7 +103,7 @@ export default async function DiscipuladoPage() {
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>
+                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
                 Sin etapa asignada
               </span>
             )}
@@ -151,7 +151,7 @@ export default async function DiscipuladoPage() {
                       <span className="font-black tabular-nums" style={{ fontSize: '2.8rem', lineHeight: 1, color: '#76ABAE' }}>
                         {pct}<span className="text-2xl">%</span>
                       </span>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
                         {pct === 0 ? 'Sin comenzar' : 'Completado'}
                       </p>
                     </div>
@@ -208,7 +208,7 @@ export default async function DiscipuladoPage() {
                   </p>
                 </div>
               ) : (
-                <p className="text-xs text-center" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                <p className="text-xs text-center" style={{ color: 'rgba(246,243,235,0.62)' }}>
                   Un pastor asignará tu etapa pronto
                 </p>
               )}
@@ -220,7 +220,7 @@ export default async function DiscipuladoPage() {
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: 'rgba(118,171,174,0.50)' }}>
                   Próximo paso → {nextStage.name}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
                   {NEXT_STEP[currentStage.order_index]}
                 </p>
               </div>
@@ -300,7 +300,7 @@ export default async function DiscipuladoPage() {
                             {activeCourses.length}
                           </span>
                           <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-0.5"
-                            style={{ color: 'rgba(246,243,235,0.35)' }}>
+                            style={{ color: 'rgba(246,243,235,0.62)' }}>
                             curso{activeCourses.length !== 1 ? 's' : ''}
                           </p>
                         </div>
@@ -311,7 +311,7 @@ export default async function DiscipuladoPage() {
                               {completedCount}
                             </span>
                             <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-0.5"
-                              style={{ color: 'rgba(246,243,235,0.35)' }}>
+                              style={{ color: 'rgba(246,243,235,0.62)' }}>
                               complet.
                             </p>
                           </div>
@@ -354,7 +354,7 @@ export default async function DiscipuladoPage() {
                         <Lock size={18} style={{ color: 'rgba(246,243,235,0.20)' }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-black text-base truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>{p.title}</p>
+                        <p className="font-black text-base truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>{p.title}</p>
                         <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.22)' }}>
                           Se desbloquea en etapa {req.order_index} · {req.name}
                         </p>

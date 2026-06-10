@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { createRoom } from '@/app/actions/rooms'
@@ -47,7 +47,7 @@ export default function NuevaSalaPage() {
             </div>
             <div>
               <label className="block text-sm font-bold mb-2" style={{ color: 'rgba(246,243,235,0.7)' }}>
-                Descripción <span style={{ color: 'rgba(246,243,235,0.35)' }}>(opcional)</span>
+                Descripción <span style={{ color: 'rgba(246,243,235,0.62)' }}>(opcional)</span>
               </label>
               <textarea name="description" rows={3}
                 placeholder="¿De qué se trata esta sesión de oración?"

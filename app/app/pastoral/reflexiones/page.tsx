@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Play, Mic, Type, Clock, Star } from 'lucide-react'
@@ -7,7 +7,7 @@ import VideoEmbed from '@/components/app/pastoral/VideoEmbed'
 const P = {
   bg: '#060E07', surface: '#0D1A0E', sage: '#869B7E',
   gold: '#C9A227', teal: '#76ABAE', cream: '#F6F3EB',
-  muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
 }
 
 const TYPE_ICONS: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {

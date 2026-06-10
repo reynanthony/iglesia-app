@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, Video, MessageSquare, ChevronRight } from 'lucide-react'
@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, BookOpen, Video, MessageSquare, ChevronRight } f
 const P = {
   bg: '#060E07', surface: '#0D1A0E',
   sage: '#869B7E', teal: '#76ABAE', gold: '#C9A227',
-  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.45)', border: 'rgba(134,155,126,0.15)',
+  cream: '#F6F3EB', muted: 'rgba(246,243,235,0.72)', border: 'rgba(134,155,126,0.15)',
 }
 
 export default async function PastoralPerfilPage() {

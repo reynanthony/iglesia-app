@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { createPrayerRequest } from '@/app/actions/prayer'
@@ -29,7 +29,7 @@ export default function NuevaPeticionPage() {
             <h1 className="font-black text-xl tracking-tight" style={{ color: '#F6F3EB' }}>
               Nueva petición
             </h1>
-            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
               La comunidad orará contigo
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function NuevaPeticionPage() {
             <div>
               <label className="block text-sm font-bold mb-2"
                 style={{ color: 'rgba(246,243,235,0.70)' }}>
-                Detalles <span style={{ color: 'rgba(246,243,235,0.35)' }}>(opcional)</span>
+                Detalles <span style={{ color: 'rgba(246,243,235,0.62)' }}>(opcional)</span>
               </label>
               <textarea name="body" rows={5}
                 placeholder="Comparte más detalles sobre tu petición..."
@@ -66,7 +66,7 @@ export default function NuevaPeticionPage() {
               <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#76ABAE]" />
               <div>
                 <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicar como anónimo</p>
-                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   Tu nombre no será visible para la comunidad
                 </p>
               </div>
