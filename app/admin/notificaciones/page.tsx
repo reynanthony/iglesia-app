@@ -12,8 +12,11 @@ export default async function NotificacionesAdminPage() {
     .from('profiles').select('role').eq('id', user.id).single()
   if (!profile || !['admin', 'pastor'].includes(profile.role)) redirect('/admin')
 
-  const [{ count: tokenCount }, { data: logs }] = await Promise.all([
-    supabase.from('device_tokens').select('*', { count: 'exact', head: true }),
+  const [{ count: webPushCount }, { data: logs }] = await Promise.all([
+    supabase.from('device_tokens')
+      .select('*', { count: 'exact', head: true })
+      .eq('platform', 'web')
+      .not('push_sub', 'is', null),
     supabase.from('push_notifications_log')
       .select('*, profiles!push_notifications_log_sent_by_fkey(full_name)')
       .order('sent_at', { ascending: false })
@@ -30,7 +33,7 @@ export default async function NotificacionesAdminPage() {
         <div className="mb-4 md:mb-6">
           <h1 className="text-xl md:text-2xl font-bold">Notificaciones Push</h1>
           <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
-            {tokenCount ?? 0} dispositivo{tokenCount !== 1 ? 's' : ''} registrado{tokenCount !== 1 ? 's' : ''}
+            {webPushCount ?? 0} suscripcion{webPushCount !== 1 ? 'es' : ''} web push activa{webPushCount !== 1 ? 's' : ''}
           </p>
         </div>
 
@@ -79,12 +82,16 @@ export default async function NotificacionesAdminPage() {
           <div className="flex items-center gap-3">
             <Users size={16} style={{ color: 'rgba(118,171,174,0.55)' }} />
             <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
-              {tokenCount ?? 0} dispositivo{tokenCount !== 1 ? 's' : ''} registrado{tokenCount !== 1 ? 's' : ''}
+              {webPushCount ?? 0} suscripcion{webPushCount !== 1 ? 'es' : ''} web push
             </p>
           </div>
-          {(tokenCount ?? 0) === 0 && (
+          {(webPushCount ?? 0) === 0 ? (
+            <p className="text-xs mt-2 font-bold" style={{ color: '#F87171' }}>
+              ⚠ Ningún usuario ha activado notificaciones aún. Los usuarios deben ir a /app/notificaciones → "Activar".
+            </p>
+          ) : (
             <p className="text-xs mt-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
-              Los dispositivos se registran automáticamente cuando los usuarios abren la app nativa por primera vez y otorgan permiso de notificaciones.
+              Estos usuarios recibirán la notificación al enviarla.
             </p>
           )}
         </div>
