@@ -130,7 +130,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-30"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-[9100]"
         style={{
           background: 'rgba(6,30,48,0.97)',
           borderTop: '1px solid #0D3352',
