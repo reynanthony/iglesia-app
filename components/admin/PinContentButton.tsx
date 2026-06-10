@@ -25,7 +25,7 @@ export default function PinContentButton({ contentId, pinned }: { contentId: str
       className="w-9 h-9 rounded-xl flex items-center justify-center transition disabled:opacity-40"
       style={{ background: active ? '#0D3352' : '#0B2D47', border: `1px solid ${active ? 'rgba(118,171,174,0.20)' : '#0D3352'}` }}
     >
-      <Pin size={13} style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.40)' }} />
+      <Pin size={13} style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.68)' }} />
     </button>
   )
 }

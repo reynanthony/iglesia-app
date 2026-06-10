@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+﻿import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Newspaper } from 'lucide-react'
 import { createPublicacion } from '@/app/actions/publicaciones'
@@ -7,7 +7,7 @@ import ImageUploader from '@/components/admin/ImageUploader'
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
 const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.45)' }
+const lStyle = { color: 'rgba(246,243,235,0.72)' }
 
 async function handleCreate(formData: FormData) {
   'use server'
@@ -38,7 +38,7 @@ export default function NuevaPublicacionPage() {
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Nueva publicación</h1>
-              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>Landing page editorial</p>
+              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Landing page editorial</p>
             </div>
           </div>
         </div>
@@ -90,12 +90,12 @@ export default function NuevaPublicacionPage() {
           <div>
             <label className={label} style={lStyle}>Slug (URL)</label>
             <div className="flex items-center gap-0" style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, overflow: 'hidden' }}>
-              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.30)' }}>/publicaciones/</span>
+              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>/publicaciones/</span>
               <input name="slug" placeholder="conferencia-familia-2026"
                 className="flex-1 px-2 py-2.5 text-sm focus:outline-none bg-transparent"
                 style={{ color: '#F6F3EB' }} />
             </div>
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
               Opcional — se genera automáticamente del título si lo dejas vacío.
             </p>
           </div>
@@ -113,7 +113,7 @@ export default function NuevaPublicacionPage() {
               <input name="cover_color" type="color" defaultValue="#093C5D"
                 className="w-10 h-10 rounded-lg border cursor-pointer"
                 style={{ background: '#0B2D47', borderColor: '#0D3352', padding: 2 }} />
-              <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                 Se usa como fondo si no hay imagen de portada
               </span>
             </div>
@@ -125,7 +125,7 @@ export default function NuevaPublicacionPage() {
             <textarea name="body" rows={10}
               placeholder={`## Bienvenidos\n\nEscribe el contenido completo de la landing page aquí.\n\nPuedes usar **negrita**, *cursiva*, ## encabezados, y párrafos separados por línea en blanco.\n\n> Citas destacadas con >`}
               className={`${field} resize-y font-mono text-[13px]`} style={fStyle} />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
               Markdown: **negrita**, *cursiva*, ## título, &gt; cita, - lista
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function NuevaPublicacionPage() {
             <input type="checkbox" name="is_active" className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicar inmediatamente</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 La página estará visible en /publicaciones/slug al activarla
               </p>
             </div>

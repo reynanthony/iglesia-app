@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+﻿import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Megaphone } from 'lucide-react'
 import { createAnnouncement } from '@/app/actions/announcements'
@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 const field   = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
 const fStyle  = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
 const label   = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle  = { color: 'rgba(246,243,235,0.45)' }
+const lStyle  = { color: 'rgba(246,243,235,0.72)' }
 
 async function handleCreate(formData: FormData) {
   'use server'
@@ -47,7 +47,7 @@ export default async function NuevaCampanaPage() {
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Nueva campaña</h1>
-              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>Announcement Engine</p>
+              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Announcement Engine</p>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default async function NuevaCampanaPage() {
           <div>
             <label className={label} style={lStyle}>Imagen o video de fondo</label>
             <ImageUploader name="image_url" />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
               Sube una imagen desde tu dispositivo, o pega URL de imagen / YouTube.
             </p>
           </div>
@@ -156,7 +156,7 @@ export default async function NuevaCampanaPage() {
             <input type="checkbox" name="is_banner" className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Banner de texto (barra superior)</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Barra discreta en Comunidad. Sin imagen ni video. Desmarca para mostrar pantalla completa con imagen o video de fondo.
               </p>
             </div>
@@ -168,7 +168,7 @@ export default async function NuevaCampanaPage() {
             <input type="checkbox" name="is_active" defaultChecked className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Activar inmediatamente</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 La campaña comenzará a mostrarse según la fecha de inicio configurada
               </p>
             </div>

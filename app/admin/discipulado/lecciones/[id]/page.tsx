@@ -36,7 +36,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
   return (
     <div>
@@ -46,10 +46,10 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
           <Link href={`/admin/discipulado/cursos/${course?.id}`}
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-1.5 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
               <span>/</span>
               <Link href={`/admin/discipulado/programas/${program?.id}`} className="hover:underline truncate max-w-[80px]">
@@ -71,7 +71,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Contenido de la lección ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Contenido
           </p>
           <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
@@ -144,7 +144,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Versículos base ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             <BookMarked size={10} className="inline mr-1.5" />
             Versículos base ({verses?.length ?? 0})
           </p>
@@ -176,7 +176,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
             )}
             <div className="px-5 py-4" style={{ borderTop: verses && verses.length > 0 ? '1px solid #0D3352' : 'none' }}>
               <p className="text-[10px] font-black uppercase tracking-[0.15em] mb-3"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>
+                style={{ color: 'rgba(246,243,235,0.55)' }}>
                 <Plus size={9} className="inline mr-1" /> Agregar versículo
               </p>
               <form action={addVerseAction} className="space-y-3">
@@ -204,7 +204,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Desafíos prácticos ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             <Zap size={10} className="inline mr-1.5" />
             Desafíos prácticos ({challenges?.length ?? 0})
           </p>
@@ -239,7 +239,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
             )}
             <div className="px-5 py-4" style={{ borderTop: challenges && challenges.length > 0 ? '1px solid #0D3352' : 'none' }}>
               <p className="text-[10px] font-black uppercase tracking-[0.15em] mb-3"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>
+                style={{ color: 'rgba(246,243,235,0.55)' }}>
                 <Plus size={9} className="inline mr-1" /> Agregar desafío
               </p>
               <form action={addChallengeAction} className="space-y-3">

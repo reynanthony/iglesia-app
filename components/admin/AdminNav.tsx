@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React from 'react'
 import Link from 'next/link'
@@ -79,7 +79,7 @@ export default function AdminNav({
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
                     style={{
                       background: active ? '#0B2D47' : 'transparent',
-                      color: active ? '#F6F3EB' : 'rgba(246,243,235,0.40)',
+                      color: active ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
                     }}
                   >
                     <Icon size={14} />
@@ -107,25 +107,25 @@ export default function AdminNav({
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: 'rgba(246,243,235,0.40)' }}
+            style={{ color: 'rgba(246,243,235,0.68)' }}
           >
             <ExternalLink size={14} /> Editar sitio (Directus)
           </a>
         )}
         <Link href="/" target="_blank"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: 'rgba(246,243,235,0.40)' }}>
+          style={{ color: 'rgba(246,243,235,0.68)' }}>
           <Globe size={14} /> Ver sitio web
         </Link>
         <Link href="/app/comunidad"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: 'rgba(246,243,235,0.40)' }}>
+          style={{ color: 'rgba(246,243,235,0.68)' }}>
           <ArrowLeft size={14} /> Volver a la app
         </Link>
         <form action={logoutAction}>
           <button type="submit"
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             <LogOut size={14} /> Cerrar sesión
           </button>
         </form>

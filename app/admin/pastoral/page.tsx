@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { MessageSquare, BookOpen, Video, HelpCircle, ChevronRight } from 'lucide-react'
 
@@ -47,7 +47,7 @@ export default async function AdminPastoralPage() {
       <div className="border-b" style={{ borderColor: '#0D3352' }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5">
           <h1 className="font-bold text-lg text-white">Pastoral Room</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
             Panel de gestión del espacio pastoral
           </p>
         </div>
@@ -68,7 +68,7 @@ export default async function AdminPastoralPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm text-white">{label}</p>
-                <p className="text-[12px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{desc}</p>
+                <p className="text-[12px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{desc}</p>
                 <p className="text-[11px] mt-1 font-bold" style={{ color: 'rgba(118,171,174,0.60)' }}>
                   {counts[i]} {counts[i] === 1 ? 'elemento' : 'elementos'}
                 </p>

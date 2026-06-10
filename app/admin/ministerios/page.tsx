@@ -25,7 +25,7 @@ export default async function AdminMinisteriosPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div>
           <h1 className="font-bold text-lg text-white">Ministerios</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {ministries?.length ?? 0} ministerios · gestiona el contenido del sitio web
           </p>
         </div>
@@ -41,7 +41,7 @@ export default async function AdminMinisteriosPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-3">
         {withSubs.length === 0 && (
           <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay ministerios aún.</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>No hay ministerios aún.</p>
             <Link href="/admin/ministerios/nuevo" className="text-sm font-bold text-white mt-2 inline-block">
               Crear el primero →
             </Link>
@@ -65,7 +65,7 @@ export default async function AdminMinisteriosPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-white text-sm truncate">{ministry.name}</p>
-                  <p className="text-[12px] truncate mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[12px] truncate mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     /{ministry.slug} · {ministry.sub.length} sub-ministerio{ministry.sub.length !== 1 ? 's' : ''}
                   </p>
                 </div>
@@ -75,7 +75,7 @@ export default async function AdminMinisteriosPage() {
                   <Link href={`/admin/ministerios/${ministry.id}/editar`}
                     className="w-9 h-9 rounded-xl flex items-center justify-center transition"
                     style={{ background: '#0B2D47' }}>
-                    <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                    <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
                   </Link>
                   <form action={async () => {
                     'use server'
@@ -95,9 +95,9 @@ export default async function AdminMinisteriosPage() {
                 <div className="border-t px-4 py-3 flex flex-wrap gap-2" style={{ borderColor: '#0D3352' }}>
                   {ministry.sub.map((sub: any) => (
                     <div key={sub.id} className="flex items-center gap-2 rounded-lg px-3 py-1.5" style={{ background: '#0B2D47' }}>
-                      <span className="text-[12px] font-medium" style={{ color: 'rgba(246,243,235,0.40)' }}>{sub.name}</span>
+                      <span className="text-[12px] font-medium" style={{ color: 'rgba(246,243,235,0.68)' }}>{sub.name}</span>
                       <Link href={`/admin/ministerios/${sub.id}/editar`}>
-                        <Pencil size={10} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                        <Pencil size={10} style={{ color: 'rgba(246,243,235,0.68)' }} />
                       </Link>
                       <form action={async () => {
                         'use server'
@@ -111,7 +111,7 @@ export default async function AdminMinisteriosPage() {
                   ))}
                   <Link href={`/admin/ministerios/nuevo?parent=${ministry.id}`}
                     className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-[12px]"
-                    style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+                    style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
                     <Plus size={10} /> Sub-ministerio
                   </Link>
                 </div>

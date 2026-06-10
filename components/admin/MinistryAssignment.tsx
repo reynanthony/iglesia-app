@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { X, Plus, ChevronDown } from 'lucide-react'
@@ -76,7 +76,7 @@ export default function MinistryAssignment({
             onClick={() => { setShowAdd(v => !v); setPendingMinistry(null) }}
             disabled={pending}
             className="w-6 h-6 rounded-md flex items-center justify-center transition"
-            style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }}
+            style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}
           >
             <Plus size={11} />
           </button>
@@ -89,7 +89,7 @@ export default function MinistryAssignment({
                   className="w-full text-left px-3 py-2 text-[12px] flex items-center justify-between hover:bg-[#0D3352] transition"
                   style={{ color: '#F6F3EB' }}>
                   {m.name}
-                  <ChevronDown size={10} style={{ color: 'rgba(246,243,235,0.30)' }} />
+                  <ChevronDown size={10} style={{ color: 'rgba(246,243,235,0.55)' }} />
                 </button>
               ))}
             </div>
@@ -100,7 +100,7 @@ export default function MinistryAssignment({
             <div className="absolute left-0 top-8 z-50 rounded-xl shadow-xl min-w-[150px] overflow-hidden"
               style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               <p className="px-3 pt-2.5 pb-1 text-[9px] font-black uppercase tracking-wider"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>
+                style={{ color: 'rgba(246,243,235,0.55)' }}>
                 Rol en el ministerio
               </p>
               {(['lider', 'colaborador'] as const).map(role => (
@@ -114,7 +114,7 @@ export default function MinistryAssignment({
               ))}
               <button onClick={() => setPendingMinistry(null)}
                 className="w-full text-left px-3 py-2 text-[11px] transition"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>
+                style={{ color: 'rgba(246,243,235,0.55)' }}>
                 ← Volver
               </button>
             </div>

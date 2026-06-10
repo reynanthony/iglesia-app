@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, BookOpen, ChevronRight } from 'lucide-react'
 
@@ -20,13 +20,13 @@ export default async function ProgramasAdminPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <span>Programas</span>
             </div>
             <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Programas</h1>
-            <p className="text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {programs?.length ?? 0} programa{programs?.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -45,7 +45,7 @@ export default async function ProgramasAdminPage() {
           <div className="rounded-2xl py-16 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <BookOpen size={32} style={{ color: 'rgba(118,171,174,0.40)', margin: '0 auto 12px' }} />
             <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Sin programas todavía</p>
-            <p className="text-xs mt-1 mb-4" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-1 mb-4" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Crea el primer programa de formación
             </p>
             <Link
@@ -86,7 +86,7 @@ export default async function ProgramasAdminPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         {courseCount} curso{courseCount !== 1 ? 's' : ''}
                       </span>
                       {stage && (

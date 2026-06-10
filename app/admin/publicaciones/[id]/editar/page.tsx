@@ -8,7 +8,7 @@ import ImageUploader from '@/components/admin/ImageUploader'
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
 const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.45)' }
+const lStyle = { color: 'rgba(246,243,235,0.72)' }
 
 export default async function EditarPublicacionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -42,7 +42,7 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Editar publicación</h1>
-              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.40)' }}>{item.title}</p>
+              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{item.title}</p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
           <div>
             <label className={label} style={lStyle}>Slug (URL)</label>
             <div className="flex items-center gap-0" style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, overflow: 'hidden' }}>
-              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.30)' }}>/publicaciones/</span>
+              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>/publicaciones/</span>
               <input name="slug" defaultValue={item.slug}
                 className="flex-1 px-2 py-2.5 text-sm focus:outline-none bg-transparent"
                 style={{ color: '#F6F3EB' }} />
@@ -143,7 +143,7 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
             <input type="checkbox" name="is_active" defaultChecked={item.is_active} className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicación activa</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Visible en /publicaciones/{item.slug}
               </p>
             </div>

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { deletePost } from '@/app/actions/admin'
@@ -25,7 +25,7 @@ export default function DeletePostButton({ postId }: { postId: string }) {
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition flex-shrink-0 ${
         confirm
           ? 'bg-red-500 text-white'
-          : 'bg-[#0D3352] text-[rgba(246,243,235,0.45)] hover:text-red-400 hover:bg-red-500/10'
+          : 'bg-[#0D3352] text-[rgba(246,243,235,0.72)] hover:text-red-400 hover:bg-red-500/10'
       }`}
     >
       <Trash2 size={13} />

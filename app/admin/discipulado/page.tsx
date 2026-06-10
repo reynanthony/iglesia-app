@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { setUserStage, advanceUserStage } from '@/app/actions/discipleship'
 import { ChevronRight, BookOpen, GraduationCap, Users, BarChart2 } from 'lucide-react'
 import Link from 'next/link'
@@ -48,7 +48,7 @@ export default async function AdminDiscipuladoPage({
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Discipulado</h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {users.length} usuarios · {unassigned} sin etapa asignada
           </p>
         </div>
@@ -65,12 +65,12 @@ export default async function AdminDiscipuladoPage({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Contenido del LMS</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {programs?.length ?? 0} programa{programs?.length !== 1 ? 's' : ''} ·{' '}
               {programs?.reduce((n: number, p: any) => n + (p.discipleship_courses?.length ?? 0), 0)} cursos
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
         </Link>
 
         {/* Acceso rápido a Reportes */}
@@ -85,11 +85,11 @@ export default async function AdminDiscipuladoPage({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Dashboard Pastoral</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Métricas, alertas y actividad reciente
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
         </Link>
 
         {/* Acceso rápido a Mentoría */}
@@ -104,15 +104,15 @@ export default async function AdminDiscipuladoPage({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Asignaciones de Mentoría</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Asignar mentores a discípulos y gestionar pares
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
         </Link>
 
         {/* Separador seguimiento */}
-        <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>
+        <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
           Seguimiento de etapas
         </p>
 
@@ -126,7 +126,7 @@ export default async function AdminDiscipuladoPage({
             }}>
             <p className="font-black text-lg" style={{ color: '#F6F3EB' }}>{unassigned}</p>
             <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5"
-              style={{ color: 'rgba(246,243,235,0.40)' }}>Sin etapa</p>
+              style={{ color: 'rgba(246,243,235,0.68)' }}>Sin etapa</p>
           </a>
           {stages?.map((s: any) => (
             <a key={s.id} href={`/admin/discipulado?stage=${s.id}`}
@@ -139,7 +139,7 @@ export default async function AdminDiscipuladoPage({
                 {stageCounts.get(s.id) ?? 0}
               </p>
               <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5 truncate"
-                style={{ color: 'rgba(246,243,235,0.40)' }}>{s.name}</p>
+                style={{ color: 'rgba(246,243,235,0.68)' }}>{s.name}</p>
             </a>
           ))}
         </div>
@@ -147,7 +147,7 @@ export default async function AdminDiscipuladoPage({
         {/* Users table */}
         <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
           <div className="px-5 py-3 border-b" style={{ borderColor: '#0D3352' }}>
-            <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {filtered.length} usuarios
             </p>
           </div>
@@ -175,7 +175,7 @@ export default async function AdminDiscipuladoPage({
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>@{u.username}</p>
+                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ export default async function AdminDiscipuladoPage({
                     </span>
                   ) : (
                     <span className="text-[11px] px-3 py-1.5 rounded-lg"
-                      style={{ background: '#0D3352', color: 'rgba(246,243,235,0.35)' }}>
+                      style={{ background: '#0D3352', color: 'rgba(246,243,235,0.62)' }}>
                       Sin etapa
                     </span>
                   )}
@@ -227,7 +227,7 @@ export default async function AdminDiscipuladoPage({
           })}
 
           {filtered.length === 0 && (
-            <div className="py-12 text-center" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <div className="py-12 text-center" style={{ color: 'rgba(246,243,235,0.68)' }}>
               <p className="text-sm">No hay usuarios en esta etapa</p>
             </div>
           )}

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
@@ -39,7 +39,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               style={{ background: '#F6F3EB', color: '#061E30' }}>A</div>
             <div>
               <p className="font-bold text-[13px] text-white leading-tight">Panel Admin</p>
-              <p className="text-[11px] leading-tight" style={{ color: 'rgba(246,243,235,0.40)' }}>{profile.full_name}</p>
+              <p className="text-[11px] leading-tight" style={{ color: 'rgba(246,243,235,0.68)' }}>{profile.full_name}</p>
             </div>
           </div>
         </div>
@@ -61,13 +61,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="flex items-center gap-1">
           <Link href="/app/comunidad"
             className="px-3 py-2 rounded-lg text-[11px] font-bold transition"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             ← App
           </Link>
           <form action={logout}>
             <button type="submit"
               className="w-10 h-10 flex items-center justify-center rounded-lg transition"
-              style={{ color: 'rgba(246,243,235,0.40)' }}
+              style={{ color: 'rgba(246,243,235,0.68)' }}
               title="Cerrar sesión">
               <LogOut size={17} />
             </button>

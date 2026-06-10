@@ -30,7 +30,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
   return (
     <div>
@@ -40,10 +40,10 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
           <Link href={`/admin/discipulado/programas/${program?.id}`}
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
@@ -63,7 +63,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
         {/* ── Editar curso ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Datos del curso
           </p>
           <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
@@ -136,7 +136,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
         {/* ── Lecciones ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Lecciones ({lessons?.length ?? 0})
           </p>
 
@@ -184,7 +184,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
           {/* Nueva lección */}
           <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Plus size={10} className="inline mr-1" />
               Nueva lección
             </p>

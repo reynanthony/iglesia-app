@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { Shield, UserCheck, UserX, Clock } from 'lucide-react'
 import RoleSelector from '@/components/admin/RoleSelector'
 
@@ -9,7 +9,7 @@ const ROLE_LABEL: Record<string, string> = {
 
 const ROLE_COLOR: Record<string, string> = {
   admin: '#F87171', pastor: '#C084FC', moderador: '#F59E0B',
-  lider: '#60A5FA', miembro: 'rgba(246,243,235,0.40)',
+  lider: '#60A5FA', miembro: 'rgba(246,243,235,0.68)',
 }
 
 export default async function SeguridadPage() {
@@ -47,7 +47,7 @@ export default async function SeguridadPage() {
           <Shield size={18} style={{ color: '#76ABAE' }} />
           <div>
             <h1 className="font-bold text-base md:text-lg text-white">Seguridad</h1>
-            <p className="text-[11px] md:text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[11px] md:text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Control de acceso y actividad
             </p>
           </div>
@@ -59,7 +59,7 @@ export default async function SeguridadPage() {
         {/* Usuarios con roles privilegiados */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             Accesos privilegiados ({privileged.length})
           </h2>
           <div className="space-y-2">
@@ -73,7 +73,7 @@ export default async function SeguridadPage() {
                 </div>
                 <div className="flex-1 min-w-[100px]">
                   <p className="font-bold text-white text-sm truncate">{user.full_name}</p>
-                  <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     @{user.username}
                   </p>
                 </div>
@@ -92,13 +92,13 @@ export default async function SeguridadPage() {
         {/* Log de actividad reciente */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             Actividad reciente
           </h2>
           {!logs || logs.length === 0 ? (
             <div className="rounded-xl md:rounded-2xl border p-4 md:p-6 text-center"
               style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 El log de actividad está vacío.
               </p>
               <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
@@ -113,17 +113,17 @@ export default async function SeguridadPage() {
                   style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
                   <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ background: '#0D3352' }}>
-                    <Clock size={12} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                    <Clock size={12} style={{ color: 'rgba(246,243,235,0.68)' }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] font-bold text-white">
                       {(log.profiles as any)?.full_name ?? 'Sistema'}
                     </p>
-                    <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                       {log.action}
                     </p>
                   </div>
-                  <span className="text-[11px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  <span className="text-[11px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
                     {timeAgo(log.created_at)}
                   </span>
                 </div>
@@ -135,7 +135,7 @@ export default async function SeguridadPage() {
         {/* Resumen de miembros */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             Resumen de miembros
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
@@ -149,7 +149,7 @@ export default async function SeguridadPage() {
                 style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
                 <stat.icon size={14} style={{ color: '#76ABAE', marginBottom: 6 }} />
                 <p className="font-black text-xl md:text-2xl text-white leading-none">{stat.value}</p>
-                <p className="text-[10px] md:text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-[10px] md:text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   {stat.label}
                 </p>
               </div>

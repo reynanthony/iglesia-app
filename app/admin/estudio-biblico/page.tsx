@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, BookOpen, ChevronRight } from 'lucide-react'
 
@@ -19,7 +19,7 @@ export default async function EstudioBiblicoAdminPage() {
         <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
           <div>
             <h1 className="text-xl md:text-2xl font-bold" style={{ color: '#F6F3EB' }}>Estudio Bíblico</h1>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {series?.length ?? 0} series
             </p>
           </div>
@@ -33,7 +33,7 @@ export default async function EstudioBiblicoAdminPage() {
         {!series || series.length === 0 ? (
           <div className="rounded-2xl p-12 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <BookOpen size={28} style={{ color: 'rgba(246,243,235,0.20)', margin: '0 auto 0.75rem' }} />
-            <p style={{ color: 'rgba(246,243,235,0.40)' }}>No hay series todavía.</p>
+            <p style={{ color: 'rgba(246,243,235,0.68)' }}>No hay series todavía.</p>
             <Link href="/admin/estudio-biblico/nueva"
               className="inline-flex items-center gap-1 mt-3 text-sm font-bold"
               style={{ color: '#76ABAE' }}>
@@ -64,7 +64,7 @@ export default async function EstudioBiblicoAdminPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
                       {s.book} · {sessionCount} sesiones
                     </p>
                   </div>

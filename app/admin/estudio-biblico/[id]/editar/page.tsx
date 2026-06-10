@@ -7,7 +7,7 @@ import { updateSeries } from '@/app/actions/bible-study'
 const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
 const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
 const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
 export default async function EditarSeriesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -30,10 +30,10 @@ export default async function EditarSeriesPage({ params }: { params: Promise<{ i
           <Link href={`/admin/estudio-biblico/${id}`}
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div>
-            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/estudio-biblico" className="hover:underline">Estudio Bíblico</Link>
               <span>/</span>
               <Link href={`/admin/estudio-biblico/${id}`} className="hover:underline truncate max-w-[10rem]">{series.title}</Link>
@@ -118,7 +118,7 @@ export default async function EditarSeriesPage({ params }: { params: Promise<{ i
             </button>
             <Link href={`/admin/estudio-biblico/${id}`}
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
               Cancelar
             </Link>
           </div>

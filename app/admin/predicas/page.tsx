@@ -1,4 +1,4 @@
-import { cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
+﻿import { cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
 import Link from 'next/link'
 import { Plus, Pencil, Play } from 'lucide-react'
 import DeletePredicaButton from '@/components/admin/DeletePredicaButton'
@@ -13,7 +13,7 @@ export default async function AdminPredicasPage() {
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
           <div>
             <h1 className="font-bold text-lg text-white">Prédicas</h1>
-            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {predicas.length} mensajes publicados
             </p>
           </div>
@@ -29,7 +29,7 @@ export default async function AdminPredicasPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-3">
         {predicas.length === 0 && (
           <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
-            <p className="text-sm mb-2" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay prédicas publicadas.</p>
+            <p className="text-sm mb-2" style={{ color: 'rgba(246,243,235,0.68)' }}>No hay prédicas publicadas.</p>
             <Link href="/admin/predicas/nuevo" className="text-sm font-bold text-white">
               Publicar la primera →
             </Link>
@@ -54,7 +54,7 @@ export default async function AdminPredicasPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-white text-sm truncate">{predica.title}</p>
-                  <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {predica.speaker ?? '—'} · {predica.series ?? '—'} ·{' '}
                     {predica.date
                       ? new Date(predica.date).toLocaleDateString('es-DO', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -67,7 +67,7 @@ export default async function AdminPredicasPage() {
                   <Link href={`/admin/predicas/${predica.id}/editar`}
                     className="w-9 h-9 rounded-xl flex items-center justify-center"
                     style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-                    <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                    <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
                   </Link>
                   <DeletePredicaButton predicaId={String(predica.id)} />
                 </div>

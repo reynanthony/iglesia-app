@@ -22,7 +22,7 @@ export default async function EditarEncuentroPage({
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
   const scheduledLocal = enc.scheduled_at ? enc.scheduled_at.slice(0, 16) : ''
   const action = updatePastoralEncounter.bind(null, id)
@@ -34,11 +34,11 @@ export default async function EditarEncuentroPage({
           <Link href="/admin/pastoral/encuentros"
             className="w-9 h-9 rounded-xl flex items-center justify-center"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div>
             <h1 className="font-bold text-lg text-white">Editar encuentro</h1>
-            <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>{enc.title}</p>
+            <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{enc.title}</p>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default async function EditarEncuentroPage({
             )}
             <div className="rounded-xl border-2 border-dashed p-5 text-center" style={{ borderColor: '#0D3352' }}>
               <input type="file" name="thumbnail" accept="image/*"
-                className="w-full text-sm cursor-pointer" style={{ color: 'rgba(246,243,235,0.40)' }} />
+                className="w-full text-sm cursor-pointer" style={{ color: 'rgba(246,243,235,0.68)' }} />
               <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
                 Dejar vacío para conservar la imagen actual
               </p>
@@ -115,7 +115,7 @@ export default async function EditarEncuentroPage({
             </button>
             <Link href="/admin/pastoral/encuentros"
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
               Cancelar
             </Link>
           </div>

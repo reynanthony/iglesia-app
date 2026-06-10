@@ -40,7 +40,7 @@ export default async function AdminContenidoPage({
         style={{ borderColor: '#0D3352' }}>
         <div>
           <h1 className="font-bold text-lg text-white">Contenido de ministerios</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {content?.length ?? 0} publicaciones · artículos, videos, anuncios
           </p>
         </div>
@@ -66,7 +66,7 @@ export default async function AdminContenidoPage({
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
                   isActive
                     ? 'text-black font-bold'
-                    : 'text-[rgba(246,243,235,0.45)] hover:text-slate-200'
+                    : 'text-[rgba(246,243,235,0.72)] hover:text-slate-200'
                 }`}
                 style={{ background: isActive ? '#F6F3EB' : '#0B2D47', border: '1px solid #0D3352' }}>
                 {m.name}
@@ -87,7 +87,7 @@ export default async function AdminContenidoPage({
           return (
             <a key={t.id} href={href}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
-                isActive ? 'text-black' : 'text-[rgba(246,243,235,0.45)] hover:text-slate-200'
+                isActive ? 'text-black' : 'text-[rgba(246,243,235,0.72)] hover:text-slate-200'
               }`}
               style={{ background: isActive ? '#F6F3EB' : '#0B2D47', border: '1px solid #0D3352' }}>
               {t.label}
@@ -100,7 +100,7 @@ export default async function AdminContenidoPage({
       <div className="px-4 md:px-8 py-5 space-y-3">
         {(!content || content.length === 0) && (
           <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>Sin contenido publicado aún.</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>Sin contenido publicado aún.</p>
           </div>
         )}
 
@@ -134,12 +134,12 @@ export default async function AdminContenidoPage({
                   <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${meta.color}`}>
                     {meta.label}
                   </span>
-                  <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {(item.ministries as any)?.name ?? '—'}
                   </span>
                 </div>
                 <p className="font-bold text-white text-sm truncate">{item.title}</p>
-                <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   {(item.profiles as any)?.full_name ?? 'Desconocido'} ·{' '}
                   {new Date(item.created_at).toLocaleDateString('es-DO', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
@@ -150,7 +150,7 @@ export default async function AdminContenidoPage({
                 <Link href={`/admin/contenido/${item.id}/editar`}
                   className="w-9 h-9 rounded-xl flex items-center justify-center"
                   style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
                 </Link>
                 <PinContentButton contentId={item.id} pinned={item.pinned} />
                 <DeleteContentButton contentId={item.id} />

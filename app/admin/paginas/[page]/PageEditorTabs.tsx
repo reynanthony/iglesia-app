@@ -55,7 +55,7 @@ export default function PageEditorTabs({ page, pageLabel, initialBlocks, initial
               className="px-4 md:px-5 py-3 text-[11px] font-bold uppercase tracking-[0.18em] transition rounded-t-xl"
               style={{
                 background: tab === t.key ? '#0B2D47' : 'transparent',
-                color: tab === t.key ? '#F6F3EB' : 'rgba(246,243,235,0.40)',
+                color: tab === t.key ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
                 borderBottom: tab === t.key ? '2px solid #76ABAE' : '2px solid transparent',
               }}
             >

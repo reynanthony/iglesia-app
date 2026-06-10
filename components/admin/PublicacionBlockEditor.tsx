@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -11,7 +11,7 @@ import { savePublicacionBlocks } from '@/app/actions/publicaciones'
 const field  = 'w-full px-3 py-2 text-sm focus:outline-none rounded-xl'
 const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' } as const
 const lbl    = 'block text-[10px] font-black uppercase tracking-[0.2em] mb-1'
-const lStyle = { color: 'rgba(246,243,235,0.45)' } as const
+const lStyle = { color: 'rgba(246,243,235,0.72)' } as const
 
 const ICONS: Record<string, string> = {
   hero: '🎯', heading: 'T', text: '¶', image: '🖼', video: '▶',
@@ -38,8 +38,8 @@ function ItemWrap({ index, label, onRemove, children }: {
   return (
     <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(13,51,82,0.5)', border: '1px solid #0D3352' }}>
       <div className="flex justify-between items-center">
-        <span className="text-[10px] font-bold" style={{ color: 'rgba(246,243,235,0.30)' }}>{label} {index + 1}</span>
-        <button type="button" onClick={onRemove} className="p-1 rounded" style={{ color: 'rgba(246,243,235,0.35)' }}>
+        <span className="text-[10px] font-bold" style={{ color: 'rgba(246,243,235,0.55)' }}>{label} {index + 1}</span>
+        <button type="button" onClick={onRemove} className="p-1 rounded" style={{ color: 'rgba(246,243,235,0.62)' }}>
           <Trash2 size={12} />
         </button>
       </div>
@@ -76,7 +76,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
               <input value={item.value} placeholder="Valor" onChange={e => setItem('items', i, { value: e.target.value })}
                 className={`${field} flex-1`} style={fStyle} />
               <button type="button" onClick={() => removeItem('items', i)}
-                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.35)', background: '#0B2D47' }}>
+                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -120,7 +120,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
               <input value={url} placeholder="https://..." onChange={e => { const imgs = [...(p.images || [])]; imgs[i] = e.target.value; set('images', imgs) }}
                 className={`${field} flex-1`} style={fStyle} />
               <button type="button" onClick={() => set('images', (p.images || []).filter((_: any, j: number) => j !== i))}
-                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.35)', background: '#0B2D47' }}>
+                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -295,7 +295,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
             <div key={i} className="flex gap-2 items-center">
               <input value={item.value} placeholder="Valor" onChange={e => setItem('items', i, { value: e.target.value })} className={`${field} flex-1`} style={fStyle} />
               <input value={item.label} placeholder="Etiqueta" onChange={e => setItem('items', i, { label: e.target.value })} className={`${field} flex-1`} style={fStyle} />
-              <button type="button" onClick={() => removeItem('items', i)} className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.35)', background: '#0B2D47' }}>
+              <button type="button" onClick={() => removeItem('items', i)} className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -390,7 +390,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
       )
 
     default:
-      return <p className="text-xs py-4 text-center" style={{ color: 'rgba(246,243,235,0.30)' }}>Editor no disponible.</p>
+      return <p className="text-xs py-4 text-center" style={{ color: 'rgba(246,243,235,0.55)' }}>Editor no disponible.</p>
   }
 }
 
@@ -458,7 +458,7 @@ export default function PublicacionBlockEditor({
           <ArrowLeft size={15} />
         </Link>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Editor de bloques
           </p>
           <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{publicacionTitle}</p>
@@ -509,15 +509,15 @@ export default function PublicacionBlockEditor({
                   <div className="flex gap-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                     onClick={e => e.stopPropagation()}>
                     <button onClick={() => moveUp(i)} disabled={i === 0}
-                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.72)' }}>
                       <ArrowUp size={11} />
                     </button>
                     <button onClick={() => moveDown(i)} disabled={i === blocks.length - 1}
-                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.72)' }}>
                       <ArrowDown size={11} />
                     </button>
                     <button onClick={() => removeBlock(block.id)}
-                      className="p-0.5 rounded" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                      className="p-0.5 rounded" style={{ color: 'rgba(246,243,235,0.72)' }}>
                       <Trash2 size={11} />
                     </button>
                   </div>
@@ -549,14 +549,14 @@ export default function PublicacionBlockEditor({
             <div>
               <div className="flex items-center justify-between mb-5">
                 <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Tipo de bloque</p>
-                <button onClick={() => setAdding(false)} style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <button onClick={() => setAdding(false)} style={{ color: 'rgba(246,243,235,0.68)' }}>
                   <X size={16} />
                 </button>
               </div>
               {BLOCK_GROUPS.map(group => (
                 <div key={group.name} className="mb-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
-                    style={{ color: 'rgba(246,243,235,0.35)' }}>
+                    style={{ color: 'rgba(246,243,235,0.62)' }}>
                     {group.name}
                   </p>
                   <div className="grid grid-cols-3 gap-2">
@@ -586,7 +586,7 @@ export default function PublicacionBlockEditor({
                   <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
                     {BLOCK_META[selected.type]?.label ?? selected.type}
                   </p>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                     {BLOCK_META[selected.type]?.description}
                   </p>
                 </div>

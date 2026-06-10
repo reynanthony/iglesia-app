@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition, useRef } from 'react'
 import { savePageFields } from '@/app/actions/admin'
@@ -374,7 +374,7 @@ function fieldDisplayValue(type: FieldType, value: unknown): string {
 export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Props) {
   const schema = SCHEMAS[page]
   if (!schema) return (
-    <div className="p-6 rounded-xl text-sm" style={{ background: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>
+    <div className="p-6 rounded-xl text-sm" style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
       No hay campos configurados para esta página.
     </div>
   )
@@ -523,7 +523,7 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
               const isFullWidth = isTextArea || isUpload
               return (
                 <div key={field.key} className={isFullWidth ? 'md:col-span-2' : ''}>
-                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: 'rgba(246,243,235,0.72)' }}>
                     {field.label}
                   </label>
 

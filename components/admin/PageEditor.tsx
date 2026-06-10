@@ -54,7 +54,7 @@ export default function PageEditor({
       {fields.map(field => (
         <div key={field.key}>
           <label className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2"
-            style={{ color: 'rgba(246,243,235,0.40)' }}>
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
             {field.label}
           </label>
 
@@ -76,7 +76,7 @@ export default function PageEditor({
               <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
                 style={{ borderColor: '#0D3352', opacity: uploadingKey === field.key ? 0.6 : 1 }}>
                 <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
-                <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   {uploadingKey === field.key ? 'Subiendo…' : values[field.key] ? 'Cambiar imagen' : 'Subir imagen'}
                 </span>
                 <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>JPG, PNG o WebP</span>

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { setLiveUrl, toggleLive } from '@/app/actions/liveconfig'
 import { Radio, AlertCircle } from 'lucide-react'
 
@@ -25,7 +25,7 @@ export default async function AdminEnVivoPage() {
           </div>
           <div>
             <h1 className="text-lg font-bold leading-tight">En Vivo</h1>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Gestión de la transmisión
             </p>
           </div>
@@ -61,13 +61,13 @@ export default async function AdminEnVivoPage() {
             <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
               style={{
                 background: isLive ? 'rgba(248,113,113,0.15)' : '#0D3352',
-                color: isLive ? '#F87171' : 'rgba(246,243,235,0.40)',
+                color: isLive ? '#F87171' : 'rgba(246,243,235,0.68)',
               }}>
               {isLive ? 'EN VIVO' : 'OFFLINE'}
             </span>
           </div>
           {liveUrl && (
-            <p className="text-[11px] mt-1.5 truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[11px] mt-1.5 truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {liveUrl}
             </p>
           )}
@@ -102,7 +102,7 @@ export default async function AdminEnVivoPage() {
               className="w-full px-3.5 py-2.5 text-sm bg-transparent focus:outline-none"
               style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 10, color: '#F6F3EB' }}
             />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
               URL pública del video (youtube.com/watch?v=... o youtu.be/...)
             </p>
           </div>
@@ -138,7 +138,7 @@ export default async function AdminEnVivoPage() {
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
                 Publicar en el sitio web
               </p>
-              <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Sin marcar: solo lo ven los miembros en la app.
               </p>
             </div>

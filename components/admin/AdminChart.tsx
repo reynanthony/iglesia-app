@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useMemo } from 'react'
 
@@ -40,13 +40,13 @@ export default function AdminChart({
         <h2 className="font-semibold text-xs md:text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>{title}</h2>
         <span className="text-xl md:text-2xl font-bold" style={{ color: '#F6F3EB' }}>{total}</span>
       </div>
-      <p className="text-[10px] md:text-xs mb-3 md:mb-5" style={{ color: 'rgba(246,243,235,0.30)' }}>últimos 7 días</p>
+      <p className="text-[10px] md:text-xs mb-3 md:mb-5" style={{ color: 'rgba(246,243,235,0.55)' }}>últimos 7 días</p>
 
       {/* Barras */}
       <div className="flex items-end gap-1 md:gap-1.5 h-24 md:h-32">
         {chartData.map(({ label, value }) => (
           <div key={label} className="flex-1 flex flex-col items-center gap-1">
-            <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.40)' }}>{value > 0 ? value : ''}</span>
+            <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{value > 0 ? value : ''}</span>
             <div className="w-full rounded-t-md transition-all" style={{
               height: `${Math.max((value / max) * 100, value > 0 ? 8 : 2)}%`,
               backgroundColor: value > 0 ? color : '#0D3352',
@@ -59,7 +59,7 @@ export default function AdminChart({
       {/* Labels */}
       <div className="flex gap-1.5 mt-2">
         {chartData.map(({ label }) => (
-          <div key={label} className="flex-1 text-center text-[9px] truncate" style={{ color: 'rgba(246,243,235,0.30)' }}>
+          <div key={label} className="flex-1 text-center text-[9px] truncate" style={{ color: 'rgba(246,243,235,0.55)' }}>
             {label.split(' ')[0]}
           </div>
         ))}

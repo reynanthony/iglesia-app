@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { createProgram } from '@/app/actions/discipleship-lms'
@@ -13,7 +13,7 @@ export default async function NuevoProgramaPage() {
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
   return (
     <div>
@@ -22,10 +22,10 @@ export default async function NuevoProgramaPage() {
           <Link href="/admin/discipulado/programas"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div>
-            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
@@ -78,7 +78,7 @@ export default async function NuevoProgramaPage() {
             </button>
             <Link href="/admin/discipulado/programas"
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
               Cancelar
             </Link>
           </div>

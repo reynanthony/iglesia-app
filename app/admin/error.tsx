@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect } from 'react'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ export default function AdminError({
       className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
       style={{ background: '#061E30', color: '#F6F3EB' }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+      <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
         Panel Admin — Error
       </p>
       <h1 className="font-black text-3xl tracking-tight mb-3">Algo salió mal</h1>

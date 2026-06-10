@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Pencil, UsersRound, Lock, Users } from 'lucide-react'
 import { toggleGroupActive } from '@/app/actions/groups'
@@ -33,7 +33,7 @@ export default async function AdminGruposPage() {
         <div className="mb-4 md:mb-6 flex items-center justify-between gap-3">
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Grupos</h1>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {activeCount} activos · {(groups ?? []).length} total
             </p>
           </div>
@@ -64,7 +64,7 @@ export default async function AdminGruposPage() {
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>{group.name}</p>
                     {group.is_private && (
-                      <Lock size={10} style={{ color: 'rgba(246,243,235,0.35)' }} />
+                      <Lock size={10} style={{ color: 'rgba(246,243,235,0.62)' }} />
                     )}
                     {!group.is_active && (
                       <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full"
@@ -73,7 +73,7 @@ export default async function AdminGruposPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {TYPE_LABELS[group.type] ?? group.type} · {count} miembros
                   </p>
                 </div>
@@ -107,7 +107,7 @@ export default async function AdminGruposPage() {
           })}
 
           {(!groups || groups.length === 0) && (
-            <div className="text-center py-16" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <div className="text-center py-16" style={{ color: 'rgba(246,243,235,0.68)' }}>
               <p className="text-sm">No hay grupos creados aún</p>
             </div>
           )}

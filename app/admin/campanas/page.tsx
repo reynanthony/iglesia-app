@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Megaphone, Plus, Pencil } from 'lucide-react'
 import ToggleActiveCheckbox from '@/components/admin/ToggleActiveCheckbox'
@@ -37,7 +37,7 @@ export default async function CampanasPage() {
         <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Campañas</h1>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {active} activa{active !== 1 ? 's' : ''} · {(items ?? []).length} total
             </p>
           </div>
@@ -57,7 +57,7 @@ export default async function CampanasPage() {
         <div className="mb-5 p-3.5 rounded-xl flex items-start gap-3"
           style={{ background: 'rgba(118,171,174,0.06)', border: '1px solid rgba(118,171,174,0.15)' }}>
           <Megaphone size={14} style={{ color: '#76ABAE', flexShrink: 0, marginTop: 1 }} />
-          <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.45)' }}>
+          <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
             Las campañas activas se muestran a los miembros al abrir la app, según la audiencia y frecuencia configuradas.
             Los anuncios de prioridad <strong style={{ color: '#F87171' }}>Urgente</strong> se muestran siempre.
           </p>
@@ -67,7 +67,7 @@ export default async function CampanasPage() {
         {(!items || items.length === 0) ? (
           <div className="rounded-xl p-12 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <Megaphone size={28} style={{ color: 'rgba(246,243,235,0.15)', margin: '0 auto 12px' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay campañas todavía.</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>No hay campañas todavía.</p>
             <Link href="/admin/campanas/nueva"
               className="inline-flex items-center gap-1 mt-3 text-sm font-bold"
               style={{ color: '#76ABAE' }}>
@@ -119,15 +119,15 @@ export default async function CampanasPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {TYPE_LABEL[item.content_type] ?? item.content_type}
                         </span>
                         <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {FREQ_LABEL[item.show_frequency] ?? item.show_frequency}
                         </span>
                         <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {timeRange(item.start_date, item.end_date)}
                         </span>
                       </div>

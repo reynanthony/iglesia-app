@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { HelpCircle, CheckCircle, Clock } from 'lucide-react'
 import AnswerPastoralQuestionForm from '@/components/admin/AnswerPastoralQuestionForm'
@@ -22,7 +22,7 @@ export default async function AdminPastoralPreguntasPage() {
       <div className="border-b" style={{ borderColor: '#0D3352' }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5">
           <div className="flex items-center gap-2 mb-0.5">
-            <Link href="/admin/pastoral" className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <Link href="/admin/pastoral" className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Pastoral
             </Link>
             <span style={{ color: 'rgba(246,243,235,0.20)' }}>/</span>
@@ -56,7 +56,7 @@ export default async function AdminPastoralPreguntasPage() {
                         style={{ background: '#061E30', color: 'rgba(118,171,174,0.60)' }}>
                         {CAT_LABELS[item.category] ?? item.category}
                       </span>
-                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                         {(item as any).profiles?.full_name ?? 'Anónimo'} ·{' '}
                         {new Date(item.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })}
                       </span>
@@ -75,7 +75,7 @@ export default async function AdminPastoralPreguntasPage() {
         {pending.length === 0 && (
           <div className="py-16 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
             <CheckCircle size={28} style={{ color: 'rgba(118,171,174,0.30)', margin: '0 auto 12px' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
               No hay preguntas pendientes.
             </p>
           </div>

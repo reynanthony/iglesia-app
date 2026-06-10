@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { Users, FileText, MessageCircle, Mic, TrendingUp, AlertTriangle } from 'lucide-react'
 import AdminChart from '@/components/admin/AdminChart'
 
@@ -66,7 +66,7 @@ export default async function AdminPage() {
       <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Dashboard</h1>
-        <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>Vista general de la plataforma</p>
+        <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
       </div>
 
       {/* Stats grid */}
@@ -84,7 +84,7 @@ export default async function AdminPage() {
               )}
             </div>
             <p className="text-xl md:text-3xl font-bold" style={{ color: '#F6F3EB' }}>{value.toLocaleString()}</p>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</p>
           </div>
         ))}
       </div>
@@ -115,7 +115,7 @@ export default async function AdminPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                      <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>@{u.username}</p>
+                      <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
                     </div>
                   </div>
                   <span className="text-xs px-2 py-0.5 rounded-full capitalize font-bold"
@@ -138,9 +138,9 @@ export default async function AdminPage() {
                   <img src={p.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>@{p.profiles?.username}</p>
+                  <p className="text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>@{p.profiles?.username}</p>
                   <p className="text-sm truncate" style={{ color: 'rgba(246,243,235,0.80)' }}>{p.content || 'Sin texto'}</p>
-                  <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
                     {new Date(p.created_at).toLocaleDateString('es-DO')}
                   </p>
                 </div>

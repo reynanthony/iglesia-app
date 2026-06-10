@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -103,7 +103,7 @@ export default function ImageUploader({
         </div>
       )}
       {url && (url.includes('youtube.com') || url.includes('youtu.be')) && (
-        <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+        <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
           YouTube detectado — se usará el thumbnail como fondo
         </p>
       )}

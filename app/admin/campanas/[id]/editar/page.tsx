@@ -10,7 +10,7 @@ import CtaDestinationField from '@/components/admin/CtaDestinationField'
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
 const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.45)' }
+const lStyle = { color: 'rgba(246,243,235,0.72)' }
 
 function toLocalDatetime(iso: string | null): string {
   if (!iso) return ''
@@ -55,7 +55,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Editar campaña</h1>
-              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 {item.title}
               </p>
             </div>
@@ -101,7 +101,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
           <div>
             <label className={label} style={lStyle}>Imagen o video de fondo</label>
             <ImageUploader name="image_url" defaultValue={item.image_url ?? ''} />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.30)' }}>
+            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
               Sube una imagen desde tu dispositivo, o pega URL de imagen / YouTube.
             </p>
           </div>
@@ -163,7 +163,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
             <input type="checkbox" name="is_banner" defaultChecked={item.is_banner ?? false} className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Banner de texto (barra superior)</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Barra discreta en Comunidad. Sin imagen ni video. Desmarca para pantalla completa con imagen o video de fondo.
               </p>
             </div>
@@ -174,7 +174,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
             <input type="checkbox" name="is_active" defaultChecked={item.is_active} className="flex-shrink-0" />
             <div>
               <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Campaña activa</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Desactiva para pausar sin eliminar
               </p>
             </div>

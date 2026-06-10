@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { answerPastoralQuestion } from '@/app/actions/pastoral-admin'
 
@@ -12,7 +12,7 @@ export default function AnswerPastoralQuestionForm({ id }: { id: string }) {
 
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>
           Respuesta (texto)
         </label>
         <textarea name="answer_body" rows={3} placeholder="Escribe la respuesta pastoral..."
@@ -21,7 +21,7 @@ export default function AnswerPastoralQuestionForm({ id }: { id: string }) {
 
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>
           Tipo de respuesta
         </label>
         <select name="answer_media_type" className={field} style={fieldStyle}>
@@ -33,7 +33,7 @@ export default function AnswerPastoralQuestionForm({ id }: { id: string }) {
 
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>
           URL de video / audio (YouTube, etc.)
         </label>
         <input type="url" name="media" placeholder="https://youtube.com/watch?v=..."
@@ -42,11 +42,11 @@ export default function AnswerPastoralQuestionForm({ id }: { id: string }) {
 
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-1.5"
-          style={{ color: 'rgba(246,243,235,0.35)' }}>
+          style={{ color: 'rgba(246,243,235,0.62)' }}>
           O sube un archivo (tiene prioridad)
         </label>
         <input type="file" name="media_file" accept="audio/*,video/*"
-          className="w-full text-[12px] cursor-pointer pt-2" style={{ color: 'rgba(246,243,235,0.40)' }} />
+          className="w-full text-[12px] cursor-pointer pt-2" style={{ color: 'rgba(246,243,235,0.68)' }} />
       </div>
 
       <div className="flex items-center justify-between">

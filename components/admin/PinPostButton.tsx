@@ -26,7 +26,7 @@ export default function PinPostButton({ postId, pinned }: { postId: string; pinn
       style={
         active
           ? { background: '#0D3352', color: '#76ABAE', border: '1px solid #2A3A2A' }
-          : { background: '#0B2D47', color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }
+          : { background: '#0B2D47', color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }
       }
     >
       <Pin size={12} />

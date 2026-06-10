@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 const ACCENT   = '#76ABAE'
-const INACTIVE = 'rgba(246,243,235,0.35)'
+const INACTIVE = 'rgba(246,243,235,0.62)'
 const BG       = '#061E30'
 const SURFACE  = '#0B2D47'
 const BORDER   = '#0D3352'

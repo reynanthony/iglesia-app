@@ -48,7 +48,7 @@ export default async function AdminUsuariosPage({
       <div className="mb-4 md:mb-6 flex items-center justify-between gap-3">
         <div>
           <h1 className="text-xl md:text-2xl font-bold">Usuarios</h1>
-          <p className="text-[rgba(246,243,235,0.40)] text-xs md:text-sm mt-0.5">{users?.length ?? 0} miembros</p>
+          <p className="text-[rgba(246,243,235,0.68)] text-xs md:text-sm mt-0.5">{users?.length ?? 0} miembros</p>
         </div>
         <Link href="/admin/usuarios/nuevo"
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold transition flex-shrink-0"
@@ -59,12 +59,12 @@ export default async function AdminUsuariosPage({
 
       <div className="flex flex-col gap-2.5 mb-4 md:mb-6">
         <form method="GET" className="flex items-center gap-3 bg-[#0B2D47] border border-[#0D3352] rounded-xl px-3.5 py-2.5">
-          <Search size={15} className="text-[rgba(246,243,235,0.40)] flex-shrink-0" />
+          <Search size={15} className="text-[rgba(246,243,235,0.68)] flex-shrink-0" />
           <input
             name="q"
             defaultValue={q ?? ''}
             placeholder="Buscar por nombre o usuario..."
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-[rgba(246,243,235,0.30)] focus:outline-none"
+            className="flex-1 bg-transparent text-white text-sm placeholder:text-[rgba(246,243,235,0.55)] focus:outline-none"
           />
           {role && <input type="hidden" name="role" value={role} />}
         </form>
@@ -82,7 +82,7 @@ export default async function AdminUsuariosPage({
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition ${
                   isActive
                     ? 'bg-white text-[#061E30]'
-                    : 'bg-[#0B2D47] border border-[#0D3352] text-[rgba(246,243,235,0.45)]'
+                    : 'bg-[#0B2D47] border border-[#0D3352] text-[rgba(246,243,235,0.72)]'
                 }`}>
                 {r}
               </a>
@@ -94,7 +94,7 @@ export default async function AdminUsuariosPage({
       {/* ── MÓVIL: tarjetas ── */}
       <div className="md:hidden space-y-2">
         {users && users.length === 0 && (
-          <p className="py-10 text-center text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="py-10 text-center text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
             No se encontraron usuarios
           </p>
         )}
@@ -114,7 +114,7 @@ export default async function AdminUsuariosPage({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate" style={{ color: '#F6F3EB' }}>{user.full_name}</p>
-                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>@{user.username}</p>
+                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{user.username}</p>
               </div>
               <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
             </div>
@@ -133,10 +133,10 @@ export default async function AdminUsuariosPage({
         <table className="w-full">
           <thead>
             <tr className="border-b border-[#0D3352]">
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium">Usuario</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium">Registrado</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium">Rol</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.40)] font-medium hidden lg:table-cell">Ministerios</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Usuario</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Registrado</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Rol</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium hidden lg:table-cell">Ministerios</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
@@ -159,12 +159,12 @@ export default async function AdminUsuariosPage({
                       </div>
                       <div>
                         <p className="text-sm font-medium">{user.full_name}</p>
-                        <p className="text-xs text-[rgba(246,243,235,0.40)]">@{user.username}</p>
+                        <p className="text-xs text-[rgba(246,243,235,0.68)]">@{user.username}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
-                    <p className="text-xs text-[rgba(246,243,235,0.40)]">
+                    <p className="text-xs text-[rgba(246,243,235,0.68)]">
                       {new Date(user.created_at).toLocaleDateString('es-DO')}
                     </p>
                   </td>
@@ -198,7 +198,7 @@ export default async function AdminUsuariosPage({
           </tbody>
         </table>
         {(!users || users.length === 0) && (
-          <div className="py-16 text-center text-[rgba(246,243,235,0.40)] text-sm">
+          <div className="py-16 text-center text-[rgba(246,243,235,0.68)] text-sm">
             No se encontraron usuarios
           </div>
         )}

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Newspaper, Plus, Pencil, Eye } from 'lucide-react'
 import TogglePublicacionButton from '@/components/admin/TogglePublicacionButton'
@@ -38,7 +38,7 @@ export default async function PublicacionesAdminPage() {
         <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Publicaciones</h1>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {activas} activa{activas !== 1 ? 's' : ''} · {(items ?? []).length} total
             </p>
           </div>
@@ -53,7 +53,7 @@ export default async function PublicacionesAdminPage() {
         <div className="mb-5 p-3.5 rounded-xl flex items-start gap-3"
           style={{ background: 'rgba(118,171,174,0.06)', border: '1px solid rgba(118,171,174,0.15)' }}>
           <Newspaper size={14} style={{ color: '#76ABAE', flexShrink: 0, marginTop: 1 }} />
-          <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.45)' }}>
+          <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
             Las publicaciones son landing pages editoriales para campañas, series y eventos especiales.
             Enlázalas desde el destino CTA de una campaña usando <code className="text-[10px] px-1 rounded" style={{ background: '#0D3352' }}>/publicaciones/slug</code>.
           </p>
@@ -63,7 +63,7 @@ export default async function PublicacionesAdminPage() {
         {(!items || items.length === 0) ? (
           <div className="rounded-xl p-12 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <Newspaper size={28} style={{ color: 'rgba(246,243,235,0.15)', margin: '0 auto 12px' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay publicaciones todavía.</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>No hay publicaciones todavía.</p>
             <Link href="/admin/publicaciones/nueva"
               className="inline-flex items-center gap-1 mt-3 text-sm font-bold"
               style={{ color: '#76ABAE' }}>
@@ -108,11 +108,11 @@ export default async function PublicacionesAdminPage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[10px] font-mono" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                          <span className="text-[10px] font-mono" style={{ color: 'rgba(246,243,235,0.55)' }}>
                             /publicaciones/{item.slug}
                           </span>
                           <span style={{ color: 'rgba(246,243,235,0.15)' }}>·</span>
-                          <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                          <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
                             {new Date(item.published_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short', year: 'numeric' })}
                           </span>
                         </div>

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { Mail, MailOpen, Clock, User } from 'lucide-react'
 import { markMessageRead } from '@/app/actions/admin'
 import DeleteContactMessageButton from '@/components/admin/DeleteContactMessageButton'
@@ -39,7 +39,7 @@ export default async function AdminMensajesPage() {
                 </span>
               )}
             </h1>
-            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Formulario de contacto del sitio web
             </p>
           </div>
@@ -50,7 +50,7 @@ export default async function AdminMensajesPage() {
         {!messages || messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Mail size={40} style={{ color: 'rgba(118,171,174,0.30)' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
               No hay mensajes aún
             </p>
           </div>
@@ -84,7 +84,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
           style={{ background: '#0D3352' }}
         >
           {msg.read
-            ? <MailOpen size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            ? <MailOpen size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
             : <Mail size={16} style={{ color: '#76ABAE' }} />
           }
         </div>
@@ -99,7 +99,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
             {msg.asunto}
           </p>
         </div>
-        <div className="flex items-center gap-1 flex-shrink-0" style={{ color: 'rgba(246,243,235,0.30)' }}>
+        <div className="flex items-center gap-1 flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
           <Clock size={12} />
           <span className="text-[11px]">{timeAgo(msg.created_at)}</span>
         </div>

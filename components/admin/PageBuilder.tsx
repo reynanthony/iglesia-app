@@ -347,7 +347,7 @@ function VisualBlock({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-[10px] font-bold uppercase tracking-[0.2em] mb-1.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</label>
+      <label className="block text-[10px] font-bold uppercase tracking-[0.2em] mb-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</label>
       {children}
     </div>
   )
@@ -378,12 +378,12 @@ function Sel({ value, onChange, options }: { value: string; onChange: (v: string
 function Tog({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex items-center justify-between cursor-pointer">
-      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</span>
+      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</span>
       <button type="button" onClick={() => onChange(!value)}
         className="w-10 h-5 rounded-full relative transition-colors"
         style={{ background: value ? '#F6F3EB' : '#0D3352' }}>
         <span className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
-          style={{ background: value ? '#061E30' : 'rgba(246,243,235,0.40)', transform: `translateX(${value ? '22px' : '2px'})` }} />
+          style={{ background: value ? '#061E30' : 'rgba(246,243,235,0.68)', transform: `translateX(${value ? '22px' : '2px'})` }} />
       </button>
     </label>
   )
@@ -405,7 +405,7 @@ function ImgField({ value, onChange, label }: { value: string; onChange: (v: str
       {value && <img src={value} alt="" className="w-full rounded-lg object-cover" style={{ maxHeight: 80 }} />}
       <button type="button" onClick={() => ref.current?.click()} disabled={up}
         className="w-full text-xs py-1.5 rounded-lg border"
-        style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.40)', background: '#0B2D47' }}>
+        style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)', background: '#0B2D47' }}>
         {up ? 'Subiendo…' : `Subir ${label}`}
       </button>
       <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handle} />
@@ -484,7 +484,7 @@ function VideoField({ value, onChange }: { value: string; onChange: (v: string) 
       )}
       <button type="button" onClick={() => ref.current?.click()} disabled={up}
         className="w-full text-xs py-1.5 rounded-lg border transition"
-        style={{ borderColor: '#0D3352', color: up ? '#4D9EFF' : 'rgba(246,243,235,0.40)', background: '#0B2D47' }}>
+        style={{ borderColor: '#0D3352', color: up ? '#4D9EFF' : 'rgba(246,243,235,0.68)', background: '#0B2D47' }}>
         {up
           ? <span className="flex items-center justify-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full border-2 animate-spin"
@@ -523,7 +523,7 @@ function BgSection({ p, set }: { p: Record<string, any>; set: (k: string, v: any
               value={p._bgOverlay ?? 0.4}
               onChange={e => set('_bgOverlay', parseFloat(e.target.value))}
               style={{ flex: 1, accentColor: '#F6F3EB' }} />
-            <span className="text-xs" style={{ color: 'rgba(246,243,235,0.40)', minWidth: 32 }}>
+            <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)', minWidth: 32 }}>
               {Math.round((p._bgOverlay ?? 0.4) * 100)}%
             </span>
           </div>
@@ -607,7 +607,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { value: '0', label: 'Nuevo' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>+ Añadir</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -619,7 +619,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
         {(p.items||[]).map((it: any, i: number) => (
           <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.40)' }}>Tarjeta {i+1}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.68)' }}>Tarjeta {i+1}</span>
               <button onClick={() => set('items', (p.items||[]).filter((_: any, idx: number) => idx !== i))} style={{ color: '#F87171' }}><X size={13} /></button>
             </div>
             <Field label="Imagen"><ImgField value={it.image || ''} onChange={v => set('items', setItem(p.items, i, 'image', v))} label="imagen" /></Field>
@@ -629,7 +629,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { image: '', title: 'Tarjeta', body: '', link: '' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>+ Añadir tarjeta</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir tarjeta</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -660,7 +660,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
         {(p.items||[]).map((it: any, i: number) => (
           <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.40)' }}>Horario {i+1}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.68)' }}>Horario {i+1}</span>
               <button onClick={() => set('items', (p.items||[]).filter((_: any, idx: number) => idx !== i))} style={{ color: '#F87171' }}><X size={13} /></button>
             </div>
             <Field label="Día"><Input value={it.day} onChange={v => set('items', setItem(p.items, i, 'day', v))} /></Field>
@@ -672,7 +672,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { day: 'Domingo', time: '10:00', unit: 'AM', label: 'Servicio' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.40)' }}>+ Añadir horario</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir horario</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -697,7 +697,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
         <Field label="Altura"><Sel value={p.size} onChange={v => set('size', v)} options={[{ value: 'xs', label: 'XS' }, { value: 'sm', label: 'S' }, { value: 'md', label: 'M (defecto)' }, { value: 'lg', label: 'L' }, { value: 'xl', label: 'XL' }]} /></Field>
       </div>
     )
-    default: return <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>Sin propiedades.</p>
+    default: return <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>Sin propiedades.</p>
   }
 }
 
@@ -709,8 +709,8 @@ function BlockPicker({ onAdd, onClose }: { onAdd: (t: BlockType) => void; onClos
       <div className="w-full sm:w-auto sm:max-w-lg rounded-t-3xl sm:rounded-2xl p-6 overflow-y-auto"
         style={{ background: '#0B2D47', border: '1px solid #0D3352', maxHeight: '85vh' }}>
         <div className="flex items-center justify-between mb-5">
-          <p className="text-[11px] font-black uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.40)' }}>Añadir bloque</p>
-          <button onClick={onClose} style={{ color: 'rgba(246,243,235,0.40)' }}><X size={18} /></button>
+          <p className="text-[11px] font-black uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.68)' }}>Añadir bloque</p>
+          <button onClick={onClose} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={18} /></button>
         </div>
         {BLOCK_GROUPS.map(group => (
           <div key={group.name} className="mb-5">
@@ -723,9 +723,9 @@ function BlockPicker({ onAdd, onClose }: { onAdd: (t: BlockType) => void; onClos
                   <button key={type} onClick={() => { onAdd(type); onClose() }}
                     className="flex flex-col items-center gap-2 p-3 rounded-xl transition hover:bg-[#0B2D47] text-center">
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#0B2D47' }}>
-                      <Icon size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                      <Icon size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
                     </div>
-                    <span className="text-[11px] font-bold leading-tight" style={{ color: 'rgba(246,243,235,0.40)' }}>{meta.label}</span>
+                    <span className="text-[11px] font-bold leading-tight" style={{ color: 'rgba(246,243,235,0.68)' }}>{meta.label}</span>
                   </button>
                 )
               })}
@@ -926,10 +926,10 @@ export default function PageBuilder({
       <div className="flex-shrink-0 flex items-center justify-between px-4 py-2.5 border-b"
         style={{ borderColor: '#0D3352', background: '#061E30', minHeight: 52 }}>
         <div className="flex items-center gap-3">
-          <a href="/admin/paginas" className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'rgba(246,243,235,0.40)' }}>← Páginas</a>
+          <a href="/admin/paginas" className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'rgba(246,243,235,0.68)' }}>← Páginas</a>
           <span style={{ color: '#0D3352' }}>/</span>
           <span className="text-sm font-bold text-white">{pageLabel}</span>
-          <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+          <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
             {blocks.length} bloque{blocks.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -949,21 +949,21 @@ export default function PageBuilder({
           {blocks.length > 0 && (
             <button onClick={() => { setPreviewMode(v => !v); setSelectedId(null) }}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ background: previewMode ? '#4D9EFF' : '#0B2D47', color: previewMode ? '#fff' : 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }}>
+              style={{ background: previewMode ? '#4D9EFF' : '#0B2D47', color: previewMode ? '#fff' : 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}>
               <Eye size={12} /> {previewMode ? 'Editar' : 'Vista previa'}
             </button>
           )}
           {previewPath && blocks.length > 0 && !previewMode && (
             <button onClick={() => setSplitView(v => !v)}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ background: splitView ? '#F6F3EB' : '#0B2D47', color: splitView ? '#061E30' : 'rgba(246,243,235,0.40)', border: '1px solid #0D3352' }}>
+              style={{ background: splitView ? '#F6F3EB' : '#0B2D47', color: splitView ? '#061E30' : 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}>
               <Eye size={12} /> {splitView ? 'Cerrar referencia' : 'Ver publicado'}
             </button>
           )}
           {previewPath && (
             <a href={previewPath} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ color: 'rgba(246,243,235,0.40)', border: '1px solid #0D3352', background: '#051828' }}
+              style={{ color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352', background: '#051828' }}
               title="Abrir en nueva pestaña">
               <Eye size={12} />
             </a>
@@ -986,10 +986,10 @@ export default function PageBuilder({
           <div className="flex-shrink-0 border-b flex flex-col" style={{ height: 380, borderColor: '#0D3352' }}>
             <div className="flex-shrink-0 flex items-center justify-between px-4 py-2"
               style={{ background: '#061E30', borderBottom: '1px solid #0D3352' }}>
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Página publicada — referencia (scroll activo)
               </span>
-              <button onClick={() => setSplitView(false)} style={{ color: 'rgba(246,243,235,0.40)' }}><X size={13} /></button>
+              <button onClick={() => setSplitView(false)} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={13} /></button>
             </div>
             <iframe
               ref={splitIframeRef}
@@ -1010,7 +1010,7 @@ export default function PageBuilder({
               <div className="flex items-center gap-3 px-5 py-2.5 sticky top-0 z-10"
                 style={{ background: '#0B2D47', borderBottom: '1px solid #222' }}>
                 <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#4D9EFF' }} />
-                <p className="text-[11px] flex-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-[11px] flex-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   <strong style={{ color: '#F6F3EB' }}>Vista previa</strong> — así se verá la página al publicar
                 </p>
                 <button onClick={() => setPreviewMode(false)}
@@ -1044,7 +1044,7 @@ export default function PageBuilder({
                     style={{ background: '#0B2D47', borderBottom: '1px solid #222' }}>
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#4D9EFF' }} />
-                      <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         <strong style={{ color: '#F6F3EB' }}>Haz clic en una sección</strong> para cargar todas en el editor y editarla
                       </p>
                     </div>
@@ -1138,12 +1138,12 @@ export default function PageBuilder({
               <div className="p-4">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
-                    {React.createElement(ICONS[selectedBlock.type], { size: 14, style: { color: 'rgba(246,243,235,0.40)' } })}
+                    {React.createElement(ICONS[selectedBlock.type], { size: 14, style: { color: 'rgba(246,243,235,0.68)' } })}
                     <span className="text-[11px] font-black uppercase tracking-wider text-white">
                       {BLOCK_META[selectedBlock.type].label}
                     </span>
                   </div>
-                  <button onClick={() => setSelectedId(null)} style={{ color: 'rgba(246,243,235,0.40)' }}><X size={14} /></button>
+                  <button onClick={() => setSelectedId(null)} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={14} /></button>
                 </div>
                 <PropsPanel block={selectedBlock} onChange={props => updateBlock(selectedBlock.id, props)} />
               </div>
@@ -1165,7 +1165,7 @@ export default function PageBuilder({
                         </div>
                         <div>
                           <p className="text-[11px] font-bold text-white">{SECTION_LABELS[type]}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.40)' }}>Sección {i + 1}</p>
+                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Sección {i + 1}</p>
                         </div>
                       </button>
                     )
@@ -1190,7 +1190,7 @@ export default function PageBuilder({
                   style={{ background: '#061E30', border: '1px solid #0D3352' }}>
                   <MousePointerClick size={16} style={{ color: 'rgba(246,243,235,0.25)' }} />
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   Haz clic sobre cualquier bloque para editarlo
                 </p>
               </div>

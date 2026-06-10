@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -146,11 +146,11 @@ export default async function ReportesDiscipuladoPage() {
           <Link href="/admin/discipulado"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div>
             <h1 className="text-xl font-bold">Dashboard Pastoral</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               Métricas de discipulado · Actualizado ahora
             </p>
           </div>
@@ -168,7 +168,7 @@ export default async function ReportesDiscipuladoPage() {
               style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               <div className="flex items-center justify-between mb-3">
                 <p className="text-[10px] font-black uppercase tracking-wider"
-                  style={{ color: 'rgba(246,243,235,0.35)' }}>{label}</p>
+                  style={{ color: 'rgba(246,243,235,0.62)' }}>{label}</p>
                 <Icon size={14} style={{ color }} />
               </div>
               <p className="font-black text-3xl leading-none" style={{ color }}>{value}</p>
@@ -179,7 +179,7 @@ export default async function ReportesDiscipuladoPage() {
         {/* ── DISTRIBUCIÓN POR ETAPA ── */}
         <section>
           <p className="text-xs font-black uppercase tracking-[0.2em] mb-4"
-            style={{ color: 'rgba(246,243,235,0.35)' }}>
+            style={{ color: 'rgba(246,243,235,0.62)' }}>
             Distribución por etapa
           </p>
           <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
@@ -203,7 +203,7 @@ export default async function ReportesDiscipuladoPage() {
                     </div>
                     <div className="flex items-center gap-2 w-20 flex-shrink-0 text-right justify-end">
                       <span className="font-black text-sm" style={{ color: stage.color }}>{count}</span>
-                      <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>{pct}%</span>
+                      <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>{pct}%</span>
                     </div>
                   </div>
                 )
@@ -219,7 +219,7 @@ export default async function ReportesDiscipuladoPage() {
           <section>
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-1.5"
-                style={{ color: withoutStage > 0 ? '#F59E0B' : 'rgba(246,243,235,0.35)' }}>
+                style={{ color: withoutStage > 0 ? '#F59E0B' : 'rgba(246,243,235,0.62)' }}>
                 <AlertTriangle size={10} /> Sin etapa ({withoutStage})
               </p>
               {withoutStage > 0 && (
@@ -234,7 +234,7 @@ export default async function ReportesDiscipuladoPage() {
               {unassignedUsers.length === 0 ? (
                 <div className="px-5 py-6 text-center">
                   <CheckCircle2 size={18} style={{ color: '#76ABAE', margin: '0 auto 8px' }} />
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     Todos los miembros tienen etapa asignada
                   </p>
                 </div>
@@ -248,7 +248,7 @@ export default async function ReportesDiscipuladoPage() {
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p.full_name}</p>
-                        <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>@{p.username}</p>
+                        <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>@{p.username}</p>
                       </div>
                     </div>
                   ))}
@@ -269,7 +269,7 @@ export default async function ReportesDiscipuladoPage() {
           <section>
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-1.5"
-                style={{ color: stagnant.length > 0 ? '#F59E0B' : 'rgba(246,243,235,0.35)' }}>
+                style={{ color: stagnant.length > 0 ? '#F59E0B' : 'rgba(246,243,235,0.62)' }}>
                 <Clock size={10} /> Estancados +14 días ({stagnant.length})
               </p>
             </div>
@@ -277,7 +277,7 @@ export default async function ReportesDiscipuladoPage() {
               {stagnant.length === 0 ? (
                 <div className="px-5 py-6 text-center">
                   <CheckCircle2 size={18} style={{ color: '#76ABAE', margin: '0 auto 8px' }} />
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     No hay alumnos estancados
                   </p>
                 </div>
@@ -297,7 +297,7 @@ export default async function ReportesDiscipuladoPage() {
                           <span className="text-[10px] font-black ml-auto flex-shrink-0"
                             style={{ color: '#F59E0B' }}>{e.progress_pct}%</span>
                         </div>
-                        <p className="text-[10px] truncate pl-7" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <p className="text-[10px] truncate pl-7" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {program?.title} · {course?.title}
                         </p>
                         <p className="text-[10px] pl-7 mt-0.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
@@ -317,7 +317,7 @@ export default async function ReportesDiscipuladoPage() {
         {leadersWithoutStudents.length > 0 && (
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.35)' }}>
+              style={{ color: 'rgba(246,243,235,0.62)' }}>
               <UserX size={10} /> Líderes disponibles para mentorear ({leadersWithoutStudents.length})
             </p>
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
@@ -330,7 +330,7 @@ export default async function ReportesDiscipuladoPage() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p.full_name}</p>
-                      <p className="text-[10px] capitalize" style={{ color: 'rgba(246,243,235,0.35)' }}>{p.role}</p>
+                      <p className="text-[10px] capitalize" style={{ color: 'rgba(246,243,235,0.62)' }}>{p.role}</p>
                     </div>
                   </div>
                 ))}
@@ -349,13 +349,13 @@ export default async function ReportesDiscipuladoPage() {
         {/* ── ACTIVIDAD RECIENTE ── */}
         <section>
           <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-            style={{ color: 'rgba(246,243,235,0.35)' }}>
+            style={{ color: 'rgba(246,243,235,0.62)' }}>
             <TrendingUp size={10} /> Lecciones completadas esta semana ({recentActivity.length})
           </p>
           <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             {recentActivity.length === 0 ? (
               <div className="px-5 py-6 text-center">
-                <p className="text-xs" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>
                   Sin actividad en los últimos 7 días
                 </p>
               </div>
@@ -375,14 +375,14 @@ export default async function ReportesDiscipuladoPage() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-bold truncate" style={{ color: '#F6F3EB' }}>
                           {r.profile?.full_name}
-                          <span className="font-normal" style={{ color: 'rgba(246,243,235,0.40)' }}> completó </span>
+                          <span className="font-normal" style={{ color: 'rgba(246,243,235,0.68)' }}> completó </span>
                           {lesson?.title}
                         </p>
-                        <p className="text-[10px] truncate mt-0.5" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                        <p className="text-[10px] truncate mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
                           {course?.title}
                         </p>
                       </div>
-                      <p className="text-[10px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                      <p className="text-[10px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
                         {fmtDate(r.completed_at)}
                       </p>
                     </div>
@@ -398,13 +398,13 @@ export default async function ReportesDiscipuladoPage() {
 
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.35)' }}>
+              style={{ color: 'rgba(246,243,235,0.62)' }}>
               <CheckCircle2 size={10} /> Más completados
             </p>
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               {topCompleted.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.35)' }}>Sin completaciones aún</p>
+                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>Sin completaciones aún</p>
                 </div>
               ) : (
                 <div className="divide-y" style={{ borderColor: '#0D3352' }}>
@@ -414,7 +414,7 @@ export default async function ReportesDiscipuladoPage() {
                         style={{ color: '#76ABAE' }}>{i + 1}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{course.title}</p>
-                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {course.discipleship_programs?.title}
                         </p>
                       </div>
@@ -428,13 +428,13 @@ export default async function ReportesDiscipuladoPage() {
 
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.35)' }}>
+              style={{ color: 'rgba(246,243,235,0.62)' }}>
               <AlertTriangle size={10} /> Sin iniciar (posible abandono)
             </p>
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               {topAbandoned.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.35)' }}>Sin datos aún</p>
+                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>Sin datos aún</p>
                 </div>
               ) : (
                 <div className="divide-y" style={{ borderColor: '#0D3352' }}>
@@ -444,7 +444,7 @@ export default async function ReportesDiscipuladoPage() {
                         style={{ color: '#F59E0B' }}>{i + 1}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{course.title}</p>
-                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.62)' }}>
                           {course.discipleship_programs?.title}
                         </p>
                       </div>

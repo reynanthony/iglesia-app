@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Eye, EyeOff } from 'lucide-react'
 import { togglePublico } from '@/app/actions/lideres-admin'
@@ -18,7 +18,7 @@ export default function ToggleLiderButton({ id, isPublic }: { id: string; isPubl
     >
       {isPublic
         ? <Eye size={13} style={{ color: 'rgba(118,171,174,0.7)' }} />
-        : <EyeOff size={13} style={{ color: 'rgba(246,243,235,0.30)' }} />
+        : <EyeOff size={13} style={{ color: 'rgba(246,243,235,0.55)' }} />
       }
     </button>
   )

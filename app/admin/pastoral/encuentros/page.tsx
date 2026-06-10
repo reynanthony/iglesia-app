@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Video, Radio, CheckCircle, Clock, Pencil } from 'lucide-react'
 import DeletePastoralItemButton from '@/components/admin/DeletePastoralItemButton'
@@ -27,13 +27,13 @@ export default async function AdminPastoralEncuentrosPage() {
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 mb-0.5">
-              <Link href="/admin/pastoral" className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <Link href="/admin/pastoral" className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Pastoral
               </Link>
               <span style={{ color: 'rgba(246,243,235,0.20)' }}>/</span>
               <span className="text-[13px] text-white">Encuentros</span>
             </div>
-            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
               {items?.length ?? 0} encuentros registrados
             </p>
           </div>
@@ -49,7 +49,7 @@ export default async function AdminPastoralEncuentrosPage() {
         {(!items || items.length === 0) && (
           <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
             <Video size={28} style={{ color: 'rgba(118,171,174,0.30)', margin: '0 auto 12px' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>No hay encuentros registrados.</p>
+            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>No hay encuentros registrados.</p>
           </div>
         )}
 
@@ -71,7 +71,7 @@ export default async function AdminPastoralEncuentrosPage() {
                 </div>
                 <p className="font-bold text-sm text-white">{item.title}</p>
                 {item.scheduled_at && (
-                  <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                  <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
                     {new Date(item.scheduled_at).toLocaleDateString('es-DO', {
                       weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
                     })}
@@ -83,7 +83,7 @@ export default async function AdminPastoralEncuentrosPage() {
                 <Link href={`/admin/pastoral/encuentros/${item.id}/editar`}
                   className="w-9 h-9 rounded-xl flex items-center justify-center"
                   style={{ background: '#061E30' }}>
-                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
                 </Link>
                 <DeletePastoralItemButton id={item.id} table="pastoral_encounters" />
               </div>

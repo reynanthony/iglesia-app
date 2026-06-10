@@ -74,10 +74,10 @@ export default async function AdminPaginasPage() {
       <div className="border-b" style={{ borderColor: '#0D3352' }}>
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-5">
         <div className="flex items-center gap-3 mb-1">
-          <Layers size={16} style={{ color: 'rgba(246,243,235,0.40)' }} />
+          <Layers size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
           <h1 className="font-bold text-lg text-white">Editor de páginas</h1>
         </div>
-        <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+        <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
           Diseña cada página con bloques drag-and-drop
         </p>
       </div>
@@ -86,7 +86,7 @@ export default async function AdminPaginasPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-8">
         {groups.map(group => (
           <div key={group}>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {group}
             </p>
             <div className="space-y-2">
@@ -101,7 +101,7 @@ export default async function AdminPaginasPage() {
                   >
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: '#0B2D47' }}>
-                      <Icon size={18} style={{ color: 'rgba(246,243,235,0.40)' }} />
+                      <Icon size={18} style={{ color: 'rgba(246,243,235,0.68)' }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -116,7 +116,7 @@ export default async function AdminPaginasPage() {
                           <ResetPageButton pageKey={key} />
                         )}
                       </div>
-                      <p className="text-[12px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{desc}</p>
+                      <p className="text-[12px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{desc}</p>
                       {updatedMap[key] && (
                         <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.25)' }}>
                           Actualizado: {new Date(updatedMap[key]).toLocaleDateString('es-DO', {

@@ -42,7 +42,7 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: 'rgba(246,243,235,0.40)' }
+  const lblStyle = { color: 'rgba(246,243,235,0.68)' }
 
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-5">
@@ -70,7 +70,7 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
         <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
           style={{ borderColor: '#0D3352' }}>
           <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
-          <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
             {preview ? 'Cambiar imagen' : 'Agregar imagen (opcional)'}
           </span>
           <input type="file" name="image" accept="image/*" className="sr-only" onChange={handleFile} />
@@ -80,7 +80,7 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
       <label className="flex items-center gap-3 cursor-pointer">
         <input type="checkbox" name="pinned" defaultChecked={initialValues?.pinned ?? false}
           className="w-4 h-4 accent-white rounded" />
-        <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.40)' }}>
+        <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.68)' }}>
           Fijar en el feed (aparece primero)
         </span>
       </label>
@@ -100,7 +100,7 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
           {isPending ? 'Guardando…' : submitLabel}
         </button>
         <a href={backHref} className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
           Cancelar
         </a>
       </div>

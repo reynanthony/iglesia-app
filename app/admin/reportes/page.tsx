@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { AlertTriangle } from 'lucide-react'
 import DeletePostButton from '@/components/admin/DeletePostButton'
 
@@ -24,14 +24,14 @@ export default async function AdminReportesPage() {
           </div>
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Reportes</h1>
-            <p className="text-xs md:text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs md:text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {reports?.length ?? 0} reportes recibidos
             </p>
           </div>
         </div>
 
         {!reports || reports.length === 0 ? (
-          <div className="text-center py-16" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <div className="text-center py-16" style={{ color: 'rgba(246,243,235,0.68)' }}>
             <p className="text-2xl mb-2">✅</p>
             <p className="text-sm">Sin reportes pendientes</p>
           </div>
@@ -48,11 +48,11 @@ export default async function AdminReportesPage() {
                         style={{ background: 'rgba(248,113,113,0.12)', color: '#F87171' }}>
                         @{report.reporter?.username}
                       </span>
-                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>
                         {new Date(report.created_at).toLocaleDateString('es-DO')}
                       </span>
                     </div>
-                    <p className="text-xs mb-1.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                    <p className="text-xs mb-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
                       Post de <span style={{ color: 'rgba(246,243,235,0.70)' }}>@{report.post?.profiles?.username}</span>
                     </p>
                     <p className="text-sm leading-relaxed line-clamp-2 px-3 py-2 rounded-lg"

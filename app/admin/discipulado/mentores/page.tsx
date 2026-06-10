@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Trash2 } from 'lucide-react'
@@ -49,11 +49,11 @@ export default async function AdminMentoresPage() {
           <Link href="/admin/discipulado"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div>
             <h1 className="text-xl font-bold">Asignaciones de Mentoría</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
               {pairs?.length ?? 0} par{pairs?.length !== 1 ? 'es' : ''} registrados
             </p>
           </div>
@@ -65,7 +65,7 @@ export default async function AdminMentoresPage() {
           <form action={assignMentor} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.40)' }}>
+                style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Mentor
               </label>
               <select name="mentor_id" required
@@ -79,7 +79,7 @@ export default async function AdminMentoresPage() {
             </div>
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.40)' }}>
+                style={{ color: 'rgba(246,243,235,0.68)' }}>
                 Discípulo
               </label>
               <select name="student_id" required
@@ -112,7 +112,7 @@ export default async function AdminMentoresPage() {
 
           {!pairs || pairs.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
                 Aún no hay pares de mentoría registrados
               </p>
             </div>
@@ -137,7 +137,7 @@ export default async function AdminMentoresPage() {
                         </div>
                         <div>
                           <p className="text-xs font-bold" style={{ color: '#F6F3EB' }}>{mentor?.full_name}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>mentor</p>
+                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>mentor</p>
                         </div>
                       </div>
 
@@ -152,7 +152,7 @@ export default async function AdminMentoresPage() {
                         </div>
                         <div>
                           <p className="text-xs font-bold" style={{ color: '#F6F3EB' }}>{student?.full_name}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>discípulo</p>
+                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>discípulo</p>
                         </div>
                       </div>
                     </div>
@@ -174,7 +174,7 @@ export default async function AdminMentoresPage() {
                       <form action={removeMentorPair.bind(null, pair.id)}>
                         <button type="submit"
                           className="w-8 h-8 flex items-center justify-center rounded-lg transition hover:bg-red-900/20"
-                          style={{ color: 'rgba(246,243,235,0.30)' }}
+                          style={{ color: 'rgba(246,243,235,0.55)' }}
                           title="Eliminar par">
                           <Trash2 size={13} />
                         </button>

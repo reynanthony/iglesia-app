@@ -66,7 +66,7 @@ export default async function GrupoMiembrosPage({
           </Link>
           <div>
             <h1 className="text-xl font-bold">{group.name}</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>Gestión de miembros</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>Gestión de miembros</p>
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export default async function GrupoMiembrosPage({
           </form>
 
           {q && searchResults.length === 0 && (
-            <p className="text-sm text-center py-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-sm text-center py-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
               Sin resultados para "{q}"
             </p>
           )}
@@ -112,7 +112,7 @@ export default async function GrupoMiembrosPage({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>@{u.username}</p>
+                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
                   </div>
                   <form action={inviteUserToGroup.bind(null, id, u.id)}>
                     <button type="submit"
@@ -148,7 +148,7 @@ export default async function GrupoMiembrosPage({
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>@{p?.username} · Pendiente</p>
+                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{p?.username} · Pendiente</p>
                     </div>
                     <form action={cancelGroupInvite.bind(null, inv.id, id)}>
                       <button type="submit"
@@ -173,7 +173,7 @@ export default async function GrupoMiembrosPage({
             Miembros — {(members ?? []).length}
           </p>
           {(members ?? []).length === 0 ? (
-            <p className="text-sm text-center py-6" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-sm text-center py-6" style={{ color: 'rgba(246,243,235,0.62)' }}>
               Este grupo no tiene miembros aún
             </p>
           ) : (
@@ -191,7 +191,7 @@ export default async function GrupoMiembrosPage({
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         @{p?.username}
                         {m.role === 'leader' && ' · Líder'}
                       </p>

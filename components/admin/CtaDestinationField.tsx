@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Newspaper } from 'lucide-react'
@@ -78,12 +78,12 @@ export default function CtaDestinationField({
                 borderBottom: '1px solid #0D3352',
               }}
             >
-              <Newspaper size={13} style={{ color: slug === p.slug ? '#76ABAE' : 'rgba(246,243,235,0.30)', flexShrink: 0 }} />
+              <Newspaper size={13} style={{ color: slug === p.slug ? '#76ABAE' : 'rgba(246,243,235,0.55)', flexShrink: 0 }} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm truncate" style={{ color: slug === p.slug ? '#F6F3EB' : 'rgba(246,243,235,0.55)' }}>
                   {p.title}
                 </p>
-                <p className="text-[10px] font-mono truncate" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                <p className="text-[10px] font-mono truncate" style={{ color: 'rgba(246,243,235,0.55)' }}>
                   /publicaciones/{p.slug}
                 </p>
               </div>
@@ -95,7 +95,7 @@ export default function CtaDestinationField({
             </button>
           ))}
           {publicaciones.length === 0 && (
-            <p className="px-3.5 py-3 text-[12px]" style={{ color: 'rgba(246,243,235,0.35)', background: '#0B2D47' }}>
+            <p className="px-3.5 py-3 text-[12px]" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
               No hay publicaciones activas todavía.
             </p>
           )}
@@ -103,7 +103,7 @@ export default function CtaDestinationField({
       )}
 
       {mode === 'next' && (
-        <p className="text-[11px] leading-relaxed px-1" style={{ color: 'rgba(246,243,235,0.35)' }}>
+        <p className="text-[11px] leading-relaxed px-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
           Al pulsar el botón se mostrará la siguiente campaña activa. Si no hay más, cierra el anuncio.
         </p>
       )}

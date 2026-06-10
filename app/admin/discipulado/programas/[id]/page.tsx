@@ -66,7 +66,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.40)' }
+  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
 
   const LEVELS: Record<string, string> = { basico: 'Básico', intermedio: 'Intermedio', avanzado: 'Avanzado' }
 
@@ -78,10 +78,10 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
           <Link href="/admin/discipulado/programas"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
@@ -97,7 +97,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Editar programa ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Datos del programa
           </p>
           <div className="rounded-2xl p-5 space-y-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
@@ -159,7 +159,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Cursos ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Cursos ({courses?.length ?? 0})
           </p>
 
@@ -183,7 +183,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{c.title}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                           {lessonCount} lección{lessonCount !== 1 ? 'es' : ''}
                         </span>
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded"
@@ -207,7 +207,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
           {/* Nuevo curso */}
           <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
               <Plus size={10} className="inline mr-1" />
               Nuevo curso
             </p>
@@ -254,7 +254,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Certificaciones ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.35)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
             Certificaciones
           </p>
 
@@ -279,7 +279,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>@{u.username}</p>
+                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
                     </div>
                     <form action={issueAction}>
                       <button type="submit"
@@ -298,7 +298,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
           {certificates && certificates.length > 0 ? (
             <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               <div className="px-5 py-3 border-b" style={{ borderColor: '#0D3352' }}>
-                <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   {certificates.length} certificado{certificates.length !== 1 ? 's' : ''} emitido{certificates.length !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -319,7 +319,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{profile?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                         <CheckCircle2 size={10} className="inline mr-1" style={{ color: '#76ABAE' }} />
                         {issuedDate}
                       </p>
@@ -338,7 +338,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
           ) : eligibleUsers.length === 0 ? (
             <div className="rounded-2xl p-8 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
               <Award size={24} className="mx-auto mb-3" style={{ color: 'rgba(118,171,174,0.25)' }} />
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
                 Ningún certificado emitido aún
               </p>
             </div>

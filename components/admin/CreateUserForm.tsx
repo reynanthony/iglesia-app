@@ -32,7 +32,7 @@ export default function CreateUserForm() {
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: 'rgba(246,243,235,0.40)' }
+  const lblStyle = { color: 'rgba(246,243,235,0.68)' }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -88,7 +88,7 @@ export default function CreateUserForm() {
           {isPending ? 'Creando…' : 'Crear usuario'}
         </button>
         <a href="/admin/usuarios" className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.40)' }}>
+          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
           Cancelar
         </a>
       </div>
