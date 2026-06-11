@@ -31,7 +31,7 @@ export default async function BibliaPage() {
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
-              La Palabra · Reina-Valera 1960
+              La Palabra · NTV
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -41,7 +41,7 @@ export default async function BibliaPage() {
             </h1>
             <div>
               <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.50)' }}>
-                Lee la Biblia completa en Reina-Valera 1960 con marcadores, notas y lectura continua.
+                Lee la Biblia completa en Nueva Traducción Viviente con marcadores, notas y lectura continua.
               </p>
               <div className="flex flex-wrap gap-3">
                 {bibleOn && (
@@ -79,7 +79,7 @@ export default async function BibliaPage() {
                 <a href="https://www.bible.com/es" target="_blank" rel="noopener noreferrer"
                   className="font-bold underline" style={{ color: TEAL }}>YouVersion</a>{' '}
                 o{' '}
-                <a href="https://www.biblegateway.com/?search=Juan+3&version=RVR1960" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.biblegateway.com/?search=Juan+3&version=NTV" target="_blank" rel="noopener noreferrer"
                   className="font-bold underline" style={{ color: TEAL }}>Bible Gateway</a>{' '}
                 para leer en RVR1960.
               </p>

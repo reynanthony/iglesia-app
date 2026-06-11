@@ -1,5 +1,5 @@
 const BIBLE_API_KEY = process.env.BIBLE_API_KEY
-const BIBLE_ID      = '592420522e16049f-01' // Reina-Valera 1960
+const BIBLE_ID      = 'b32b9d1b64b4ef29-01' // Nueva Traducción Viviente (NTV)
 const BASE_URL      = 'https://api.scripture.api.bible/v1'
 
 export type BibleChapterContent = {

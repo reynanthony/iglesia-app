@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft, Copy, Share2, ChevronLeft, ChevronRight,
-  BookOpen, Check, X, Bookmark, FileText, Image,
+  BookOpen, Check, X, Bookmark, FileText, Image, ScrollText,
 } from 'lucide-react'
 import type { BibleBook } from '@/lib/bible'
+import {
+  upsertBibleHighlight, deleteBibleHighlight,
+  upsertBibleNote, deleteBibleNote,
+} from '@/app/actions/bible'
 
 // ── Types ──────────────────────────────────────────────────────
 type Theme      = 'cream' | 'sepia' | 'dark'
@@ -26,6 +30,17 @@ export interface BookmarkItem {
 
 interface VerseSelection { num: string; ref: string; text: string }
 
+export interface RelatedContent {
+  lessons: Array<{
+    id: string; title: string; reference: string
+    programSlug: string; courseSlug: string
+  }>
+  sessions: Array<{
+    id: string; title: string; reference: string
+    seriesSlug: string; sessionSlug: string; seriesTitle: string
+  }>
+}
+
 export interface BibleReaderProps {
   bookId: string
   bookName: string
@@ -36,6 +51,10 @@ export interface BibleReaderProps {
   next: { bookId: string; chapter: number } | null
   allBooks: BibleBook[]
   startVerse?: number
+  userId?: string
+  initialHighlights?: Record<string, number>
+  initialNotes?: Record<string, string>
+  relatedContent?: RelatedContent
 }
 
 // ── Constants ─────────────────────────────────────────────────
@@ -203,7 +222,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
     // Reference
     ctx.font      = `bold 32px -apple-system, BlinkMacSystemFont, “Helvetica Neue”, sans-serif`
     ctx.fillStyle = '#76ABAE'
-    ctx.fillText(`— ${verse.ref}  (RVR1960)`, PAD, sepY + REF_OFFSET)
+    ctx.fillText(`— ${verse.ref}  (NTV)`, PAD, sepY + REF_OFFSET)
 
     // Branding
     ctx.font      = `22px -apple-system, BlinkMacSystemFont, sans-serif`
@@ -224,6 +243,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
   bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
+  userId, initialHighlights, initialNotes, relatedContent,
 }: BibleReaderProps) {
   const router = useRouter()
 
@@ -335,13 +355,21 @@ export function BibleReader({
   useEffect(() => { highlightsRef.current = highlights }, [highlights])
 
   useLayoutEffect(() => {
-    const stored = localStorage.getItem(`bible-hl-${bookId}-${chapterNum}`)
-    const hl: Highlights = stored ? JSON.parse(stored) : {}
-    if (startVerse && hl[String(startVerse)] === undefined) {
-      hl[String(startVerse)] = 0  // yellow highlight for the entry verse
+    if (initialHighlights !== undefined) {
+      const hl = { ...initialHighlights }
+      if (startVerse && hl[String(startVerse)] === undefined) {
+        hl[String(startVerse)] = 0
+      }
+      setHighlights(hl)
+    } else {
+      const stored = localStorage.getItem(`bible-hl-${bookId}-${chapterNum}`)
+      const hl: Highlights = stored ? JSON.parse(stored) : {}
+      if (startVerse && hl[String(startVerse)] === undefined) {
+        hl[String(startVerse)] = 0
+      }
+      setHighlights(hl)
     }
-    setHighlights(hl)
-  }, [bookId, chapterNum, startVerse])
+  }, [bookId, chapterNum, startVerse, initialHighlights])
 
   useEffect(() => {
     localStorage.setItem(`bible-hl-${bookId}-${chapterNum}`, JSON.stringify(highlights))
@@ -349,11 +377,15 @@ export function BibleReader({
 
   // ── Notes ──────────────────────────────────────────────────
   useLayoutEffect(() => {
-    const stored = localStorage.getItem(`bible-notes-${bookId}-${chapterNum}`)
-    setNotes(stored ? JSON.parse(stored) : {})
+    if (initialNotes !== undefined) {
+      setNotes(initialNotes)
+    } else {
+      const stored = localStorage.getItem(`bible-notes-${bookId}-${chapterNum}`)
+      setNotes(stored ? JSON.parse(stored) : {})
+    }
     setNoteMode(false)
     setNoteText('')
-  }, [bookId, chapterNum])
+  }, [bookId, chapterNum, initialNotes])
 
   useEffect(() => {
     localStorage.setItem(`bible-notes-${bookId}-${chapterNum}`, JSON.stringify(notes))
@@ -366,17 +398,23 @@ export function BibleReader({
 
   // ── Highlight actions ──────────────────────────────────────
   const toggleHighlight = useCallback((verseNum: string, colorIdx: number) => {
+    const isRemoving = highlightsRef.current[verseNum] === colorIdx
     setHighlights(prev => {
       const next = { ...prev }
-      if (next[verseNum] === colorIdx) delete next[verseNum]
+      if (isRemoving) delete next[verseNum]
       else next[verseNum] = colorIdx
       return next
     })
-  }, [])
+    if (userId) {
+      if (isRemoving) deleteBibleHighlight(bookId, chapterNum, parseInt(verseNum))
+      else upsertBibleHighlight(bookId, chapterNum, parseInt(verseNum), colorIdx)
+    }
+  }, [userId, bookId, chapterNum])
 
   const removeHighlight = useCallback((verseNum: string) => {
     setHighlights(prev => { const n = { ...prev }; delete n[verseNum]; return n })
-  }, [])
+    if (userId) deleteBibleHighlight(bookId, chapterNum, parseInt(verseNum))
+  }, [userId, bookId, chapterNum])
 
   // ── Bookmark actions ───────────────────────────────────────
   const toggleBookmark = useCallback(() => {
@@ -405,14 +443,20 @@ export function BibleReader({
 
   const saveNote = useCallback(() => {
     if (!verse) return
+    const trimmed = noteText.trim()
     setNotes(prev => {
       const next = { ...prev }
-      if (noteText.trim()) next[verse.num] = noteText.trim()
+      if (trimmed) next[verse.num] = trimmed
       else delete next[verse.num]
       return next
     })
     setNoteMode(false)
-  }, [verse, noteText])
+    if (userId) {
+      const verseInt = parseInt(verse.num)
+      if (trimmed) upsertBibleNote(bookId, chapterNum, verseInt, trimmed)
+      else deleteBibleNote(bookId, chapterNum, verseInt)
+    }
+  }, [verse, noteText, userId, bookId, chapterNum])
 
   // ── Verse tap (delegation) ──────────────────────────────────
   useEffect(() => {
@@ -459,14 +503,14 @@ export function BibleReader({
   // ── Share / copy ───────────────────────────────────────────
   const handleCopy = async () => {
     if (!verse) return
-    await navigator.clipboard.writeText(`"${verse.text}" — ${verse.ref} (RVR1960)`)
+    await navigator.clipboard.writeText(`"${verse.text}" — ${verse.ref} (NTV)`)
     setCopied(true)
     setTimeout(() => { setCopied(false); setVerse(null) }, 1800)
   }
 
   const handleShareText = async () => {
     if (!verse) return
-    const text = `"${verse.text}" — ${verse.ref} (RVR1960)`
+    const text = `"${verse.text}" — ${verse.ref} (NTV)`
     if (navigator.share) { await navigator.share({ text }) }
     else {
       await navigator.clipboard.writeText(text)
@@ -495,7 +539,7 @@ export function BibleReader({
       const blob = await res.blob()
       const file = new File([blob], 'versiculo.png', { type: 'image/png' })
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: `${verse.ref} (RVR1960)` })
+        await navigator.share({ files: [file], title: `${verse.ref} (NTV)` })
       } else {
         const a = document.createElement('a')
         a.href     = shareCardUrl
@@ -549,7 +593,7 @@ export function BibleReader({
             <span style={{ color: 'rgba(246,243,235,0.70)' }}>{bookName}</span>
             <span style={{ color: TEAL }}>{chapterNum}</span>
             <span className="text-[8px] font-bold uppercase tracking-[0.28em] px-2 py-0.5 rounded"
-              style={{ background: `${TEAL}18`, color: TEAL }}>RVR1960</span>
+              style={{ background: `${TEAL}18`, color: TEAL }}>NTV</span>
           </Link>
           <div className="flex-shrink-0 flex items-center gap-1">
             {prev ? (
@@ -581,6 +625,45 @@ export function BibleReader({
             style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', color: t.text }}>{chapterNum}</span>
           {verseCount > 0 && <span style={{ fontSize: 11, color: t.muted }}>{verseCount} vv.</span>}
         </div>
+
+        {relatedContent && (relatedContent.lessons.length > 0 || relatedContent.sessions.length > 0) && (
+          <div className="mb-8 p-4 rounded-2xl" style={{ background: `${TEAL}0A`, border: `1px solid ${TEAL}1A` }}>
+            <p className="text-[9px] font-black uppercase tracking-[0.25em] mb-3"
+              style={{ color: `${TEAL}80` }}>Recursos relacionados</p>
+            <div className="space-y-2">
+              {relatedContent.sessions.map(s => (
+                <Link key={s.id}
+                  href={`/educacion/estudio-biblico/${s.seriesSlug}/${s.sessionSlug}`}
+                  className="flex items-start gap-3 p-3 rounded-xl transition hover:brightness-110"
+                  style={{ background: `${TEAL}12`, border: `1px solid ${TEAL}20` }}>
+                  <BookOpen size={13} style={{ color: TEAL, flexShrink: 0, marginTop: 1 }} />
+                  <div className="min-w-0">
+                    <p style={{ fontSize: 10, color: `${TEAL}99`, fontWeight: 700, marginBottom: 1 }}>
+                      {s.seriesTitle}
+                    </p>
+                    <p className="truncate" style={{ fontSize: 13, color: t.text, fontWeight: 700 }}>{s.title}</p>
+                    <p style={{ fontSize: 10, color: t.muted }}>{s.reference}</p>
+                  </div>
+                </Link>
+              ))}
+              {relatedContent.lessons.map(l => (
+                <Link key={l.id}
+                  href={`/educacion/discipulado/${l.programSlug}/${l.courseSlug}/${l.id}`}
+                  className="flex items-start gap-3 p-3 rounded-xl transition hover:brightness-110"
+                  style={{ background: `${TEAL}0A`, border: `1px solid ${TEAL}18` }}>
+                  <ScrollText size={13} style={{ color: TEAL, flexShrink: 0, marginTop: 1 }} />
+                  <div className="min-w-0">
+                    <p style={{ fontSize: 10, color: `${TEAL}80`, fontWeight: 700, marginBottom: 1 }}>
+                      Discipulado
+                    </p>
+                    <p className="truncate" style={{ fontSize: 13, color: t.text, fontWeight: 700 }}>{l.title}</p>
+                    <p style={{ fontSize: 10, color: t.muted }}>{l.reference}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {content ? (
           <>
@@ -640,7 +723,7 @@ export function BibleReader({
               No se pudo cargar este capítulo. Verifica tu conexión o intenta de nuevo.
             </p>
             <a
-              href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=RVR1960`}
+              href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=NTV`}
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
               style={{ background: TEAL, color: '#051828' }}>

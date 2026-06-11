@@ -96,7 +96,7 @@ export default function BibleSelector() {
           <>
             <Crumb label="La Biblia" dim />
             <Sep />
-            <Crumb label="RVR 1960" color={TEAL} bold />
+            <Crumb label="NTV" color={TEAL} bold />
             <Sep />
             <Crumb label="Elige un libro" dim />
           </>
@@ -149,7 +149,7 @@ export default function BibleSelector() {
             <StepHeading
               eyebrow={isOT ? 'Antiguo Testamento' : 'Nuevo Testamento'}
               title={book.name}
-              sub={`${book.chapters} capítulos · RVR 1960`}
+              sub={`${book.chapters} capítulos · NTV`}
               accent={accent}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))', gap: 8 }}>
@@ -199,7 +199,7 @@ function Testament({
     <div>
       <div className="flex items-center gap-4 mb-12">
         <div className="h-px flex-1" style={{ background: '#D2CDB8' }} />
-        <p className="font-black uppercase" style={{ fontSize: 9, letterSpacing: '0.44em', color: accent }}>
+        <p className="font-black uppercase" style={{ fontSize: 11, letterSpacing: '0.40em', color: accent }}>
           {label}
         </p>
         <div className="h-px flex-1" style={{ background: '#D2CDB8' }} />
@@ -207,7 +207,7 @@ function Testament({
       <div className="space-y-10">
         {cats.map(cat => (
           <div key={cat.label}>
-            <p className="font-bold uppercase mb-4" style={{ fontSize: 8, letterSpacing: '0.36em', color: `${NAVY}40` }}>
+            <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: `${NAVY}70` }}>
               {cat.label}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 10 }}>
