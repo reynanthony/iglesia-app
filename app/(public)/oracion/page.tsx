@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { Flame, Plus, ArrowRight, CheckCircle, Sparkles, Users } from 'lucide-react'
+import { Flame, Plus, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { PublicPrayerButton } from '@/components/public/PublicPrayerButton'
+import { PrayerCard } from '@/components/public/PrayerCard'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +21,7 @@ export default async function OracionPublicaPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: requests, error }, { data: allParticipants }] = await Promise.all([
+  const [{ data: requests, error }, { data: allParticipants }, { data: allResponses }] = await Promise.all([
     supabase
       .from('prayer_requests')
       .select('id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)')
@@ -31,6 +31,9 @@ export default async function OracionPublicaPage() {
     supabase
       .from('prayer_participants')
       .select('request_id, user_id'),
+    supabase
+      .from('prayer_responses')
+      .select('request_id'),
   ])
 
   const countMap: Record<string, number> = {}
@@ -38,6 +41,11 @@ export default async function OracionPublicaPage() {
   for (const p of allParticipants ?? []) {
     countMap[p.request_id] = (countMap[p.request_id] ?? 0) + 1
     if (p.user_id === user?.id) userPrayed.add(p.request_id)
+  }
+
+  const responseCountMap: Record<string, number> = {}
+  for (const r of allResponses ?? []) {
+    responseCountMap[r.request_id] = (responseCountMap[r.request_id] ?? 0) + 1
   }
 
   const active   = (requests ?? []).filter(r => r.status !== 'respondida')
@@ -150,46 +158,23 @@ export default async function OracionPublicaPage() {
 
               <div className="space-y-3">
                 {active.map(req => {
-                  const count  = countMap[req.id] ?? 0
-                  const prayed = userPrayed.has(req.id)
-                  const name   = req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Miembro')
+                  const count     = countMap[req.id] ?? 0
+                  const resCount  = responseCountMap[req.id] ?? 0
+                  const prayed    = userPrayed.has(req.id)
+                  const name      = req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Miembro')
                   return (
-                    <div key={req.id}
-                      className="rounded-2xl border border-edge hover:border-edge-2 bg-card p-5 transition">
-                      {/* Prayer text */}
-                      <p className="text-sm text-ink leading-relaxed mb-3 italic" style={{ lineHeight: 1.7 }}>
-                        &ldquo;{(req as any).body || req.title}&rdquo;
-                      </p>
-                      {/* Motivo tag — only if separate from body */}
-                      {(req as any).body && req.title && (
-                        <p className="text-[11px] font-bold text-ink-3 mb-3 uppercase tracking-[0.15em]">
-                          {req.title}
-                        </p>
-                      )}
-                      {/* Footer */}
-                      <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-[11px] text-ink-3">{name}</span>
-                          <span className="text-ink-3 opacity-40">·</span>
-                          <span className="text-[11px] text-ink-3">{timeAgo(req.created_at)}</span>
-                          {count > 0 && (
-                            <>
-                              <span className="text-ink-3 opacity-40">·</span>
-                              <span className="inline-flex items-center gap-1 text-[11px] font-bold"
-                                style={{ color: TEAL }}>
-                                <Flame size={10} /> {count} orando
-                              </span>
-                            </>
-                          )}
-                        </div>
-                        <PublicPrayerButton
-                          requestId={req.id}
-                          initialCount={count}
-                          initialPrayed={prayed}
-                          isAuthenticated={!!user}
-                        />
-                      </div>
-                    </div>
+                    <PrayerCard
+                      key={req.id}
+                      requestId={req.id}
+                      body={(req as any).body || req.title}
+                      title={(req as any).body ? req.title : null}
+                      authorName={name}
+                      timeAgoStr={timeAgo(req.created_at)}
+                      prayCount={count}
+                      responseCount={resCount}
+                      initialPrayed={prayed}
+                      isAuthenticated={!!user}
+                    />
                   )
                 })}
               </div>

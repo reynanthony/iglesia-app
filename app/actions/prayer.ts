@@ -122,6 +122,22 @@ export async function togglePublicPrayer(requestId: string): Promise<{ success: 
   return { success: true }
 }
 
+export async function createPrayerResponse(requestId: string, formData: FormData): Promise<{ success: boolean; needsLogin?: boolean }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { success: false, needsLogin: true }
+
+  const body         = (formData.get('body') as string)?.trim()
+  const is_anonymous = formData.get('is_anonymous') === 'on'
+
+  if (!body) return { success: false }
+
+  await supabase.from('prayer_responses').insert({ request_id: requestId, user_id: user.id, body, is_anonymous })
+  revalidatePath('/oracion')
+  revalidatePath('/app/oracion')
+  return { success: true }
+}
+
 export async function shareTestimony(requestId: string, formData: FormData): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
