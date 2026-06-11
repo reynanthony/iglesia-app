@@ -53,6 +53,15 @@ export type DHomepage = {
   hero_show_grid: boolean | null      // default true
   hero_grid_opacity: number | null    // 0–0.2, default 0.04
   hero_overlay_opacity: number | null // 0–1, default 0.60
+  hero_text_color: string | null      // 'light' | 'dark', default 'light'
+  hero_bg_color: string | null        // hex, default '#051828'
+  hero_title_size: string | null      // 'sm'|'md'|'lg'|'xl', default 'xl'
+  hero_title_color: string | null     // hex override for title text
+  hero_accent_color: string | null    // hex override for accent text
+  hero_subtitle_color: string | null  // hex override for subtitle text
+  hero_eyebrow_color: string | null   // hex override for eyebrow text/line
+  hero_title_animation: string | null // 'none'|'fade-up'|'reveal'|'split'|'gradient'
+  hero_layout: string | null          // 'default'|'centered'
   cta_eyebrow: string | null
   cta_title_main: string | null
   cta_title_accent: string | null
@@ -72,6 +81,17 @@ export type DNosotros = {
   hero_body: string | null
   hero_image: string | null       // uuid → cmsImageUrl()
   hero_video_url: string | null
+  hero_overlay_opacity: number | null // 0–1, default 0.55
+  hero_show_grid: boolean | null      // default true
+  hero_text_color: string | null      // 'light' | 'dark', default 'light'
+  hero_bg_color: string | null        // hex, default '#051828'
+  hero_title_size: string | null      // 'sm'|'md'|'lg'|'xl', default 'lg'
+  hero_title_color: string | null     // hex override for title text
+  hero_accent_color: string | null    // hex override for accent text
+  hero_subtitle_color: string | null  // hex override for subtitle text
+  hero_eyebrow_color: string | null   // hex override for eyebrow text/line
+  hero_title_animation: string | null // 'none'|'fade-up'|'reveal'|'split'|'gradient'
+  hero_layout: string | null          // 'default'|'centered'
   stat_year: string | null
   stat_families: string | null
   stat_generations: string | null
@@ -91,6 +111,17 @@ export type DContacto = {
   hero_subtitle: string | null
   hero_image: string | null       // uuid → cmsImageUrl()
   hero_video_url: string | null
+  hero_overlay_opacity: number | null // 0–1, default 0.65
+  hero_show_grid: boolean | null      // default true
+  hero_text_color: string | null      // 'light' | 'dark', default 'light'
+  hero_bg_color: string | null        // hex, default '#051828'
+  hero_title_size: string | null      // 'sm'|'md'|'lg'|'xl', default 'lg'
+  hero_title_color: string | null     // hex override for title text
+  hero_accent_color: string | null    // hex override for accent text
+  hero_subtitle_color: string | null  // hex override for subtitle text
+  hero_eyebrow_color: string | null   // hex override for eyebrow text/line
+  hero_title_animation: string | null // 'none'|'fade-up'|'reveal'|'split'|'gradient'
+  hero_layout: string | null          // 'default'|'centered'
   info_eyebrow: string | null
   form_eyebrow: string | null
   first_visit_title: string | null
@@ -111,6 +142,15 @@ export type DMinisterio = {
   hero_watermark: string | null
   hero_overlay_opacity: number | null  // 0–1, default 0.80
   hero_show_grid: boolean | null       // default true
+  hero_text_color: string | null       // 'light' | 'dark', default 'light'
+  hero_bg_color: string | null         // hex, default '#051828'
+  hero_title_size: string | null       // 'sm'|'md'|'lg'|'xl', default 'md'
+  hero_title_color: string | null      // hex override for title text
+  hero_accent_color: string | null     // hex override for accent text
+  hero_subtitle_color: string | null   // hex override for subtitle text
+  hero_eyebrow_color: string | null    // hex override for eyebrow text/line
+  hero_title_animation: string | null  // 'none'|'fade-up'|'reveal'|'split'|'gradient'
+  hero_layout: string | null           // 'default'|'centered'
   color: string | null
   icon: string | null
   leader_name: string | null

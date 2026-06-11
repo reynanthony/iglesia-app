@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { LeaderCards } from '@/components/public/LeaderCards'
 import { cmsSingleton, cmsImageUrl, type DNosotros } from '@/lib/directus'
+import { heroStyle } from '@/lib/hero-style'
+import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,6 +58,21 @@ export default async function NosotrosPage() {
   const heroTitleAccent = c?.hero_title_accent ?? 'tial.'
   const heroImageUrl    = cmsImageUrl(c?.hero_image)
   const heroVideoUrl    = c?.hero_video_url   ?? null
+  const heroOverlayOpacity = c?.hero_overlay_opacity ?? 0.55
+  const heroShowGrid       = c?.hero_show_grid !== false
+  const heroTitleAnimation = (c?.hero_title_animation ?? 'none') as TitleAnimation
+  const heroLayout         = c?.hero_layout ?? 'default'
+  const hs = heroStyle({
+    textColor:        c?.hero_text_color,
+    bgColor:          c?.hero_bg_color,
+    titleSize:        c?.hero_title_size,
+    titleColorHex:    c?.hero_title_color,
+    accentColorHex:   c?.hero_accent_color,
+    subtitleColorHex: c?.hero_subtitle_color,
+    eyebrowColorHex:  c?.hero_eyebrow_color,
+    defaultBg: '#051828',
+    defaultTitleSize: 'lg',
+  })
 
   const pullquote       = c?.pullquote        ?? 'No somos un edificio. Somos una familia que se reúne, crece y sirve juntos.'
   const pullquoteAuthor = c?.pullquote_author ?? '— Fundadores de El Manantial'
@@ -82,11 +99,11 @@ export default async function NosotrosPage() {
           1. HERO — dark, editorial
       ══════════════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh] flex flex-col justify-end"
-        style={{ background: DARK }}>
+        style={{ background: hs.bg }}>
 
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden
-            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55 }} />
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
         )}
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
         {(heroImageUrl || heroVideoUrl) && (
@@ -94,32 +111,39 @@ export default async function NosotrosPage() {
             style={{ background: `linear-gradient(160deg, rgba(5,24,40,0.75) 0%, rgba(9,60,93,0.40) 70%, transparent 100%)` }} />
         )}
 
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 90px)` }} />
+        )}
 
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
           <span className="font-black leading-none tracking-tighter block"
-            style={{ fontSize: 'clamp(18rem, 40vw, 38rem)', opacity: 0.05, lineHeight: 1, paddingRight: '1rem', color: TEAL }}>
+            style={{ fontSize: 'clamp(18rem, 40vw, 38rem)', opacity: 0.05, lineHeight: 1, paddingRight: '1rem', color: hs.gridColor }}>
             08
           </span>
         </div>
 
-        <div className="relative max-w-6xl mx-auto w-full px-6 pb-0 pt-32 md:pt-40">
+        <div className={`relative max-w-6xl mx-auto w-full px-6 pb-0 pt-32 md:pt-40${heroLayout === 'centered' ? ' text-center' : ''}`}>
           <div className="pb-20 max-w-3xl">
-            <div className="flex items-center gap-5 mb-14">
-              <div className="w-12 h-px" style={{ background: TEAL }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}B0` }}>
+            <div className={`flex items-center gap-5 mb-14${heroLayout === 'centered' ? ' justify-center' : ''}`}>
+              {heroLayout !== 'centered' && <div className="w-12 h-px" style={{ background: hs.eyebrowLine }} />}
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: hs.eyebrowColor }}>
                 {heroEyebrow}
               </p>
             </div>
-            <h1 className="font-display font-black tracking-tighter text-white mb-8 leading-[0.88]"
-              style={{ fontSize: 'clamp(3.5rem, 11vw, 10rem)' }}>
+            <HeroTitle
+              animation={heroTitleAnimation}
+              color={hs.titleColor}
+              accentColor={hs.accentColor}
+              className="font-display font-black tracking-tighter mb-8 leading-[0.88]"
+              style={{ fontSize: hs.titleFontSize }}
+            >
               {heroTitleMain.split('\n').map((line, i, arr) => (
                 <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
               ))}
-              <br /><em style={{ color: TEAL }}>{heroTitleAccent}</em>
-            </h1>
-            <p className="text-base leading-relaxed max-w-lg mt-8" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <br /><em style={{ color: hs.accentColor }}>{heroTitleAccent}</em>
+            </HeroTitle>
+            <p className="text-base leading-relaxed max-w-lg mt-8" style={{ color: hs.subtitleColor }}>
               {heroBody}
             </p>
           </div>

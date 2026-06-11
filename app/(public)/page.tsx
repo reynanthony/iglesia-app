@@ -5,6 +5,8 @@ import PWAInstallBanner from '@/components/public/PWAInstallBanner'
 import { getDailyVerse, getDailyVerseDate } from '@/lib/daily-verse'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { createClient } from '@/lib/supabase/server'
+import { heroStyle } from '@/lib/hero-style'
+import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,6 +63,19 @@ export default async function HomePage() {
   const heroShowGrid       = c.hero_show_grid      !== false
   const heroGridOpacity    = c.hero_grid_opacity   ?? 0.04
   const heroOverlayOpacity = c.hero_overlay_opacity ?? (heroImageUrl || heroVideoUrl ? 0.60 : 0.92)
+  const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
+  const heroLayout         = c.hero_layout ?? 'default'
+  const hs = heroStyle({
+    textColor:        c.hero_text_color,
+    bgColor:          c.hero_bg_color,
+    titleSize:        c.hero_title_size,
+    titleColorHex:    c.hero_title_color,
+    accentColorHex:   c.hero_accent_color,
+    subtitleColorHex: c.hero_subtitle_color,
+    eyebrowColorHex:  c.hero_eyebrow_color,
+    defaultBg: '#051828',
+    defaultTitleSize: 'xl',
+  })
 
   // Services
   const defaultServices = [
@@ -133,7 +148,7 @@ export default async function HomePage() {
           1. HERO
       ════════════════════════════════════════════════ */}
       <section className="hero-mesh relative min-h-[100svh] md:min-h-screen flex flex-col overflow-hidden"
-        style={{ background: DARK }}>
+        style={{ background: hs.bg }}>
 
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden
@@ -146,37 +161,42 @@ export default async function HomePage() {
 
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ opacity: heroGridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+            style={{ opacity: heroGridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 90px)` }} />
         )}
 
         {heroWatermark && (
           <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
-            <span className="font-black text-white leading-none tracking-tighter block"
-              style={{ fontSize: 'clamp(20rem, 45vw, 42rem)', opacity: 0.04, lineHeight: 1 }}>
+            <span className="font-black leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(20rem, 45vw, 42rem)', opacity: 0.04, lineHeight: 1, color: hs.gridColor }}>
               {heroWatermark}
             </span>
           </div>
         )}
 
-        <div className="relative flex-1 flex flex-col justify-end max-w-6xl mx-auto w-full px-6 pb-16 sm:pb-20 pt-28 sm:pt-36">
+        <div className={`relative flex-1 flex flex-col justify-end max-w-6xl mx-auto w-full px-6 pb-16 sm:pb-20 pt-28 sm:pt-36${heroLayout === 'centered' ? ' items-center text-center' : ''}`}>
 
-          <div className="flex items-center gap-4 mb-8 sm:mb-10">
-            <div className="w-10 h-px" style={{ background: TEAL }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em]" style={{ color: `${TEAL}99` }}>
+          <div className={`flex items-center gap-4 mb-8 sm:mb-10${heroLayout === 'centered' ? ' justify-center' : ''}`}>
+            {heroLayout !== 'centered' && <div className="w-10 h-px" style={{ background: hs.eyebrowLine }} />}
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em]" style={{ color: hs.eyebrowColor }}>
               {heroEyebrow}
             </p>
           </div>
 
-          <h1 className="font-display font-black tracking-tighter text-white mb-10 sm:mb-12 max-w-5xl leading-[0.9] md:leading-[0.85]"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 11rem)' }}>
+          <HeroTitle
+            animation={heroTitleAnimation}
+            color={hs.titleColor}
+            accentColor={hs.accentColor}
+            className="font-display font-black tracking-tighter mb-10 sm:mb-12 max-w-5xl leading-[0.9] md:leading-[0.85]"
+            style={{ fontSize: hs.titleFontSize }}
+          >
             {heroTitleMain.split('\n').map((line, i, arr) => (
               <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
             ))}
-            <em className="block" style={{ color: TEAL }}> {heroTitleAccent}</em>
-          </h1>
+            <em className="block" style={{ color: hs.accentColor }}> {heroTitleAccent}</em>
+          </HeroTitle>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-2xl">
-            <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.60)' }}>
+            <p className="text-sm leading-relaxed" style={{ color: hs.subtitleColor }}>
               {heroSubtitle}
             </p>
             <div className="flex flex-col gap-3">

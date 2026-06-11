@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import { cmsGet, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { heroStyle } from '@/lib/hero-style'
+import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
 import {
   ArrowLeft, ArrowRight, Play, FileText, Megaphone, Video, Pin,
   Users, Music, Heart, Star, BookOpen, Mic, Baby, Flame, Home, Globe,
@@ -173,11 +175,24 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
 
       {/* ══ HERO ═══════════════════════════════════════════ */}
       {(() => {
-        const overlayOpacity = ministry.hero_overlay_opacity ?? 0.80
-        const showGrid       = ministry.hero_show_grid !== false
-        const gridOpacity    = 0.04
+        const overlayOpacity     = ministry.hero_overlay_opacity ?? 0.80
+        const showGrid           = ministry.hero_show_grid !== false
+        const gridOpacity        = 0.04
+        const heroTitleAnimation = (ministry.hero_title_animation ?? 'none') as TitleAnimation
+        const heroLayout         = ministry.hero_layout ?? 'default'
+        const hs = heroStyle({
+          textColor:        ministry.hero_text_color,
+          bgColor:          ministry.hero_bg_color,
+          titleSize:        ministry.hero_title_size,
+          titleColorHex:    ministry.hero_title_color,
+          accentColorHex:   ministry.hero_accent_color,
+          subtitleColorHex: ministry.hero_subtitle_color,
+          eyebrowColorHex:  ministry.hero_eyebrow_color,
+          defaultBg: DARK,
+          defaultTitleSize: 'md',
+        })
         return (
-      <section className="relative overflow-hidden" style={{ background: DARK, minHeight: '60vh' }}>
+      <section className="relative overflow-hidden" style={{ background: hs.bg, minHeight: '60vh' }}>
 
         {/* Fondo: video tiene prioridad sobre foto */}
         {ministry.video_url ? (
@@ -194,15 +209,15 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
         {/* Grilla sutil */}
         {showGrid && (
           <div className="absolute inset-0 pointer-events-none"
-            style={{ opacity: gridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 80px)` }} />
+            style={{ opacity: gridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px)` }} />
         )}
 
         {/* Watermark decorativo */}
         {ministry.hero_watermark && (
           <div className="pointer-events-none absolute select-none right-0 bottom-0 overflow-hidden"
             aria-hidden>
-            <span className="font-black text-white leading-none tracking-tighter block"
-              style={{ fontSize: 'clamp(10rem, 30vw, 28rem)', opacity: 0.05, lineHeight: 1 }}>
+            <span className="font-black leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(10rem, 30vw, 28rem)', opacity: 0.05, lineHeight: 1, color: hs.gridColor }}>
               {ministry.hero_watermark}
             </span>
           </div>
@@ -211,12 +226,13 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-0">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] mb-14 text-white/40">
-            <Link href="/ministerios" className="hover:text-white/80 transition flex items-center gap-1.5">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] mb-14"
+            style={{ color: hs.eyebrowColor }}>
+            <Link href="/ministerios" className="hover:opacity-80 transition flex items-center gap-1.5">
               <ArrowLeft size={11} /> Ministerios
             </Link>
             <span>/</span>
-            <span className="text-white/65">{ministry.name}</span>
+            <span style={{ opacity: 0.8 }}>{ministry.name}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pb-16">
@@ -224,15 +240,21 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             {/* Left: identity */}
             <div className="lg:col-span-7">
               <div className="w-20 h-20 flex items-center justify-center rounded-2xl mb-8"
-                style={{ background: 'rgba(118,171,174,0.15)', border: '1px solid rgba(118,171,174,0.30)' }}>
-                <IconComponent size={34} color={TEAL} strokeWidth={1.5} />
+                style={{ background: `${hs.accentColor}1A`, border: `1px solid ${hs.accentColor}33` }}>
+                <IconComponent size={34} color={hs.accentColor} strokeWidth={1.5} />
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: TEAL }}>— Ministerio</p>
-              <h1 className="text-5xl sm:text-6xl md:text-8xl font-black leading-[0.88] tracking-tighter mb-6" style={{ color: CREAM }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: hs.accentColor }}>— Ministerio</p>
+              <HeroTitle
+                animation={heroTitleAnimation}
+                color={hs.titleColor}
+                accentColor={hs.accentColor}
+                className="font-black leading-[0.88] tracking-tighter mb-6"
+                style={{ fontSize: hs.titleFontSize }}
+              >
                 {ministry.name}
-              </h1>
+              </HeroTitle>
               {ministry.description && (
-                <p className="text-sm leading-relaxed max-w-lg mb-6" style={{ color: 'rgba(246,243,235,0.60)' }}>
+                <p className="text-sm leading-relaxed max-w-lg mb-6" style={{ color: hs.subtitleColor }}>
                   {ministry.description}
                 </p>
               )}
