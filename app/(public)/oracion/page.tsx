@@ -74,7 +74,7 @@ export default async function OracionPublicaPage() {
             Comparte tu petición y deja que la comunidad ore contigo. Cada oración cuenta.
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            <Link href={user ? '/oracion/nueva' : '/login'}
+            <Link href={user ? '/oracion/nueva' : '/login?next=/oracion/nueva'}
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
               style={{ background: CREAM, color: NAVY }}>
               <Plus size={13} /> {user ? 'Nueva petición' : 'Compartir petición'}
@@ -132,7 +132,7 @@ export default async function OracionPublicaPage() {
               </div>
               <p className="font-black text-xl text-ink mb-2">Aún no hay peticiones</p>
               <p className="text-sm text-ink-3 mb-6">Sé el primero en compartir una petición con la comunidad</p>
-              <Link href={user ? '/oracion/nueva' : '/login'}
+              <Link href={user ? '/oracion/nueva' : '/login?next=/oracion/nueva'}
                 className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"
                 style={{ background: NAVY, color: CREAM }}>
                 <Plus size={13} /> {user ? 'Crear petición' : 'Iniciar sesión'}

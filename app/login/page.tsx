@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { login } from '@/app/actions/auth'
 import Link from 'next/link'
 import { ArrowRight, AlertCircle } from 'lucide-react'
@@ -9,6 +10,8 @@ import { ArrowRight, AlertCircle } from 'lucide-react'
 export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next') ?? ''
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -89,6 +92,7 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {next && <input type="hidden" name="next" value={next} />}
             <div>
               <label className="text-[10px] font-bold uppercase tracking-[0.22em] block mb-2.5 text-[#111111]/50">
                 Correo electrónico

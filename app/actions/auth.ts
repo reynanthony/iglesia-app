@@ -15,7 +15,9 @@ export async function login(formData: FormData) {
     return { error: 'Correo o contraseña incorrectos' }
   }
 
-  redirect('/app/feed')
+  const next = formData.get('next') as string | null
+  const dest = next && next.startsWith('/') && !next.startsWith('//') ? next : '/app/feed'
+  redirect(dest)
 }
 
 export async function register(formData: FormData) {
