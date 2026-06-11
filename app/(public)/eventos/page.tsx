@@ -1,6 +1,8 @@
 import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { cmsGet, cmsImageUrl } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
+import { EventRsvpButton } from '@/components/public/EventRsvpButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,11 +59,28 @@ function formatEventDate(fechaInicio: string, fechaFin?: string | null) {
 }
 
 export default async function EventosPage() {
-  const cmsEventos = await cmsGet<DirectusEvento>('eventos', {
-    sort: 'fecha_inicio',
-  })
+  const [cmsEventos, supabase] = await Promise.all([
+    cmsGet<DirectusEvento>('eventos', { sort: 'fecha_inicio' }),
+    createClient(),
+  ])
 
   const specialEvents: DirectusEvento[] = cmsEventos.length > 0 ? cmsEventos : fallbackEvents
+
+  // RSVP data
+  const { data: { user } } = await supabase.auth.getUser()
+  const eventIds = specialEvents.map(e => e.id.toString())
+  const rsvpResult = await supabase
+    .from('event_rsvps')
+    .select('directus_event_id, user_id')
+    .in('directus_event_id', eventIds)
+  const rsvpRows = rsvpResult.data as { directus_event_id: string; user_id: string }[] | null
+
+  const rsvpCounts: Record<string, number> = {}
+  const userRsvps = new Set<string>()
+  for (const r of rsvpRows ?? []) {
+    rsvpCounts[r.directus_event_id] = (rsvpCounts[r.directus_event_id] ?? 0) + 1
+    if (r.user_id === user?.id) userRsvps.add(r.directus_event_id)
+  }
 
   return (
     <div>
@@ -181,10 +200,18 @@ export default async function EventosPage() {
                             {event.descripcion}
                           </p>
                         </div>
-                        <Link href="/contacto"
-                          className={`inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition self-start ${imgUrl ? 'text-white/70 hover:text-white' : 'text-ink-3 hover:text-ink'}`}>
-                          Más información <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <EventRsvpButton
+                            eventId={event.id.toString()}
+                            initialCount={rsvpCounts[event.id.toString()] ?? 0}
+                            initialRsvped={userRsvps.has(event.id.toString())}
+                            isAuthenticated={!!user}
+                          />
+                          <Link href="/contacto"
+                            className={`inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition ${imgUrl ? 'text-white/50 hover:text-white' : 'text-ink-3 hover:text-ink'}`}>
+                            Info <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>

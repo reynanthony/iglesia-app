@@ -72,6 +72,32 @@ export async function markPrayerFollowUp(requestId: string): Promise<void> {
   revalidatePath('/app/oracion')
 }
 
+export async function togglePublicPrayer(requestId: string): Promise<{ success: boolean; needsLogin?: boolean }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { success: false, needsLogin: true }
+
+  const { data: existing } = await supabase
+    .from('prayer_participants')
+    .select('request_id')
+    .eq('request_id', requestId)
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (existing) {
+    await supabase.from('prayer_participants')
+      .delete().eq('request_id', requestId).eq('user_id', user.id)
+  } else {
+    await supabase.from('prayer_participants')
+      .insert({ request_id: requestId, user_id: user.id })
+  }
+
+  revalidatePath('/oracion')
+  revalidatePath(`/app/oracion/${requestId}`)
+  revalidatePath('/app/oracion')
+  return { success: true }
+}
+
 export async function shareTestimony(requestId: string, formData: FormData): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

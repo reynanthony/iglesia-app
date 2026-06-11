@@ -15,6 +15,7 @@ const navLinks = [
   { href: '/eventos',     label: 'Eventos' },
   { href: '/en-vivo',     label: 'En Vivo' },
   { href: '/biblia',      label: 'Biblia' },
+  { href: '/oracion',     label: 'Oración' },
   { href: '/donaciones',  label: 'Donaciones' },
   { href: '/contacto',    label: 'Contacto' },
 ]
