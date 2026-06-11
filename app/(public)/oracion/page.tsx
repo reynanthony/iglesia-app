@@ -76,19 +76,11 @@ export default async function OracionPublicaPage() {
             Comparte tu petición y deja que la comunidad ore contigo. Cada oración cuenta.
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            {user ? (
-              <Link href="/app/oracion/nueva"
-                className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-                style={{ background: CREAM, color: NAVY }}>
-                <Plus size={13} /> Nueva petición
-              </Link>
-            ) : (
-              <Link href="/login"
-                className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-                style={{ background: CREAM, color: NAVY }}>
-                <Plus size={13} /> Compartir petición
-              </Link>
-            )}
+            <Link href={user ? '/oracion/nueva' : '/login'}
+              className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
+              style={{ background: CREAM, color: NAVY }}>
+              <Plus size={13} /> {user ? 'Nueva petición' : 'Compartir petición'}
+            </Link>
             <Link href="/app/oracion"
               className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
               style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
@@ -119,7 +111,7 @@ export default async function OracionPublicaPage() {
               </div>
               <p className="font-black text-lg mb-2" style={{ color: CREAM }}>Aún no hay peticiones</p>
               <p className="text-sm mb-6" style={{ color: `${CREAM}55` }}>Sé el primero en compartir una petición con la comunidad</p>
-              <Link href={user ? '/app/oracion/nueva' : '/login'}
+              <Link href={user ? '/oracion/nueva' : '/login'}
                 className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl"
                 style={{ background: CREAM, color: NAVY }}>
                 <Plus size={13} /> {user ? 'Crear petición' : 'Iniciar sesión'}

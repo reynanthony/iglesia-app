@@ -20,6 +20,23 @@ export async function createPrayerRequest(formData: FormData): Promise<void> {
   redirect('/app/oracion')
 }
 
+export async function createPublicPrayerRequest(formData: FormData): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const title        = (formData.get('title') as string).trim()
+  const body         = (formData.get('body') as string | null)?.trim() || null
+  const is_anonymous = formData.get('is_anonymous') === 'on'
+
+  if (!title) return
+
+  await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous })
+  revalidatePath('/oracion')
+  revalidatePath('/app/oracion')
+  redirect('/oracion')
+}
+
 export async function togglePrayerParticipation(requestId: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
