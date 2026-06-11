@@ -25,13 +25,20 @@ export async function createPublicPrayerRequest(formData: FormData): Promise<voi
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const title        = (formData.get('title') as string).trim()
-  const body         = (formData.get('body') as string | null)?.trim() || null
+  const body         = (formData.get('body') as string)?.trim()
+  const title        = (formData.get('title') as string | null)?.trim() || null
   const is_anonymous = formData.get('is_anonymous') === 'on'
+  const is_public    = formData.get('is_public') === 'on'
 
-  if (!title) return
+  if (!body) return
 
-  await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous })
+  await supabase.from('prayer_requests').insert({
+    user_id: user.id,
+    title: title || body.slice(0, 100),
+    body,
+    is_anonymous,
+    is_public,
+  })
   revalidatePath('/oracion')
   revalidatePath('/app/oracion')
   redirect('/oracion')

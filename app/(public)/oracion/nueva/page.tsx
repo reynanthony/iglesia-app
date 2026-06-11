@@ -33,54 +33,67 @@ export default function NuevaPeticionPublicaPage() {
           </Link>
           <h1 className="font-display font-black tracking-tighter leading-[0.9] text-white"
             style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)' }}>
-            Nueva petición<br /><span style={{ color: TEAL }}>de oración.</span>
+            Comparte tu<br /><span style={{ color: TEAL }}>oración.</span>
           </h1>
         </div>
       </section>
 
-      {/* Formulario — fondo claro */}
+      {/* Formulario */}
       <section className="bg-card border-b border-edge">
         <div className="max-w-2xl mx-auto px-6 py-12 sm:py-16">
 
           <p className="text-sm text-ink-2 leading-relaxed mb-8 max-w-md">
-            La comunidad orará contigo. Puedes publicar de forma anónima si prefieres que tu nombre no sea visible.
+            Escribe tu oración. Al compartirla, invitas a la comunidad a unirse en intercesión contigo.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
 
+            {/* Oración — campo principal */}
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-2">
-                ¿Por qué necesitas oración? *
-              </label>
-              <input
-                name="title"
-                type="text"
-                required
-                maxLength={120}
-                placeholder="Ej: Sanidad para mi familia"
-                className="w-full rounded-xl px-4 py-3.5 text-sm bg-card border border-edge focus:outline-none focus:border-edge-2 transition text-ink placeholder:text-ink-3"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-2">
-                Detalles <span className="text-ink-3 opacity-60">(opcional)</span>
+                Tu oración *
               </label>
               <textarea
                 name="body"
-                rows={4}
-                placeholder="Comparte más detalles sobre tu petición..."
+                rows={6}
+                required
+                placeholder="Señor, te pido..."
                 className="w-full rounded-xl px-4 py-3.5 text-sm bg-card border border-edge focus:outline-none focus:border-edge-2 transition resize-none text-ink placeholder:text-ink-3"
               />
             </div>
 
-            <label className="flex items-center gap-4 p-4 rounded-xl border border-edge bg-muted cursor-pointer transition hover:border-edge-2">
-              <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded flex-shrink-0" style={{ accentColor: TEAL }} />
-              <div>
-                <p className="text-sm font-bold text-ink">Publicar como anónimo</p>
-                <p className="text-[11px] text-ink-3 mt-0.5">Tu nombre no será visible para la comunidad</p>
-              </div>
-            </label>
+            {/* Motivo — breve etiqueta */}
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-2">
+                Motivo <span className="opacity-60">(opcional)</span>
+              </label>
+              <input
+                name="title"
+                type="text"
+                maxLength={120}
+                placeholder="Ej: Sanidad, familia, trabajo..."
+                className="w-full rounded-xl px-4 py-3.5 text-sm bg-card border border-edge focus:outline-none focus:border-edge-2 transition text-ink placeholder:text-ink-3"
+              />
+            </div>
+
+            {/* Visibilidad */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-4 p-4 rounded-xl border border-edge bg-muted cursor-pointer transition hover:border-edge-2">
+                <input name="is_public" type="checkbox" defaultChecked className="w-4 h-4 rounded flex-shrink-0" style={{ accentColor: TEAL }} />
+                <div>
+                  <p className="text-sm font-bold text-ink">Compartir en el muro público</p>
+                  <p className="text-[11px] text-ink-3 mt-0.5">Tu oración será visible para la comunidad en el muro web</p>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-4 p-4 rounded-xl border border-edge bg-muted cursor-pointer transition hover:border-edge-2">
+                <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded flex-shrink-0" style={{ accentColor: TEAL }} />
+                <div>
+                  <p className="text-sm font-bold text-ink">Publicar como anónimo</p>
+                  <p className="text-[11px] text-ink-3 mt-0.5">Tu nombre no será visible para la comunidad</p>
+                </div>
+              </label>
+            </div>
 
             <div className="flex gap-3 justify-end pt-2">
               <Link href="/oracion"
@@ -93,7 +106,7 @@ export default function NuevaPeticionPublicaPage() {
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition disabled:opacity-50"
                 style={{ background: NAVY, color: CREAM }}>
                 <Flame size={13} style={{ color: TEAL }} />
-                {loading ? 'Publicando...' : 'Publicar petición'}
+                {loading ? 'Publicando...' : 'Publicar oración'}
               </button>
             </div>
 

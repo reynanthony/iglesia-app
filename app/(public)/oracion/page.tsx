@@ -24,7 +24,8 @@ export default async function OracionPublicaPage() {
   const [{ data: requests, error }, { data: allParticipants }] = await Promise.all([
     supabase
       .from('prayer_requests')
-      .select('id, title, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)')
+      .select('id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)')
+      .eq('is_public', true)
       .order('created_at', { ascending: false })
       .limit(40),
     supabase
@@ -154,9 +155,19 @@ export default async function OracionPublicaPage() {
                   const name   = req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Miembro')
                   return (
                     <div key={req.id}
-                      className="flex items-start gap-4 rounded-2xl border border-edge hover:border-edge-2 bg-card p-5 transition">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-base text-ink leading-snug mb-2">{req.title}</p>
+                      className="rounded-2xl border border-edge hover:border-edge-2 bg-card p-5 transition">
+                      {/* Prayer text */}
+                      <p className="text-sm text-ink leading-relaxed mb-3 italic" style={{ lineHeight: 1.7 }}>
+                        &ldquo;{(req as any).body || req.title}&rdquo;
+                      </p>
+                      {/* Motivo tag — only if separate from body */}
+                      {(req as any).body && req.title && (
+                        <p className="text-[11px] font-bold text-ink-3 mb-3 uppercase tracking-[0.15em]">
+                          {req.title}
+                        </p>
+                      )}
+                      {/* Footer */}
+                      <div className="flex items-center justify-between gap-3 flex-wrap">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-[11px] text-ink-3">{name}</span>
                           <span className="text-ink-3 opacity-40">·</span>
@@ -171,13 +182,13 @@ export default async function OracionPublicaPage() {
                             </>
                           )}
                         </div>
+                        <PublicPrayerButton
+                          requestId={req.id}
+                          initialCount={count}
+                          initialPrayed={prayed}
+                          isAuthenticated={!!user}
+                        />
                       </div>
-                      <PublicPrayerButton
-                        requestId={req.id}
-                        initialCount={count}
-                        initialPrayed={prayed}
-                        isAuthenticated={!!user}
-                      />
                     </div>
                   )
                 })}
@@ -204,9 +215,11 @@ export default async function OracionPublicaPage() {
                   <div key={req.id}
                     className="flex items-start gap-4 rounded-2xl p-5 border"
                     style={{ background: 'rgba(74,222,128,0.04)', borderColor: 'rgba(74,222,128,0.15)' }}>
-                    <Sparkles size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#4ADE80' }} />
+                    <Sparkles size={14} className="flex-shrink-0 mt-1" style={{ color: '#4ADE80' }} />
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm text-ink leading-snug mb-1">{req.title}</p>
+                      <p className="text-sm text-ink leading-relaxed mb-1 italic">
+                        &ldquo;{(req as any).body || req.title}&rdquo;
+                      </p>
                       <p className="text-[11px] text-ink-3">{name} · {timeAgo(req.created_at)}</p>
                     </div>
                   </div>
