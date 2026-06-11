@@ -23,10 +23,9 @@ const POST_SELECT = `
 interface Props {
   initialPosts: any[]
   currentUserId: string
-  category?: string
 }
 
-export default function ComunidadFeedScroll({ initialPosts, currentUserId, category }: Props) {
+export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Props) {
   const [posts, setPosts]       = useState(initialPosts)
   const [loading, setLoading]   = useState(false)
   const [hasMore, setHasMore]   = useState(initialPosts.length === PAGE_SIZE)
@@ -39,24 +38,23 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId, categ
     const channel = supabase
       .channel(`posts-live-${uid}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, async (payload) => {
-        if (category && payload.new.category !== category) return
         const { data } = await supabase.from('posts').select(POST_SELECT).eq('id', payload.new.id).single()
         if (data) setPosts(prev => [data, ...prev])
       })
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
-  }, [category])
+  }, [])
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore || posts.length === 0) return
     setLoading(true)
     const cursor = posts[posts.length - 1].created_at
-    const more = await fetchMorePosts(cursor, category)
+    const more = await fetchMorePosts(cursor)
     if (more.length < PAGE_SIZE) setHasMore(false)
     if (more.length > 0) setPosts(prev => [...prev, ...more])
     setLoading(false)
-  }, [loading, hasMore, posts, category])
+  }, [loading, hasMore, posts])
 
   // Attach IntersectionObserver to the sentinel (last card)
   const sentinelCallbackRef = useCallback((node: HTMLDivElement | null) => {

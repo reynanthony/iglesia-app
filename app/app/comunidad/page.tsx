@@ -5,44 +5,26 @@ import { redirect } from 'next/navigation'
 import CommunityAnnouncement from '@/components/app/CommunityAnnouncement'
 import ComunidadFeedScroll from '@/components/app/ComunidadFeedScroll'
 
-const CATEGORIES = [
-  { key: '', label: 'Todos' },
-  { key: 'testimonio', label: 'Testimonios' },
-  { key: 'reflexion', label: 'Reflexiones' },
-  { key: 'peticion', label: 'Peticiones' },
-  { key: 'devocional', label: 'Devocionales' },
-  { key: 'servicio', label: 'Servicio' },
-]
-
-export default async function ComunidadPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ cat?: string }>
-}) {
-  const { cat } = await searchParams
+export default async function ComunidadPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  let query = supabase
-    .from('posts')
-    .select(`
-      *,
-      profiles(id, full_name, username, avatar_url),
-      reactions(id, user_id, type),
-      comments(
-        id, content, created_at, parent_id,
-        profiles(full_name, username, avatar_url),
-        comment_likes(id, user_id)
-      )
-    `)
-    .order('created_at', { ascending: false })
-    .limit(20)
-
-  if (cat) query = query.eq('category', cat)
-
   const [{ data: posts }, bannerResult] = await Promise.all([
-    query,
+    supabase
+      .from('posts')
+      .select(`
+        *,
+        profiles(id, full_name, username, avatar_url),
+        reactions(id, user_id, type),
+        comments(
+          id, content, created_at, parent_id,
+          profiles(full_name, username, avatar_url),
+          comment_likes(id, user_id)
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(20),
     supabase
       .from('announcements')
       .select('id, title, description, cta_label, cta_destination, video_url')
@@ -71,28 +53,6 @@ export default async function ComunidadPage({
         />
       )}
 
-      {/* Filtros por categoría */}
-      <div
-        className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 overflow-x-auto no-scrollbar"
-        style={{ borderBottom: '1px solid rgba(13,51,82,0.6)' }}
-      >
-        {CATEGORIES.map(c => (
-          <Link
-            key={c.key}
-            href={c.key ? `/app/comunidad?cat=${c.key}` : '/app/comunidad'}
-            className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-[12px] font-bold tracking-wide transition"
-            style={{
-              background: (cat ?? '') === c.key ? '#76ABAE' : '#0B2D47',
-              color: (cat ?? '') === c.key ? '#061E30' : 'rgba(246,243,235,0.50)',
-              border: '1px solid',
-              borderColor: (cat ?? '') === c.key ? '#76ABAE' : '#0D3352',
-            }}
-          >
-            {c.label}
-          </Link>
-        ))}
-      </div>
-
       {/* FAB nueva publicación — absolute dentro del contenedor (no fixed) */}
       <Link
         href="/app/nuevo-post"
@@ -117,7 +77,6 @@ export default async function ComunidadPage({
         <ComunidadFeedScroll
           initialPosts={posts ?? []}
           currentUserId={user.id}
-          category={cat}
         />
       </div>
     </div>
