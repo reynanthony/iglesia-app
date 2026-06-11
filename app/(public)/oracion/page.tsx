@@ -21,19 +21,29 @@ export default async function OracionPublicaPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: requests, error }, { data: allParticipants }, { data: allResponses }] = await Promise.all([
-    supabase
+  const SELECT_FIELDS = 'id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)'
+
+  // Try with is_public filter first; fall back if column doesn't exist yet (migration pending)
+  let { data: requests, error } = await supabase
+    .from('prayer_requests')
+    .select(SELECT_FIELDS)
+    .eq('is_public', true)
+    .order('created_at', { ascending: false })
+    .limit(40)
+
+  if (error?.code === '42703') {
+    const fallback = await supabase
       .from('prayer_requests')
-      .select('id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)')
-      .eq('is_public', true)
+      .select(SELECT_FIELDS)
       .order('created_at', { ascending: false })
-      .limit(40),
-    supabase
-      .from('prayer_participants')
-      .select('request_id, user_id'),
-    supabase
-      .from('prayer_responses')
-      .select('request_id'),
+      .limit(40)
+    requests = fallback.data
+    error    = fallback.error
+  }
+
+  const [{ data: allParticipants }, { data: allResponses }] = await Promise.all([
+    supabase.from('prayer_participants').select('request_id, user_id'),
+    supabase.from('prayer_responses').select('request_id').then(r => r.error ? { data: [] } : r),
   ])
 
   const countMap: Record<string, number> = {}
