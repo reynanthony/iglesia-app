@@ -29,11 +29,11 @@ export function PublicPrayerButton({ requestId, initialCount, initialPrayed, isA
       disabled={pending}
       className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-2 rounded-lg transition-all disabled:opacity-60 cursor-pointer flex-shrink-0"
       style={prayed
-        ? { background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.30)' }
-        : { background: 'rgba(246,243,235,0.07)', color: 'rgba(246,243,235,0.55)', border: '1px solid rgba(246,243,235,0.12)' }
+        ? { background: 'rgba(118,171,174,0.12)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.30)' }
+        : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(9,60,93,0.15)' }
       }
     >
-      <Flame size={12} style={{ color: prayed ? '#76ABAE' : 'rgba(246,243,235,0.40)' }} />
+      <Flame size={12} style={{ color: prayed ? '#76ABAE' : '#869B7E' }} />
       {count > 0 ? count : 'Orar'}
     </button>
   )

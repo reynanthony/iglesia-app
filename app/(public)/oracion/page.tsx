@@ -1,13 +1,12 @@
 import Link from 'next/link'
-import { Flame, Plus, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
+import { Flame, Plus, ArrowRight, CheckCircle, Sparkles, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { PublicPrayerButton } from '@/components/public/PublicPrayerButton'
 
 export const dynamic = 'force-dynamic'
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
 const TEAL  = '#76ABAE'
+const NAVY  = '#093C5D'
 const CREAM = '#F6F3EB'
 
 function timeAgo(date: string) {
@@ -33,7 +32,6 @@ export default async function OracionPublicaPage() {
       .select('request_id, user_id'),
   ])
 
-  // Build count map and user-prayed set
   const countMap: Record<string, number> = {}
   const userPrayed = new Set<string>()
   for (const p of allParticipants ?? []) {
@@ -43,24 +41,24 @@ export default async function OracionPublicaPage() {
 
   const active   = (requests ?? []).filter(r => r.status !== 'respondida')
   const answered = (requests ?? []).filter(r => r.status === 'respondida')
+  const totalPrayers = Object.values(countMap).reduce((a, b) => a + b, 0)
 
   return (
     <div>
 
-      {/* Hero */}
+      {/* ── Hero oscuro ─────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center"
-        style={{ background: DARK, minHeight: '70svh' }}>
+        style={{ background: '#051828', minHeight: '70svh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 20% 50%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 60% 80% at 15% 60%, rgba(118,171,174,0.07), transparent 70%)' }} />
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
           <span className="font-black leading-none tracking-tighter block"
             style={{ fontSize: 'clamp(14rem, 32vw, 30rem)', opacity: 0.05, color: TEAL, lineHeight: 1, paddingRight: '1rem' }}>
             FE
           </span>
         </div>
-
         <div className="relative max-w-6xl mx-auto w-full px-6 py-16 sm:py-20 md:py-32">
           <div className="flex items-center gap-5 mb-10">
             <div className="w-12 h-px" style={{ background: TEAL }} />
@@ -88,32 +86,55 @@ export default async function OracionPublicaPage() {
             </Link>
           </div>
         </div>
+
+        {/* Stats strip */}
+        {(active.length > 0 || totalPrayers > 0) && (
+          <div className="relative" style={{ borderTop: `1px solid rgba(118,171,174,0.12)` }}>
+            <div className="max-w-6xl mx-auto px-6">
+              <div className="grid grid-cols-3 divide-x" style={{ borderColor: 'rgba(118,171,174,0.10)' }}>
+                {[
+                  { value: active.length,   label: 'Peticiones activas' },
+                  { value: answered.length,  label: 'Respondidas' },
+                  { value: totalPrayers,     label: 'Oraciones ofrecidas' },
+                ].map(({ value, label }) => (
+                  <div key={label} className="px-6 py-5 md:px-8 md:py-6">
+                    <p className="font-black tracking-tighter leading-none mb-1"
+                      style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', color: TEAL }}>{value}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                      style={{ color: 'rgba(246,243,235,0.30)' }}>{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
-      {/* Peticiones activas */}
-      <section style={{ background: '#061E30', borderBottom: `1px solid rgba(118,171,174,0.12)` }}>
+      {/* ── Peticiones activas ──────────────────────────── */}
+      <section className="bg-card border-b border-edge">
         <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16 md:py-24">
 
           {error && (
-            <div className="rounded-2xl p-8 text-center" style={{ background: '#0B2D47', border: '1px solid #1A4A6E' }}>
-              <p className="font-bold text-sm mb-2" style={{ color: CREAM }}>
-                {error.code === '42P01' ? 'Ejecuta la migración v22 en Supabase SQL Editor.' : 'No se pudieron cargar las peticiones.'}
+            <div className="rounded-2xl p-8 text-center border border-edge">
+              <p className="font-bold text-sm text-ink mb-1">
+                {error.code === '42P01'
+                  ? 'Ejecuta la migración v22 en Supabase SQL Editor.'
+                  : 'No se pudieron cargar las peticiones.'}
               </p>
-              <p className="text-[12px]" style={{ color: `${CREAM}40` }}>{error.message}</p>
+              <p className="text-[12px] text-ink-3">{error.message}</p>
             </div>
           )}
 
           {!error && active.length === 0 && (
             <div className="text-center py-20">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-                style={{ background: '#0B2D47', border: '1px solid #1A4A6E' }}>
-                <Flame size={26} style={{ color: `${TEAL}50` }} />
+              <div className="w-16 h-16 rounded-2xl border border-edge flex items-center justify-center mx-auto mb-5">
+                <Flame size={26} style={{ color: `${TEAL}60` }} />
               </div>
-              <p className="font-black text-lg mb-2" style={{ color: CREAM }}>Aún no hay peticiones</p>
-              <p className="text-sm mb-6" style={{ color: `${CREAM}55` }}>Sé el primero en compartir una petición con la comunidad</p>
+              <p className="font-black text-xl text-ink mb-2">Aún no hay peticiones</p>
+              <p className="text-sm text-ink-3 mb-6">Sé el primero en compartir una petición con la comunidad</p>
               <Link href={user ? '/oracion/nueva' : '/login'}
-                className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl"
-                style={{ background: CREAM, color: NAVY }}>
+                className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl transition"
+                style={{ background: NAVY, color: CREAM }}>
                 <Plus size={13} /> {user ? 'Crear petición' : 'Iniciar sesión'}
               </Link>
             </div>
@@ -121,11 +142,9 @@ export default async function OracionPublicaPage() {
 
           {active.length > 0 && (
             <>
-              <div className="flex items-center justify-between mb-8 pb-5"
-                style={{ borderBottom: '1px solid rgba(118,171,174,0.12)' }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em]"
-                  style={{ color: `${TEAL}70` }}>— Peticiones activas</p>
-                <p className="text-[11px] font-bold" style={{ color: `${CREAM}35` }}>{active.length}</p>
+              <div className="flex items-center justify-between mb-8 pb-5 border-b border-edge">
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Peticiones activas</p>
+                <p className="text-[11px] font-bold text-ink-3">{active.length}</p>
               </div>
 
               <div className="space-y-3">
@@ -135,20 +154,18 @@ export default async function OracionPublicaPage() {
                   const name   = req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Miembro')
                   return (
                     <div key={req.id}
-                      className="flex items-start gap-4 rounded-2xl p-5 transition"
-                      style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                      className="flex items-start gap-4 rounded-2xl border border-edge hover:border-edge-2 bg-card p-5 transition">
                       <div className="flex-1 min-w-0">
-                        <p className="font-black text-base leading-snug mb-2" style={{ color: CREAM }}>
-                          {req.title}
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px]" style={{ color: `${CREAM}45` }}>{name}</span>
-                          <span style={{ color: `${CREAM}25` }}>·</span>
-                          <span className="text-[11px]" style={{ color: `${CREAM}45` }}>{timeAgo(req.created_at)}</span>
+                        <p className="font-black text-base text-ink leading-snug mb-2">{req.title}</p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[11px] text-ink-3">{name}</span>
+                          <span className="text-ink-3 opacity-40">·</span>
+                          <span className="text-[11px] text-ink-3">{timeAgo(req.created_at)}</span>
                           {count > 0 && (
                             <>
-                              <span style={{ color: `${CREAM}25` }}>·</span>
-                              <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: TEAL }}>
+                              <span className="text-ink-3 opacity-40">·</span>
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold"
+                                style={{ color: TEAL }}>
                                 <Flame size={10} /> {count} orando
                               </span>
                             </>
@@ -170,30 +187,27 @@ export default async function OracionPublicaPage() {
         </div>
       </section>
 
-      {/* Peticiones respondidas */}
+      {/* ── Respondidas ─────────────────────────────────── */}
       {answered.length > 0 && (
-        <section style={{ background: '#051420', borderBottom: `1px solid rgba(118,171,174,0.08)` }}>
+        <section className="bg-muted border-b border-edge">
           <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16 md:py-20">
-            <div className="flex items-center justify-between mb-8 pb-5"
-              style={{ borderBottom: '1px solid rgba(74,222,128,0.12)' }}>
-              <div className="flex items-center gap-2">
-                <CheckCircle size={14} style={{ color: '#4ADE80' }} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em]"
-                  style={{ color: 'rgba(74,222,128,0.60)' }}>Respondidas por Dios</p>
-              </div>
-              <p className="text-[11px] font-bold" style={{ color: `${CREAM}25` }}>{answered.length}</p>
+            <div className="flex items-center gap-2 mb-8 pb-5 border-b border-edge">
+              <CheckCircle size={13} style={{ color: '#4ADE80' }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em]"
+                style={{ color: '#4ADE80' }}>Respondidas por Dios</p>
+              <span className="ml-auto text-[11px] font-bold text-ink-3">{answered.length}</span>
             </div>
             <div className="space-y-3">
               {answered.slice(0, 10).map(req => {
                 const name = req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Miembro')
                 return (
                   <div key={req.id}
-                    className="flex items-start gap-4 rounded-2xl p-5"
-                    style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.12)' }}>
+                    className="flex items-start gap-4 rounded-2xl p-5 border"
+                    style={{ background: 'rgba(74,222,128,0.04)', borderColor: 'rgba(74,222,128,0.15)' }}>
                     <Sparkles size={14} className="flex-shrink-0 mt-0.5" style={{ color: '#4ADE80' }} />
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm leading-snug mb-1" style={{ color: CREAM }}>{req.title}</p>
-                      <p className="text-[11px]" style={{ color: `${CREAM}40` }}>{name} · {timeAgo(req.created_at)}</p>
+                      <p className="font-bold text-sm text-ink leading-snug mb-1">{req.title}</p>
+                      <p className="text-[11px] text-ink-3">{name} · {timeAgo(req.created_at)}</p>
                     </div>
                   </div>
                 )
@@ -203,14 +217,18 @@ export default async function OracionPublicaPage() {
         </section>
       )}
 
-      {/* CTA */}
-      <section style={{ background: DARK, borderTop: `1px solid rgba(118,171,174,0.08)` }}>
-        <div className="max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-28 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
+      {/* ── CTA ─────────────────────────────────────────── */}
+      <section className="relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, #0D4A72 100%)` }}>
+        <div className="pointer-events-none absolute inset-0"
+          style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(118,171,174,0.07), transparent 70%)' }} />
+        <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-28 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10" style={{ color: `${TEAL}45` }}>— Más en la comunidad</p>
-            <h2 className="font-display font-black tracking-tighter leading-[0.88]"
-              style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: CREAM }}>
-              Únete a la<br /><span style={{ color: TEAL }}>comunidad.</span>
+            <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10"
+              style={{ color: 'rgba(118,171,174,0.45)' }}>— Únete a la comunidad</p>
+            <h2 className="font-display font-black tracking-tighter leading-[0.88] text-white"
+              style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
+              Más que<br /><span style={{ color: TEAL }}>oraciones.</span>
             </h2>
           </div>
           <div className="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
