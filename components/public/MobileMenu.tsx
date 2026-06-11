@@ -33,6 +33,7 @@ const SECTIONS = [
       { href: '/predicas', label: 'Prédicas' },
       { href: '/eventos',  label: 'Eventos' },
       { href: '/en-vivo',  label: 'En Vivo' },
+      { href: '/oracion',  label: 'Oración' },
     ],
   },
   {

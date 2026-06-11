@@ -16,6 +16,7 @@ const PRIMARY_LINKS = [
 
 const MORE_LINKS = [
   { href: '/eventos',        label: 'Eventos' },
+  { href: '/oracion',        label: 'Oración' },
   { href: '/publicaciones',  label: 'Publicaciones' },
   { href: '/biblia',         label: 'Biblia' },
   { href: '/devocionales',   label: 'Devocionales' },
