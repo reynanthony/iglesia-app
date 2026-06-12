@@ -8,12 +8,11 @@ export function CapacitorBridge() {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return
 
-    // Mark document for native-specific CSS (tap targets, text selection, etc.)
     document.documentElement.classList.add('is-native-app')
 
     let cleanup: (() => void) | undefined
 
-    // Native back button handler
+    // Native back button
     import('@capacitor/app').then(({ App }) => {
       const listenerPromise = App.addListener('backButton', ({ canGoBack }) => {
         if (canGoBack) window.history.back()
@@ -34,25 +33,38 @@ export function CapacitorBridge() {
         saveDeviceToken(token, platform)
       })
 
-      // Deep-link from notification tap
       PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
         const url: string | undefined = action.notification.data?.url
         if (url) window.location.href = url
       })
     })
 
-    // Disable pull-to-refresh on native (causes accidental reloads)
-    const preventPull = (e: TouchEvent) => {
-      if (window.scrollY === 0 && e.touches[0].clientY > 0) {
-        e.preventDefault()
+    // When app returns from background, force a page reload to recover
+    // any stale real-time subscriptions and clear accumulated DOM weight
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Give the WebView 300ms to stabilize before checking
+        setTimeout(() => {
+          // Only reload if the page has been hidden for a while
+          // (stored in sessionStorage to survive background/foreground)
+          const hiddenAt = Number(sessionStorage.getItem('_hiddenAt') ?? 0)
+          const elapsed = Date.now() - hiddenAt
+          // If hidden for more than 10 minutes, reload to clear state
+          if (hiddenAt && elapsed > 10 * 60 * 1000) {
+            window.location.reload()
+          }
+          sessionStorage.removeItem('_hiddenAt')
+        }, 300)
+      } else {
+        sessionStorage.setItem('_hiddenAt', String(Date.now()))
       }
     }
-    document.addEventListener('touchmove', preventPull, { passive: false })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
       cleanup?.()
       document.documentElement.classList.remove('is-native-app')
-      document.removeEventListener('touchmove', preventPull)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 

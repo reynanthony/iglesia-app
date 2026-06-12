@@ -8,6 +8,7 @@ import { fetchMorePosts } from '@/app/actions/posts'
 import { createClient } from '@/lib/supabase/client'
 
 const PAGE_SIZE = 20
+const MAX_POSTS  = 60
 
 const POST_SELECT = `
   *,
@@ -52,7 +53,11 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
     const cursor = posts[posts.length - 1].created_at
     const more = await fetchMorePosts(cursor)
     if (more.length < PAGE_SIZE) setHasMore(false)
-    if (more.length > 0) setPosts(prev => [...prev, ...more])
+    if (more.length > 0) setPosts(prev => {
+      const next = [...prev, ...more]
+      if (next.length >= MAX_POSTS) setHasMore(false)
+      return next.slice(0, MAX_POSTS)
+    })
     setLoading(false)
   }, [loading, hasMore, posts])
 
