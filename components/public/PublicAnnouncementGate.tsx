@@ -31,7 +31,7 @@ export default function PublicAnnouncementGate() {
 
   return (
     <AnnouncementGate
-      onboardingCompleted={onboardingCompleted}
+      onboardingCompleted={userId ? onboardingCompleted : true}
       userId={userId}
       userRole={userRole}
     />

@@ -15,6 +15,7 @@ export default async function DiscipuladoPage() {
     { data: programs },
     { data: mentorPair },
     { count: certCount },
+    { data: profile },
   ] = await Promise.all([
     supabase.from('user_discipleship').select('*, discipleship_stages(*)').eq('user_id', user.id).maybeSingle(),
     supabase.from('discipleship_stages').select('*').order('order_index'),
@@ -32,8 +33,10 @@ export default async function DiscipuladoPage() {
     supabase.from('discipleship_certificates')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', user.id),
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
   ])
 
+  const isLeader = ['admin', 'pastor', 'lider'].includes(profile?.role ?? '')
   const currentStage  = (discipleship?.discipleship_stages as any) ?? null
   const totalCerts    = certCount ?? 0
   const sorted       = (stages ?? []).sort((a: any, b: any) => a.order_index - b.order_index)
@@ -48,16 +51,20 @@ export default async function DiscipuladoPage() {
   const enrolledCourseIds = new Set((enrollments ?? []).map((e: any) => e.course_id))
 
   const allPrograms = programs ?? []
-  const myPrograms  = allPrograms.filter((p: any) => {
-    const req = p.discipleship_stages
-    if (!req) return true
-    if (!currentStage) return false
-    return currentStage.order_index >= req.order_index
-  })
-  const lockedPrograms = allPrograms.filter((p: any) => {
-    const req = p.discipleship_stages
-    return req && (!currentStage || currentStage.order_index < req.order_index)
-  })
+  const myPrograms  = isLeader
+    ? allPrograms
+    : allPrograms.filter((p: any) => {
+        const req = p.discipleship_stages
+        if (!req) return true
+        if (!currentStage) return false
+        return currentStage.order_index >= req.order_index
+      })
+  const lockedPrograms = isLeader
+    ? []
+    : allPrograms.filter((p: any) => {
+        const req = p.discipleship_stages
+        return req && (!currentStage || currentStage.order_index < req.order_index)
+      })
 
   const STAGE_DESC: Record<number, string> = {
     1: 'Estás conociendo la comunidad y dando tus primeros pasos en la fe.',

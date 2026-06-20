@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import { cmsGet, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
@@ -168,6 +168,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
   const latestAnuncio = anuncios[0] ?? null
   const IconComponent = getIcon(slug)
   const imgUrl    = cmsImageUrl(ministry.imagen)
+  const videoUrl  = ministry.video_url || cmsImageUrl(ministry.video_file) || null
   const leaderImg = cmsImageUrl(ministry.leader_photo)
 
   return (
@@ -195,8 +196,8 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
       <section className="relative overflow-hidden" style={{ background: hs.bg, minHeight: '60vh' }}>
 
         {/* Fondo: video tiene prioridad sobre foto */}
-        {ministry.video_url ? (
-          <HeroVideo url={ministry.video_url} opacity={0.45} />
+        {videoUrl ? (
+          <HeroVideo url={videoUrl} opacity={0.45} fallbackUrl={imgUrl ?? undefined} />
         ) : imgUrl ? (
           <img src={imgUrl} alt="" aria-hidden
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.40 }} />
@@ -273,7 +274,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                 ].map(({ n, label }) => (
                   <div key={label} className="text-center">
                     <p className="text-3xl font-black leading-none" style={{ color: CREAM }}>{n}</p>
-                    <p className="text-[10px] uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
+                    <p className="text-[10px] uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.86)' }}>{label}</p>
                   </div>
                 ))}
               </div>
@@ -480,7 +481,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             </Link>
             <Link href="/contacto"
               className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition"
-              style={{ border: '1px solid rgba(118,171,174,0.25)', color: 'rgba(246,243,235,0.60)' }}>
+              style={{ border: '1px solid rgba(118,171,174,0.25)', color: 'rgba(246,243,235,0.84)' }}>
               Contáctanos
             </Link>
           </div>

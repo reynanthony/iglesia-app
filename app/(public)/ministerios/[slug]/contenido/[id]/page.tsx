@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Calendar, FileText, Megaphone, Play, Video } from 'lucide-react'
 import { cmsGet, cmsById, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
@@ -87,9 +87,9 @@ export default async function ContentDetailPage({
           <div className="flex flex-wrap items-center gap-5 pt-5"
             style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
             {item.author && (
-              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.65)' }}>{item.author}</p>
+              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.86)' }}>{item.author}</p>
             )}
-            <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
               <Calendar size={11} />
               <span className="text-[11px]">{displayDate}</span>
             </div>
@@ -147,7 +147,7 @@ export default async function ContentDetailPage({
               ) : null
             )
           ) : (
-            <p className="text-base italic" style={{ color: `${NAVY}50` }}>Sin contenido adicional.</p>
+            <p className="text-base italic" style={{ color: `${NAVY}A0` }}>Sin contenido adicional.</p>
           )}
         </div>
       </section>
@@ -183,7 +183,7 @@ export default async function ContentDetailPage({
         <div className="max-w-4xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link href={`/ministerios/${slug}`}
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: 'rgba(246,243,235,0.45)' }}>
+            style={{ color: 'rgba(246,243,235,0.88)' }}>
             <ArrowLeft size={12} /> Volver al ministerio
           </Link>
           <Link href="/registro"

@@ -7,11 +7,18 @@ import { notFound } from 'next/navigation'
 export default async function EditarLiderPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
-  const { data: l } = await supabase
-    .from('church_leaders')
-    .select('id,name,title,bio,avatar_url,category,is_public,order_index')
-    .eq('id', id)
-    .single()
+  const [{ data: l }, { data: profiles }] = await Promise.all([
+    supabase
+      .from('church_leaders')
+      .select('id,name,title,bio,avatar_url,category,is_public,order_index,user_id')
+      .eq('id', id)
+      .single(),
+    supabase
+      .from('profiles')
+      .select('id,full_name,username,role')
+      .in('role', ['admin', 'pastor', 'moderador', 'lider', 'consejero'])
+      .order('full_name'),
+  ])
   if (!l) notFound()
 
   const action = updateLider.bind(null, id)
@@ -82,6 +89,22 @@ export default async function EditarLiderPage({ params }: { params: Promise<{ id
                 <option value="false">Oculto</option>
               </select>
             </div>
+          </div>
+
+          {/* Vincular perfil de app */}
+          <div>
+            <label className={label} style={labelStyle}>Vincular usuario de la app</label>
+            <select name="user_id" defaultValue={l.user_id ?? ''} className={field} style={fieldStyle}>
+              <option value="">— Sin vincular —</option>
+              {(profiles ?? []).map((p: any) => (
+                <option key={p.id} value={p.id}>
+                  {p.full_name ?? p.username ?? p.id} ({p.role})
+                </option>
+              ))}
+            </select>
+            <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              Al vincular, la foto y nombre del perfil de la app se sincronizan automáticamente en esta página.
+            </p>
           </div>
 
           {/* Foto actual */}

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { hasBibleApi } from '@/lib/bible'
 import BibleContinue from '@/components/public/BibleContinue'
@@ -40,7 +40,7 @@ export default async function BibliaPage() {
               La Palabra<br /><em style={{ color: TEAL }}>que transforma.</em>
             </h1>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.50)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.76)' }}>
                 Lee la Biblia completa en Nueva Traducción Viviente con marcadores, notas y lectura continua.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -74,7 +74,7 @@ export default async function BibliaPage() {
             <div className="rounded-2xl p-10" style={{ background: '#EDEAE0', border: '1px solid #D2CDB8' }}>
               <BookOpen size={36} style={{ color: TEAL, margin: '0 auto 16px', opacity: 0.6 }} />
               <p className="font-black text-lg mb-2" style={{ color: NAVY }}>Lector bíblico próximamente</p>
-              <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}60` }}>
+              <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}CC` }}>
                 Mientras tanto, te recomendamos{' '}
                 <a href="https://www.bible.com/es" target="_blank" rel="noopener noreferrer"
                   className="font-bold underline" style={{ color: TEAL }}>YouVersion</a>{' '}
@@ -103,7 +103,7 @@ export default async function BibliaPage() {
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Únete para compartir reflexiones, pedir oración y crecer en la fe con nuestra comunidad en línea.
               </p>
               <Link href="/registro"

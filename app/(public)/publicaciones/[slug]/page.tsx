@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -23,7 +23,7 @@ const CAT_COLOR: Record<string, string> = {
   'evento-especial': '#76ABAE',
   ministerio:       '#4ADE80',
   anuncio:          '#F87171',
-  general:          'rgba(246,243,235,0.50)',
+  general:          'rgba(246,243,235,0.76)',
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -88,7 +88,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         <div className="relative max-w-4xl mx-auto px-6 pt-8">
           <Link href="/publicaciones"
             className="inline-flex items-center gap-2 text-[12px] font-bold transition hover:opacity-70"
-            style={{ color: 'rgba(246,243,235,0.55)' }}>
+            style={{ color: 'rgba(246,243,235,0.82)' }}>
             <ArrowLeft size={13} /> Publicaciones
           </Link>
         </div>
@@ -103,7 +103,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
               style={{ background: `${cc}20`, color: cc, border: `1px solid ${cc}40` }}>
               {CAT_LABEL[item.category] ?? item.category}
             </span>
-            <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.50)' }}>
+            <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.76)' }}>
               {new Date(item.published_at).toLocaleDateString('es-DO', {
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
               })}
@@ -156,16 +156,16 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
             </div>
             <aside className="space-y-6">
               <div className="rounded-xl p-5" style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>Información</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>Información</p>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Categoría</p>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.84)' }}>Categoría</p>
                     <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${cc}20`, color: cc }}>
                       {CAT_LABEL[item.category] ?? item.category}
                     </span>
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>Publicado</p>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.84)' }}>Publicado</p>
                     <p className="text-sm" style={{ color: '#F6F3EB' }}>
                       {new Date(item.published_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>
@@ -174,7 +174,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
               </div>
               {others && others.length > 0 && (
                 <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                  <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.82)' }}>
                     Otras publicaciones
                   </p>
                   <div className="space-y-2">
@@ -212,7 +212,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
       {/* Related publicaciones (shown after blocks) */}
       {hasBlocks && others && others.length > 0 && (
         <div className="max-w-4xl mx-auto px-6 py-10" style={{ borderTop: '1px solid rgba(246,243,235,0.06)' }}>
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.30)' }}>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
             Otras publicaciones
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -258,7 +258,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         .publicacion-body h3 { font-size: clamp(16px, 2vw, 22px); }
         .publicacion-body p  { margin-bottom: 1.4em; }
         .publicacion-body strong { color: #F6F3EB; font-weight: 700; }
-        .publicacion-body em { color: rgba(246,243,235,0.70); font-style: italic; }
+        .publicacion-body em { color: rgba(246,243,235,0.88); font-style: italic; }
         .publicacion-body a { color: #76ABAE; text-decoration: underline; text-underline-offset: 3px; }
         .publicacion-body blockquote {
           border-left: 3px solid #76ABAE;
@@ -266,7 +266,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
           margin: 1.5em 0;
           background: rgba(118,171,174,0.06);
           border-radius: 0 8px 8px 0;
-          color: rgba(246,243,235,0.70);
+          color: rgba(246,243,235,0.88);
           font-style: italic;
         }
         .publicacion-body ul, .publicacion-body ol {

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star, BookOpen } from 'lucide-react'
 import { cmsSingleton, cmsImageUrl, type DHomepage } from '@/lib/directus'
 import PWAInstallBanner from '@/components/public/PWAInstallBanner'
@@ -9,6 +9,7 @@ import { heroStyle } from '@/lib/hero-style'
 import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
+
 
 const DARK  = '#051828'
 const NAVY  = '#093C5D'
@@ -57,8 +58,8 @@ export default async function HomePage() {
   const heroCta1Url     = c.hero_cta1_url     ?? '/nosotros'
   const heroCta2Label   = c.hero_cta2_label   ?? 'Ver prédica'
   const heroCta2Url     = c.hero_cta2_url     ?? '/predicas'
-  const heroImageUrl    = pc.hero_image_url   || cmsImageUrl(c.hero_image)
-  const heroVideoUrl    = pc.hero_video_url   || c.hero_video_url    || null
+  const heroImageUrl    = pc.hero_image_url   || c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl    = pc.hero_video_url   || c.hero_video_url || cmsImageUrl(c.hero_video) || null
   const heroWatermark      = c.hero_watermark || null
   const heroShowGrid       = c.hero_show_grid      !== false
   const heroGridOpacity    = c.hero_grid_opacity   ?? 0.04
@@ -151,10 +152,10 @@ export default async function HomePage() {
         style={{ background: hs.bg }}>
 
         {heroImageUrl && !heroVideoUrl && (
-          <img src={heroImageUrl} alt="" aria-hidden
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.45 }} />
         )}
-        {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
 
         <div className="pointer-events-none absolute inset-0"
           style={{ background: `linear-gradient(160deg, rgba(5,24,40,${heroOverlayOpacity}) 0%, rgba(9,60,93,${Math.max(0, heroOverlayOpacity - 0.10)}) 60%, rgba(118,171,174,0.15) 100%)` }} />
@@ -293,7 +294,7 @@ export default async function HomePage() {
               style={{ fontSize: 'clamp(2.4rem, 6.5vw, 5rem)', color: NAVY }}>
               {eventTitle}
             </h2>
-            <p className="text-base leading-relaxed mb-8 sm:mb-10" style={{ color: `${NAVY}70` }}>
+            <p className="text-base leading-relaxed mb-8 sm:mb-10" style={{ color: `${NAVY}D9` }}>
               {eventDesc}
             </p>
             <Link href={eventCtaUrl}
@@ -339,7 +340,7 @@ export default async function HomePage() {
               style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
               {ministry1Title}
             </h2>
-            <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: `${CREAM}60` }}>
+            <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: `${CREAM}CC` }}>
               {ministry1Desc}
             </p>
             <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
@@ -461,7 +462,7 @@ export default async function HomePage() {
                   {sermonsBadge}
                 </div>
                 <div className="relative w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ border: `1px solid rgba(246,243,235,0.35)`, background: 'rgba(255,255,255,0.08)' }}>
+                  style={{ border: `1px solid rgba(246,243,235,0.84)`, background: 'rgba(255,255,255,0.08)' }}>
                   <Play size={20} className="text-white ml-1" />
                 </div>
               </div>
@@ -557,7 +558,7 @@ export default async function HomePage() {
                   </>
                 )}
                 <span className="relative text-[9px] font-bold tracking-widest"
-                  style={{ color: img ? 'rgba(255,255,255,0.45)' : fg === CREAM ? `${CREAM}50` : `${NAVY}40` }}>{n}</span>
+                  style={{ color: img ? 'rgba(255,255,255,0.45)' : fg === CREAM ? `${CREAM}50` : `${NAVY}80` }}>{n}</span>
                 <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center"
                   style={{ background: img ? 'rgba(255,255,255,0.15)' : fg === CREAM ? 'rgba(255,255,255,0.15)' : `${NAVY}12` }}>
                   <Icon size={18} style={{ color: img ? CREAM : fg }} strokeWidth={2} />
@@ -565,10 +566,10 @@ export default async function HomePage() {
                 <div className="relative">
                   <h3 className="font-black text-base sm:text-lg leading-tight mb-1" style={{ color: img ? CREAM : fg }}>{nombre}</h3>
                   <p className="text-[11px] leading-relaxed"
-                    style={{ color: img ? 'rgba(246,243,235,0.65)' : fg === CREAM ? `${CREAM}60` : `${NAVY}60` }}>{desc}</p>
+                    style={{ color: img ? 'rgba(246,243,235,0.86)' : fg === CREAM ? `${CREAM}CC` : `${NAVY}CC` }}>{desc}</p>
                 </div>
                 <ArrowRight size={13} className="relative group-hover:translate-x-1 transition-all mt-auto"
-                  style={{ color: img ? 'rgba(246,243,235,0.45)' : fg === CREAM ? `${CREAM}40` : `${NAVY}40` }} />
+                  style={{ color: img ? 'rgba(246,243,235,0.88)' : fg === CREAM ? `${CREAM}40` : `${NAVY}80` }} />
               </Link>
             ))}
           </div>
@@ -610,7 +611,7 @@ export default async function HomePage() {
               </h2>
             </div>
             <div className="flex flex-col gap-5">
-              <p className="text-base leading-relaxed max-w-xs" style={{ color: `${CREAM}60` }}>
+              <p className="text-base leading-relaxed max-w-xs" style={{ color: `${CREAM}CC` }}>
                 {ctaBody}
               </p>
               <div className="flex flex-col gap-3 mt-4">
@@ -622,7 +623,7 @@ export default async function HomePage() {
                 </Link>
                 <Link href={cta2Url}
                   className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                  style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
+                  style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}D9` }}>
                   {cta2Label}
                   <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </Link>

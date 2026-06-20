@@ -114,8 +114,9 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
           <div
             key={post.id}
             ref={isLast ? sentinelCallbackRef : undefined}
+            data-snap-card
             className="w-full flex-shrink-0"
-            style={{ height: 'calc(100% - 1px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+            style={{ height: 'calc(100% - 1px)', scrollSnapAlign: 'start' }}
           >
             <ShortsCard post={post} currentUserId={currentUserId} />
           </div>

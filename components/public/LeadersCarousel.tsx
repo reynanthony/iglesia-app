@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -77,7 +77,7 @@ export function LeadersCarousel({ leaders }: { leaders: Leader[] }) {
                 </div>
 
                 {l.bio && (
-                  <p className="text-[12px] leading-relaxed line-clamp-5" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                  <p className="text-[12px] leading-relaxed line-clamp-5" style={{ color: 'rgba(246,243,235,0.76)' }}>
                     {l.bio}
                   </p>
                 )}

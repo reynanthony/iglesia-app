@@ -1,6 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowRight, Newspaper } from 'lucide-react'
+import { cmsSingleton, cmsImageUrl, type DPublicacionesPage } from '@/lib/directus'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 60
 
@@ -28,11 +30,25 @@ const CAT_COLOR: Record<string, string> = {
 
 export default async function PublicacionesPage() {
   const supabase = await createClient()
-  const { data: items } = await supabase
-    .from('publicaciones')
-    .select('id, slug, title, subtitle, excerpt, category, cover_image, cover_color, published_at')
-    .eq('is_active', true)
-    .order('published_at', { ascending: false })
+  const [{ data: items }, cms] = await Promise.all([
+    supabase
+      .from('publicaciones')
+      .select('id, slug, title, subtitle, excerpt, category, cover_image, cover_color, published_at')
+      .eq('is_active', true)
+      .order('published_at', { ascending: false }),
+    cmsSingleton<DPublicacionesPage>('publicaciones_page'),
+  ])
+  const c = cms ?? {} as DPublicacionesPage
+
+  const heroEyebrow        = c.hero_eyebrow  ?? 'El Manantial · Publicaciones'
+  const heroTitle          = c.hero_title    ?? 'Campañas *y series.'
+  const heroSubtitle       = c.hero_subtitle ?? 'Campañas, series y eventos especiales de la iglesia.'
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
+  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
+  const heroShowGrid       = c.hero_show_grid !== false
+  const heroBg             = c.hero_bg_color ?? DARK
+  const heroWatermark      = c.hero_watermark ?? 'PUB'
 
   const [featured, ...rest] = items ?? []
 
@@ -41,29 +57,44 @@ export default async function PublicacionesPage() {
 
       {/* ── Hero oscuro ─────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center"
-        style={{ background: DARK, minHeight: '60svh' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        style={{ background: heroBg, minHeight: '60svh' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+        )}
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        )}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.08), transparent 65%)' }} />
-        <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
-          <span className="font-black leading-none tracking-tighter block"
-            style={{ fontSize: 'clamp(14rem, 32vw, 28rem)', opacity: 0.05, color: TEAL, lineHeight: 1, paddingRight: '1rem' }}>
-            PUB
-          </span>
-        </div>
+        {heroWatermark && (
+          <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
+            <span className="font-black leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(14rem, 32vw, 28rem)', opacity: 0.05, color: TEAL, lineHeight: 1, paddingRight: '1rem' }}>
+              {heroWatermark}
+            </span>
+          </div>
+        )}
         <div className="relative max-w-6xl mx-auto w-full px-6 py-16 sm:py-20 md:py-32">
           <div className="flex items-center gap-5 mb-10">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]"
-              style={{ color: `${TEAL}80` }}>El Manantial · Publicaciones</p>
+              style={{ color: `${TEAL}80` }}>{heroEyebrow}</p>
           </div>
           <h1 className="font-display font-black tracking-tighter text-white mb-6 leading-[0.88]"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 8rem)' }}>
-            Campañas<br /><span style={{ color: TEAL }}>y series.</span>
+            {heroTitle.includes('*')
+              ? <>{heroTitle.split('*')[0]}<span style={{ color: TEAL }}>{heroTitle.split('*')[1]}</span></>
+              : heroTitle}
           </h1>
-          <p className="text-base leading-relaxed max-w-md" style={{ color: `${CREAM}55` }}>
-            Campañas, series y eventos especiales de la iglesia.
+          <p className="text-base leading-relaxed max-w-md" style={{ color: `${CREAM}BF` }}>
+            {heroSubtitle}
           </p>
         </div>
       </section>
@@ -118,12 +149,12 @@ export default async function PublicacionesPage() {
                     {featured.title}
                   </h2>
                   {featured.subtitle && (
-                    <p className="mb-4 text-sm md:text-base italic" style={{ color: `${CREAM}70`, maxWidth: 560 }}>
+                    <p className="mb-4 text-sm md:text-base italic" style={{ color: `${CREAM}D9`, maxWidth: 560 }}>
                       {featured.subtitle}
                     </p>
                   )}
                   {featured.excerpt && (
-                    <p className="mb-5 text-sm" style={{ color: `${CREAM}55`, maxWidth: 560 }}>
+                    <p className="mb-5 text-sm" style={{ color: `${CREAM}BF`, maxWidth: 560 }}>
                       {featured.excerpt}
                     </p>
                   )}

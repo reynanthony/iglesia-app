@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { slugify } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -13,16 +14,6 @@ async function assertAdmin() {
   if (!profile || !['admin', 'pastor', 'moderador'].includes(profile.role))
     throw new Error('Sin permisos')
   return { supabase, userId: user.id }
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
 }
 
 export async function createPublicacion(formData: FormData) {

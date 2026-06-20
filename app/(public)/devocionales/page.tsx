@@ -1,6 +1,7 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, Quote, BookOpen } from 'lucide-react'
-import { cmsGet, cmsImageUrl, type DDevocional } from '@/lib/directus'
+import { cmsGet, cmsSingleton, cmsImageUrl, type DDevocional, type DDevoccionalesPage } from '@/lib/directus'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 3600
 
@@ -16,11 +17,25 @@ function fmtDate(d: string) {
 }
 
 export default async function DevoccionalesPage() {
-  const devocionales = await cmsGet<DDevocional>('devocionales', {
-    'filter[status][_eq]': 'published',
-    'sort': '-date_published,-date_created',
-    'limit': '25',
-  })
+  const [devocionales, cms] = await Promise.all([
+    cmsGet<DDevocional>('devocionales', {
+      'filter[status][_eq]': 'published',
+      'sort': '-date_published,-date_created',
+      'limit': '25',
+    }),
+    cmsSingleton<DDevoccionalesPage>('devocionales_page'),
+  ])
+  const c = cms ?? {} as DDevoccionalesPage
+
+  const heroEyebrow        = c.hero_eyebrow  ?? 'Reflexiones · Devocionales'
+  const heroTitle          = c.hero_title    ?? 'Palabra\npara hoy.'
+  const heroSubtitle       = c.hero_subtitle ?? 'Reflexiones escritas por nuestros líderes para nutrir tu vida espiritual cada día.'
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
+  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
+  const heroShowGrid       = c.hero_show_grid !== false
+  const heroBg             = c.hero_bg_color ?? '#051828'
+  const heroWatermark      = c.hero_watermark ?? 'DEV'
 
   const featured = devocionales[0] ?? null
   const rest     = devocionales.slice(1)
@@ -29,33 +44,48 @@ export default async function DevoccionalesPage() {
     <div>
 
       {/* ══ HERO ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '60vh' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+      <section className="relative overflow-hidden" style={{ background: heroBg, minHeight: '60vh' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+        )}
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        )}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: `radial-gradient(ellipse 60% 80% at 20% 60%, rgba(134,155,126,0.08), transparent 70%)` }} />
-        <div className="pointer-events-none absolute right-0 bottom-0 select-none">
-          <span className="font-black leading-none" style={{ fontSize: 'clamp(10rem, 22vw, 20rem)', opacity: 0.035, color: SAGE }}>
-            DEV
-          </span>
-        </div>
+        {heroWatermark && (
+          <div className="pointer-events-none absolute right-0 bottom-0 select-none">
+            <span className="font-black leading-none" style={{ fontSize: 'clamp(10rem, 22vw, 20rem)', opacity: 0.035, color: SAGE }}>
+              {heroWatermark}
+            </span>
+          </div>
+        )}
 
         <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-16 md:pt-40 md:pb-20 flex flex-col justify-end"
           style={{ minHeight: '60vh' }}>
           <div className="flex items-center gap-5 mb-12">
             <div className="w-12 h-px" style={{ background: SAGE }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${SAGE}80` }}>
-              Reflexiones · Devocionales
+              {heroEyebrow}
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <h1 className="font-display font-black tracking-tighter text-white"
               style={{ fontSize: 'clamp(3rem, 9vw, 7.5rem)', lineHeight: 0.88 }}>
-              Palabra<br />para hoy.
+              {heroTitle.includes('*')
+                ? <>{heroTitle.split('*')[0]}<em style={{ color: TEAL }}>{heroTitle.split('*')[1]}</em></>
+                : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
             </h1>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.50)' }}>
-                Reflexiones escritas por nuestros líderes para nutrir tu vida espiritual cada día.
+              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.76)' }}>
+                {heroSubtitle}
               </p>
               <Link href="/biblia"
                 className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
@@ -114,7 +144,7 @@ export default async function DevoccionalesPage() {
                     {featured.title}
                   </h2>
                   {featured.content && (
-                    <p className="text-sm leading-relaxed line-clamp-3" style={{ color: `${NAVY}65` }}>
+                    <p className="text-sm leading-relaxed line-clamp-3" style={{ color: `${NAVY}CC` }}>
                       {featured.content}
                     </p>
                   )}
@@ -155,7 +185,7 @@ export default async function DevoccionalesPage() {
                   ) : d.verse ? (
                     <div className="p-5 flex items-start gap-3" style={{ background: `${NAVY}08`, borderBottom: '1px solid #D2CDB8' }}>
                       <Quote size={16} style={{ color: `${TEAL}60`, flexShrink: 0, marginTop: 2 }} />
-                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: `${NAVY}70` }}>"{d.verse}"</p>
+                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: `${NAVY}D9` }}>"{d.verse}"</p>
                     </div>
                   ) : null}
                   <div className="p-6 flex flex-col gap-3 flex-1">
@@ -168,7 +198,7 @@ export default async function DevoccionalesPage() {
                       {d.title}
                     </h3>
                     {d.content && (
-                      <p className="text-[12px] leading-relaxed line-clamp-3 flex-1" style={{ color: `${NAVY}60` }}>
+                      <p className="text-[12px] leading-relaxed line-clamp-3 flex-1" style={{ color: `${NAVY}CC` }}>
                         {d.content}
                       </p>
                     )}
@@ -193,7 +223,7 @@ export default async function DevoccionalesPage() {
           <div className="max-w-6xl mx-auto px-6 py-32 text-center">
             <Quote size={36} style={{ color: `${TEAL}40`, margin: '0 auto 16px' }} />
             <p className="font-black text-xl mb-2" style={{ color: NAVY }}>Próximamente</p>
-            <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}60` }}>
+            <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}CC` }}>
               Estamos preparando reflexiones para tu crecimiento espiritual.
             </p>
           </div>

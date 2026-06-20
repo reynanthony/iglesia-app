@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, Target, MessageCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
@@ -92,7 +92,7 @@ export default async function SessionPage({
           </h1>
           {session.summary && (
             <p className="text-base leading-relaxed max-w-2xl mt-6"
-              style={{ color: 'rgba(246,243,235,0.55)' }}>
+              style={{ color: 'rgba(246,243,235,0.82)' }}>
               {session.summary}
             </p>
           )}
@@ -193,7 +193,7 @@ export default async function SessionPage({
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-wider mb-0.5"
                     style={{ color: `${TEAL}50` }}>Anterior</p>
-                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.70)' }}>
+                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.88)' }}>
                     {prev.title}
                   </p>
                 </div>
@@ -213,7 +213,7 @@ export default async function SessionPage({
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-wider mb-0.5"
                     style={{ color: `${TEAL}50` }}>Siguiente</p>
-                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.70)' }}>
+                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.88)' }}>
                     {next.title}
                   </p>
                 </div>

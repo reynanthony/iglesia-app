@@ -75,7 +75,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 </div>
                 <span className="font-black text-base tracking-tight">El Manantial</span>
               </div>
-              <p className="text-[#FFFFFF]/40 text-sm leading-relaxed max-w-xs mb-8">
+              <p className="text-[#FFFFFF]/68 text-sm leading-relaxed max-w-xs mb-8">
                 Una comunidad de fe comprometida con el crecimiento espiritual y el servicio a nuestra ciudad.
               </p>
               <Link
@@ -89,7 +89,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             {/* Links col 1 */}
             <div className="md:col-span-2 md:col-start-7 xl:col-start-7">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Iglesia</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/48 mb-6">Iglesia</p>
               <div className="space-y-3">
                 {[
                   { href: '/', label: 'Inicio' },
@@ -98,7 +98,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   { href: '/educacion', label: 'Educación' },
                   { href: '/contacto', label: 'Contacto' },
                 ].map(({ href, label }) => (
-                  <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/40 hover:text-[#FFFFFF] transition">
+                  <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/65 hover:text-[#FFFFFF] transition">
                     {label}
                   </Link>
                 ))}
@@ -107,16 +107,17 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             {/* Links col 2 */}
             <div className="md:col-span-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Contenido</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/48 mb-6">Contenido</p>
               <div className="space-y-3">
                 {[
                   { href: '/predicas', label: 'Prédicas' },
                   { href: '/eventos', label: 'Eventos' },
                   { href: '/en-vivo', label: 'En Vivo' },
+                  { href: '/oracion', label: 'Oración' },
                   { href: '/biblia', label: 'Biblia' },
                   { href: '/donaciones', label: 'Donaciones' },
                 ].map(({ href, label }) => (
-                  <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/40 hover:text-[#FFFFFF] transition">
+                  <Link key={href} href={href} className="block text-sm text-[#FFFFFF]/65 hover:text-[#FFFFFF] transition">
                     {label}
                   </Link>
                 ))}
@@ -125,18 +126,18 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
             {/* Services */}
             <div className="md:col-span-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/25 mb-6">Cultos</p>
-              <div className="space-y-3.5 text-sm text-[#FFFFFF]/40">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#FFFFFF]/48 mb-6">Cultos</p>
+              <div className="space-y-3.5 text-sm text-[#FFFFFF]/65">
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Domingo</p>
+                  <p className="text-[#FFFFFF]/85 font-bold text-xs">Domingo</p>
                   <p className="text-xs">10:00 AM</p>
                 </div>
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Miércoles</p>
+                  <p className="text-[#FFFFFF]/85 font-bold text-xs">Miércoles</p>
                   <p className="text-xs">7:00 PM</p>
                 </div>
                 <div>
-                  <p className="text-[#FFFFFF]/70 font-bold text-xs">Viernes</p>
+                  <p className="text-[#FFFFFF]/85 font-bold text-xs">Viernes</p>
                   <p className="text-xs">7:00 PM</p>
                 </div>
               </div>
@@ -146,8 +147,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
           {/* Bottom bar */}
           <div className="border-t border-[#FFFFFF]/[0.06] pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <p className="text-[11px] text-[#FFFFFF]/20" suppressHydrationWarning>© {new Date().getFullYear()} Iglesia El Manantial. Todos los derechos reservados.</p>
-            <p className="text-[11px] text-[#FFFFFF]/15 uppercase tracking-widest">Hecho con fe</p>
+            <p className="text-[11px] text-[#FFFFFF]/40" suppressHydrationWarning>© {new Date().getFullYear()} Iglesia El Manantial. Todos los derechos reservados.</p>
+            <p className="text-[11px] text-[#FFFFFF]/30 uppercase tracking-widest">Hecho con fe</p>
           </div>
         </div>
       </footer>

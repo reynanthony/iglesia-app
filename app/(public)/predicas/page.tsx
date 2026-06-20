@@ -1,6 +1,7 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, Play } from 'lucide-react'
-import { cmsGet, cmsImageUrl, type DPredica } from '@/lib/directus'
+import { cmsGet, cmsSingleton, cmsImageUrl, type DPredica, type DPredicasPage } from '@/lib/directus'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 300
 
@@ -22,7 +23,21 @@ function getYoutubeId(url?: string | null) {
 }
 
 export default async function PredicasPage() {
-  const rawPredicas = await cmsGet<DPredica>('predicas', { sort: '-id', limit: '50' })
+  const [rawPredicas, cms] = await Promise.all([
+    cmsGet<DPredica>('predicas', { sort: '-id', limit: '50' }),
+    cmsSingleton<DPredicasPage>('predicas_page'),
+  ])
+  const c = cms ?? {} as DPredicasPage
+
+  const heroEyebrow        = c.hero_eyebrow  ?? 'Prédicas · Archivo de mensajes'
+  const heroTitle          = c.hero_title    ?? 'La Palabra\ndonde estés.'
+  const heroSubtitle       = c.hero_subtitle ?? 'Accede al archivo completo de nuestras prédicas. Escucha, medita y crece en la fe desde donde estés.'
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
+  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
+  const heroShowGrid       = c.hero_show_grid !== false
+  const heroBg             = c.hero_bg_color ?? '#051828'
+  const heroWatermark      = c.hero_watermark ?? 'FE'
 
   const predicas = rawPredicas.map(s => ({
     id: s.id,
@@ -41,34 +56,49 @@ export default async function PredicasPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden min-h-[72svh] md:min-h-[72vh]" style={{ background: '#051828' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+      <section className="relative overflow-hidden min-h-[72svh] md:min-h-[72vh]" style={{ background: heroBg }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+        )}
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        )}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: `radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)` }} />
-        <div className="pointer-events-none absolute right-0 bottom-0 select-none">
-          <span className="font-black leading-none"
-            style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.04, color: TEAL, lineHeight: 1 }}>
-            FE
-          </span>
-        </div>
+        {heroWatermark && (
+          <div className="pointer-events-none absolute right-0 bottom-0 select-none">
+            <span className="font-black leading-none"
+              style={{ fontSize: 'clamp(12rem, 28vw, 26rem)', opacity: 0.04, color: TEAL, lineHeight: 1 }}>
+              {heroWatermark}
+            </span>
+          </div>
+        )}
 
         <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-12 sm:pt-32 sm:pb-20 md:pt-44 md:pb-24 flex flex-col justify-end"
           style={{ minHeight: '72vh' }}>
           <div className="flex items-center gap-5 mb-12">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
-              Prédicas · Archivo de mensajes
+              {heroEyebrow}
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
             <h1 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
               style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
-              La Palabra<br /><em style={{ color: TEAL }}>donde estés.</em>
+              {heroTitle.includes('*')
+                ? <>{heroTitle.split('*')[0]}<em style={{ color: TEAL }}>{heroTitle.split('*')[1]}</em></>
+                : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
             </h1>
             <div>
-              <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.55)' }}>
-                Accede al archivo completo de nuestras prédicas. Escucha, medita y crece en la fe desde donde estés.
+              <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.82)' }}>
+                {heroSubtitle}
               </p>
               {predicas.length > 0 && (
                 <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: `${TEAL}60` }}>
@@ -191,7 +221,7 @@ export default async function PredicasPage() {
             </div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: SAGE }}>Próximamente</p>
             <h2 className="text-2xl font-black tracking-tight mb-3" style={{ color: NAVY }}>Las prédicas estarán aquí pronto</h2>
-            <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}60` }}>
+            <p className="text-sm max-w-sm mx-auto" style={{ color: `${NAVY}CC` }}>
               Estamos preparando el archivo de mensajes para que puedas escucharlos cuando quieras.
             </p>
           </div>
@@ -213,7 +243,7 @@ export default async function PredicasPage() {
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Únete a la comunidad en línea para comentar, compartir y discutir los mensajes con otros creyentes.
               </p>
               <Link href="/registro"
@@ -223,7 +253,7 @@ export default async function PredicasPage() {
               </Link>
               <Link href="/en-vivo"
                 className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.60)' }}>
+                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
                 Ver transmisiones en vivo <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

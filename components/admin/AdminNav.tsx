@@ -1,17 +1,17 @@
-﻿'use client'
+'use client'
 
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, Shield, ShieldAlert,
-  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper,
+  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean; external?: boolean }
 type NavSection = { label: string; items: NavItem[] }
 
-const sections: NavSection[] = [
+const FULL_ADMIN_SECTIONS: NavSection[] = [
   {
     label: 'General',
     items: [{ href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true }],
@@ -43,14 +43,32 @@ const sections: NavSection[] = [
   },
 ]
 
+function liderSections(ministries: { id: string; name: string }[]): NavSection[] {
+  return [
+    {
+      label: 'Mi Ministerio',
+      items: [
+        { href: '/admin/ministerio', icon: Building2,  label: 'Inicio',    exact: true },
+        { href: '/admin/ministerio/contenido', icon: FileText,   label: 'Contenido' },
+        { href: '/admin/ministerio/grupos',    icon: UsersRound, label: 'Grupos'    },
+        { href: '/admin/ministerio/anuncios',  icon: Megaphone,  label: 'Anuncios'  },
+      ],
+    },
+  ]
+}
+
 export default function AdminNav({
   logoutAction,
   unreadMessages = 0,
   strapiUrl,
+  isLider = false,
+  liderMinistries = [],
 }: {
   logoutAction: () => Promise<void>
   unreadMessages?: number
   strapiUrl?: string
+  isLider?: boolean
+  liderMinistries?: { id: string; name: string }[]
 }) {
   const pathname = usePathname()
 
@@ -58,6 +76,8 @@ export default function AdminNav({
     if (exact) return pathname === href
     return pathname.startsWith(href)
   }
+
+  const sections = isLider ? liderSections(liderMinistries) : FULL_ADMIN_SECTIONS
 
   return (
     <>
@@ -98,10 +118,27 @@ export default function AdminNav({
             </div>
           </div>
         ))}
+
+        {/* Ministerios del lider */}
+        {isLider && liderMinistries.length > 0 && (
+          <div>
+            <p className="text-[9px] font-black uppercase tracking-[0.25em] px-3 mb-1.5"
+              style={{ color: 'rgba(246,243,235,0.25)' }}>
+              Ministerios a cargo
+            </p>
+            {liderMinistries.map(m => (
+              <div key={m.id} className="px-3 py-2 text-[12px] flex items-center gap-2"
+                style={{ color: '#76ABAE' }}>
+                <Building2 size={12} />
+                {m.name}
+              </div>
+            ))}
+          </div>
+        )}
       </nav>
 
       <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#0D3352' }}>
-        {strapiUrl && (
+        {!isLider && strapiUrl && (
           <a
             href={strapiUrl}
             target="_blank"
@@ -112,11 +149,13 @@ export default function AdminNav({
             <ExternalLink size={14} /> Editar sitio (Directus)
           </a>
         )}
-        <Link href="/" target="_blank"
-          className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: 'rgba(246,243,235,0.68)' }}>
-          <Globe size={14} /> Ver sitio web
-        </Link>
+        {!isLider && (
+          <Link href="/" target="_blank"
+            className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
+            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <Globe size={14} /> Ver sitio web
+          </Link>
+        )}
         <Link href="/app/comunidad"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
           style={{ color: 'rgba(246,243,235,0.68)' }}>

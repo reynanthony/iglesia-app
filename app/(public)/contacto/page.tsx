@@ -23,8 +23,8 @@ export default async function ContactoPage() {
   const firstVisitTitle   = c.first_visit_title    ?? '¿Primera visita?'
   const firstVisitSubtitle = c.first_visit_subtitle ?? 'No necesitas saber nada.'
   const firstVisitBody    = c.first_visit_body     ?? 'Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.'
-  const heroImageUrl       = cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url       ?? null
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
   const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.65
   const heroShowGrid       = c.hero_show_grid !== false
   const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
@@ -55,9 +55,9 @@ export default async function ContactoPage() {
       ═══════════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: hs.bg }}>
         {heroImageUrl && !heroVideoUrl && (
-          <img src={heroImageUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
         )}
-        {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
             style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />

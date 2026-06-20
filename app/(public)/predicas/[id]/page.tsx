@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Play, Calendar, User } from 'lucide-react'
 import { cmsById, cmsGet, cmsImageUrl, type DPredica } from '@/lib/directus'
@@ -57,7 +57,7 @@ export default async function PredicaDetailPage({
             <>
               <span style={{ color: 'rgba(118,171,174,0.25)' }}>/</span>
               <span className="text-[10px] font-bold uppercase tracking-[0.3em]"
-                style={{ color: 'rgba(246,243,235,0.30)' }}>{item.series}</span>
+                style={{ color: 'rgba(246,243,235,0.82)' }}>{item.series}</span>
             </>
           )}
         </div>
@@ -94,13 +94,13 @@ export default async function PredicaDetailPage({
           <div className="flex flex-wrap items-center gap-5 pt-5"
             style={{ borderTop: '1px solid rgba(118,171,174,0.15)' }}>
             {item.speaker && (
-              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.65)' }}>
+              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.86)' }}>
                 <User size={12} />
                 <span className="text-[12px] font-bold">{item.speaker}</span>
               </div>
             )}
             {item.date && (
-              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
                 <Calendar size={12} />
                 <span className="text-[12px]">{fmtDate(item.date)}</span>
               </div>
@@ -171,7 +171,7 @@ export default async function PredicaDetailPage({
         <div className="max-w-5xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link href="/en-vivo"
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
-            style={{ color: 'rgba(246,243,235,0.45)' }}>
+            style={{ color: 'rgba(246,243,235,0.88)' }}>
             <ArrowLeft size={12} /> Volver a Prédicas
           </Link>
           <Link href="/registro"

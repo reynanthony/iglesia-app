@@ -22,6 +22,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ progra
     { data: program },
     { data: discipleship },
     { data: enrollments },
+    { data: profile },
   ] = await Promise.all([
     supabase.from('discipleship_programs')
       .select('*, discipleship_stages(id, name, order_index, color), discipleship_courses(id, title, slug, description, level, duration_minutes, order_index, is_active)')
@@ -34,13 +35,17 @@ export default async function ProgramPage({ params }: { params: Promise<{ progra
     user
       ? supabase.from('user_course_enrollments').select('course_id, progress_pct, completed_at').eq('user_id', user.id)
       : Promise.resolve({ data: null }),
+    user
+      ? supabase.from('profiles').select('role').eq('id', user.id).single()
+      : Promise.resolve({ data: null }),
   ])
 
   if (!program) notFound()
 
+  const isLeader = ['admin', 'pastor', 'lider'].includes((profile as any)?.role ?? '')
   const currentStage = (discipleship?.discipleship_stages as any) ?? null
   const requiredStage = program.discipleship_stages as any
-  const isLocked = user && requiredStage && (!currentStage || currentStage.order_index < requiredStage.order_index)
+  const isLocked = !isLeader && user && requiredStage && (!currentStage || currentStage.order_index < requiredStage.order_index)
 
   const enrollmentMap = new Map(
     ((enrollments ?? []) as any[]).map((e: any) => [e.course_id, e])

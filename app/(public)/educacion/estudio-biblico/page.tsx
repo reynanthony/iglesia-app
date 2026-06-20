@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, ArrowLeft, Clock, Users, ChevronRight, Calendar, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 
@@ -61,7 +61,7 @@ export default async function EstudioBiblicoPage() {
               </h1>
             </div>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Cada miércoles nos reunimos para estudiar la Biblia con rigor, comunidad y aplicación práctica. No interpretamos la Escritura solos — la interpretamos juntos.
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -101,8 +101,8 @@ export default async function EstudioBiblicoPage() {
           {!series || series.length === 0 ? (
             <div className="text-center py-16">
               <BookOpen size={32} style={{ color: `${NAVY}30`, margin: '0 auto 1rem' }} />
-              <p style={{ color: `${NAVY}60` }}>Las series se publicarán próximamente.</p>
-              <p className="text-sm mt-1" style={{ color: `${NAVY}40` }}>
+              <p style={{ color: `${NAVY}CC` }}>Las series se publicarán próximamente.</p>
+              <p className="text-sm mt-1" style={{ color: `${NAVY}80` }}>
                 ¿Tienes preguntas? <Link href="/contacto" style={{ color: TEAL }}>Contáctanos.</Link>
               </p>
             </div>
@@ -127,12 +127,12 @@ export default async function EstudioBiblicoPage() {
                           {STATUS_LABEL[s.status] ?? s.status}
                         </span>
                       </div>
-                      <p className="text-[12px]" style={{ color: `${NAVY}60` }}>{s.theme}</p>
+                      <p className="text-[12px]" style={{ color: `${NAVY}CC` }}>{s.theme}</p>
                     </div>
                     <div className="flex items-center gap-4 flex-shrink-0">
                       <div className="text-right">
                         <p className="font-black text-xl leading-none" style={{ color }}>{sessionCount}</p>
-                        <p className="text-[9px] font-bold uppercase tracking-wider mt-0.5" style={{ color: `${NAVY}40` }}>sesiones</p>
+                        <p className="text-[9px] font-bold uppercase tracking-wider mt-0.5" style={{ color: `${NAVY}80` }}>sesiones</p>
                       </div>
                       {isActive && sessionCount > 0 && (
                         <Link href={`/educacion/estudio-biblico/${s.slug}`}
@@ -169,7 +169,7 @@ export default async function EstudioBiblicoPage() {
                   <span className="text-[9px] font-black tracking-widest mt-1 flex-shrink-0" style={{ color: `${TEAL}50` }}>{n}</span>
                   <div>
                     <h3 className="font-black text-base tracking-tight mb-3" style={{ color: CREAM }}>{title}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.55)' }}>{desc}</p>
+                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.82)' }}>{desc}</p>
                   </div>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default async function EstudioBiblicoPage() {
               </p>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Únete al estudio bíblico este miércoles a las 7PM. No necesitas traer nada más que tu Biblia y un corazón abierto.
               </p>
               <Link href="/contacto"
@@ -206,7 +206,7 @@ export default async function EstudioBiblicoPage() {
               </Link>
               <Link href="/registro"
                 className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.60)' }}>
+                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
                 Unirme en línea <ChevronRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

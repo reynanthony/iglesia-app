@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Flame, CheckCircle, Clock, Users, Sparkles, MessageSquareHeart, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Flame, CheckCircle, Clock, Users, Sparkles, MessageSquareHeart, ChevronRight, HandHeart, Lock } from 'lucide-react'
 import { togglePrayerParticipation, markPrayerAnswered, markPrayerFollowUp } from '@/app/actions/prayer'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
+import PrayerResponseForm from '@/components/app/PrayerResponseForm'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -25,7 +26,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ data: req }, { data: participants }] = await Promise.all([
+  const [{ data: req }, { data: participants }, { data: responses }] = await Promise.all([
     supabase
       .from('prayer_requests')
       .select('*, profiles!prayer_requests_user_id_fkey(full_name, username), posts!prayer_requests_testimony_post_id_fkey(id, content, created_at)')
@@ -35,6 +36,11 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
       .from('prayer_participants')
       .select('user_id')
       .eq('request_id', id),
+    supabase
+      .from('prayer_responses')
+      .select('id, body, is_anonymous, created_at, profiles!prayer_responses_user_id_fkey(full_name, username)')
+      .eq('request_id', id)
+      .order('created_at', { ascending: true }),
   ])
 
   if (!req) notFound()
@@ -47,14 +53,22 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
     ? 'Anónimo'
     : ((req.profiles as any)?.full_name ?? 'Usuario')
   const testimony    = (req.posts as any) ?? null
+  const isPrivate    = req.is_public === false
+
+  // Already responded?
+  const alreadyResponded = responses?.some((r: any) => {
+    const profile = r.profiles as any
+    return !r.is_anonymous && profile?.username && user?.id
+  })
 
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
       <RealtimeRefresh
         channelName={`oracion-detail-${id}`}
         watches={[
-          { table: 'prayer_participants', filter: `request_id=eq.${id}` },
-          { table: 'prayer_requests',    filter: `id=eq.${id}` },
+          { table: 'prayer_participants',  filter: `request_id=eq.${id}` },
+          { table: 'prayer_requests',      filter: `id=eq.${id}` },
+          { table: 'prayer_responses',     filter: `request_id=eq.${id}` },
         ]}
       />
 
@@ -70,6 +84,12 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
           style={{ color: 'rgba(246,243,235,0.40)' }}>
           Petición de oración
         </span>
+        {isPrivate && (
+          <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full ml-auto"
+            style={{ background: 'rgba(246,243,235,0.06)', color: 'rgba(246,243,235,0.40)', border: '1px solid rgba(246,243,235,0.10)' }}>
+            <Lock size={9} /> Privada
+          </span>
+        )}
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">
@@ -78,7 +98,6 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
         <div className="rounded-2xl p-6 space-y-5"
           style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
 
-          {/* Status + meta */}
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-full"
               style={{ background: `${sc}18`, color: sc, border: `1px solid ${sc}30` }}>
@@ -89,13 +108,11 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
             </span>
           </div>
 
-          {/* Título */}
           <h1 className="font-black text-xl leading-snug tracking-tight"
             style={{ color: '#F6F3EB' }}>
             {req.title}
           </h1>
 
-          {/* Cuerpo */}
           {req.body && (
             <p className="text-sm leading-relaxed whitespace-pre-wrap"
               style={{ color: 'rgba(246,243,235,0.65)' }}>
@@ -103,7 +120,6 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
             </p>
           )}
 
-          {/* Contador de personas orando */}
           <div className="flex items-center gap-2 pt-1"
             style={{ borderTop: '1px solid #0D3352', paddingTop: 16 }}>
             <Users size={14} style={{ color: 'rgba(118,171,174,0.60)' }} />
@@ -154,7 +170,6 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
         {/* Estado respondida */}
         {req.status === 'respondida' && (
           <div className="space-y-3">
-            {/* Badge respondida */}
             <div className="rounded-2xl p-5 flex items-center gap-4"
               style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.20)' }}>
               <CheckCircle size={22} style={{ color: '#4ADE80', flexShrink: 0 }} />
@@ -166,7 +181,6 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
               </div>
             </div>
 
-            {/* Testimonio — si existe */}
             {testimony && (
               <div className="rounded-2xl p-5 space-y-3"
                 style={{ background: 'rgba(118,171,174,0.07)', border: '1px solid rgba(118,171,174,0.20)' }}>
@@ -189,7 +203,6 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
               </div>
             )}
 
-            {/* CTA para escribir testimonio (solo dueño, sin testimonio aún) */}
             {isOwner && !testimony && (
               <Link href={`/app/oracion/${id}/testimonio`}
                 className="flex items-center gap-3 p-5 rounded-2xl transition hover:brightness-110"
@@ -209,6 +222,55 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
             )}
           </div>
         )}
+
+        {/* ── Oraciones de la comunidad ── */}
+        {(responses && responses.length > 0) && (
+          <div className="space-y-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] px-1"
+              style={{ color: 'rgba(118,171,174,0.60)' }}>
+              Oraciones de la comunidad ({responses.length})
+            </p>
+            {responses.map((r: any) => {
+              const profile = r.profiles as any
+              const name = r.is_anonymous ? 'Anónimo' : (profile?.full_name ?? 'Usuario')
+              return (
+                <div key={r.id} className="rounded-2xl p-5 space-y-2"
+                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'rgba(118,171,174,0.15)' }}>
+                      <HandHeart size={12} style={{ color: '#76ABAE' }} />
+                    </div>
+                    <span className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.60)' }}>
+                      {name}
+                    </span>
+                    <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                      · {timeAgo(r.created_at)}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap pl-8"
+                    style={{ color: 'rgba(246,243,235,0.80)' }}>
+                    {r.body}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Formulario de respuesta */}
+        {user && (
+          <PrayerResponseForm requestId={id} />
+        )}
+
+        {!user && (
+          <Link href={`/login?next=/app/oracion/${id}`}
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition"
+            style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)', color: '#76ABAE' }}>
+            <MessageSquareHeart size={16} /> Inicia sesión para responder
+          </Link>
+        )}
+
       </div>
     </div>
   )

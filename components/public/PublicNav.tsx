@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -79,7 +79,7 @@ export default function PublicNav() {
               return (
                 <Link key={href} href={href} onClick={() => setOpen(false)}
                   className="block px-5 py-3 text-[11px] font-bold uppercase tracking-[0.15em] transition hover:bg-white/5"
-                  style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.60)' }}>
+                  style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.84)' }}>
                   {label}
                 </Link>
               )

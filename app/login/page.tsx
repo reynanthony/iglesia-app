@@ -2,34 +2,56 @@
 
 import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { login } from '@/app/actions/auth'
 import Link from 'next/link'
 import { ArrowRight, AlertCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 
 function LoginForm() {
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const searchParams = useSearchParams()
-  const next = searchParams.get('next') ?? ''
+  const next = searchParams.get('next') ?? '/app/comunidad'
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setError('')
+
     const formData = new FormData(e.currentTarget)
-    const result = await login(formData)
-    if (result?.error) {
-      setError(result.error)
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    })
+    const data = await res.json()
+
+    if (!res.ok || data.error) {
+      setError('Correo o contraseña incorrectos')
       setLoading(false)
+      return
     }
+
+    const supabase = createClient()
+    const { error: sessionError } = await supabase.auth.setSession({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+    })
+
+    if (sessionError) {
+      setError('Error al iniciar sesión. Intenta de nuevo.')
+      setLoading(false)
+      return
+    }
+
+    window.location.href = next
   }
 
   return (
     <div className="w-full max-w-sm">
 
-      <div className="mb-10">
-        <h1 className="font-black text-3xl tracking-tight text-[#111111] mb-2">
+      <div className="mb-5">
+        <h1 className="font-black text-2xl tracking-tight text-[#111111] mb-1">
           Iniciar sesión
         </h1>
         <p className="text-sm text-[#111111]/50">
@@ -37,10 +59,9 @@ function LoginForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {next && <input type="hidden" name="next" value={next} />}
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-[0.22em] block mb-2.5 text-[#111111]/50">
+          <label className="text-[10px] font-bold uppercase tracking-[0.22em] block mb-2 text-[#111111]/50">
             Correo electrónico
           </label>
           <input
@@ -49,7 +70,7 @@ function LoginForm() {
             required
             autoComplete="email"
             placeholder="tu@correo.com"
-            className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition text-[#111111]"
+            className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition text-[#111111]"
             style={{
               background: '#FFFFFF',
               border: '1px solid #E8E8E8',
@@ -61,7 +82,7 @@ function LoginForm() {
         </div>
 
         <div>
-          <label className="text-[10px] font-bold uppercase tracking-[0.22em] block mb-2.5 text-[#111111]/50">
+          <label className="text-[10px] font-bold uppercase tracking-[0.22em] block mb-2 text-[#111111]/50">
             Contraseña
           </label>
           <input
@@ -70,7 +91,7 @@ function LoginForm() {
             required
             autoComplete="current-password"
             placeholder="••••••••"
-            className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none transition text-[#111111]"
+            className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition text-[#111111]"
             style={{
               background: '#FFFFFF',
               border: '1px solid #E8E8E8',
@@ -92,7 +113,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.22em] rounded-xl px-6 py-4 transition-all disabled:opacity-50 text-white active:scale-[0.98]"
+          className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.22em] rounded-xl px-6 py-3.5 transition-all disabled:opacity-50 text-white active:scale-[0.98]"
           style={{ background: '#093C5D' }}
         >
           {loading ? 'Entrando…' : (
@@ -104,7 +125,7 @@ function LoginForm() {
         </button>
       </form>
 
-      <div className="mt-8 pt-8 space-y-3" style={{ borderTop: '1px solid #EBEBEB' }}>
+      <div className="mt-4 pt-4 space-y-2" style={{ borderTop: '1px solid #EBEBEB' }}>
         <p className="text-center text-sm text-[#111111]/50">
           ¿No tienes cuenta?{' '}
           <Link href="/registro" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
@@ -124,12 +145,12 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen flex flex-col lg:flex-row">
+    <main className="h-screen overflow-hidden flex flex-col lg:flex-row">
 
       {/* ── PANEL IZQUIERDO — identidad visual ── */}
       <div
-        className="relative lg:w-1/2 flex flex-col items-center justify-center px-10 py-16 overflow-hidden"
-        style={{ background: '#093C5D', minHeight: 300 }}
+        className="relative flex-[2] lg:flex-none lg:w-1/2 flex flex-col items-center justify-center px-8 py-3 lg:px-10 lg:py-16 overflow-hidden"
+        style={{ background: '#093C5D' }}
       >
         {/* Grid sutil */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
@@ -154,15 +175,15 @@ export default function LoginPage() {
             <rect x="9" y="18" width="30" height="5" rx="2" fill="#76ABAE" />
           </svg>
 
-          <h2 className="font-display font-black tracking-tighter mt-6 mb-2"
-            style={{ fontSize: 'clamp(2.4rem, 5vw, 3.5rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
+          <h2 className="font-display font-black tracking-tighter mt-2 mb-1 lg:mt-6 lg:mb-2"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             El Manantial
           </h2>
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8" style={{ color: '#76ABAE' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3 lg:mb-8" style={{ color: '#76ABAE' }}>
             Comunidad de fe
           </p>
 
-          <div className="w-8 h-px mb-8" style={{ background: 'rgba(118,171,174,0.4)' }} />
+          <div className="w-8 h-px mb-3 lg:mb-8" style={{ background: 'rgba(118,171,174,0.4)' }} />
 
           <blockquote className="text-sm leading-relaxed text-center" style={{ color: 'rgba(246,243,235,0.40)' }}>
             "El que bebe del agua que yo le daré no volverá a tener sed jamás."
@@ -175,7 +196,7 @@ export default function LoginPage() {
 
       {/* ── PANEL DERECHO — formulario ── */}
       <div
-        className="lg:w-1/2 flex items-center justify-center px-6 py-16"
+        className="flex-[3] lg:flex-none lg:w-1/2 flex items-center justify-center px-6 py-4 lg:py-16"
         style={{ background: '#FAFAFA' }}
       >
         <Suspense fallback={null}>

@@ -1,6 +1,6 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Plus, Flame, Mic2, ChevronRight, Sparkles } from 'lucide-react'
+import { Plus, Flame, Mic2, ChevronRight, Sparkles, Lock, HandHeart } from 'lucide-react'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
 
 const STATUS_LABEL: Record<string, string> = {
@@ -27,13 +27,21 @@ export default async function OracionPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Show all public prayers + user's own (including private)
   let query = supabase
     .from('prayer_requests')
-    .select('id, title, is_anonymous, status, created_at, user_id, testimony_post_id, profiles!prayer_requests_user_id_fkey(full_name, username)')
+    .select('id, title, is_anonymous, is_public, status, created_at, user_id, testimony_post_id, profiles!prayer_requests_user_id_fkey(full_name, username), prayer_responses(id)')
     .order('created_at', { ascending: false })
     .limit(50)
 
   if (estado && estado !== 'todas') query = query.eq('status', estado)
+
+  // If logged in, show public prayers OR own prayers
+  if (user) {
+    query = query.or(`is_public.eq.true,user_id.eq.${user.id}`)
+  } else {
+    query = query.eq('is_public', true)
+  }
 
   const { data: requests, error } = await query
 
@@ -136,15 +144,17 @@ export default async function OracionPage({
         )}
 
         {requests?.map((req: any) => {
-          const sc          = STATUS_COLOR[req.status] ?? '#76ABAE'
-          const isOwn       = req.user_id === user?.id
+          const sc           = STATUS_COLOR[req.status] ?? '#76ABAE'
+          const isOwn        = req.user_id === user?.id
           const hasTestimony = !!req.testimony_post_id
+          const isPrivate    = req.is_public === false
+          const responseCount = (req.prayer_responses as any[])?.length ?? 0
           return (
             <Link key={req.id} href={`/app/oracion/${req.id}`}
               className="group block rounded-2xl transition"
               style={{
                 background: '#0B2D47',
-                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.25)' : '#0D3352'}`,
+                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.25)' : isPrivate ? 'rgba(246,243,235,0.08)' : '#0D3352'}`,
               }}>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -153,20 +163,34 @@ export default async function OracionPage({
                       style={{ background: `${sc}18`, color: sc, border: `1px solid ${sc}30` }}>
                       {STATUS_LABEL[req.status]}
                     </span>
+                    {isPrivate && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                        style={{ background: 'rgba(246,243,235,0.06)', color: 'rgba(246,243,235,0.45)', border: '1px solid rgba(246,243,235,0.10)' }}>
+                        <Lock size={8} /> Privada
+                      </span>
+                    )}
                     {hasTestimony && (
                       <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
                         style={{ background: 'rgba(118,171,174,0.12)', color: '#76ABAE' }}>
                         <Sparkles size={9} /> Testimonio
                       </span>
                     )}
-                    {isOwn && !hasTestimony && (
+                    {isOwn && !hasTestimony && !isPrivate && (
                       <span className="text-[9px] font-bold uppercase tracking-wider"
                         style={{ color: 'rgba(246,243,235,0.55)' }}>
                         Mi petición
                       </span>
                     )}
                   </div>
-                  <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0, marginTop: 2 }} />
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {responseCount > 0 && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold"
+                        style={{ color: 'rgba(118,171,174,0.70)' }}>
+                        <HandHeart size={11} /> {responseCount}
+                      </span>
+                    )}
+                    <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', marginTop: 2 }} />
+                  </div>
                 </div>
                 <p className="font-black text-base leading-snug mb-2 group-hover:text-[#76ABAE] transition"
                   style={{ color: '#F6F3EB' }}>

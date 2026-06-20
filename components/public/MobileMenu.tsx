@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -99,7 +99,7 @@ export default function MobileMenu() {
         aria-controls="mobile-menu-drawer"
         aria-label="Abrir menú"
         className="p-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-        style={{ color: 'rgba(246,243,235,0.70)' }}
+        style={{ color: 'rgba(246,243,235,0.88)' }}
       >
         <Menu size={22} aria-hidden="true" />
       </button>
@@ -151,7 +151,7 @@ export default function MobileMenu() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar menú"
-                style={{ padding: '0.375rem', color: 'rgba(246,243,235,0.40)', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ padding: '0.375rem', color: 'rgba(246,243,235,0.86)', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -181,7 +181,7 @@ export default function MobileMenu() {
                           padding: '0.875rem 0.875rem',
                           fontSize: '0.75rem', fontWeight: active ? 700 : 600,
                           textTransform: 'uppercase', letterSpacing: '0.14em',
-                          color: active ? '#F6F3EB' : 'rgba(246,243,235,0.50)',
+                          color: active ? '#F6F3EB' : 'rgba(246,243,235,0.76)',
                           background: active ? 'rgba(118,171,174,0.10)' : 'transparent',
                           borderRadius: '0.625rem',
                           textDecoration: 'none',
@@ -220,7 +220,7 @@ export default function MobileMenu() {
                         width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                         fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
                         padding: '0.875rem', borderRadius: '0.75rem', cursor: 'pointer', background: 'none',
-                        border: '1px solid rgba(246,243,235,0.12)', color: 'rgba(246,243,235,0.50)',
+                        border: '1px solid rgba(246,243,235,0.12)', color: 'rgba(246,243,235,0.76)',
                         minHeight: '3rem',
                       }}
                     >
@@ -249,7 +249,7 @@ export default function MobileMenu() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
                       padding: '0.875rem', borderRadius: '0.75rem',
-                      border: '1px solid rgba(118,171,174,0.20)', color: 'rgba(246,243,235,0.60)', textDecoration: 'none',
+                      border: '1px solid rgba(118,171,174,0.20)', color: 'rgba(246,243,235,0.84)', textDecoration: 'none',
                       minHeight: '3rem',
                     }}
                   >

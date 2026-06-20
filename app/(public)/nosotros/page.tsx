@@ -1,6 +1,7 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { LeaderCards } from '@/components/public/LeaderCards'
 import { cmsSingleton, cmsImageUrl, type DNosotros } from '@/lib/directus'
@@ -9,7 +10,7 @@ import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
 
-type Leader = { id: string; name: string; title: string; bio: string | null; avatar_url: string | null; category: string }
+type Leader = { id: string; name: string; title: string; bio: string | null; avatar_url: string | null; category: string; user_id?: string | null }
 
 const DARK  = '#051828'
 const NAVY  = '#093C5D'
@@ -26,7 +27,7 @@ const defaultBeliefs = [
 
 export default async function NosotrosPage() {
   const supabase = await createClient()
-  const [cms, { data: leadersData }] = await Promise.all([
+  const [cms, pastoralResult, ministerioResult] = await Promise.all([
     cmsSingleton<DNosotros & {
       hero_title_main: string | null; hero_title_accent: string | null
       pullquote: string | null; pullquote_author: string | null
@@ -38,11 +39,47 @@ export default async function NosotrosPage() {
       nos_cta1_label: string | null; nos_cta1_url: string | null
       nos_cta2_label: string | null; nos_cta2_url: string | null
     }>('nosotros'),
-    supabase.from('church_leaders').select('id,name,title,bio,avatar_url,category').eq('is_public', true).order('order_index'),
+    supabase
+      .from('church_leaders')
+      .select('id,name,title,bio,avatar_url,category')
+      .eq('category', 'pastoral')
+      .eq('is_public', true)
+      .order('order_index'),
+    // Service client para bypass RLS en página pública
+    // profiles!user_id evita ambigüedad con assigned_by (dos FK a profiles)
+    (() => {
+      try {
+        const svc = createServiceClient()
+        return svc
+          .from('ministry_assignments')
+          .select('user_id,ministry_id,role,ministries(id,name),profiles!user_id(id,full_name,avatar_url,role)')
+      } catch {
+        return Promise.resolve({ data: [] as any[] })
+      }
+    })(),
   ])
-  const leaders: Leader[] = leadersData ?? []
-  const pastoral   = leaders.filter(l => l.category === 'pastoral')
-  const ministerio = leaders.filter(l => l.category === 'ministerio')
+
+  const pastoral: Leader[] = (pastoralResult.data ?? []).map((l: any) => ({
+    id: l.id,
+    name: l.name,
+    title: l.title,
+    bio: l.bio,
+    avatar_url: l.avatar_url,
+    category: 'pastoral',
+  }))
+
+  const ministerio: Leader[] = (ministerioResult.data ?? [])
+    .filter((a: any) => a.profiles?.role === 'lider' || a.profiles?.role === 'pastor')
+    .map((a: any) => ({
+      id: `${a.user_id}-${a.ministry_id}`,
+      name: a.profiles?.full_name ?? 'Líder',
+      title: a.ministries?.name ?? 'Ministerio',
+      bio: null,
+      avatar_url: a.profiles?.avatar_url ?? null,
+      category: 'ministerio',
+    }))
+
+  const leaders = [...pastoral, ...ministerio]
   const c = cms ?? {} as typeof cms & Record<string, any>
 
   const stats = [
@@ -56,8 +93,8 @@ export default async function NosotrosPage() {
   const heroEyebrow     = c?.hero_eyebrow     ?? 'Quiénes somos · Desde 2008'
   const heroTitleMain   = c?.hero_title_main  ?? 'Somos\nEl Manan-'
   const heroTitleAccent = c?.hero_title_accent ?? 'tial.'
-  const heroImageUrl    = cmsImageUrl(c?.hero_image)
-  const heroVideoUrl    = c?.hero_video_url   ?? null
+  const heroImageUrl    = c?.hero_image_url || cmsImageUrl(c?.hero_image)
+  const heroVideoUrl    = c?.hero_video_url || cmsImageUrl(c?.hero_video) || null
   const heroOverlayOpacity = c?.hero_overlay_opacity ?? 0.55
   const heroShowGrid       = c?.hero_show_grid !== false
   const heroTitleAnimation = (c?.hero_title_animation ?? 'none') as TitleAnimation
@@ -102,10 +139,10 @@ export default async function NosotrosPage() {
         style={{ background: hs.bg }}>
 
         {heroImageUrl && !heroVideoUrl && (
-          <img src={heroImageUrl} alt="" aria-hidden
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
         )}
-        {heroVideoUrl && <HeroVideo url={heroVideoUrl} />}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
             style={{ background: `linear-gradient(160deg, rgba(5,24,40,0.75) 0%, rgba(9,60,93,0.40) 70%, transparent 100%)` }} />
@@ -162,7 +199,7 @@ export default async function NosotrosPage() {
                   <p className="font-black tracking-tighter leading-none mb-1"
                     style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: TEAL }}>{value}</p>
                   <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em]"
-                    style={{ color: 'rgba(246,243,235,0.40)' }}>{label}</p>
+                    style={{ color: 'rgba(246,243,235,0.86)' }}>{label}</p>
                 </div>
               ))}
             </div>
@@ -273,7 +310,7 @@ export default async function NosotrosPage() {
                   <h3 className="text-xl md:text-2xl font-black tracking-tight mb-2"
                     style={{ color: DARK }}>{title}</h3>
                   <p className="text-sm leading-relaxed max-w-xl"
-                    style={{ color: `${DARK}99` }}>{desc}</p>
+                    style={{ color: `${DARK}CC` }}>{desc}</p>
                 </div>
               </div>
             ))}
@@ -317,7 +354,7 @@ export default async function NosotrosPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-20 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-12"
-                style={{ color: 'rgba(255,255,255,0.30)' }}>{nosCta_eyebrow}</p>
+                style={{ color: 'rgba(255,255,255,0.80)' }}>{nosCta_eyebrow}</p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.88]"
                 style={{ fontSize: 'clamp(3rem, 9vw, 8rem)' }}>
                 {nosCta_title.split('\n').map((line, i, arr) => (

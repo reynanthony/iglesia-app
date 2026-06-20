@@ -9,7 +9,9 @@ export type DHomepage = {
   hero_title_accent: string | null
   hero_subtitle: string | null
   hero_image: string | null       // uuid → cmsImageUrl()
-  hero_video_url: string | null
+  hero_image_url: string | null   // external URL (takes priority over hero_image)
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → cmsImageUrl() for internal files
   hero_cta1_label: string | null
   hero_cta1_url: string | null
   hero_cta2_label: string | null
@@ -79,8 +81,10 @@ export type DNosotros = {
   hero_title: string | null
   hero_subtitle: string | null
   hero_body: string | null
-  hero_image: string | null       // uuid → cmsImageUrl()
-  hero_video_url: string | null
+  hero_image: string | null       // uuid → file picker in Directus → cmsImageUrl()
+  hero_image_url: string | null   // external URL, takes priority over hero_image
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → file picker for internal video → cmsImageUrl()
   hero_overlay_opacity: number | null // 0–1, default 0.55
   hero_show_grid: boolean | null      // default true
   hero_text_color: string | null      // 'light' | 'dark', default 'light'
@@ -109,8 +113,10 @@ export type DContacto = {
   hero_eyebrow: string | null
   hero_title: string | null
   hero_subtitle: string | null
-  hero_image: string | null       // uuid → cmsImageUrl()
-  hero_video_url: string | null
+  hero_image: string | null       // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null   // external URL, takes priority over hero_image
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → file picker for internal video → cmsImageUrl()
   hero_overlay_opacity: number | null // 0–1, default 0.65
   hero_show_grid: boolean | null      // default true
   hero_text_color: string | null      // 'light' | 'dark', default 'light'
@@ -129,6 +135,129 @@ export type DContacto = {
   first_visit_body: string | null
 }
 
+export type DMinisteriosPage = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null       // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null   // external URL, takes priority over hero_image
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → file picker for internal video → cmsImageUrl()
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_text_color: string | null
+  hero_bg_color: string | null
+  hero_title_size: string | null
+  hero_title_color: string | null
+  hero_accent_color: string | null
+  hero_subtitle_color: string | null
+  hero_eyebrow_color: string | null
+  hero_title_animation: string | null
+  hero_layout: string | null
+  hero_watermark: string | null
+  cta_eyebrow: string | null
+  cta_title: string | null
+  cta_link_label: string | null
+  cta_link_url: string | null
+}
+
+export type DEducacion = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null       // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null   // external URL, takes priority over hero_image
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → file picker for internal video → cmsImageUrl()
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_text_color: string | null
+  hero_bg_color: string | null
+  hero_title_size: string | null
+  hero_title_color: string | null
+  hero_accent_color: string | null
+  hero_subtitle_color: string | null
+  hero_eyebrow_color: string | null
+  hero_title_animation: string | null
+  hero_layout: string | null
+  hero_watermark: string | null
+  path1_label: string | null; path1_headline: string | null; path1_desc: string | null
+  path1_tag1: string | null; path1_tag2: string | null; path1_tag3: string | null
+  path2_label: string | null; path2_headline: string | null; path2_desc: string | null
+  path2_tag1: string | null; path2_tag2: string | null; path2_tag3: string | null
+  why_eyebrow: string | null; why_title: string | null
+  why_body1: string | null; why_body2: string | null
+  verse: string | null; verse_ref: string | null
+  app_title: string | null; app_body: string | null
+  cta_label: string | null
+}
+
+export type DDonaciones = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_verse: string | null
+  hero_verse_ref: string | null
+  hero_image: string | null       // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null   // external URL, takes priority over hero_image
+  hero_video_url: string | null   // YouTube / Vimeo / direct URL
+  hero_video: string | null       // uuid → file picker for internal video → cmsImageUrl()
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_text_color: string | null
+  hero_bg_color: string | null
+  hero_title_size: string | null
+  hero_title_color: string | null
+  hero_accent_color: string | null
+  hero_eyebrow_color: string | null
+  hero_title_animation: string | null
+  hero_layout: string | null
+  bank_name: string | null; bank_account: string | null
+  bank_titular: string | null; bank_rnc: string | null; bank_note: string | null
+  zelle_email: string | null; zelle_name: string | null; zelle_note: string | null
+  schedule_1_day: string | null; schedule_1_time: string | null; schedule_1_type: string | null
+  schedule_2_day: string | null; schedule_2_time: string | null; schedule_2_type: string | null
+  stat1_value: string | null; stat1_label: string | null; stat1_desc: string | null
+  stat2_value: string | null; stat2_label: string | null; stat2_desc: string | null
+  stat3_value: string | null; stat3_label: string | null; stat3_desc: string | null
+  stat4_value: string | null; stat4_label: string | null; stat4_desc: string | null
+  cta_verse: string | null; cta_verse_ref: string | null; cta_body: string | null
+}
+
+export type DEnVivo = {
+  hero_image: string | null          // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null      // external URL, takes priority over hero_image
+  hero_video_url: string | null      // YouTube / Vimeo / direct URL
+  hero_video: string | null          // uuid → file picker for internal video → cmsImageUrl()
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_bg_color: string | null
+  offline_title: string | null
+  offline_subtitle: string | null
+  offline_next_text: string | null
+  schedule_eyebrow: string | null
+  schedule_title: string | null
+  schedule_1_day: string | null; schedule_1_time: string | null; schedule_1_type: string | null; schedule_1_live: boolean | null
+  schedule_2_day: string | null; schedule_2_time: string | null; schedule_2_type: string | null; schedule_2_live: boolean | null
+  schedule_3_day: string | null; schedule_3_time: string | null; schedule_3_type: string | null; schedule_3_live: boolean | null
+  cta_eyebrow: string | null; cta_title: string | null; cta_body: string | null
+}
+
+export type DOracion = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null          // uuid → file picker → cmsImageUrl()
+  hero_image_url: string | null      // external URL, takes priority over hero_image
+  hero_video_url: string | null      // YouTube / Vimeo / direct URL
+  hero_video: string | null          // uuid → file picker for internal video → cmsImageUrl()
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_bg_color: string | null
+  cta_eyebrow: string | null
+  cta_title: string | null
+  cta_body: string | null
+}
+
 export type DMinisterio = {
   id: number
   status: 'published' | 'draft' | null
@@ -137,8 +266,9 @@ export type DMinisterio = {
   slug: string | null
   description: string | null
   long_description: string | null
-  imagen: string | null  // file UUID → pass to cmsImageUrl()
-  video_url: string | null
+  imagen: string | null     // file UUID → cmsImageUrl() (file picker in Directus)
+  video_url: string | null  // YouTube / Vimeo / direct URL
+  video_file: string | null // uuid for internal video files → cmsImageUrl()
   hero_watermark: string | null
   hero_overlay_opacity: number | null  // 0–1, default 0.80
   hero_show_grid: boolean | null       // default true
@@ -210,6 +340,62 @@ export type DPredica = {
   series: string | null
   speaker: string | null
   date: string | null
+}
+
+export type DPredicasPage = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null
+  hero_image_url: string | null
+  hero_video: string | null
+  hero_video_url: string | null
+  hero_bg_color: string | null
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_watermark: string | null
+}
+
+export type DEventosPage = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null
+  hero_image_url: string | null
+  hero_video: string | null
+  hero_video_url: string | null
+  hero_bg_color: string | null
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_watermark: string | null
+}
+
+export type DDevoccionalesPage = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null
+  hero_image_url: string | null
+  hero_video: string | null
+  hero_video_url: string | null
+  hero_bg_color: string | null
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_watermark: string | null
+}
+
+export type DPublicacionesPage = {
+  hero_eyebrow: string | null
+  hero_title: string | null
+  hero_subtitle: string | null
+  hero_image: string | null
+  hero_image_url: string | null
+  hero_video: string | null
+  hero_video_url: string | null
+  hero_bg_color: string | null
+  hero_overlay_opacity: number | null
+  hero_show_grid: boolean | null
+  hero_watermark: string | null
 }
 
 // ── API helpers ────────────────────────────────────────
@@ -289,9 +475,15 @@ export async function cmsSingleton<T>(collection: string): Promise<T | null> {
   }
 }
 
-export function cmsImageUrl(fileId: string | null | undefined): string | null {
-  if (!fileId || !CMS) return null
-  return `${CMS}/assets/${fileId}`
+export function cmsImageUrl(fileIdOrUrl: string | null | undefined): string | null {
+  if (!fileIdOrUrl) return null
+  // Already a full URL — use directly
+  if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://') || fileIdOrUrl.startsWith('/')) {
+    return fileIdOrUrl
+  }
+  // Directus file UUID
+  if (!CMS) return null
+  return `${CMS}/assets/${fileIdOrUrl}`
 }
 
 // ── Write helpers ──────────────────────────────────────

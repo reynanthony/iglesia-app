@@ -1,9 +1,8 @@
-﻿import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ChevronRight, CheckCircle2, Video, FileText, BookMarked, Zap } from 'lucide-react'
 import { marked } from 'marked'
-import DOMPurify from 'isomorphic-dompurify'
 import { markLessonComplete } from '@/app/actions/discipleship-lms'
 import { ReflectionForm } from '@/components/lms/ReflectionForm'
 
@@ -83,7 +82,7 @@ export default async function LessonPage({
   const nextLesson   = currentIdx < sortedLessons.length - 1 ? sortedLessons[currentIdx + 1] : null
 
   const htmlBody = lesson.body
-    ? DOMPurify.sanitize(await marked.parse(lesson.body as string, { breaks: true }))
+    ? String(await marked.parse(lesson.body as string, { breaks: true }))
     : null
 
   const completeAction = markLessonComplete.bind(null, lessonId, course.id)
@@ -145,7 +144,7 @@ export default async function LessonPage({
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
 
-        {/* â”€â”€ Video â”€â”€ */}
+        {/* ── Video ── */}
         {embedUrl && (
           <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
             <iframe
@@ -168,7 +167,7 @@ export default async function LessonPage({
           </a>
         )}
 
-        {/* â”€â”€ PDF â”€â”€ */}
+        {/* ── PDF ── */}
         {lesson.pdf_url && (
           <a href={lesson.pdf_url} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 rounded-2xl transition hover:brightness-110"
@@ -179,17 +178,17 @@ export default async function LessonPage({
           </a>
         )}
 
-        {/* â”€â”€ Contenido â”€â”€ */}
+        {/* ── Contenido ── */}
         {htmlBody && (
           <div className="prose-lesson" dangerouslySetInnerHTML={{ __html: htmlBody }} />
         )}
 
-        {/* â”€â”€ VersÃ­culos â”€â”€ */}
+        {/* ── Versículos ── */}
         {verses && verses.length > 0 && (
           <section>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
               style={{ color: 'rgba(118,171,174,0.55)' }}>
-              <BookMarked size={10} /> VersÃ­culos base
+              <BookMarked size={10} /> Versículos base
             </p>
             <div className="space-y-2">
               {verses.map((v: any) => (
@@ -205,12 +204,12 @@ export default async function LessonPage({
           </section>
         )}
 
-        {/* â”€â”€ DesafÃ­os â”€â”€ */}
+        {/* ── Desafíos ── */}
         {challenges && challenges.length > 0 && (
           <section>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
               style={{ color: 'rgba(118,171,174,0.55)' }}>
-              <Zap size={10} /> DesafÃ­os prÃ¡cticos
+              <Zap size={10} /> Desafíos prácticos
             </p>
             <div className="space-y-2">
               {challenges.map((c: any) => (
@@ -246,11 +245,11 @@ export default async function LessonPage({
           <div className="w-full py-4 rounded-2xl flex items-center justify-center gap-2"
             style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.25)' }}>
             <CheckCircle2 size={16} style={{ color: '#76ABAE' }} />
-            <span className="text-sm font-black" style={{ color: '#76ABAE' }}>LecciÃ³n completada</span>
+            <span className="text-sm font-black" style={{ color: '#76ABAE' }}>Lección completada</span>
           </div>
         )}
 
-        {/* â”€â”€ NavegaciÃ³n prev/next â”€â”€ */}
+        {/* ── Navegación prev/next ── */}
         <div className="flex gap-3">
           {prevLesson ? (
             <Link

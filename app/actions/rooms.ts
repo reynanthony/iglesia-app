@@ -35,11 +35,13 @@ export async function closeRoom(roomId: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 
-  await supabase
+  const { error } = await supabase
     .from('rooms')
     .update({ is_active: false })
     .eq('id', roomId)
     .eq('created_by', user.id)
+
+  if (error) return
 
   revalidatePath('/app/oracion')
   redirect('/app/oracion')

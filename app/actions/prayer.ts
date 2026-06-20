@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { isUUID } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -9,13 +10,14 @@ export async function createPrayerRequest(formData: FormData): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const title       = (formData.get('title') as string).trim()
-  const body        = (formData.get('body') as string | null)?.trim() || null
+  const title        = (formData.get('title') as string).trim()
+  const body         = (formData.get('body') as string | null)?.trim() || null
   const is_anonymous = formData.get('is_anonymous') === 'on'
+  const is_public    = formData.get('is_private') !== 'on'
 
   if (!title) return
 
-  await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous })
+  await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous, is_public })
   revalidatePath('/app/oracion')
   redirect('/app/oracion')
 }
@@ -45,6 +47,7 @@ export async function createPublicPrayerRequest(formData: FormData): Promise<voi
 }
 
 export async function togglePrayerParticipation(requestId: string): Promise<void> {
+  if (!isUUID(requestId)) return
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
@@ -69,6 +72,7 @@ export async function togglePrayerParticipation(requestId: string): Promise<void
 }
 
 export async function markPrayerAnswered(requestId: string): Promise<void> {
+  if (!isUUID(requestId)) return
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
@@ -83,6 +87,7 @@ export async function markPrayerAnswered(requestId: string): Promise<void> {
 }
 
 export async function markPrayerFollowUp(requestId: string): Promise<void> {
+  if (!isUUID(requestId)) return
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
@@ -97,6 +102,7 @@ export async function markPrayerFollowUp(requestId: string): Promise<void> {
 }
 
 export async function togglePublicPrayer(requestId: string): Promise<{ success: boolean; needsLogin?: boolean }> {
+  if (!isUUID(requestId)) return { success: false }
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, needsLogin: true }
@@ -123,6 +129,7 @@ export async function togglePublicPrayer(requestId: string): Promise<{ success: 
 }
 
 export async function createPrayerResponse(requestId: string, formData: FormData): Promise<{ success: boolean; needsLogin?: boolean }> {
+  if (!isUUID(requestId)) return { success: false }
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, needsLogin: true }
@@ -133,12 +140,14 @@ export async function createPrayerResponse(requestId: string, formData: FormData
   if (!body) return { success: false }
 
   await supabase.from('prayer_responses').insert({ request_id: requestId, user_id: user.id, body, is_anonymous })
-  revalidatePath('/oracion')
+  revalidatePath(`/app/oracion/${requestId}`)
   revalidatePath('/app/oracion')
+  revalidatePath('/oracion')
   return { success: true }
 }
 
 export async function shareTestimony(requestId: string, formData: FormData): Promise<void> {
+  if (!isUUID(requestId)) return
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')

@@ -55,6 +55,8 @@ export async function updateLider(id: string, formData: FormData) {
   let avatar_url = current?.avatar_url ?? null
   if (file && file.size > 0) avatar_url = await uploadAvatar(file, current?.avatar_url)
 
+  const rawUserId = (formData.get('user_id') as string) || null
+
   await supabase.from('church_leaders').update({
     name:        formData.get('name') as string,
     title:       formData.get('title') as string,
@@ -63,6 +65,7 @@ export async function updateLider(id: string, formData: FormData) {
     order_index: parseInt((formData.get('order_index') as string) || '0'),
     is_public:   formData.get('is_public') === 'true',
     avatar_url,
+    user_id:     rawUserId,
   }).eq('id', id)
 
   revalidatePath('/nosotros')

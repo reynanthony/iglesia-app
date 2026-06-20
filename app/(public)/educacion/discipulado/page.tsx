@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowRight, ArrowLeft, GraduationCap, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { StageCard } from '@/components/ui/stage-card'
@@ -83,7 +83,7 @@ export default async function DiscipuladoPage() {
               </h1>
             </div>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 El discipulado no es un evento — es un proceso. Siete etapas diseñadas para llevar a cada persona desde el primer encuentro con Dios hasta el liderazgo pleno en su comunidad.
               </p>
               <Link href="/registro"
@@ -107,7 +107,7 @@ export default async function DiscipuladoPage() {
                 Cada etapa,<br />su formación.
               </h2>
             </div>
-            <p className="hidden md:block text-sm max-w-xs text-right leading-relaxed" style={{ color: `${NAVY}55` }}>
+            <p className="hidden md:block text-sm max-w-xs text-right leading-relaxed" style={{ color: `${NAVY}B0` }}>
               Cada etapa del camino tiene programas y cursos específicos diseñados para ese momento de la vida espiritual.
             </p>
           </div>
@@ -119,7 +119,7 @@ export default async function DiscipuladoPage() {
                 style={{ background: NAVY, color: CREAM }}>i</div>
               <div>
                 <p className="text-xs font-bold mb-0.5" style={{ color: NAVY }}>Contenido en preparación</p>
-                <p className="text-xs leading-relaxed" style={{ color: `${NAVY}60` }}>
+                <p className="text-xs leading-relaxed" style={{ color: `${NAVY}CC` }}>
                   Los programas de formación serán publicados próximamente. Podés{' '}
                   <Link href="/contacto" className="underline" style={{ color: NAVY }}>contactarnos</Link>
                   {' '}para más información.
@@ -167,7 +167,7 @@ export default async function DiscipuladoPage() {
                       <p className="font-black text-sm mb-1" style={{ color: CREAM }}>{p.title}</p>
                       {p.description && (
                         <p className="text-[11px] leading-relaxed line-clamp-2 mb-2"
-                          style={{ color: 'rgba(246,243,235,0.45)' }}>
+                          style={{ color: 'rgba(246,243,235,0.88)' }}>
                           {p.description}
                         </p>
                       )}
@@ -196,10 +196,10 @@ export default async function DiscipuladoPage() {
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
                 Nadie crece<br />solo.
               </h2>
-              <p className="text-base leading-relaxed mb-4" style={{ color: `${NAVY}70` }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: `${NAVY}D9` }}>
                 Cada etapa del discipulado incluye una relación de mentoría — un creyente más maduro que camina contigo, te hace preguntas difíciles, te celebra en los logros y te sostiene en los momentos difíciles.
               </p>
-              <p className="text-base leading-relaxed mb-8" style={{ color: `${NAVY}70` }}>
+              <p className="text-base leading-relaxed mb-8" style={{ color: `${NAVY}D9` }}>
                 Cuando llegas a la etapa 6, ya no solo eres discípulo — también comienzas a discipular a otro. Así se multiplica el Reino.
               </p>
               <div className="flex flex-col gap-3">
@@ -210,7 +210,7 @@ export default async function DiscipuladoPage() {
                 </Link>
                 <Link href="/registro"
                   className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition self-start"
-                  style={{ border: `1px solid ${NAVY}30`, color: `${NAVY}70` }}>
+                  style={{ border: `1px solid ${NAVY}30`, color: `${NAVY}D9` }}>
                   Unirme a la comunidad
                 </Link>
               </div>
@@ -244,7 +244,7 @@ export default async function DiscipuladoPage() {
               <h3 className="font-black text-2xl text-white tracking-tight mb-3">
                 Tu camino de discipulado te espera
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Creá una cuenta, conocé tu etapa actual y accedé a los programas y cursos diseñados para vos.
               </p>
             </div>
@@ -256,7 +256,7 @@ export default async function DiscipuladoPage() {
               </Link>
               <Link href="/login"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-[11px] font-bold uppercase tracking-wider transition"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.55)' }}>
+                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.82)' }}>
                 Ya tengo cuenta
               </Link>
             </div>

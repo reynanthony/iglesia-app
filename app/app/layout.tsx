@@ -3,16 +3,29 @@ import Link from 'next/link'
 import { logout } from '@/app/actions/auth'
 import NotificationBell from '@/components/NotificationBell'
 import AppNav, { AppBottomNav } from '@/components/app/AppNav'
-import { Globe, LogOut, Cross, ShieldCheck } from 'lucide-react'
+import { Globe, LogOut, Cross, ShieldCheck, Building2 } from 'lucide-react'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import AnnouncementGate from '@/components/app/AnnouncementEngine/AnnouncementGate'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser()
   if (!user) redirect('/login')
 
   const profile = await getProfile(user.id)
+
+  // Verificar si el líder tiene acceso admin delegado a algún ministerio
+  let isLiderAdmin = false
+  if (profile?.role === 'lider') {
+    const supabase = await createClient()
+    const { count } = await supabase
+      .from('ministry_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('can_admin', true)
+    isLiderAdmin = (count ?? 0) > 0
+  }
 
   const profileHref = profile?.username ? `/app/perfil/${profile.username}` : '/app/comunidad'
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
@@ -53,6 +66,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <ShieldCheck size={16} /><span>Panel Admin</span>
             </Link>
           )}
+          {isLiderAdmin && (
+            <Link href="/admin/ministerio" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#0D3352]" style={{ color: '#76ABAE' }}>
+              <Building2 size={16} /><span>Mi Ministerio</span>
+            </Link>
+          )}
           <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
             <Link href={profileHref} className="flex-1 flex items-center gap-3 min-w-0">
               <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm" style={{ background: '#0D3352', color: '#76ABAE' }}>
@@ -78,6 +96,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           El <main> compensa con padding-top idéntico via .app-header-offset.
       */}
       <header
+        id="app-mobile-header"
         className="md:hidden fixed top-0 left-0 right-0 z-30"
         style={{
           background: 'rgba(6,30,48,0.97)',
@@ -102,6 +121,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
               <Link href="/admin" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.72)' }}>
                 <ShieldCheck size={19} />
+              </Link>
+            )}
+            {isLiderAdmin && (
+              <Link href="/admin/ministerio" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: '#76ABAE' }} title="Mi Ministerio">
+                <Building2 size={19} />
               </Link>
             )}
             <NotificationBell userId={user.id} />
@@ -130,6 +154,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {/* ── BOTTOM NAV (mobile) ── */}
       <nav
+        id="app-mobile-nav"
         className="md:hidden fixed bottom-0 left-0 right-0 z-[9100]"
         style={{
           background: 'rgba(6,30,48,0.97)',

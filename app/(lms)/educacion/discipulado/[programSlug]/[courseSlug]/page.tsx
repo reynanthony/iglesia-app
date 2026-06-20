@@ -48,7 +48,7 @@ export default async function CoursePage({ params }: { params: Promise<{ program
   const nextLesson = activeLessons.find((l: any) => !completedIds.has(l.id)) ?? activeLessons[0]
 
   const LEVEL_LABEL: Record<string, string> = {
-    basico: 'BÃ¡sico',
+    basico: 'Básico',
     intermedio: 'Intermedio',
     avanzado: 'Avanzado',
   }
@@ -81,7 +81,7 @@ export default async function CoursePage({ params }: { params: Promise<{ program
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-bold px-2 py-1 rounded-lg"
               style={{ background: '#0D3352', color: 'rgba(246,243,235,0.45)' }}>
-              {activeLessons.length} lecciÃ³n{activeLessons.length !== 1 ? 'es' : ''}
+              {activeLessons.length} lección{activeLessons.length !== 1 ? 'es' : ''}
             </span>
             {course.level && (
               <span className="text-[11px] font-bold px-2 py-1 rounded-lg"
@@ -133,7 +133,7 @@ export default async function CoursePage({ params }: { params: Promise<{ program
               <BookOpen size={18} style={{ color: '#76ABAE' }} />
               <div>
                 <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>
-                  {pct === 0 ? 'Comenzar curso' : 'Continuar donde lo dejÃ©'}
+                  {pct === 0 ? 'Comenzar curso' : 'Continuar donde lo dejé'}
                 </p>
                 <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>{nextLesson.title}</p>
               </div>
@@ -195,7 +195,7 @@ export default async function CoursePage({ params }: { params: Promise<{ program
 
         {activeLessons.length === 0 && (
           <div className="py-12 text-center" style={{ color: 'rgba(246,243,235,0.35)' }}>
-            <p className="text-sm">Este curso aÃºn no tiene lecciones</p>
+            <p className="text-sm">Este curso aún no tiene lecciones</p>
           </div>
         )}
       </div>

@@ -35,8 +35,8 @@ export async function sendContactMessage(formData: FormData) {
     })
 
   if (error) {
-    // Table might not exist yet — still succeed silently so UX doesn't break
     console.error('contact_messages insert error:', error.message)
+    return { error: 'No se pudo enviar el mensaje. Por favor intenta de nuevo.' }
   }
 
   return { success: true }

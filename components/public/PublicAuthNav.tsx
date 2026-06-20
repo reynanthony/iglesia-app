@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -51,7 +51,7 @@ export function PublicAuthNav() {
         <button
           type="submit"
           className="w-10 h-10 flex items-center justify-center rounded-xl transition hover:bg-white/10"
-          style={{ color: 'rgba(246,243,235,0.45)' }}
+          style={{ color: 'rgba(246,243,235,0.88)' }}
           title="Cerrar sesión"
         >
           <LogOut size={16} />

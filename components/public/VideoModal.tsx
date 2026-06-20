@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { Play, X } from 'lucide-react'
@@ -34,7 +34,7 @@ export function VideoPlayButton({ url, label = 'Ver video' }: { url: string; lab
         ref={triggerRef}
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-        style={{ color: 'rgba(246,243,235,0.70)' }}
+        style={{ color: 'rgba(246,243,235,0.88)' }}
       >
         <span className="flex items-center justify-center w-9 h-9 rounded-full border border-white/30 hover:border-white/70 transition"
           style={{ background: 'rgba(255,255,255,0.10)' }}>

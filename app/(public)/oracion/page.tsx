@@ -1,7 +1,9 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { Flame, Plus, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { cmsSingleton, cmsImageUrl, type DOracion } from '@/lib/directus'
 import { PrayerCard } from '@/components/public/PrayerCard'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +20,20 @@ function timeAgo(date: string) {
 }
 
 export default async function OracionPublicaPage() {
-  const supabase = await createClient()
+  const [supabase, cms] = await Promise.all([createClient(), cmsSingleton<DOracion>('oracion')])
+  const c = cms ?? {} as DOracion
+
+  const heroEyebrow  = c.hero_eyebrow  ?? 'Comunidad · Intercesión'
+  const heroTitle    = c.hero_title    ?? 'Muro de Oración.'
+  const heroSubtitle = c.hero_subtitle ?? 'Comparte tu petición y deja que la comunidad ore contigo. Cada oración cuenta.'
+  const ctaEyebrow   = c.cta_eyebrow  ?? '— Únete a la comunidad'
+  const ctaTitle     = c.cta_title    ?? 'Más que oraciones.'
+  const ctaBody      = c.cta_body     ?? 'El stream es el primer paso. La comunidad en línea te permite participar, orar y crecer.'
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
+  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
+  const heroShowGrid       = c.hero_show_grid !== false
+  const heroBg             = c.hero_bg_color ?? '#051828'
   const { data: { user } } = await supabase.auth.getUser()
 
   const SELECT_FIELDS = 'id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)'
@@ -67,9 +82,20 @@ export default async function OracionPublicaPage() {
 
       {/* ── Hero oscuro ─────────────────────────────────── */}
       <section className="relative overflow-hidden flex flex-col justify-center"
-        style={{ background: '#051828', minHeight: '70svh' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        style={{ background: heroBg, minHeight: '70svh' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+        )}
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
+        )}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 60% 80% at 15% 60%, rgba(118,171,174,0.07), transparent 70%)' }} />
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
@@ -82,15 +108,17 @@ export default async function OracionPublicaPage() {
           <div className="flex items-center gap-5 mb-10">
             <div className="w-12 h-px" style={{ background: TEAL }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
-              Comunidad · Intercesión
+              {heroEyebrow}
             </p>
           </div>
           <h1 className="font-display font-black tracking-tighter text-white mb-6 leading-[0.88]"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 8rem)' }}>
-            Muro de<br /><span style={{ color: TEAL }}>Oración.</span>
+            {heroTitle.includes('*')
+              ? <>{heroTitle.split('*')[0]}<span style={{ color: TEAL }}>{heroTitle.split('*')[1]}</span></>
+              : heroTitle}
           </h1>
-          <p className="text-base leading-relaxed max-w-md mb-10" style={{ color: `${CREAM}60` }}>
-            Comparte tu petición y deja que la comunidad ore contigo. Cada oración cuenta.
+          <p className="text-base leading-relaxed max-w-md mb-10" style={{ color: `${CREAM}CC` }}>
+            {heroSubtitle}
           </p>
           <div className="flex items-center gap-3 flex-wrap">
             <Link href={user ? '/oracion/nueva' : '/login?next=/oracion/nueva'}
@@ -100,7 +128,7 @@ export default async function OracionPublicaPage() {
             </Link>
             <Link href="/app/oracion"
               className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-              style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}70` }}>
+              style={{ border: `1px solid ${TEAL}40`, color: `${CREAM}D9` }}>
               App completa <ArrowRight size={12} />
             </Link>
           </div>
@@ -120,7 +148,7 @@ export default async function OracionPublicaPage() {
                     <p className="font-black tracking-tighter leading-none mb-1"
                       style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', color: TEAL }}>{value}</p>
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                      style={{ color: 'rgba(246,243,235,0.30)' }}>{label}</p>
+                      style={{ color: 'rgba(246,243,235,0.82)' }}>{label}</p>
                   </div>
                 ))}
               </div>
@@ -233,10 +261,12 @@ export default async function OracionPublicaPage() {
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-28 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10"
-              style={{ color: 'rgba(118,171,174,0.45)' }}>— Únete a la comunidad</p>
+              style={{ color: 'rgba(118,171,174,0.45)' }}>{ctaEyebrow}</p>
             <h2 className="font-display font-black tracking-tighter leading-[0.88] text-white"
               style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
-              Más que<br /><span style={{ color: TEAL }}>oraciones.</span>
+              {ctaTitle.includes('*')
+                ? <>{ctaTitle.split('*')[0]}<span style={{ color: TEAL }}>{ctaTitle.split('*')[1]}</span></>
+                : ctaTitle}
             </h2>
           </div>
           <div className="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
@@ -247,7 +277,7 @@ export default async function OracionPublicaPage() {
             </Link>
             <Link href="/app/oracion"
               className="flex items-center justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition group"
-              style={{ border: `1px solid ${TEAL}35`, color: `${CREAM}60` }}>
+              style={{ border: `1px solid ${TEAL}35`, color: `${CREAM}CC` }}>
               Salas de oración en vivo <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
             </Link>
           </div>

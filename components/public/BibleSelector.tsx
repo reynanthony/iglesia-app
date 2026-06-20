@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
@@ -207,7 +207,7 @@ function Testament({
       <div className="space-y-10">
         {cats.map(cat => (
           <div key={cat.label}>
-            <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: `${NAVY}70` }}>
+            <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: `${NAVY}D9` }}>
               {cat.label}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 10 }}>
@@ -362,7 +362,7 @@ function Crumb({ label, color, bold, dim }: { label: string; color?: string; bol
   return (
     <span
       className="text-[9px] uppercase tracking-[0.34em] whitespace-nowrap flex-shrink-0"
-      style={{ color: color ?? (dim ? `${NAVY}38` : `${NAVY}60`), fontWeight: bold ? 900 : 700 }}
+      style={{ color: color ?? (dim ? `${NAVY}38` : `${NAVY}CC`), fontWeight: bold ? 900 : 700 }}
     >
       {label}
     </span>
@@ -374,7 +374,7 @@ function CrumbBtn({ label, onClick, color }: { label: string; onClick: () => voi
     <button
       onClick={onClick}
       className="flex items-center gap-1 flex-shrink-0 transition-opacity hover:opacity-60"
-      style={{ color: color ?? `${NAVY}55` }}
+      style={{ color: color ?? `${NAVY}B0` }}
     >
       <ChevronLeft size={10} />
       <span className="text-[9px] font-bold uppercase tracking-[0.32em]">{label}</span>

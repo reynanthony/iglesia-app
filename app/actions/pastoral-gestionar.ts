@@ -17,12 +17,20 @@ async function getPastor() {
   return { supabase, userId: profile.id as string }
 }
 
+const ALLOWED_PASTORAL_MIMES: Record<string, string> = {
+  'image/jpeg': 'jpg', 'image/jpg': 'jpg',
+  'image/png':  'png', 'image/webp': 'webp',
+  'video/mp4':  'mp4', 'video/webm': 'webm',
+  'application/pdf': 'pdf',
+}
+
 async function uploadFile(
   supabase: Awaited<ReturnType<typeof createClient>>,
   file: File,
   folder: string,
 ) {
-  const ext  = file.name.split('.').pop() ?? 'bin'
+  const ext = ALLOWED_PASTORAL_MIMES[file.type]
+  if (!ext) return null
   const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
   const { error } = await supabase.storage.from('pastoral').upload(path, file, { contentType: file.type })
   if (error) return null

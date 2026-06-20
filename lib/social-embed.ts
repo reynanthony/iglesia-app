@@ -1,4 +1,4 @@
-export type SocialPlatform = 'youtube' | 'vimeo' | 'facebook' | 'instagram' | 'tiktok'
+export type SocialPlatform = 'youtube' | 'vimeo' | 'facebook'
 
 export interface SocialEmbed {
   platform: SocialPlatform
@@ -17,12 +17,6 @@ const VIMEO_RE =
 const FB_RE =
   /https?:\/\/(?:www\.)?(?:facebook\.com\/(?:[^/\s]+\/videos\/\d+\/?|watch\/?\?(?:v|video)=\d+)|fb\.watch\/[A-Za-z0-9_-]+)/i
 
-const IG_RE =
-  /https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/i
-
-const TT_RE =
-  /https?:\/\/(?:www\.)?tiktok\.com\/@[^/\s]+\/video\/(\d+)/i
-
 export function detectSocialEmbed(text: string): SocialEmbed | null {
   if (!text) return null
 
@@ -31,7 +25,7 @@ export function detectSocialEmbed(text: string): SocialEmbed | null {
     return {
       platform: 'youtube',
       originalUrl: yt[0],
-      embedUrl: `https://www.youtube.com/embed/${yt[1]}?rel=0&modestbranding=1`,
+      embedUrl: `https://www.youtube.com/embed/${yt[1]}?rel=0&modestbranding=1&enablejsapi=1`,
       aspectPadding: '56.25%',
     }
   }
@@ -57,26 +51,6 @@ export function detectSocialEmbed(text: string): SocialEmbed | null {
     }
   }
 
-  const ig = text.match(IG_RE)
-  if (ig) {
-    return {
-      platform: 'instagram',
-      originalUrl: ig[0],
-      embedUrl: `https://www.instagram.com/p/${ig[1]}/embed/`,
-      aspectPadding: '125%',
-    }
-  }
-
-  const tt = text.match(TT_RE)
-  if (tt) {
-    return {
-      platform: 'tiktok',
-      originalUrl: tt[0],
-      embedUrl: `https://www.tiktok.com/embed/v2/${tt[1]}`,
-      aspectPadding: '177%',
-    }
-  }
-
   return null
 }
 
@@ -84,8 +58,6 @@ export const PLATFORM_LABEL: Record<SocialPlatform, string> = {
   youtube: 'YouTube',
   vimeo: 'Vimeo',
   facebook: 'Facebook',
-  instagram: 'Instagram',
-  tiktok: 'TikTok',
 }
 
 /** Retorna la URL de embed con parámetros de autoplay activados */
@@ -97,8 +69,6 @@ export function getAutoplayUrl(embed: SocialEmbed): string {
       return `${embed.embedUrl}?autoplay=1&muted=1&loop=1&background=1`
     case 'facebook':
       return `${embed.embedUrl}&autoplay=true&muted=true`
-    case 'tiktok':
-      return `${embed.embedUrl}?autoplay=1`
     default:
       return embed.embedUrl
   }

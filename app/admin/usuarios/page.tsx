@@ -3,6 +3,7 @@ import RoleSelector from '@/components/admin/RoleSelector'
 import MinistryAssignment from '@/components/admin/MinistryAssignment'
 import DeleteUserButton from '@/components/admin/DeleteUserButton'
 import ConsejoToggle from '@/components/admin/ConsejoToggle'
+import AdminToggle from '@/components/admin/AdminToggle'
 import { Search, Plus } from 'lucide-react'
 import Link from 'next/link'
 
@@ -24,9 +25,19 @@ export default async function AdminUsuariosPage({
 
   const { data: users } = await query
 
-  const { data: allAssignments } = await supabase
+  // Intentar con can_admin; si la columna no existe aún, fallback sin ella
+  let allAssignments: any[] | null = null
+  const { data: assignmentsWithAdmin, error: adminColError } = await supabase
     .from('ministry_assignments')
-    .select('user_id, ministry_id, role, ministries(id, name)')
+    .select('user_id, ministry_id, role, can_admin, ministries(id, name)')
+  if (!adminColError) {
+    allAssignments = assignmentsWithAdmin
+  } else {
+    const { data: assignmentsFallback } = await supabase
+      .from('ministry_assignments')
+      .select('user_id, ministry_id, role, ministries(id, name)')
+    allAssignments = assignmentsFallback
+  }
 
   const { data: allMinistries } = await supabase
     .from('ministries')
@@ -98,34 +109,56 @@ export default async function AdminUsuariosPage({
             No se encontraron usuarios
           </p>
         )}
-        {users?.map((user: any) => (
-          <div key={user.id} className="rounded-xl p-3.5"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
-                style={{ background: '#0D3352' }}>
-                {user.avatar_url
-                  ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
-                  : <div className="w-full h-full flex items-center justify-center text-xs font-bold"
-                      style={{ color: 'rgba(246,243,235,0.70)' }}>
-                      {user.full_name?.[0]?.toUpperCase() ?? 'U'}
-                    </div>
-                }
+        {users?.map((user: any) => {
+          const userAssignments = (allAssignments ?? []).filter(a => a.user_id === user.id)
+          const showAssign = ['lider', 'pastor', 'moderador'].includes(user.role)
+          return (
+            <div key={user.id} className="rounded-xl p-3.5"
+              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
+                  style={{ background: '#0D3352' }}>
+                  {user.avatar_url
+                    ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-xs font-bold"
+                        style={{ color: 'rgba(246,243,235,0.70)' }}>
+                        {user.full_name?.[0]?.toUpperCase() ?? 'U'}
+                      </div>
+                  }
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold truncate" style={{ color: '#F6F3EB' }}>{user.full_name}</p>
+                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{user.username}</p>
+                </div>
+                <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate" style={{ color: '#F6F3EB' }}>{user.full_name}</p>
-                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{user.username}</p>
-              </div>
-              <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap mb-2">
                 <RoleSelector userId={user.id} currentRole={user.role} />
                 {['lider', 'pastor'].includes(user.role) && (
                   <ConsejoToggle userId={user.id} value={user.is_consejo_pastoral ?? false} />
                 )}
               </div>
-          </div>
-        ))}
+              {showAssign && (
+                <div className="pt-2 border-t" style={{ borderColor: '#0D3352' }}>
+                  <p className="text-[9px] font-black uppercase tracking-wider mb-1.5"
+                    style={{ color: 'rgba(246,243,235,0.30)' }}>Ministerios</p>
+                  <MinistryAssignment
+                    userId={user.id}
+                    assignments={userAssignments as any}
+                    allMinistries={allMinistries ?? []}
+                  />
+                  {userAssignments.length > 0 && user.role === 'lider' && (
+                    <div className="mt-2">
+                      <p className="text-[9px] font-black uppercase tracking-wider mb-1.5"
+                        style={{ color: 'rgba(246,243,235,0.30)' }}>Acceso admin</p>
+                      <AdminToggle userId={user.id} assignments={userAssignments as any} />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* ── DESKTOP: tabla ── */}
@@ -178,11 +211,16 @@ export default async function AdminUsuariosPage({
                   </td>
                   <td className="px-5 py-3.5 hidden lg:table-cell">
                     {showAssign ? (
-                      <MinistryAssignment
-                        userId={user.id}
-                        assignments={userAssignments as any}
-                        allMinistries={allMinistries ?? []}
-                      />
+                      <div className="space-y-1.5">
+                        <MinistryAssignment
+                          userId={user.id}
+                          assignments={userAssignments as any}
+                          allMinistries={allMinistries ?? []}
+                        />
+                        {userAssignments.length > 0 && user.role === 'lider' && (
+                          <AdminToggle userId={user.id} assignments={userAssignments as any} />
+                        )}
+                      </div>
                     ) : (
                       <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
                         {user.role === 'admin' ? 'Acceso total' : '—'}

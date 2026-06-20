@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { ArrowRight, Heart, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -20,13 +20,28 @@ const TEAL  = '#76ABAE'
 const SAGE  = '#869B7E'
 const CREAM = '#F6F3EB'
 
+// Parsea el nombre: si tiene ' & ' trata a cada parte como persona
+// Si no, divide en primer nombre (light) y apellido (bold)
+function parseName(name: string) {
+  const isCouple = name.includes(' & ')
+  if (isCouple) {
+    const [a, bFull] = name.split(' & ')
+    const bParts = bFull.trim().split(' ')
+    // Última palabra del segundo nombre = apellido compartido en bold
+    const sharedLast  = bParts.length > 1 ? bParts[bParts.length - 1] : ''
+    const secondFirst = bParts.length > 1 ? bParts.slice(0, -1).join(' ') : bFull.trim()
+    return { isCouple: true, nameA: a.trim(), nameB: secondFirst, lastName: sharedLast, firstName: a.trim() }
+  }
+  const parts = name.split(' ')
+  return { isCouple: false, nameA: '', nameB: '', firstName: parts[0], lastName: parts.slice(1).join(' ') }
+}
+
 // ── TeamMemberCard — liderazgo pastoral ───────────────────────
 function PastoralCard({ leader }: { leader: Leader }) {
   const [expanded, setExpanded] = useState(false)
-  const parts     = leader.name.split(' ')
-  const firstName = parts[0]
-  const lastName  = parts.slice(1).join(' ')
-  const initials  = `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase()
+  const { isCouple, nameA, nameB, firstName, lastName } = parseName(leader.name)
+  const parts   = leader.name.split(' ')
+  const initials = `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase()
 
   const expandedContent = (
     <motion.div
@@ -39,7 +54,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
     >
       <div className="pt-6 flex flex-col gap-4">
         {leader.bio && (
-          <p className="text-sm leading-[1.8]" style={{ color: 'rgba(246,243,235,0.55)' }}>
+          <p className="text-sm leading-[1.8]" style={{ color: 'rgba(246,243,235,0.82)' }}>
             {leader.bio}
           </p>
         )}
@@ -52,7 +67,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
           </Link>
           <Link href="/contacto"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.15em] transition group"
-            style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.65)' }}>
+            style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.86)' }}>
             <span className="flex items-center gap-2"><Heart size={12} /> Solicitar oración</span>
             <ArrowRight size={11} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
@@ -111,12 +126,30 @@ function PastoralCard({ leader }: { leader: Leader }) {
           style={{ paddingTop: 24, maxWidth: 480 }}
         >
           <p style={{ lineHeight: 1.0, letterSpacing: '-0.03em', color: CREAM, marginBottom: 32 }}>
-            <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 300, display: 'block' }}>
-              {firstName}
-            </span>
-            <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 900, display: 'block' }}>
-              {lastName}
-            </span>
+            {isCouple ? (
+              <>
+                <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 300, display: 'block' }}>
+                  {nameA}
+                </span>
+                <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 300, display: 'block' }}>
+                  <em style={{ color: TEAL, fontStyle: 'normal' }}>&</em> {nameB}
+                </span>
+                {lastName && (
+                  <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 900, display: 'block' }}>
+                    {lastName}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 300, display: 'block' }}>
+                  {firstName}
+                </span>
+                <span style={{ fontSize: 'clamp(2.8rem, 5vw, 5.5rem)', fontWeight: 900, display: 'block' }}>
+                  {lastName}
+                </span>
+              </>
+            )}
           </p>
 
           <motion.button
@@ -167,12 +200,30 @@ function PastoralCard({ leader }: { leader: Leader }) {
         {/* Nombre e info fuera de la foto */}
         <div className="mt-5 px-1">
           <p style={{ lineHeight: 1.0, letterSpacing: '-0.03em', color: CREAM, marginBottom: 20 }}>
-            <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 300, display: 'block' }}>
-              {firstName}
-            </span>
-            <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 900, display: 'block' }}>
-              {lastName}
-            </span>
+            {isCouple ? (
+              <>
+                <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 300, display: 'block' }}>
+                  {nameA}
+                </span>
+                <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 300, display: 'block' }}>
+                  <em style={{ color: TEAL, fontStyle: 'normal' }}>&</em> {nameB}
+                </span>
+                {lastName && (
+                  <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 900, display: 'block' }}>
+                    {lastName}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 300, display: 'block' }}>
+                  {firstName}
+                </span>
+                <span style={{ fontSize: 'clamp(1.9rem, 7.5vw, 3rem)', fontWeight: 900, display: 'block' }}>
+                  {lastName}
+                </span>
+              </>
+            )}
           </p>
 
           <motion.button
@@ -203,10 +254,9 @@ function PastoralCard({ leader }: { leader: Leader }) {
 // ── Tarjeta individual del carrusel ───────────────────────────
 function ProfileCard({ leader }: { leader: Leader }) {
   const [expanded, setExpanded] = useState(false)
-  const parts     = leader.name.split(' ')
-  const firstName = parts[0]
-  const lastName  = parts.slice(1).join(' ')
-  const initials  = `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase()
+  const { isCouple, nameA, nameB, firstName, lastName } = parseName(leader.name)
+  const parts   = leader.name.split(' ')
+  const initials = `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase()
 
   return (
     <div style={{ width: 220, flexShrink: 0 }}>
@@ -228,8 +278,22 @@ function ProfileCard({ leader }: { leader: Leader }) {
       {/* Nombre y cargo fuera de la foto */}
       <div style={{ paddingTop: 16 }}>
         <p style={{ lineHeight: 1.0, letterSpacing: '-0.03em', color: CREAM, marginBottom: 6 }}>
-          <span style={{ fontSize: '1.35rem', fontWeight: 300, display: 'block' }}>{firstName}</span>
-          <span style={{ fontSize: '1.35rem', fontWeight: 900, display: 'block' }}>{lastName}</span>
+          {isCouple ? (
+            <>
+              <span style={{ fontSize: '1.35rem', fontWeight: 300, display: 'block' }}>{nameA}</span>
+              <span style={{ fontSize: '1.35rem', fontWeight: 300, display: 'block' }}>
+                <em style={{ color: TEAL, fontStyle: 'normal' }}>&</em> {nameB}
+              </span>
+              {lastName && (
+                <span style={{ fontSize: '1.35rem', fontWeight: 900, display: 'block' }}>{lastName}</span>
+              )}
+            </>
+          ) : (
+            <>
+              <span style={{ fontSize: '1.35rem', fontWeight: 300, display: 'block' }}>{firstName}</span>
+              <span style={{ fontSize: '1.35rem', fontWeight: 900, display: 'block' }}>{lastName}</span>
+            </>
+          )}
         </p>
         <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.22em',
           textTransform: 'uppercase', color: SAGE, marginBottom: 14 }}>
@@ -278,7 +342,7 @@ function ProfileCard({ leader }: { leader: Leader }) {
                 </Link>
                 <Link href="/contacto"
                   className="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-[0.12em] transition group"
-                  style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.65)' }}>
+                  style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.86)' }}>
                   <span className="flex items-center gap-1.5"><Heart size={11} /> Oración</span>
                   <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </Link>
@@ -363,7 +427,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
           <div className="flex items-center gap-3 mb-12">
             <div className="w-px h-5" style={{ background: TEAL }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
-              style={{ color: 'rgba(246,243,235,0.28)' }}>
+              style={{ color: 'rgba(246,243,235,0.52)' }}>
               Liderazgo pastoral
             </p>
           </div>
@@ -378,7 +442,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
           <div className="flex items-center gap-3 mb-10">
             <div className="w-px h-5" style={{ background: TEAL }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
-              style={{ color: 'rgba(246,243,235,0.28)' }}>
+              style={{ color: 'rgba(246,243,235,0.52)' }}>
               Líderes de ministerios
             </p>
           </div>

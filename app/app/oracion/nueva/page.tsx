@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createPrayerRequest } from '@/app/actions/prayer'
-import { ArrowLeft, Flame } from 'lucide-react'
+import { ArrowLeft, Flame, Lock } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NuevaPeticionPage() {
@@ -68,6 +68,20 @@ export default function NuevaPeticionPage() {
                 <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicar como anónimo</p>
                 <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
                   Tu nombre no será visible para la comunidad
+                </p>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition"
+              style={{ background: '#0D3352', border: '1px solid #1A4A6E' }}>
+              <input name="is_private" type="checkbox" className="w-4 h-4 rounded accent-[#76ABAE]" />
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <Lock size={12} style={{ color: 'rgba(246,243,235,0.60)' }} />
+                  <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Solo yo puedo verla</p>
+                </div>
+                <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  No aparece en la lista pública de oraciones
                 </p>
               </div>
             </label>

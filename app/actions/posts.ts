@@ -3,6 +3,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+const ALLOWED_IMAGE_MIMES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg':  'jpg',
+  'image/png':  'png',
+  'image/webp': 'webp',
+  'image/gif':  'gif',
+}
+
 const POST_SELECT = `
   *,
   profiles(id, full_name, username, avatar_url),
@@ -14,7 +22,7 @@ const POST_SELECT = `
   )
 `
 
-export async function fetchMorePosts(cursor: string): Promise<any[]> {
+export async function fetchMorePosts(cursor: string): Promise<Record<string, unknown>[]> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return []
@@ -48,7 +56,8 @@ export async function createPost(formData: FormData) {
   let image_url: string | undefined
 
   if (imageFile && imageFile.size > 0) {
-    const ext = imageFile.name.split('.').pop()
+    const ext = ALLOWED_IMAGE_MIMES[imageFile.type]
+    if (!ext) return { error: 'Tipo de imagen no permitido (jpg, png, webp, gif)' }
     const path = `${user.id}/${Date.now()}.${ext}`
 
     const { error: uploadError } = await supabase.storage

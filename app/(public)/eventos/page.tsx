@@ -1,8 +1,9 @@
-import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
+﻿import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
 import Link from 'next/link'
-import { cmsGet, cmsImageUrl } from '@/lib/directus'
+import { cmsGet, cmsSingleton, cmsImageUrl, type DEventosPage } from '@/lib/directus'
 import { createClient } from '@/lib/supabase/server'
 import { EventRsvpButton } from '@/components/public/EventRsvpButton'
+import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,10 +60,22 @@ function formatEventDate(fechaInicio: string, fechaFin?: string | null) {
 }
 
 export default async function EventosPage() {
-  const [cmsEventos, supabase] = await Promise.all([
+  const [cmsEventos, supabase, cms] = await Promise.all([
     cmsGet<DirectusEvento>('eventos', { sort: 'fecha_inicio' }),
     createClient(),
+    cmsSingleton<DEventosPage>('eventos_page'),
   ])
+  const c = cms ?? {} as DEventosPage
+
+  const heroEyebrow        = c.hero_eyebrow  ?? 'Eventos · Agenda 2026'
+  const heroTitle          = c.hero_title    ?? 'Lo que\nse viene.'
+  const heroSubtitle       = c.hero_subtitle ?? 'Mantente al día con nuestras actividades, servicios y eventos especiales.'
+  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
+  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
+  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
+  const heroShowGrid       = c.hero_show_grid !== false
+  const heroBg             = c.hero_bg_color ?? '#051828'
+  const heroWatermark      = c.hero_watermark ?? '2026'
 
   const specialEvents: DirectusEvento[] = cmsEventos.length > 0 ? cmsEventos : fallbackEvents
 
@@ -86,30 +99,45 @@ export default async function EventosPage() {
     <div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: '#051828' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
-          <span className="font-black leading-none tracking-tighter block"
-            style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
-            2026
-          </span>
-        </div>
+      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: heroBg }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+        )}
+        {heroShowGrid && (
+          <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+        )}
+        {heroWatermark && (
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
+            <span className="font-black leading-none tracking-tighter block"
+              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
+              {heroWatermark}
+            </span>
+          </div>
+        )}
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32">
           <div className="flex items-center gap-5 mb-10 sm:mb-14">
             <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
-              Eventos · Agenda 2026
+              {heroEyebrow}
             </p>
           </div>
           <h1 className="font-display font-black tracking-tighter text-white mb-8 leading-[0.9] md:leading-[0.85]"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
-            Lo que<br />se viene.
+            {heroTitle.includes('*')
+              ? <>{heroTitle.split('*')[0]}<em style={{ color: '#76ABAE' }}>{heroTitle.split('*')[1]}</em></>
+              : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
           </h1>
-          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.55)' }}>
-            Mantente al día con nuestras actividades, servicios y eventos especiales.
+          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.82)' }}>
+            {heroSubtitle}
           </p>
         </div>
       </section>

@@ -42,7 +42,16 @@ export async function updateProfile(formData: FormData) {
 
   if (error) return { error: 'No se pudo actualizar el perfil' }
 
+  // Sincronizar foto y nombre al church_leaders vinculado (página Nosotros)
+  if (avatar_url || full_name) {
+    const syncData: Record<string, string> = {}
+    if (avatar_url) syncData.avatar_url = avatar_url
+    if (full_name)  syncData.name        = full_name
+    await supabase.from('church_leaders').update(syncData).eq('user_id', user.id)
+  }
+
   revalidatePath('/app/feed')
-  revalidatePath(`/app/perfil`)
+  revalidatePath('/app/perfil')
+  revalidatePath('/nosotros')
   return { success: true }
 }

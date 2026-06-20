@@ -51,11 +51,12 @@ export async function assignUserToMinistry(userId: string, ministryId: string, r
 export async function updateMinistryAssignmentRole(userId: string, ministryId: string, role: 'lider' | 'colaborador') {
   const supabase = await checkAdmin()
   if (!supabase) return { error: 'No autorizado' }
-  await supabase
+  const { error } = await supabase
     .from('ministry_assignments')
     .update({ role })
     .eq('user_id', userId)
     .eq('ministry_id', ministryId)
+  if (error) return { error: 'No se pudo actualizar el rol' }
   revalidatePath('/admin/usuarios')
   return { success: true }
 }
@@ -63,11 +64,25 @@ export async function updateMinistryAssignmentRole(userId: string, ministryId: s
 export async function removeUserFromMinistry(userId: string, ministryId: string) {
   const supabase = await checkAdmin()
   if (!supabase) return { error: 'No autorizado' }
-  await supabase
+  const { error } = await supabase
     .from('ministry_assignments')
     .delete()
     .eq('user_id', userId)
     .eq('ministry_id', ministryId)
+  if (error) return { error: 'No se pudo remover del ministerio' }
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+export async function toggleMinisterioAdmin(userId: string, ministryId: string, value: boolean) {
+  const supabase = await checkAdmin()
+  if (!supabase) return { error: 'No autorizado' }
+  const { error } = await supabase
+    .from('ministry_assignments')
+    .update({ can_admin: value })
+    .eq('user_id', userId)
+    .eq('ministry_id', ministryId)
+  if (error) return { error: 'No se pudo actualizar' }
   revalidatePath('/admin/usuarios')
   return { success: true }
 }
@@ -89,7 +104,8 @@ export async function toggleConsejoPastoral(userId: string, value: boolean) {
 export async function deletePost(postId: string) {
   const supabase = await checkAdmin()
   if (!supabase) return { error: 'No autorizado' }
-  await supabase.from('posts').delete().eq('id', postId)
+  const { error } = await supabase.from('posts').delete().eq('id', postId)
+  if (error) return { error: 'No se pudo eliminar' }
   revalidatePath('/admin/posts')
   return { success: true }
 }
@@ -97,7 +113,8 @@ export async function deletePost(postId: string) {
 export async function pinPost(postId: string, pinned: boolean) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
-  await ctx.supabase.from('posts').update({ pinned }).eq('id', postId)
+  const { error } = await ctx.supabase.from('posts').update({ pinned }).eq('id', postId)
+  if (error) return { error: 'No se pudo actualizar' }
   revalidatePath('/admin/posts')
   revalidatePath('/app/feed')
   return { success: true }
@@ -119,7 +136,8 @@ export async function pinContent(contentId: string, pinned: boolean) {
 export async function deleteContent(contentId: string) {
   const ctx = await checkAdminOrPastor()
   if (!ctx) return { error: 'No autorizado' }
-  await ctx.supabase.from('ministry_content').delete().eq('id', contentId)
+  const { error } = await ctx.supabase.from('ministry_content').delete().eq('id', contentId)
+  if (error) return { error: 'No se pudo eliminar' }
   revalidatePath('/admin/contenido')
   revalidatePath('/admin/predicas')
   revalidatePath('/ministerios', 'layout')
@@ -227,7 +245,8 @@ export async function updateAdminContent(id: string, formData: FormData) {
     const url = await uploadToStorage(ctx.supabase, image, 'posts')
     if (url) updates.image_url = url
   }
-  await ctx.supabase.from('ministry_content').update(updates).eq('id', id)
+  const { error: updateError } = await ctx.supabase.from('ministry_content').update(updates).eq('id', id)
+  if (updateError) return { error: 'No se pudo actualizar' }
   revalidatePath('/admin/contenido')
   revalidatePath('/admin/predicas')
   revalidatePath('/ministerios', 'layout')
@@ -270,7 +289,8 @@ export async function updateAdminPost(postId: string, formData: FormData) {
     const url = await uploadToStorage(ctx.supabase, image, 'posts')
     if (url) updates.image_url = url
   }
-  await ctx.supabase.from('posts').update(updates).eq('id', postId)
+  const { error: updateError } = await ctx.supabase.from('posts').update(updates).eq('id', postId)
+  if (updateError) return { error: 'No se pudo actualizar' }
   revalidatePath('/admin/posts')
   revalidatePath('/app/feed')
   return { success: true }

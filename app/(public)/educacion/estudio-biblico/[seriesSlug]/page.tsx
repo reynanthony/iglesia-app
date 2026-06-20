@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
@@ -71,7 +71,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
             </div>
             <div>
               {series.description && (
-                <p className="text-base leading-relaxed" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                <p className="text-base leading-relaxed" style={{ color: 'rgba(246,243,235,0.82)' }}>
                   {series.description}
                 </p>
               )}
@@ -100,8 +100,8 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
           {!sessions || sessions.length === 0 ? (
             <div className="text-center py-16 rounded-2xl" style={{ background: CREAM, border: '1px solid #D2CDB8' }}>
               <BookOpen size={28} style={{ color: `${NAVY}30`, margin: '0 auto 0.75rem' }} />
-              <p className="font-bold" style={{ color: `${NAVY}60` }}>Las sesiones se publicarán pronto.</p>
-              <p className="text-sm mt-1" style={{ color: `${NAVY}40` }}>Esta serie está en preparación.</p>
+              <p className="font-bold" style={{ color: `${NAVY}CC` }}>Las sesiones se publicarán pronto.</p>
+              <p className="text-sm mt-1" style={{ color: `${NAVY}80` }}>Esta serie está en preparación.</p>
             </div>
           ) : (
             <div className="space-y-px rounded-2xl overflow-hidden" style={{ border: '1px solid #D2CDB8' }}>
@@ -128,7 +128,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
                       )}
                     </div>
                     {sess.summary && (
-                      <p className="text-[12px] leading-snug line-clamp-1" style={{ color: `${NAVY}60` }}>
+                      <p className="text-[12px] leading-snug line-clamp-1" style={{ color: `${NAVY}CC` }}>
                         {sess.summary}
                       </p>
                     )}

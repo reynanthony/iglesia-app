@@ -33,21 +33,37 @@ export async function proxy(request: NextRequest) {
   if (!user && (path.startsWith('/app') || path.startsWith('/admin'))) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    url.searchParams.set('redirectTo', path)
+    url.searchParams.set('next', path)
     return NextResponse.redirect(url)
   }
 
-  // /admin/* — require admin/pastor/moderador role
+  // /admin/* — require admin/pastor/moderador, o lider con can_admin para /admin/ministerio
   if (user && path.startsWith('/admin')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single()
-    if (!profile || !['admin', 'pastor', 'moderador'].includes(profile.role)) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/app/comunidad'
-      return NextResponse.redirect(url)
+
+    const isFullAdmin = profile && ['admin', 'pastor', 'moderador'].includes(profile.role)
+
+    if (!isFullAdmin) {
+      if (path.startsWith('/admin/ministerio')) {
+        const { count } = await supabase
+          .from('ministry_assignments')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('can_admin', true)
+        if (!count || count === 0) {
+          const url = request.nextUrl.clone()
+          url.pathname = '/app/comunidad'
+          return NextResponse.redirect(url)
+        }
+      } else {
+        const url = request.nextUrl.clone()
+        url.pathname = '/app/comunidad'
+        return NextResponse.redirect(url)
+      }
     }
   }
 

@@ -17,10 +17,12 @@ export default function MinistryAssignment({
   userId,
   assignments,
   allMinistries,
+  addOnly = false,
 }: {
   userId: string
   assignments: Assignment[]
   allMinistries: Ministry[]
+  addOnly?: boolean
 }) {
   const [pending, startTransition] = useTransition()
   const [showAdd, setShowAdd]       = useState(false)
@@ -45,7 +47,7 @@ export default function MinistryAssignment({
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      {assignments.map(a => {
+      {!addOnly && assignments.map(a => {
         const role = (a.role ?? 'colaborador') as 'lider' | 'colaborador'
         return (
           <span key={a.ministry_id} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-lg"

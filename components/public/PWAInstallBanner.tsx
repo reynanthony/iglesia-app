@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { Download, Smartphone, Bell, Zap, Share } from 'lucide-react'
@@ -59,7 +59,7 @@ export default function PWAInstallBanner() {
               Lleva la<br />comunidad<br />
               <em style={{ color: TEAL }}>contigo.</em>
             </h2>
-            <p className="text-sm leading-relaxed max-w-sm" style={{ color: `${CREAM}55` }}>
+            <p className="text-sm leading-relaxed max-w-sm" style={{ color: `${CREAM}BF` }}>
               Instala la app gratuita en tu teléfono y mantente conectado con El Manantial en todo momento.
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function PWAInstallBanner() {
                     style={{ background: `${TEAL}18`, border: `1px solid ${TEAL}25` }}>
                     <Icon size={15} style={{ color: TEAL }} />
                   </div>
-                  <span className="text-sm" style={{ color: `${CREAM}70` }}>{text}</span>
+                  <span className="text-sm" style={{ color: `${CREAM}D9` }}>{text}</span>
                 </li>
               ))}
             </ul>
@@ -103,7 +103,7 @@ export default function PWAInstallBanner() {
                     <>Selecciona <strong style={{ color: CREAM }}>"Agregar a inicio"</strong></>,
                     <>Toca <strong style={{ color: CREAM }}>"Agregar"</strong> y listo</>,
                   ].map((step, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-[11px]" style={{ color: `${CREAM}60` }}>
+                    <li key={i} className="flex items-start gap-2.5 text-[11px]" style={{ color: `${CREAM}CC` }}>
                       <span className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5"
                         style={{ background: `${TEAL}25`, color: TEAL }}>
                         {i + 1}
