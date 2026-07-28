@@ -1,16 +1,17 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { updatePredica } from '@/app/actions/predicas-admin'
-import { cmsById, cmsImageUrl, DPredica } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 
 export default async function EditarPredicaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const predica = await cmsById<DPredica>('predicas', id)
+  const supabase = await createClient()
+  const { data: predica } = await supabase.from('sermons').select('*').eq('id', id).maybeSingle()
   if (!predica) notFound()
 
   const action = updatePredica.bind(null, id)
-  const thumbUrl = cmsImageUrl(predica.thumbnail)
+  const thumbUrl = predica.thumbnail_url
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
   const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
@@ -68,7 +69,7 @@ export default async function EditarPredicaPage({ params }: { params: Promise<{ 
 
           <div>
             <label className={label} style={labelStyle}>Fecha del mensaje</label>
-            <input name="date" type="date" defaultValue={predica.date ?? ''}
+            <input name="sermon_date" type="date" defaultValue={predica.sermon_date ?? ''}
               className={field} style={fieldStyle} />
           </div>
 

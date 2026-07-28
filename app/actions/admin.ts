@@ -528,6 +528,8 @@ export async function savePageFields(page: string, fields: Record<string, unknow
   const pagePathMap: Record<string, string[]> = {
     home: ['/'], nosotros: ['/nosotros'], eventos: ['/eventos'],
     predicas: ['/predicas'], contacto: ['/contacto'], ministerios: ['/ministerios'],
+    donaciones: ['/donaciones'], oracion: ['/oracion'], 'en-vivo': ['/en-vivo'],
+    educacion: ['/educacion'], publicaciones: ['/publicaciones'], devocionales: ['/devocionales'],
   }
   ;(pagePathMap[page] ?? ['/']).forEach(p => revalidatePath(p))
   revalidatePath('/admin/paginas')

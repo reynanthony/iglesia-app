@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { ArrowLeft, Play, Calendar, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import VideoPlayer from '@/components/VideoPlayer'
-import { cmsById, cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
 
 export const revalidate = 300
 
@@ -19,17 +18,18 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const item = await cmsById<DPredica>('predicas', id)
+  const { data: item } = await supabase.from('sermons').select('*').eq('id', id).maybeSingle()
   if (!item) notFound()
 
-  const related = (await cmsGet<DPredica>('predicas', { sort: '-id', limit: '5' }))
-    .filter(p => p.id !== item.id)
-    .slice(0, 4)
+  const { data: relatedRows } = await supabase
+    .from('sermons').select('*').eq('published', true)
+    .order('sermon_date', { ascending: false }).limit(5)
+  const related = (relatedRows ?? []).filter(p => p.id !== item.id).slice(0, 4)
 
   const ytId  = getYoutubeId(item.video_url)
-  const thumb = cmsImageUrl(item.thumbnail) ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
-  const fmtDate = item.date
-    ? new Date(item.date).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
+  const thumb = item.thumbnail_url ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
+  const fmtDate = item.sermon_date
+    ? new Date(item.sermon_date).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   return (
@@ -86,7 +86,7 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
       {/* DESCRIPTION */}
       {item.description && (
         <div className="px-4 py-5" style={{ borderBottom: '1px solid #0D3352' }}>
-          {item.description.split('\n\n').map((p, i) =>
+          {item.description.split('\n\n').map((p: string, i: number) =>
             p.trim() ? (
               <p key={i} className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(246,243,235,0.55)' }}>
                 {p}
@@ -104,7 +104,7 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
           <div className="space-y-2">
             {related.map(r => {
               const rYtId = getYoutubeId(r.video_url)
-              const rThumb = cmsImageUrl(r.thumbnail) ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
+              const rThumb = r.thumbnail_url ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
               return (
                 <Link key={r.id} href={`/app/predicas/${r.id}`}
                   className="flex items-center gap-3 p-3 rounded-2xl group transition"

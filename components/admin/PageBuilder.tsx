@@ -746,6 +746,12 @@ const PAGE_SECTION_TYPES: Record<string, BlockType[]> = {
   eventos:     ['hero', 'announcement'],
   predicas:    ['hero', 'video'],
   ministerios: ['hero', 'announcement'],
+  donaciones:   ['hero', 'stats', 'cards', 'cta'],
+  oracion:      ['hero', 'cta'],
+  'en-vivo':    ['hero', 'cta'],
+  educacion:    ['hero', 'cards', 'text', 'cta'],
+  publicaciones:['hero'],
+  devocionales: ['hero'],
   'app-feed':  ['announcement', 'hero'],
 }
 

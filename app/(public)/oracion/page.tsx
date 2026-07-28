@@ -1,7 +1,6 @@
 ﻿import Link from 'next/link'
 import { Flame, Plus, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { cmsSingleton, cmsImageUrl, type DOracion } from '@/lib/directus'
 import { PrayerCard } from '@/components/public/PrayerCard'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
@@ -20,8 +19,9 @@ function timeAgo(date: string) {
 }
 
 export default async function OracionPublicaPage() {
-  const [supabase, cms] = await Promise.all([createClient(), cmsSingleton<DOracion>('oracion')])
-  const c = cms ?? {} as DOracion
+  const supabase = await createClient()
+  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'oracion').single()
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const heroEyebrow  = c.hero_eyebrow  ?? 'Comunidad · Intercesión'
   const heroTitle    = c.hero_title    ?? 'Muro de Oración.'
@@ -29,11 +29,11 @@ export default async function OracionPublicaPage() {
   const ctaEyebrow   = c.cta_eyebrow  ?? '— Únete a la comunidad'
   const ctaTitle     = c.cta_title    ?? 'Más que oraciones.'
   const ctaBody      = c.cta_body     ?? 'El stream es el primer paso. La comunidad en línea te permite participar, orar y crecer.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? '#051828'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = '#051828'
   const { data: { user } } = await supabase.auth.getUser()
 
   const SELECT_FIELDS = 'id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)'

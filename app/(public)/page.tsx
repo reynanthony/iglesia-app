@@ -1,6 +1,5 @@
 ﻿import Link from 'next/link'
 import { ArrowRight, Play, Zap, Heart, Music2, Star, BookOpen } from 'lucide-react'
-import { cmsSingleton, cmsImageUrl, type DHomepage } from '@/lib/directus'
 import PWAInstallBanner from '@/components/public/PWAInstallBanner'
 import { getDailyVerse, getDailyVerseDate } from '@/lib/daily-verse'
 import { HeroVideo } from '@/components/public/HeroVideo'
@@ -30,8 +29,7 @@ function fmtFechaCorta(iso: string) {
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const [cms, { data: pageData }, { data: predicasRows }] = await Promise.all([
-    cmsSingleton<DHomepage>('homepage'),
+  const [{ data: pageData }, { data: predicasRows }] = await Promise.all([
     supabase.from('page_content').select('content').eq('page', 'home').single(),
     supabase
       .from('ministry_content')
@@ -43,9 +41,7 @@ export default async function HomePage() {
   ])
   const predicas = predicasRows ?? []
 
-  const c = cms ?? {} as Partial<DHomepage>
-  // Admin panel image overrides (uploaded to Supabase Storage, stored as direct URLs)
-  const pc = (pageData?.content ?? {}) as Record<string, string>
+  const c = (pageData?.content ?? {}) as Record<string, any>
   const dailyVerse    = getDailyVerse()
   const dailyVerseDate = getDailyVerseDate()
 
@@ -58,22 +54,15 @@ export default async function HomePage() {
   const heroCta1Url     = c.hero_cta1_url     ?? '/nosotros'
   const heroCta2Label   = c.hero_cta2_label   ?? 'Ver prédica'
   const heroCta2Url     = c.hero_cta2_url     ?? '/predicas'
-  const heroImageUrl    = pc.hero_image_url   || c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl    = pc.hero_video_url   || c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroWatermark      = c.hero_watermark || null
-  const heroShowGrid       = c.hero_show_grid      !== false
-  const heroGridOpacity    = c.hero_grid_opacity   ?? 0.04
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? (heroImageUrl || heroVideoUrl ? 0.60 : 0.92)
-  const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
-  const heroLayout         = c.hero_layout ?? 'default'
+  const heroImageUrl    = c.hero_image_url || null
+  const heroVideoUrl    = c.hero_video_url || null
+  const heroWatermark: string | null = null
+  const heroShowGrid       = true
+  const heroGridOpacity    = 0.04
+  const heroOverlayOpacity = heroImageUrl || heroVideoUrl ? 0.60 : 0.92
+  const heroTitleAnimation: TitleAnimation = 'none'
+  const heroLayout: string = 'default'
   const hs = heroStyle({
-    textColor:        c.hero_text_color,
-    bgColor:          c.hero_bg_color,
-    titleSize:        c.hero_title_size,
-    titleColorHex:    c.hero_title_color,
-    accentColorHex:   c.hero_accent_color,
-    subtitleColorHex: c.hero_subtitle_color,
-    eyebrowColorHex:  c.hero_eyebrow_color,
     defaultBg: '#051828',
     defaultTitleSize: 'xl',
   })
@@ -84,11 +73,9 @@ export default async function HomePage() {
     { n: '02', day: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio bíblico' },
     { n: '03', day: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de oración' },
   ]
-  const services = c.svc1_day ? [
-    { n: '01', day: c.svc1_day,       time: c.svc1_time ?? '10:00', label: c.svc1_ampm ?? 'AM', type: c.svc1_type ?? '' },
-    { n: '02', day: c.svc2_day ?? '', time: c.svc2_time ?? '7:00',  label: c.svc2_ampm ?? 'PM', type: c.svc2_type ?? '' },
-    { n: '03', day: c.svc3_day ?? '', time: c.svc3_time ?? '7:00',  label: c.svc3_ampm ?? 'PM', type: c.svc3_type ?? '' },
-  ] : defaultServices
+  const services = Array.isArray(c.services) && c.services.length > 0
+    ? c.services.map((s: any, i: number) => ({ n: String(i + 1).padStart(2, '0'), ...s }))
+    : defaultServices
 
   // Event
   const eventTitle    = c.featured_event_title ?? 'Retiro Anual 2026'
@@ -96,7 +83,7 @@ export default async function HomePage() {
   const eventEyebrow  = c.event_eyebrow        ?? 'Próximo evento'
   const eventCtaLabel = c.event_cta_label      ?? 'Más información'
   const eventCtaUrl   = c.event_cta_url        ?? '/eventos'
-  const eventImageUrl = pc.event_image_url || cmsImageUrl(c.event_image)
+  const eventImageUrl = c.event_image_url || null
 
   // Ministries featured
   const ministry1Label = c.ministry1_label ?? 'Ministerio de Jóvenes'
@@ -108,8 +95,8 @@ export default async function HomePage() {
   const ministry2Title = c.ministry2_title ?? 'Hogares sólidos.'
   const ministry2Desc  = c.ministry2_desc  ?? 'Principios bíblicos para la familia.'
   const ministry2Url      = c.ministry2_url      ?? '/ministerios'
-  const ministry1ImageUrl = pc.ministry1_image || cmsImageUrl(c.ministry1_image)
-  const ministry2ImageUrl = pc.ministry2_image || cmsImageUrl(c.ministry2_image)
+  const ministry1ImageUrl = c.ministry1_image || null
+  const ministry2ImageUrl = c.ministry2_image || null
 
   // Sermons
   const sermonsEyebrow  = c.sermons_eyebrow   ?? '— Mensajes'
@@ -123,10 +110,10 @@ export default async function HomePage() {
   const ministriesTitle   = c.ministries_title   ?? 'Un lugar\npara todos.'
   const ministriesCta     = c.ministries_cta     ?? 'Ver todos'
   const ministriesUrl     = c.ministries_url     ?? '/ministerios'
-  const mini1Name = c.mini1_name ?? 'Jóvenes';      const mini1Desc = c.mini1_desc ?? 'Próxima generación';    const mini1Url = c.mini1_url ?? '/ministerios'; const mini1Img = pc.mini1_image || cmsImageUrl(c.mini1_image)
-  const mini2Name = c.mini2_name ?? 'Niños';        const mini2Desc = c.mini2_desc ?? 'Fe desde pequeños';     const mini2Url = c.mini2_url ?? '/ministerios'; const mini2Img = pc.mini2_image || cmsImageUrl(c.mini2_image)
-  const mini3Name = c.mini3_name ?? 'Matrimonios';  const mini3Desc = c.mini3_desc ?? 'Hogares fuertes';       const mini3Url = c.mini3_url ?? '/ministerios'; const mini3Img = pc.mini3_image || cmsImageUrl(c.mini3_image)
-  const mini4Name = c.mini4_name ?? 'Adoración';    const mini4Desc = c.mini4_desc ?? 'Excelencia al Señor';   const mini4Url = c.mini4_url ?? '/ministerios'; const mini4Img = pc.mini4_image || cmsImageUrl(c.mini4_image)
+  const mini1Name = c.mini1_name ?? 'Jóvenes';      const mini1Desc = c.mini1_desc ?? 'Próxima generación';    const mini1Url = c.mini1_url ?? '/ministerios'; const mini1Img = c.mini1_image || null
+  const mini2Name = c.mini2_name ?? 'Niños';        const mini2Desc = c.mini2_desc ?? 'Fe desde pequeños';     const mini2Url = c.mini2_url ?? '/ministerios'; const mini2Img = c.mini2_image || null
+  const mini3Name = c.mini3_name ?? 'Matrimonios';  const mini3Desc = c.mini3_desc ?? 'Hogares fuertes';       const mini3Url = c.mini3_url ?? '/ministerios'; const mini3Img = c.mini3_image || null
+  const mini4Name = c.mini4_name ?? 'Adoración';    const mini4Desc = c.mini4_desc ?? 'Excelencia al Señor';   const mini4Url = c.mini4_url ?? '/ministerios'; const mini4Img = c.mini4_image || null
 
   // CTA
   const ctaEyebrow     = c.cta_eyebrow     ?? '— Eres bienvenido'
@@ -190,7 +177,7 @@ export default async function HomePage() {
             className="font-display font-black tracking-tighter mb-10 sm:mb-12 max-w-5xl leading-[0.9] md:leading-[0.85]"
             style={{ fontSize: hs.titleFontSize }}
           >
-            {heroTitleMain.split('\n').map((line, i, arr) => (
+            {heroTitleMain.split('\n').map((line: string, i: number, arr: string[]) => (
               <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
             ))}
             <em className="block" style={{ color: hs.accentColor }}> {heroTitleAccent}</em>
@@ -436,7 +423,7 @@ export default async function HomePage() {
               </p>
               <h2 className="font-display font-black tracking-tighter leading-[0.9] md:leading-[0.88]"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: NAVY }}>
-                {sermonsTitle.split('\n').map((line, i, arr) => (
+                {sermonsTitle.split('\n').map((line: string, i: number, arr: string[]) => (
                   <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
               </h2>
@@ -527,7 +514,7 @@ export default async function HomePage() {
               </p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.88]"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
-                {ministriesTitle.split('\n').map((line, i, arr) => (
+                {ministriesTitle.split('\n').map((line: string, i: number, arr: string[]) => (
                   <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
               </h2>
@@ -604,7 +591,7 @@ export default async function HomePage() {
               </p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.83]"
                 style={{ fontSize: 'clamp(3rem, 10vw, 9rem)' }}>
-                {ctaTitleMain.split('\n').map((line, i, arr) => (
+                {ctaTitleMain.split('\n').map((line: string, i: number, arr: string[]) => (
                   <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
                 <br /><em style={{ color: TEAL }}>{ctaTitleAccent}</em>

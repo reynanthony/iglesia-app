@@ -49,7 +49,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     unreadMessages = count ?? 0
   }
 
-  const strapiUrl = process.env.STRAPI_URL
   const panelLabel = isLider ? 'Mi Ministerio' : 'Panel Admin'
 
   return (
@@ -73,7 +72,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <AdminNav
           logoutAction={logout}
           unreadMessages={unreadMessages}
-          strapiUrl={strapiUrl}
           isLider={isLider}
           liderMinistries={liderMinistries}
         />
@@ -112,7 +110,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <AdminMobileNav
           unreadMessages={unreadMessages}
           logoutAction={logout}
-          strapiUrl={strapiUrl}
           isLider={isLider}
           liderMinistries={liderMinistries}
         />

@@ -4,9 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { LeaderCards } from '@/components/public/LeaderCards'
-import { cmsSingleton, cmsImageUrl, type DNosotros } from '@/lib/directus'
 import { heroStyle } from '@/lib/hero-style'
-import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { HeroTitle } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,18 +26,8 @@ const defaultBeliefs = [
 
 export default async function NosotrosPage() {
   const supabase = await createClient()
-  const [cms, pastoralResult, ministerioResult] = await Promise.all([
-    cmsSingleton<DNosotros & {
-      hero_title_main: string | null; hero_title_accent: string | null
-      pullquote: string | null; pullquote_author: string | null
-      historia_p1: string | null; historia_p2: string | null
-      historia_p3: string | null; historia_p4: string | null
-      vision_text: string | null; mision_text: string | null
-      valores_list: string | null; beliefs_json: string | null
-      nos_cta_eyebrow: string | null; nos_cta_title: string | null
-      nos_cta1_label: string | null; nos_cta1_url: string | null
-      nos_cta2_label: string | null; nos_cta2_url: string | null
-    }>('nosotros'),
+  const [{ data: pageData }, pastoralResult, ministerioResult] = await Promise.all([
+    supabase.from('page_content').select('content').eq('page', 'nosotros').single(),
     supabase
       .from('church_leaders')
       .select('id,name,title,bio,avatar_url,category')
@@ -80,7 +69,7 @@ export default async function NosotrosPage() {
     }))
 
   const leaders = [...pastoral, ...ministerio]
-  const c = cms ?? {} as typeof cms & Record<string, any>
+  const c = (pageData?.content ?? {}) as Record<string, any>
 
   const stats = [
     { value: c?.stat_year        ?? '2008', label: 'Fundados' },
@@ -93,20 +82,13 @@ export default async function NosotrosPage() {
   const heroEyebrow     = c?.hero_eyebrow     ?? 'Quiénes somos · Desde 2008'
   const heroTitleMain   = c?.hero_title_main  ?? 'Somos\nEl Manan-'
   const heroTitleAccent = c?.hero_title_accent ?? 'tial.'
-  const heroImageUrl    = c?.hero_image_url || cmsImageUrl(c?.hero_image)
-  const heroVideoUrl    = c?.hero_video_url || cmsImageUrl(c?.hero_video) || null
-  const heroOverlayOpacity = c?.hero_overlay_opacity ?? 0.55
-  const heroShowGrid       = c?.hero_show_grid !== false
-  const heroTitleAnimation = (c?.hero_title_animation ?? 'none') as TitleAnimation
-  const heroLayout         = c?.hero_layout ?? 'default'
+  const heroImageUrl    = c?.hero_image_url || null
+  const heroVideoUrl    = c?.hero_video_url || null
+  const heroOverlayOpacity = 0.55
+  const heroShowGrid       = true
+  const heroTitleAnimation = 'none'
+  const heroLayout: string = 'default'
   const hs = heroStyle({
-    textColor:        c?.hero_text_color,
-    bgColor:          c?.hero_bg_color,
-    titleSize:        c?.hero_title_size,
-    titleColorHex:    c?.hero_title_color,
-    accentColorHex:   c?.hero_accent_color,
-    subtitleColorHex: c?.hero_subtitle_color,
-    eyebrowColorHex:  c?.hero_eyebrow_color,
     defaultBg: '#051828',
     defaultTitleSize: 'lg',
   })
@@ -175,7 +157,7 @@ export default async function NosotrosPage() {
               className="font-display font-black tracking-tighter mb-8 leading-[0.88]"
               style={{ fontSize: hs.titleFontSize }}
             >
-              {heroTitleMain.split('\n').map((line, i, arr) => (
+              {heroTitleMain.split('\n').map((line: string, i: number, arr: string[]) => (
                 <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
               ))}
               <br /><em style={{ color: hs.accentColor }}>{heroTitleAccent}</em>
@@ -271,7 +253,7 @@ export default async function NosotrosPage() {
 
           {/* Valores */}
           <div className="mt-16 flex flex-wrap gap-x-10 gap-y-3">
-            {valores.map((v, i) => (
+            {valores.map((v: string, i: number) => (
               <div key={v} className="flex items-baseline gap-3">
                 <span className="font-bold"
                   style={{ fontSize: '0.6rem', letterSpacing: '0.22em', color: 'rgba(118,171,174,0.35)' }}>
@@ -357,7 +339,7 @@ export default async function NosotrosPage() {
                 style={{ color: 'rgba(255,255,255,0.80)' }}>{nosCta_eyebrow}</p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.88]"
                 style={{ fontSize: 'clamp(3rem, 9vw, 8rem)' }}>
-                {nosCta_title.split('\n').map((line, i, arr) => (
+                {nosCta_title.split('\n').map((line: string, i: number, arr: string[]) => (
                   <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
               </h2>

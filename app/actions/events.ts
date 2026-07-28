@@ -12,17 +12,17 @@ export async function toggleEventRsvp(eventId: string): Promise<{ success: boole
     .from('event_rsvps')
     .select('id')
     .eq('user_id', user.id)
-    .eq('directus_event_id', eventId)
+    .eq('event_id', eventId)
     .maybeSingle()
 
   if (existing) {
     await supabase.from('event_rsvps')
       .delete()
       .eq('user_id', user.id)
-      .eq('directus_event_id', eventId)
+      .eq('event_id', eventId)
   } else {
     await supabase.from('event_rsvps')
-      .insert({ user_id: user.id, directus_event_id: eventId })
+      .insert({ user_id: user.id, event_id: eventId })
   }
 
   revalidatePath('/eventos')

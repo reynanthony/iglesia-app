@@ -6,8 +6,9 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, Mail, ShieldAlert, Shield,
   Menu, X, FileText, UsersRound, BookOpen, Radio, ScrollText,
-  Bell, UserCheck, Cross, Mic, Megaphone, Zap, ExternalLink,
+  Bell, UserCheck, Cross, Mic, Megaphone, Zap,
   Globe, ArrowLeft, LogOut, Newspaper, Building2,
+  Layers, Church, Calendar, Video, Quote,
 } from 'lucide-react'
 
 const ACCENT   = '#76ABAE'
@@ -31,6 +32,16 @@ const LIDER_PRIMARY = [
 ]
 
 const ADMIN_MENU_SECTIONS = [
+  {
+    label: 'Sitio web',
+    items: [
+      { href: '/admin/paginas',      icon: Layers,   label: 'Editor de páginas' },
+      { href: '/admin/ministerios',  icon: Church,   label: 'Ministerios'      },
+      { href: '/admin/eventos',      icon: Calendar, label: 'Eventos'          },
+      { href: '/admin/predicas',     icon: Video,    label: 'Prédicas'         },
+      { href: '/admin/devocionales', icon: Quote,    label: 'Devocionales'     },
+    ],
+  },
   {
     label: 'Comunidad',
     items: [
@@ -60,13 +71,12 @@ const ADMIN_MENU_SECTIONS = [
 
 interface Props {
   unreadMessages?: number
-  strapiUrl?: string
   logoutAction: () => Promise<void>
   isLider?: boolean
   liderMinistries?: { id: string; name: string }[]
 }
 
-export default function AdminMobileNav({ unreadMessages = 0, strapiUrl, logoutAction, isLider = false, liderMinistries = [] }: Props) {
+export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLider = false, liderMinistries = [] }: Props) {
   const pathname        = usePathname()
   const [open, setOpen] = useState(false)
 
@@ -165,13 +175,6 @@ export default function AdminMobileNav({ unreadMessages = 0, strapiUrl, logoutAc
 
           <div className="px-3 pb-6 pt-3 space-y-0.5"
             style={{ borderTop: `1px solid ${BORDER}`, paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}>
-            {!isLider && strapiUrl && (
-              <a href={strapiUrl} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 px-3 py-3 rounded-xl text-[14px] font-medium"
-                style={{ color: INACTIVE }}>
-                <ExternalLink size={16} /> Editar sitio (Directus)
-              </a>
-            )}
             {!isLider && (
               <Link href="/" target="_blank" onClick={() => setOpen(false)}
                 className="flex items-center gap-3 px-3 py-3 rounded-xl text-[14px] font-medium"

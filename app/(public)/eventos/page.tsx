@@ -1,35 +1,30 @@
 ﻿import { ArrowRight, MapPin, Clock, Calendar } from 'lucide-react'
 import Link from 'next/link'
-import { cmsGet, cmsSingleton, cmsImageUrl, type DEventosPage } from '@/lib/directus'
 import { createClient } from '@/lib/supabase/server'
 import { EventRsvpButton } from '@/components/public/EventRsvpButton'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const dynamic = 'force-dynamic'
 
-type DirectusEvento = {
+type Evento = {
   id: string
   titulo: string
-  descripcion?: string
+  descripcion: string | null
   fecha_inicio: string
-  fecha_fin?: string | null
-  lugar?: string
-  categoria?: string
-  badge?: string
-  imagen?: string
-  visible?: boolean
+  fecha_fin: string | null
+  lugar: string | null
+  categoria: string | null
+  badge: string | null
+  image_url: string | null
+  visible: boolean
 }
 
-const defaultRegularServices = [
+type RegularService = { day: string; fullDay: string; time: string; label: string; type: string; desc: string }
+
+const defaultRegularServices: RegularService[] = [
   { day: 'Dom', fullDay: 'Domingo',   time: '10:00', label: 'AM', type: 'Servicio Principal', desc: 'Adoración, Palabra y comunidad para toda la familia.' },
   { day: 'Mié', fullDay: 'Miércoles', time: '7:00',  label: 'PM', type: 'Estudio Bíblico',   desc: 'Profundizando en la Palabra de Dios juntos.' },
   { day: 'Vie', fullDay: 'Viernes',   time: '7:00',  label: 'PM', type: 'Noche de Oración',  desc: 'Intercesión y búsqueda de la presencia de Dios.' },
-]
-
-const fallbackEvents: DirectusEvento[] = [
-  { id: '1', titulo: 'Retiro de Jóvenes', fecha_inicio: '2026-06-20', fecha_fin: '2026-06-22', lugar: 'Por confirmar', badge: 'Próximo', categoria: 'Jóvenes', descripcion: 'Un fin de semana de encuentro, adoración y crecimiento para la juventud.' },
-  { id: '2', titulo: 'Conferencia de Matrimonios', fecha_inicio: '2026-07-11', fecha_fin: '2026-07-12', lugar: 'Templo principal', badge: 'Especial', categoria: 'Matrimonios', descripcion: 'Fortalece tu hogar con enseñanzas prácticas y bíblicas para parejas.' },
-  { id: '3', titulo: 'Noche de Alabanza', fecha_inicio: '2026-08-01', fecha_fin: null, lugar: 'Templo principal', badge: 'Por confirmar', categoria: 'Adoración', descripcion: 'Una noche dedicada a la adoración colectiva y la presencia de Dios.' },
 ]
 
 const BADGE_LABEL: Record<string, string> = {
@@ -60,39 +55,54 @@ function formatEventDate(fechaInicio: string, fechaFin?: string | null) {
 }
 
 export default async function EventosPage() {
-  const [cmsEventos, supabase, cms] = await Promise.all([
-    cmsGet<DirectusEvento>('eventos', { sort: 'fecha_inicio' }),
-    createClient(),
-    cmsSingleton<DEventosPage>('eventos_page'),
+  const supabase = await createClient()
+  const [{ data: eventos }, { data: pageData }, { data: { user } }] = await Promise.all([
+    supabase.from('events').select('*').eq('visible', true).order('fecha_inicio'),
+    supabase.from('page_content').select('content').eq('page', 'eventos').single(),
+    supabase.auth.getUser(),
   ])
-  const c = cms ?? {} as DEventosPage
+  const c = (pageData?.content ?? {}) as Record<string, unknown>
+  const specialEvents: Evento[] = eventos ?? []
 
-  const heroEyebrow        = c.hero_eyebrow  ?? 'Eventos · Agenda 2026'
-  const heroTitle          = c.hero_title    ?? 'Lo que\nse viene.'
-  const heroSubtitle       = c.hero_subtitle ?? 'Mantente al día con nuestras actividades, servicios y eventos especiales.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? '#051828'
-  const heroWatermark      = c.hero_watermark ?? '2026'
+  const heroEyebrow        = (c.hero_eyebrow as string)  ?? 'Eventos · Agenda 2026'
+  const heroTitle          = (c.hero_title_main as string) ?? 'Lo que\nse viene.'
+  const heroSubtitle       = (c.hero_subtitle as string) ?? 'Mantente al día con nuestras actividades, servicios y eventos especiales.'
+  const heroImageUrl       = (c.hero_image_url as string) || null
+  const heroVideoUrl       = (c.hero_video_url as string) || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = '#051828'
+  const heroWatermark      = '2026'
 
-  const specialEvents: DirectusEvento[] = cmsEventos.length > 0 ? cmsEventos : fallbackEvents
+  const regularServices: RegularService[] = Array.isArray(c.regular_services) && c.regular_services.length > 0
+    ? c.regular_services as RegularService[]
+    : defaultRegularServices
+  const eventsEyebrow    = (c.events_eyebrow as string)    ?? '— Próximamente'
+  const locationEyebrow  = (c.location_eyebrow as string)  ?? '— Cómo llegar'
+  const locationTitle    = (c.location_title as string)    ?? 'Encuéntranos\naquí.'
+  const locationAddress  = (c.location_address as string)  ?? 'Tu dirección aquí, Ciudad, País'
+  const locationSchedule = (c.location_schedule as string) ?? 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const locationNextEvent = (c.location_next_event as string) || specialEvents[0]?.titulo || 'Ver agenda arriba'
+  const evCtaEyebrow  = (c.ev_cta_eyebrow as string) ?? '— ¿Primera vez?'
+  const evCtaTitle    = (c.ev_cta_title as string)   ?? 'Ven y\nsé parte.'
+  const evCta1Label   = (c.ev_cta1_label as string)  ?? 'Escríbenos'
+  const evCta1Url     = (c.ev_cta1_url as string)    ?? '/contacto'
+  const evCta2Label   = (c.ev_cta2_label as string)  ?? 'Comunidad en línea'
+  const evCta2Url     = (c.ev_cta2_url as string)    ?? '/login'
 
   // RSVP data
-  const { data: { user } } = await supabase.auth.getUser()
-  const eventIds = specialEvents.map(e => e.id.toString())
-  const rsvpResult = await supabase
+  const eventIds = specialEvents.map(e => e.id)
+  const rsvpResult = eventIds.length > 0 ? await supabase
     .from('event_rsvps')
-    .select('directus_event_id, user_id')
-    .in('directus_event_id', eventIds)
-  const rsvpRows = rsvpResult.data as { directus_event_id: string; user_id: string }[] | null
+    .select('event_id, user_id')
+    .in('event_id', eventIds) : { data: null }
+  const rsvpRows = rsvpResult.data as { event_id: string; user_id: string }[] | null
 
   const rsvpCounts: Record<string, number> = {}
   const userRsvps = new Set<string>()
   for (const r of rsvpRows ?? []) {
-    rsvpCounts[r.directus_event_id] = (rsvpCounts[r.directus_event_id] ?? 0) + 1
-    if (r.user_id === user?.id) userRsvps.add(r.directus_event_id)
+    rsvpCounts[r.event_id] = (rsvpCounts[r.event_id] ?? 0) + 1
+    if (r.user_id === user?.id) userRsvps.add(r.event_id)
   }
 
   return (
@@ -146,7 +156,7 @@ export default async function EventosPage() {
       <section className="border-t border-edge bg-card">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-edge">
-            {defaultRegularServices.map(({ day, time, label, type, desc, fullDay }) => (
+            {regularServices.map(({ day, time, label, type, desc, fullDay }) => (
               <div key={day} className="py-8 md:px-8 first:md:pl-0 last:md:pr-0">
                 <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-3">
                   {fullDay || day}
@@ -172,14 +182,20 @@ export default async function EventosPage() {
       <section className="bg-card border-b border-edge">
         <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-32">
           <div className="flex items-end justify-between mb-14 border-b border-edge pb-7">
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Próximamente</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{eventsEyebrow}</p>
             <p className="text-[11px] font-bold text-ink-3">{specialEvents.length} eventos</p>
           </div>
+          {specialEvents.length === 0 ? (
+            <div className="py-32 text-center border border-edge rounded-2xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-4">Próximamente</p>
+              <p className="text-3xl font-black text-ink">Aún no hay eventos programados</p>
+            </div>
+          ) : (
           <div className="space-y-4">
             {specialEvents.map((event) => {
               const { mes, dia, year } = formatEventDate(event.fecha_inicio, event.fecha_fin)
-              const bc = badgeColor(event.badge)
-              const imgUrl = cmsImageUrl(event.imagen)
+              const bc = badgeColor(event.badge ?? undefined)
+              const imgUrl = event.image_url
               return (
                 <div key={event.id}
                   className="group border border-edge hover:border-edge-2 rounded-2xl overflow-hidden transition bg-card hover:bg-muted">
@@ -189,7 +205,7 @@ export default async function EventosPage() {
                       <div>
                         <span className="inline-block text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-lg mb-6"
                           style={{ backgroundColor: bc + '18', color: bc, border: `1px solid ${bc}25` }}>
-                          {badgeLabel(event.badge)}
+                          {badgeLabel(event.badge ?? undefined)}
                         </span>
                         <p className="font-black text-ink-3 tracking-widest text-sm">{mes}</p>
                         <p className="font-black text-ink leading-none tracking-tighter"
@@ -247,6 +263,7 @@ export default async function EventosPage() {
               )
             })}
           </div>
+          )}
         </div>
       </section>
 
@@ -255,10 +272,12 @@ export default async function EventosPage() {
         <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="flex flex-col gap-6 justify-center">
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">— Cómo llegar</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">{locationEyebrow}</p>
               <h2 className="font-display font-black text-ink tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9 }}>
-                Encuéntranos<br />aquí.
+                {locationTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
               <div className="space-y-4 mt-2">
                 <div className="flex items-start gap-4">
@@ -267,7 +286,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Dirección</p>
-                    <p className="text-sm font-bold text-ink">Tu dirección aquí, Ciudad, País</p>
+                    <p className="text-sm font-bold text-ink">{locationAddress}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -276,7 +295,7 @@ export default async function EventosPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Horarios</p>
-                    <p className="text-sm font-bold text-ink">Dom 10AM · Mié 7PM · Vie 7PM</p>
+                    <p className="text-sm font-bold text-ink">{locationSchedule}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -286,7 +305,7 @@ export default async function EventosPage() {
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-3 mb-1">Próximo evento</p>
                     <p className="text-sm font-bold text-ink">
-                      {specialEvents[0]?.titulo ?? 'Ver agenda arriba'}
+                      {locationNextEvent}
                     </p>
                   </div>
                 </div>
@@ -309,20 +328,22 @@ export default async function EventosPage() {
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-10 sm:gap-16">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">— ¿Primera vez?</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{evCtaEyebrow}</p>
             <h2 className="font-display font-black leading-[0.85] tracking-tighter text-white"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
-              Ven y<br />sé parte.
+              {evCtaTitle.split('\n').map((line, i, arr) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h2>
           </div>
           <div className="flex flex-col gap-4 w-full md:w-auto md:flex-shrink-0">
-            <Link href="/contacto"
+            <Link href={evCta1Url}
               className="flex items-center justify-between gap-3 bg-white hover:bg-[#F4F4F4] text-[#000000] text-[11px] font-black uppercase tracking-[0.2em] px-8 py-5 sm:py-4 rounded-xl transition group">
-              Escríbenos <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+              {evCta1Label} <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/login"
+            <Link href={evCta2Url}
               className="flex items-center justify-between gap-3 border border-white/25 text-white/70 hover:text-white hover:border-white/50 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-5 sm:py-4 rounded-xl transition group">
-              Comunidad en línea <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              {evCta2Label} <ArrowRight size={13} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
             </Link>
           </div>
         </div>

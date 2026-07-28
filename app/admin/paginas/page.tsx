@@ -1,6 +1,6 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers } from 'lucide-react'
+import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers, HandHeart, Radio, GraduationCap, Newspaper, Quote } from 'lucide-react'
 import ResetPageButton from './ResetPageButton'
 
 const pagesMeta = [
@@ -44,6 +44,48 @@ const pagesMeta = [
     label: 'Contacto',
     desc: 'Dirección, teléfono, correo, horarios de atención',
     Icon: Mail,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'donaciones',
+    label: 'Donaciones',
+    desc: 'Cabecera, cuentas bancarias, Zelle y horarios',
+    Icon: HandHeart,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'oracion',
+    label: 'Oración',
+    desc: 'Cabecera y CTA del muro de oración público',
+    Icon: HandHeart,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'en-vivo',
+    label: 'En Vivo',
+    desc: 'Mensaje sin transmisión, horario y CTA',
+    Icon: Radio,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'educacion',
+    label: 'Educación',
+    desc: 'Cabecera, rutas de formación y CTA',
+    Icon: GraduationCap,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'publicaciones',
+    label: 'Publicaciones',
+    desc: 'Cabecera de la sección de publicaciones',
+    Icon: Newspaper,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'devocionales',
+    label: 'Devocionales',
+    desc: 'Cabecera de la sección de devocionales',
+    Icon: Quote,
     group: 'Sitio web público',
   },
   {

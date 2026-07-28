@@ -53,8 +53,7 @@ npx supabase functions deploy send-push --linked
 | Capa | Tecnología |
 |------|-----------|
 | Framework | Next.js 16.2.6 (App Router, Turbopack) |
-| Auth + DB | Supabase (Postgres, Realtime, Storage, Edge Functions) |
-| CMS contenido público | Directus (Railway) — `https://directus-production-7860.up.railway.app` |
+| Auth + DB + CMS | Supabase (Postgres, Realtime, Storage, Edge Functions) — todo el contenido web y de app se administra desde `/admin/*`, sin CMS externo |
 | Audio WebRTC | LiveKit — `wss://iglesia-app-nwtiwcs8.livekit.cloud` |
 | Nativo | Capacitor (`com.elmanantial.app`) — carga `iglesia-app-sigma.vercel.app` en WebView |
 | Estilos | Tailwind CSS v4 + inline `style={}` para la paleta (NO clases de color Tailwind) |
@@ -166,6 +165,15 @@ Archivos de acciones:
 | `activity_log` | user_id, action, metadata |
 | `church_leaders` | nombre, cargo, foto, orden |
 
+### CMS del sitio web (Supabase, sin servicio externo)
+| Tabla | Uso |
+|-------|-----|
+| `page_content` | page (unique), content (jsonb) — copy editable de home/nosotros/contacto/eventos/predicas/ministerios/donaciones/oracion/en-vivo/educacion/publicaciones/devocionales vía `/admin/paginas` |
+| `events` | titulo, descripcion, fecha_inicio, fecha_fin, lugar, categoria, badge, image_url, visible — admin en `/admin/eventos` |
+| `sermons` | title, description, video_url, thumbnail_url, series, speaker, sermon_date, published — admin en `/admin/predicas` |
+| `devocionales` | title, content, author, verse, verse_ref, image_url, published — admin en `/admin/devocionales` |
+| `event_rsvps` | user_id, event_id (FK → events) |
+
 ### LMS Discipulado (v3 — `supabase/v3_discipleship_lms.sql`)
 | Tabla | Uso |
 |-------|-----|
@@ -198,14 +206,11 @@ Archivos de acciones:
 ## Pendiente
 
 ### Alta prioridad
-- [ ] **Directus admin** — recuperar acceso (Railway Variables: `ADMIN_EMAIL` + `ADMIN_PASSWORD` → redesplegar)
-- [ ] Poblar colecciones Directus: `homepage`, `nosotros`, `contacto`, `ministerios`, `predicas`, `eventos`
 - [ ] FCM push: crear Firebase project, obtener server key, `npx supabase functions deploy send-push --linked`
 
 ### Features pendientes
 - [ ] **Olvidé mi contraseña** — flujo en `/login` (Supabase `resetPasswordForEmail`)
 - [ ] Fase 3 oración — testimonios ya implementados; falta: ciclo de intercesión grupal sincrónica (opcional)
-- [ ] Migrar admin CRUD de Eventos/Predicaciones/Ministerios → Directus (cuando CMS esté activo)
 - [ ] Quizzes en lecciones LMS (fuera de scope actual)
 - [ ] Certificados PDF descargables (fuera de scope actual)
 
@@ -220,7 +225,7 @@ Archivos de acciones:
 | `lib/supabase/client.ts` | Supabase browser client |
 | `lib/supabase/cached-user.ts` | `getUser()` / `getProfile()` con React.cache() |
 | `lib/daily-verse.ts` | 52 versículos, rotación determinista por fecha |
-| `lib/directus.ts` | Helper CMS: `cmsSingleton()`, `cmsGet()`, `cmsImageUrl()` |
+| `components/admin/PageFieldsEditor.tsx` | Editor de campos del CMS (`page_content`) por página pública |
 | `lib/offline-cache.ts` | Caché offline de lecciones via @capacitor/preferences |
 | `capacitor.config.ts` | Config nativo (appId, server.url, plugins) |
 | `components/app/CapacitorBridge.tsx` | Init nativo: back button + push registration |

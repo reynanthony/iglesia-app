@@ -1,16 +1,29 @@
 ﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { detectSocialEmbed } from '@/lib/social-embed'
-import { cmsGet, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { heroStyle } from '@/lib/hero-style'
-import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { HeroTitle } from '@/components/public/HeroTitle'
 import {
-  ArrowLeft, ArrowRight, Play, FileText, Megaphone, Video, Pin,
-  Users, Music, Heart, Star, BookOpen, Mic, Baby, Flame, Home, Globe,
+  ArrowLeft, ArrowRight, Play, FileText, Megaphone, Pin,
+  Users, Music, Heart, Star, BookOpen, Baby, Flame, Home, Globe,
   Zap, Sparkles, type LucideIcon,
 } from 'lucide-react'
 import { VideoPlayButton } from '@/components/public/VideoModal'
+
+type MinistryContent = {
+  id: string
+  ministry_id: string
+  title: string
+  body: string | null
+  type: 'articulo' | 'video' | 'anuncio'
+  video_url: string | null
+  image_url: string | null
+  pinned: boolean
+  created_at: string
+  profiles: { full_name: string | null } | null
+}
 
 export const revalidate = 60
 
@@ -42,8 +55,11 @@ function fmtDate(d: string) {
   const dt = new Date(d)
   return `${dt.getUTCDate()} de ${MESES[dt.getUTCMonth()]} de ${dt.getUTCFullYear()}`
 }
-function itemDate(item: DMinisterioContenido) {
-  return fmtDate(item.date_published ?? item.date_created)
+function itemDate(item: MinistryContent) {
+  return fmtDate(item.created_at)
+}
+function itemAuthor(item: MinistryContent) {
+  return item.profiles?.full_name ?? null
 }
 
 function SectionLabel({ label, count }: { label: string; count?: number }) {
@@ -56,7 +72,7 @@ function SectionLabel({ label, count }: { label: string; count?: number }) {
   )
 }
 
-function AnnouncementCard({ item, href }: { item: DMinisterioContenido; href: string }) {
+function AnnouncementCard({ item, href }: { item: MinistryContent; href: string }) {
   return (
     <Link href={href}>
       <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group cursor-pointer">
@@ -69,16 +85,16 @@ function AnnouncementCard({ item, href }: { item: DMinisterioContenido; href: st
         {item.body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-4 flex-1">{item.body}</p>}
         <div className="pt-3 border-t border-edge flex items-center justify-between">
           <p className="text-[11px] text-ink-3">{itemDate(item)}</p>
-          {item.author && <p className="text-[11px] text-ink-3">{item.author}</p>}
+          {itemAuthor(item) && <p className="text-[11px] text-ink-3">{itemAuthor(item)}</p>}
         </div>
       </article>
     </Link>
   )
 }
 
-function VideoCard({ item, href }: { item: DMinisterioContenido; href: string }) {
+function VideoCard({ item, href }: { item: MinistryContent; href: string }) {
   const embed  = item.video_url ? detectSocialEmbed(item.video_url) : null
-  const imgUrl = cmsImageUrl(item.image)
+  const imgUrl = item.image_url
   return (
     <Link href={href}>
       <article className="group cursor-pointer">
@@ -110,14 +126,14 @@ function VideoCard({ item, href }: { item: DMinisterioContenido; href: string })
           </div>
         )}
         <h3 className="font-black text-ink group-hover:text-ink-2 transition leading-tight mb-1">{item.title}</h3>
-        <p className="text-[11px] text-ink-3 uppercase tracking-wider">{item.author ?? 'Ministerio'} · {itemDate(item)}</p>
+        <p className="text-[11px] text-ink-3 uppercase tracking-wider">{itemAuthor(item) ?? 'Ministerio'} · {itemDate(item)}</p>
       </article>
     </Link>
   )
 }
 
-function ArticleCard({ item, href }: { item: DMinisterioContenido; href: string }) {
-  const imgUrl = cmsImageUrl(item.image)
+function ArticleCard({ item, href }: { item: MinistryContent; href: string }) {
+  const imgUrl = item.image_url
   return (
     <Link href={href}>
       <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden cursor-pointer">
@@ -135,7 +151,7 @@ function ArticleCard({ item, href }: { item: DMinisterioContenido; href: string 
           <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-ink-2 transition">{item.title}</h3>
           {item.body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-3 mb-4">{item.body}</p>}
           <div className="flex items-center gap-2 pt-4 border-t border-edge">
-            <p className="text-[11px] text-ink-3">{item.author} · {itemDate(item)}</p>
+            <p className="text-[11px] text-ink-3">{itemAuthor(item)} · {itemDate(item)}</p>
           </div>
         </div>
       </article>
@@ -145,50 +161,39 @@ function ArticleCard({ item, href }: { item: DMinisterioContenido; href: string 
 
 export default async function PublicMinistryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const supabase = await createClient()
 
-  const [ministries, allContent] = await Promise.all([
-    cmsGet<DMinisterio>('ministerios', {
-      'filter[slug][_eq]': slug,
-      'filter[status][_eq]': 'published',
-      'limit': '1',
-    }),
-    cmsGet<DMinisterioContenido>('ministerio_contenido', {
-      'filter[status][_eq]': 'published',
-      'sort': '-pinned,-date_published,-date_created',
-    }),
-  ])
-
-  const ministry = ministries[0]
+  const { data: ministry } = await supabase
+    .from('ministries').select('*').eq('slug', slug).maybeSingle()
   if (!ministry) notFound()
 
-  const items     = allContent.filter(i => i.ministerio === ministry.id)
+  const { data: allContent } = await supabase
+    .from('ministry_content')
+    .select('id, ministry_id, title, body, type, video_url, image_url, pinned, created_at, profiles(full_name)')
+    .eq('ministry_id', ministry.id)
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+
+  const items     = (allContent ?? []) as unknown as MinistryContent[]
   const anuncios  = items.filter(i => i.type === 'anuncio')
   const videos    = items.filter(i => i.type === 'video')
   const articulos = items.filter(i => i.type === 'articulo')
   const latestAnuncio = anuncios[0] ?? null
   const IconComponent = getIcon(slug)
-  const imgUrl    = cmsImageUrl(ministry.imagen)
-  const videoUrl  = ministry.video_url || cmsImageUrl(ministry.video_file) || null
-  const leaderImg = cmsImageUrl(ministry.leader_photo)
+  const imgUrl    = ministry.image_url
+  const videoUrl  = ministry.video_url || null
+  const leaderImg = ministry.leader_avatar_url
 
   return (
     <div>
 
       {/* ══ HERO ═══════════════════════════════════════════ */}
       {(() => {
-        const overlayOpacity     = ministry.hero_overlay_opacity ?? 0.80
-        const showGrid           = ministry.hero_show_grid !== false
+        const overlayOpacity     = 0.80
+        const showGrid           = true
         const gridOpacity        = 0.04
-        const heroTitleAnimation = (ministry.hero_title_animation ?? 'none') as TitleAnimation
-        const heroLayout         = ministry.hero_layout ?? 'default'
+        const heroLayout: string = 'default'
         const hs = heroStyle({
-          textColor:        ministry.hero_text_color,
-          bgColor:          ministry.hero_bg_color,
-          titleSize:        ministry.hero_title_size,
-          titleColorHex:    ministry.hero_title_color,
-          accentColorHex:   ministry.hero_accent_color,
-          subtitleColorHex: ministry.hero_subtitle_color,
-          eyebrowColorHex:  ministry.hero_eyebrow_color,
           defaultBg: DARK,
           defaultTitleSize: 'md',
         })
@@ -213,17 +218,6 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             style={{ opacity: gridOpacity, backgroundImage: `repeating-linear-gradient(90deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px)` }} />
         )}
 
-        {/* Watermark decorativo */}
-        {ministry.hero_watermark && (
-          <div className="pointer-events-none absolute select-none right-0 bottom-0 overflow-hidden"
-            aria-hidden>
-            <span className="font-black leading-none tracking-tighter block"
-              style={{ fontSize: 'clamp(10rem, 30vw, 28rem)', opacity: 0.05, lineHeight: 1, color: hs.gridColor }}>
-              {ministry.hero_watermark}
-            </span>
-          </div>
-        )}
-
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-0">
 
           {/* Breadcrumb */}
@@ -246,7 +240,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
               </div>
               <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: hs.accentColor }}>— Ministerio</p>
               <HeroTitle
-                animation={heroTitleAnimation}
+                animation="none"
                 color={hs.titleColor}
                 accentColor={hs.accentColor}
                 className="font-black leading-[0.88] tracking-tighter mb-6"
@@ -367,7 +361,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                     </div>
                     <h2 className="text-2xl font-black text-ink leading-tight tracking-tight mb-3">{videos[0].title}</h2>
                     {videos[0].body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-3 mb-4">{videos[0].body}</p>}
-                    <p className="text-[11px] text-ink-3 uppercase tracking-wider">{videos[0].author} · {itemDate(videos[0])}</p>
+                    <p className="text-[11px] text-ink-3 uppercase tracking-wider">{itemAuthor(videos[0])} · {itemDate(videos[0])}</p>
                   </div>
                 </div>
               </div>
@@ -392,13 +386,13 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
               <Link href={`/ministerios/${slug}/contenido/${articulos[0].id}`}>
                 <div className="mb-10 bg-card rounded-xl border border-edge hover:border-edge-2 transition group overflow-hidden cursor-pointer">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-                    {cmsImageUrl(articulos[0].image) && (
+                    {articulos[0].image_url && (
                       <div className="lg:col-span-5 overflow-hidden h-64 lg:h-auto rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none">
-                        <img src={cmsImageUrl(articulos[0].image)!} alt=""
+                        <img src={articulos[0].image_url} alt=""
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                       </div>
                     )}
-                    <div className={`p-8 lg:p-12 flex flex-col justify-center ${cmsImageUrl(articulos[0].image) ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
+                    <div className={`p-8 lg:p-12 flex flex-col justify-center ${articulos[0].image_url ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
                       <div className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start mb-5"
                         style={{ backgroundColor: TEAL + '18', color: TEAL }}>
                         <Pin size={9} /> Artículo destacado
@@ -407,7 +401,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                         {articulos[0].title}
                       </h2>
                       {articulos[0].body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-4 mb-6">{articulos[0].body}</p>}
-                      <p className="text-[11px] text-ink-3">{articulos[0].author} · {itemDate(articulos[0])}</p>
+                      <p className="text-[11px] text-ink-3">{itemAuthor(articulos[0])} · {itemDate(articulos[0])}</p>
                     </div>
                   </div>
                 </div>
@@ -435,7 +429,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                   <img src={leaderImg} alt={ministry.leader_name} className="w-full h-full object-cover" />
                 ) : (
                   <span className="font-black text-3xl" style={{ color: TEAL }}>
-                    {ministry.leader_name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                    {ministry.leader_name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                   </span>
                 )}
               </div>

@@ -1,6 +1,6 @@
 ﻿import Link from 'next/link'
 import { ArrowRight, Play } from 'lucide-react'
-import { cmsGet, cmsSingleton, cmsImageUrl, type DPredica, type DPredicasPage } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 300
@@ -23,30 +23,40 @@ function getYoutubeId(url?: string | null) {
 }
 
 export default async function PredicasPage() {
-  const [rawPredicas, cms] = await Promise.all([
-    cmsGet<DPredica>('predicas', { sort: '-id', limit: '50' }),
-    cmsSingleton<DPredicasPage>('predicas_page'),
+  const supabase = await createClient()
+  const [{ data: rawPredicas }, { data: pageData }] = await Promise.all([
+    supabase.from('sermons').select('*').eq('published', true).order('sermon_date', { ascending: false }).limit(50),
+    supabase.from('page_content').select('content').eq('page', 'predicas').single(),
   ])
-  const c = cms ?? {} as DPredicasPage
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const heroEyebrow        = c.hero_eyebrow  ?? 'Prédicas · Archivo de mensajes'
-  const heroTitle          = c.hero_title    ?? 'La Palabra\ndonde estés.'
+  const heroTitle          = c.hero_title_main ?? 'La Palabra\ndonde estés.'
   const heroSubtitle       = c.hero_subtitle ?? 'Accede al archivo completo de nuestras prédicas. Escucha, medita y crece en la fe desde donde estés.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? '#051828'
-  const heroWatermark      = c.hero_watermark ?? 'FE'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = '#051828'
+  const heroWatermark      = 'FE'
 
-  const predicas = rawPredicas.map(s => ({
+  const featuredEyebrow    = c.featured_eyebrow      ?? 'Prédica reciente'
+  const featuredBadge      = c.featured_badge        ?? null
+  const featuredListenLabel = c.featured_listen_label ?? 'Ver prédica'
+  const olderEyebrow       = c.older_eyebrow         ?? '— Archivo'
+  const predCtaEyebrow     = c.pred_cta_eyebrow      ?? '— También en la comunidad'
+  const predCtaTitle       = c.pred_cta_title        ?? 'La Palabra\nes mejor\nen comunidad.'
+  const predCtaLabel       = c.pred_cta_label        ?? 'Crear mi cuenta'
+  const predCtaUrl         = c.pred_cta_url          ?? '/registro'
+
+  const predicas = (rawPredicas ?? []).map(s => ({
     id: s.id,
     titulo: s.title,
     pastor: s.speaker ?? 'Pastor Principal',
-    fecha: s.date ? fmtFecha(s.date) : '',
+    fecha: s.sermon_date ? fmtFecha(s.sermon_date) : '',
     serie: s.series ?? '',
     video_url: s.video_url ?? null,
-    image_url: cmsImageUrl(s.thumbnail) ?? null,
+    image_url: s.thumbnail_url ?? null,
   }))
 
   const featured = predicas[0] ?? null
@@ -116,7 +126,7 @@ export default async function PredicasPage() {
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
             <div className="flex items-center gap-4 mb-10">
               <div className="w-1.5 h-1.5 rounded-full" style={{ background: TEAL }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: TEAL }}>Prédica reciente</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: TEAL }}>{featuredEyebrow}</p>
             </div>
 
             <Link href={`/predicas/${featured.id}`}
@@ -129,10 +139,10 @@ export default async function PredicasPage() {
                     : `linear-gradient(135deg, ${NAVY} 0%, #0D4A72 100%)`,
                 }}>
                 <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.20)' }} />
-                {featured.serie && (
+                {featuredBadge && (
                   <div className="absolute top-5 left-5 text-[8px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg"
                     style={{ background: TEAL, color: NAVY }}>
-                    {featured.serie}
+                    {featuredBadge}
                   </div>
                 )}
                 <div className="relative w-20 h-20 rounded-full border-2 border-white/25 group-hover:bg-white/20 flex items-center justify-center transition duration-300 group-hover:scale-110">
@@ -155,7 +165,7 @@ export default async function PredicasPage() {
                 </div>
                 <div className="inline-flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl self-start"
                   style={{ background: NAVY }}>
-                  <Play size={12} /> Ver prédica <ArrowRight size={12} />
+                  <Play size={12} /> {featuredListenLabel} <ArrowRight size={12} />
                 </div>
               </div>
             </Link>
@@ -169,7 +179,7 @@ export default async function PredicasPage() {
           <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
             <div className="flex items-end justify-between mb-12 pb-7" style={{ borderBottom: '1px solid #D2CDB8' }}>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>— Archivo</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: SAGE }}>{olderEyebrow}</p>
                 <h2 className="font-display font-black tracking-tighter"
                   style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: NAVY }}>
                   Prédicas<br />anteriores.
@@ -235,21 +245,23 @@ export default async function PredicasPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
-                — También en la comunidad
+                {predCtaEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
                 style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}>
-                La Palabra<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
+                {predCtaTitle.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
             </div>
             <div className="flex flex-col gap-4">
               <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
                 Únete a la comunidad en línea para comentar, compartir y discutir los mensajes con otros creyentes.
               </p>
-              <Link href="/registro"
+              <Link href={predCtaUrl}
                 className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"
                 style={{ background: CREAM, color: NAVY }}>
-                Crear mi cuenta <ArrowRight size={12} />
+                {predCtaLabel} <ArrowRight size={12} />
               </Link>
               <Link href="/en-vivo"
                 className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"

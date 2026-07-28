@@ -1,7 +1,7 @@
 ﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, Quote } from 'lucide-react'
-import { cmsGet, cmsById, cmsImageUrl, type DDevocional } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 
 export const revalidate = 3600
 
@@ -22,20 +22,17 @@ export default async function DevocionalDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const supabase = await createClient()
 
-  const [devo, others] = await Promise.all([
-    cmsById<DDevocional>('devocionales', id),
-    cmsGet<DDevocional>('devocionales', {
-      'filter[status][_eq]': 'published',
-      'filter[id][_neq]': id,
-      'sort': '-date_published,-date_created',
-      'limit': '3',
-    }),
-  ])
+  const { data: devo } = await supabase.from('devocionales').select('*').eq('id', id).maybeSingle()
+  if (!devo || !devo.published) notFound()
 
-  if (!devo || devo.status !== 'published') notFound()
+  const { data: othersRows } = await supabase
+    .from('devocionales').select('*').eq('published', true)
+    .neq('id', id).order('created_at', { ascending: false }).limit(3)
+  const others = othersRows ?? []
 
-  const imgUrl = cmsImageUrl(devo.image)
+  const imgUrl = devo.image_url
 
   return (
     <div>
@@ -85,7 +82,7 @@ export default async function DevocionalDetailPage({
             )}
             <span style={{ color: 'rgba(118,171,174,0.25)' }}>·</span>
             <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.84)' }}>
-              {fmtDate(devo.date_published ?? devo.date_created)}
+              {fmtDate(devo.created_at)}
             </p>
           </div>
         </div>
@@ -103,7 +100,7 @@ export default async function DevocionalDetailPage({
       {/* CONTENT */}
       <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
         <div className="max-w-2xl mx-auto px-6 py-16 md:py-20">
-          {devo.content.split('\n\n').map((paragraph, i) =>
+          {devo.content.split('\n\n').map((paragraph: string, i: number) =>
             paragraph.trim() ? (
               <p key={i} className="mb-6 text-base leading-relaxed" style={{ color: `${NAVY}85` }}>
                 {paragraph}

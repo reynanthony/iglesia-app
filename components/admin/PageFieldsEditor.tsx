@@ -357,6 +357,215 @@ const SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
   ],
+
+  donaciones: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Donaciones · Apoyo a la misión' },
+        { key: 'hero_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Da con *alegría.' },
+        { key: 'hero_verse', label: 'Versículo / párrafo introductorio', type: 'textarea', rows: 3, placeholder: '"Dios ama al dador alegre."...' },
+        { key: 'hero_verse_ref', label: 'Referencia bíblica', type: 'text', placeholder: '— 2 Corintios 9:7' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+    {
+      title: 'Transferencia bancaria',
+      fields: [
+        { key: 'bank_name', label: 'Banco', type: 'text', placeholder: 'Banco Popular Dominicano' },
+        { key: 'bank_account', label: 'Número de cuenta', type: 'text', placeholder: '123-456789-0' },
+        { key: 'bank_titular', label: 'Titular', type: 'text', placeholder: 'Iglesia El Manantial Inc.' },
+        { key: 'bank_rnc', label: 'RNC', type: 'text', placeholder: '1-23-45678-9' },
+        { key: 'bank_note', label: 'Nota', type: 'textarea', rows: 2, placeholder: 'Envíanos el comprobante de transferencia...' },
+      ],
+    },
+    {
+      title: 'Zelle',
+      fields: [
+        { key: 'zelle_email', label: 'Email Zelle', type: 'text', placeholder: 'elmanantial@iglesia.com' },
+        { key: 'zelle_name', label: 'Nombre', type: 'text', placeholder: 'Iglesia El Manantial' },
+        { key: 'zelle_note', label: 'Nota', type: 'textarea', rows: 2, placeholder: 'Disponible desde cualquier banco...' },
+      ],
+    },
+    {
+      title: 'En persona — horarios',
+      fields: [
+        { key: 'schedule_1_day', label: 'Servicio 1 — día', type: 'text', placeholder: 'Domingo' },
+        { key: 'schedule_1_time', label: 'Servicio 1 — hora', type: 'text', placeholder: '10:00 AM' },
+        { key: 'schedule_1_type', label: 'Servicio 1 — tipo', type: 'text', placeholder: 'Servicio principal' },
+        { key: 'schedule_2_day', label: 'Servicio 2 — día', type: 'text', placeholder: 'Miércoles' },
+        { key: 'schedule_2_time', label: 'Servicio 2 — hora', type: 'text', placeholder: '7:00 PM' },
+        { key: 'schedule_2_type', label: 'Servicio 2 — tipo', type: 'text', placeholder: 'Estudio bíblico' },
+      ],
+    },
+    {
+      title: 'Estadísticas de impacto — 4 tarjetas',
+      fields: [
+        { key: 'stat1_value', label: 'Tarjeta 1 — valor', type: 'text', placeholder: '200+' },
+        { key: 'stat1_label', label: 'Tarjeta 1 — etiqueta', type: 'text', placeholder: 'Familias alcanzadas' },
+        { key: 'stat1_desc', label: 'Tarjeta 1 — descripción', type: 'text', placeholder: 'Familias que participan activamente...' },
+        { key: 'stat2_value', label: 'Tarjeta 2 — valor', type: 'text', placeholder: '8' },
+        { key: 'stat2_label', label: 'Tarjeta 2 — etiqueta', type: 'text', placeholder: 'Ministerios activos' },
+        { key: 'stat2_desc', label: 'Tarjeta 2 — descripción', type: 'text', placeholder: 'Áreas de servicio...' },
+        { key: 'stat3_value', label: 'Tarjeta 3 — valor', type: 'text', placeholder: '15+' },
+        { key: 'stat3_label', label: 'Tarjeta 3 — etiqueta', type: 'text', placeholder: 'Años de ministerio' },
+        { key: 'stat3_desc', label: 'Tarjeta 3 — descripción', type: 'text', placeholder: 'Años sembrando...' },
+        { key: 'stat4_value', label: 'Tarjeta 4 — valor', type: 'text', placeholder: '150+' },
+        { key: 'stat4_label', label: 'Tarjeta 4 — etiqueta', type: 'text', placeholder: 'Servicios al año' },
+        { key: 'stat4_desc', label: 'Tarjeta 4 — descripción', type: 'text', placeholder: 'Reuniones de adoración...' },
+      ],
+    },
+    {
+      title: 'Versículo final + CTA',
+      fields: [
+        { key: 'cta_verse', label: 'Versículo', type: 'textarea', rows: 3, placeholder: '"El que siembra generosamente..."' },
+        { key: 'cta_verse_ref', label: 'Referencia', type: 'text', placeholder: '— 2 Corintios 9:6' },
+        { key: 'cta_body', label: 'Párrafo de invitación', type: 'textarea', rows: 2, placeholder: '¿Tienes preguntas sobre cómo realizar tu ofrenda?' },
+      ],
+    },
+  ],
+
+  oracion: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Comunidad · Intercesión' },
+        { key: 'hero_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Muro de *Oración.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Comparte tu petición y deja que la comunidad ore contigo.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+    {
+      title: 'CTA final',
+      fields: [
+        { key: 'cta_eyebrow', label: 'Etiqueta de sección', type: 'text', placeholder: '— Únete a la comunidad' },
+        { key: 'cta_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Más que *oraciones.' },
+        { key: 'cta_body', label: 'Párrafo', type: 'textarea', rows: 2, placeholder: 'El stream es el primer paso...' },
+      ],
+    },
+  ],
+
+  'en-vivo': [
+    {
+      title: 'Sin transmisión — mensaje cuando no hay culto en vivo',
+      fields: [
+        { key: 'offline_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Estamos en *camino.' },
+        { key: 'offline_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Todos los domingos transmitimos nuestro servicio...' },
+        { key: 'offline_next_text', label: 'Texto de próxima transmisión', type: 'text', placeholder: 'Próxima transmisión: Domingo 10:00 AM' },
+        { key: 'hero_image_url', label: 'Imagen de fondo', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo (.mp4)', type: 'upload-video' },
+      ],
+    },
+    {
+      title: 'Horarios de transmisión',
+      fields: [
+        { key: 'schedule_eyebrow', label: 'Etiqueta de sección', type: 'text', placeholder: '— Horario' },
+        { key: 'schedule_title', label: 'Título de sección', type: 'text', placeholder: 'Nos reunimos cada semana.' },
+        { key: 'schedule_1_day', label: 'Servicio 1 — día', type: 'text', placeholder: 'Domingo' },
+        { key: 'schedule_1_time', label: 'Servicio 1 — hora', type: 'text', placeholder: '10:00 AM' },
+        { key: 'schedule_1_type', label: 'Servicio 1 — tipo', type: 'text', placeholder: 'Servicio principal' },
+        { key: 'schedule_1_live', label: 'Servicio 1 — ¿se transmite? (true/false)', type: 'text', placeholder: 'true' },
+        { key: 'schedule_2_day', label: 'Servicio 2 — día', type: 'text', placeholder: 'Miércoles' },
+        { key: 'schedule_2_time', label: 'Servicio 2 — hora', type: 'text', placeholder: '7:00 PM' },
+        { key: 'schedule_2_type', label: 'Servicio 2 — tipo', type: 'text', placeholder: 'Estudio bíblico' },
+        { key: 'schedule_2_live', label: 'Servicio 2 — ¿se transmite? (true/false)', type: 'text', placeholder: 'false' },
+        { key: 'schedule_3_day', label: 'Servicio 3 — día', type: 'text', placeholder: 'Viernes' },
+        { key: 'schedule_3_time', label: 'Servicio 3 — hora', type: 'text', placeholder: '7:00 PM' },
+        { key: 'schedule_3_type', label: 'Servicio 3 — tipo', type: 'text', placeholder: 'Noche de oración' },
+        { key: 'schedule_3_live', label: 'Servicio 3 — ¿se transmite? (true/false)', type: 'text', placeholder: 'false' },
+      ],
+    },
+    {
+      title: 'CTA final',
+      fields: [
+        { key: 'cta_eyebrow', label: 'Etiqueta de sección', type: 'text', placeholder: '— La iglesia es más que una pantalla' },
+        { key: 'cta_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Conéctate con la *comunidad.' },
+        { key: 'cta_body', label: 'Párrafo', type: 'textarea', rows: 2, placeholder: 'El stream es el primer paso...' },
+      ],
+    },
+  ],
+
+  educacion: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Educación · Formación espiritual' },
+        { key: 'hero_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Antes de servir, *aprender.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 3, placeholder: 'La fe sin conocimiento se apaga...' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+    {
+      title: 'Camino 1 — Discipulado',
+      fields: [
+        { key: 'path1_label', label: 'Etiqueta', type: 'text', placeholder: 'Discipulado' },
+        { key: 'path1_headline', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'Crecer en\nCristo.' },
+        { key: 'path1_desc', label: 'Descripción', type: 'textarea', rows: 3, placeholder: 'Un camino estructurado de siete etapas...' },
+        { key: 'path1_tag1', label: 'Etiqueta 1', type: 'text', placeholder: '7 etapas' },
+        { key: 'path1_tag2', label: 'Etiqueta 2', type: 'text', placeholder: 'Mentoría personal' },
+        { key: 'path1_tag3', label: 'Etiqueta 3', type: 'text', placeholder: 'Crecimiento espiritual' },
+      ],
+    },
+    {
+      title: 'Camino 2 — Estudio Bíblico',
+      fields: [
+        { key: 'path2_label', label: 'Etiqueta', type: 'text', placeholder: 'Estudio Bíblico' },
+        { key: 'path2_headline', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'La Palabra\nviva.' },
+        { key: 'path2_desc', label: 'Descripción', type: 'textarea', rows: 3, placeholder: 'Estudios semanales profundos...' },
+        { key: 'path2_tag1', label: 'Etiqueta 1', type: 'text', placeholder: 'Miércoles 7PM' },
+        { key: 'path2_tag2', label: 'Etiqueta 2', type: 'text', placeholder: 'Todas las edades' },
+        { key: 'path2_tag3', label: 'Etiqueta 3', type: 'text', placeholder: 'Recursos descargables' },
+      ],
+    },
+    {
+      title: 'Por qué formamos',
+      fields: [
+        { key: 'why_eyebrow', label: 'Etiqueta de sección', type: 'text', placeholder: '— Por qué formamos' },
+        { key: 'why_title', label: 'Título', type: 'textarea', rows: 2, placeholder: 'La educación espiritual es el camino, no el destino.' },
+        { key: 'why_body1', label: 'Párrafo 1', type: 'textarea', rows: 2, placeholder: 'Antes de que alguien pueda servir con excelencia...' },
+        { key: 'why_body2', label: 'Párrafo 2', type: 'textarea', rows: 2, placeholder: 'Por eso nuestros programas de educación son el punto de entrada...' },
+        { key: 'verse', label: 'Versículo', type: 'textarea', rows: 2, placeholder: '"Procura con diligencia presentarte a Dios aprobado..."' },
+        { key: 'verse_ref', label: 'Referencia bíblica', type: 'text', placeholder: '— 2 Timoteo 2:15' },
+        { key: 'cta_label', label: 'Botón — texto', type: 'text', placeholder: 'Comenzar mi camino' },
+      ],
+    },
+    {
+      title: 'Puente a la app',
+      fields: [
+        { key: 'app_title', label: 'Título', type: 'text', placeholder: 'Continúa tu formación en la comunidad en línea' },
+        { key: 'app_body', label: 'Descripción', type: 'textarea', rows: 2, placeholder: 'En la app puedes ver tu progreso de discipulado...' },
+      ],
+    },
+  ],
+
+  publicaciones: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'El Manantial · Publicaciones' },
+        { key: 'hero_title', label: 'Título (usa * antes de la palabra en acento)', type: 'text', placeholder: 'Campañas *y series.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Campañas, series y eventos especiales de la iglesia.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+  ],
+
+  devocionales: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'Reflexiones · Devocionales' },
+        { key: 'hero_title', label: 'Título (↵ para nueva línea, usa * antes de la palabra en acento)', type: 'textarea', rows: 2, placeholder: 'Palabra\npara hoy.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Reflexiones escritas por nuestros líderes...' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+  ],
 }
 
 interface Props {

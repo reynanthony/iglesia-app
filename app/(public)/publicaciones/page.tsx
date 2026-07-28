@@ -1,7 +1,6 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowRight, Newspaper } from 'lucide-react'
-import { cmsSingleton, cmsImageUrl, type DPublicacionesPage } from '@/lib/directus'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 60
@@ -30,25 +29,25 @@ const CAT_COLOR: Record<string, string> = {
 
 export default async function PublicacionesPage() {
   const supabase = await createClient()
-  const [{ data: items }, cms] = await Promise.all([
+  const [{ data: items }, { data: pageData }] = await Promise.all([
     supabase
       .from('publicaciones')
       .select('id, slug, title, subtitle, excerpt, category, cover_image, cover_color, published_at')
       .eq('is_active', true)
       .order('published_at', { ascending: false }),
-    cmsSingleton<DPublicacionesPage>('publicaciones_page'),
+    supabase.from('page_content').select('content').eq('page', 'publicaciones').single(),
   ])
-  const c = cms ?? {} as DPublicacionesPage
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const heroEyebrow        = c.hero_eyebrow  ?? 'El Manantial · Publicaciones'
   const heroTitle          = c.hero_title    ?? 'Campañas *y series.'
   const heroSubtitle       = c.hero_subtitle ?? 'Campañas, series y eventos especiales de la iglesia.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? DARK
-  const heroWatermark      = c.hero_watermark ?? 'PUB'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = DARK
+  const heroWatermark      = 'PUB'
 
   const [featured, ...rest] = items ?? []
 

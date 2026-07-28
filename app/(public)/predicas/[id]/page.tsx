@@ -1,7 +1,7 @@
 ﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Play, Calendar, User } from 'lucide-react'
-import { cmsById, cmsGet, cmsImageUrl, type DPredica } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import VideoPlayer from '@/components/VideoPlayer'
 
 export const revalidate = 300
@@ -29,18 +29,18 @@ export default async function PredicaDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const supabase = await createClient()
 
-  const item = await cmsById<DPredica>('predicas', id)
+  const { data: item } = await supabase.from('sermons').select('*').eq('id', id).maybeSingle()
   if (!item) notFound()
 
-  const related = await cmsGet<DPredica>('predicas', {
-    'sort': '-date_created',
-    'limit': '4',
-  })
-  const relatedFiltered = related.filter(p => String(p.id) !== id).slice(0, 3)
+  const { data: related } = await supabase
+    .from('sermons').select('*').eq('published', true)
+    .order('sermon_date', { ascending: false }).limit(4)
+  const relatedFiltered = (related ?? []).filter(p => p.id !== id).slice(0, 3)
 
   const ytId     = getYoutubeId(item.video_url)
-  const thumbUrl = cmsImageUrl(item.thumbnail) ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
+  const thumbUrl = item.thumbnail_url ?? (ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null)
 
   return (
     <div>
@@ -99,10 +99,10 @@ export default async function PredicaDetailPage({
                 <span className="text-[12px] font-bold">{item.speaker}</span>
               </div>
             )}
-            {item.date && (
+            {item.sermon_date && (
               <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
                 <Calendar size={12} />
-                <span className="text-[12px]">{fmtDate(item.date)}</span>
+                <span className="text-[12px]">{fmtDate(item.sermon_date)}</span>
               </div>
             )}
           </div>
@@ -134,7 +134,7 @@ export default async function PredicaDetailPage({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {relatedFiltered.map(r => {
                 const rYtId = getYoutubeId(r.video_url)
-                const rThumb = cmsImageUrl(r.thumbnail) ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
+                const rThumb = r.thumbnail_url ?? (rYtId ? `https://img.youtube.com/vi/${rYtId}/mqdefault.jpg` : null)
                 return (
                   <Link key={r.id} href={`/predicas/${r.id}`}
                     className="group block rounded-2xl overflow-hidden transition"

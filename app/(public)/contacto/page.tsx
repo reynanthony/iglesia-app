@@ -1,20 +1,21 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import ContactForm from '@/components/public/ContactForm'
 import { HeroVideo } from '@/components/public/HeroVideo'
-import { cmsSingleton, cmsImageUrl, type DContacto } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { heroStyle } from '@/lib/hero-style'
-import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { HeroTitle } from '@/components/public/HeroTitle'
 
 export const dynamic = 'force-dynamic'
 
 export default async function ContactoPage() {
-  const cms = await cmsSingleton<DContacto>('contacto')
-  const c = cms ?? {} as DContacto
+  const supabase = await createClient()
+  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'contacto').single()
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const address      = c.address      ?? 'Tu dirección aquí, Ciudad, País'
   const phone        = c.phone        ?? '+1 (809) 000-0000'
   const email        = c.email        ?? 'info@elmanantial.org'
-  const schedule     = c.schedule     ?? 'Dom 10AM · Mié 7PM · Vie 7PM'
+  const schedule     = [c.schedule_sun, c.schedule_wed, c.schedule_fri].filter(Boolean).join(' · ') || 'Dom 10AM · Mié 7PM · Vie 7PM'
   const heroEyebrow  = c.hero_eyebrow ?? 'Contacto · Estamos aquí para ti'
   const heroTitle    = c.hero_title   ?? 'Visítanos.'
   const heroSubtitle = c.hero_subtitle ?? 'No importa quién eres ni qué estás viviendo. Eres bienvenido en El Manantial.'
@@ -23,20 +24,13 @@ export default async function ContactoPage() {
   const firstVisitTitle   = c.first_visit_title    ?? '¿Primera visita?'
   const firstVisitSubtitle = c.first_visit_subtitle ?? 'No necesitas saber nada.'
   const firstVisitBody    = c.first_visit_body     ?? 'Solo ven como eres. Nuestro equipo te recibirá con los brazos abiertos.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.65
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
-  const heroLayout         = c.hero_layout ?? 'default'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.65
+  const heroShowGrid       = true
+  const heroTitleAnimation = 'none'
+  const heroLayout: string = 'default'
   const hs = heroStyle({
-    textColor:        c.hero_text_color,
-    bgColor:          c.hero_bg_color,
-    titleSize:        c.hero_title_size,
-    titleColorHex:    c.hero_title_color,
-    accentColorHex:   c.hero_accent_color,
-    subtitleColorHex: c.hero_subtitle_color,
-    eyebrowColorHex:  c.hero_eyebrow_color,
     defaultBg: '#051828',
     defaultTitleSize: 'lg',
   })

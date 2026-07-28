@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, Shield, ShieldAlert,
-  Globe, ArrowLeft, LogOut, Mail, ExternalLink, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
+  Globe, ArrowLeft, LogOut, Mail, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
+  Layers, Church, Calendar, Video, Quote,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean; external?: boolean }
@@ -15,6 +16,16 @@ const FULL_ADMIN_SECTIONS: NavSection[] = [
   {
     label: 'General',
     items: [{ href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true }],
+  },
+  {
+    label: 'Sitio web',
+    items: [
+      { href: '/admin/paginas',      icon: Layers,   label: 'Editor de páginas' },
+      { href: '/admin/ministerios',  icon: Church,   label: 'Ministerios' },
+      { href: '/admin/eventos',      icon: Calendar, label: 'Eventos' },
+      { href: '/admin/predicas',     icon: Video,    label: 'Prédicas' },
+      { href: '/admin/devocionales', icon: Quote,    label: 'Devocionales' },
+    ],
   },
   {
     label: 'Comunidad',
@@ -60,13 +71,11 @@ function liderSections(ministries: { id: string; name: string }[]): NavSection[]
 export default function AdminNav({
   logoutAction,
   unreadMessages = 0,
-  strapiUrl,
   isLider = false,
   liderMinistries = [],
 }: {
   logoutAction: () => Promise<void>
   unreadMessages?: number
-  strapiUrl?: string
   isLider?: boolean
   liderMinistries?: { id: string; name: string }[]
 }) {
@@ -138,17 +147,6 @@ export default function AdminNav({
       </nav>
 
       <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#0D3352' }}>
-        {!isLider && strapiUrl && (
-          <a
-            href={strapiUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: 'rgba(246,243,235,0.68)' }}
-          >
-            <ExternalLink size={14} /> Editar sitio (Directus)
-          </a>
-        )}
         {!isLider && (
           <Link href="/" target="_blank"
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"

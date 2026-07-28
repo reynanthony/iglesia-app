@@ -1,10 +1,12 @@
-﻿import { cmsGet, cmsImageUrl, DEvento } from '@/lib/directus'
+﻿import { createClient } from '@/lib/supabase/server'
 import { deleteEvento } from '@/app/actions/eventos-admin'
 import Link from 'next/link'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 
 export default async function AdminEventosPage() {
-  const eventos = await cmsGet<DEvento>('eventos', { sort: 'fecha_inicio' })
+  const supabase = await createClient()
+  const { data } = await supabase.from('events').select('*').order('fecha_inicio')
+  const eventos = data ?? []
 
   return (
     <div>
@@ -38,7 +40,6 @@ export default async function AdminEventosPage() {
 
         {eventos.map(evento => {
           const fechaStr = evento.fecha_inicio ? evento.fecha_inicio + 'T00:00:00' : null
-          const imgUrl = cmsImageUrl(evento.imagen)
           return (
             <div key={evento.id} className="rounded-2xl border overflow-hidden"
               style={{ borderColor: '#0D3352', background: '#0B2D47' }}>

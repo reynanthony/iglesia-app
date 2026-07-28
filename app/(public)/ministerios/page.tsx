@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { ArrowRight, Users, Baby, Heart, Music, BookOpen, Globe, Church, Flame, Star, HandHeart } from 'lucide-react'
-import { cmsGet, cmsSingleton, cmsImageUrl, type DMinisterio, type DMinisteriosPage } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
-import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { HeroTitle } from '@/components/public/HeroTitle'
 import { heroStyle } from '@/lib/hero-style'
 
 export const revalidate = 60
@@ -31,35 +31,30 @@ const placeholders = [
 ]
 
 export default async function MinisteriosPage() {
-  const [ministerios, cms] = await Promise.all([
-    cmsGet<DMinisterio>('ministerios', { 'filter[status][_eq]': 'published', 'sort': 'name' }),
-    cmsSingleton<DMinisteriosPage>('ministerios_page'),
+  const supabase = await createClient()
+  const [{ data: ministerios }, { data: pageData }] = await Promise.all([
+    supabase.from('ministries').select('*').is('parent_id', null).order('name'),
+    supabase.from('page_content').select('content').eq('page', 'ministerios').single(),
   ])
-  const c = cms ?? {} as DMinisteriosPage
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
-  const heroEyebrow  = c.hero_eyebrow  ?? 'Ministerios · Un lugar para todos'
-  const heroTitle    = c.hero_title    ?? 'Un lugar para todos.'
-  const heroSubtitle = c.hero_subtitle ?? 'Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.70
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroWatermark      = c.hero_watermark ?? null
-  const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
-  const heroLayout         = c.hero_layout ?? 'default'
-  const ctaEyebrow         = c.cta_eyebrow   ?? '— Sírvenos'
-  const ctaTitle           = c.cta_title     ?? '¿Dónde encajas tú?'
-  const ctaLinkLabel       = c.cta_link_label ?? 'Contáctanos'
-  const ctaLinkUrl         = c.cta_link_url   ?? '/contacto'
+  const heroEyebrow      = c.hero_eyebrow      ?? 'Ministerios · Un lugar para todos'
+  const heroTitleMain    = c.hero_title_main   ?? 'Un lugar\npara'
+  const heroTitleAccent  = c.hero_title_accent ?? 'todos.'
+  const heroSubtitle     = c.hero_subtitle     ?? 'Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.'
+  const heroImageUrl     = c.hero_image_url || null
+  const heroVideoUrl     = c.hero_video_url || null
+  const ctaEyebrow       = c.min_cta_eyebrow ?? '— Sírvenos'
+  const ctaTitle         = c.min_cta_title   ?? '¿Dónde encajas tú?'
+  const ctaLinkLabel     = c.min_cta_label   ?? 'Contáctanos'
+  const ctaLinkUrl       = c.min_cta_url     ?? '/contacto'
+
+  const heroOverlayOpacity = 0.70
+  const heroShowGrid       = true
+  const heroWatermark: string | null = null
+  const heroLayout: string   = 'default'
 
   const hs = heroStyle({
-    textColor:        c.hero_text_color,
-    bgColor:          c.hero_bg_color,
-    titleSize:        c.hero_title_size,
-    titleColorHex:    c.hero_title_color,
-    accentColorHex:   c.hero_accent_color,
-    subtitleColorHex: c.hero_subtitle_color,
-    eyebrowColorHex:  c.hero_eyebrow_color,
     defaultBg: '#051828',
     defaultTitleSize: 'xl',
   })
@@ -101,13 +96,16 @@ export default async function MinisteriosPage() {
             </p>
           </div>
           <HeroTitle
-            animation={heroTitleAnimation}
+            animation="none"
             color={hs.titleColor}
             accentColor={hs.accentColor}
             className="font-display font-black leading-[0.85] tracking-tighter mb-8"
             style={{ fontSize: hs.titleFontSize }}
           >
-            {heroTitle}
+            {heroTitleMain.split('\n').map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
+            <em className="block" style={{ color: hs.accentColor }}> {heroTitleAccent}</em>
           </HeroTitle>
           <p className="text-base leading-relaxed max-w-md" style={{ color: hs.subtitleColor }}>
             {heroSubtitle}
@@ -121,11 +119,11 @@ export default async function MinisteriosPage() {
         <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="flex items-center justify-between mb-16 border-b border-edge pb-7">
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3">
-              — {ministerios.length > 0 ? `${ministerios.length} ministerios` : 'Ministerios'}
+              — {ministerios && ministerios.length > 0 ? `${ministerios.length} ministerios` : 'Ministerios'}
             </p>
           </div>
 
-          {ministerios.length === 0 ? (
+          {!ministerios || ministerios.length === 0 ? (
             <div className="py-40 text-center border border-edge rounded-2xl">
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-ink-3 mb-4">Próximamente</p>
               <p className="text-3xl font-black text-ink">Estamos preparando este espacio</p>
@@ -134,7 +132,7 @@ export default async function MinisteriosPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
               {ministerios.map((m, idx) => {
                 const Icon    = getIcon(m.slug ?? '', m.name)
-                const imgUrl  = cmsImageUrl(m.imagen)
+                const imgUrl  = m.image_url
                 const n       = String(idx + 1).padStart(2, '0')
                 return (
                   <Link key={m.id} href={`/ministerios/${m.slug}`} className="group block">

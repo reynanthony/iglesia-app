@@ -1,10 +1,12 @@
-﻿import { cmsGet, cmsImageUrl, DPredica } from '@/lib/directus'
+﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Pencil, Play } from 'lucide-react'
 import DeletePredicaButton from '@/components/admin/DeletePredicaButton'
 
 export default async function AdminPredicasPage() {
-  const predicas = await cmsGet<DPredica>('predicas', { sort: '-id' })
+  const supabase = await createClient()
+  const { data } = await supabase.from('sermons').select('*').order('sermon_date', { ascending: false })
+  const predicas = data ?? []
 
   return (
     <div>
@@ -37,7 +39,7 @@ export default async function AdminPredicasPage() {
         )}
 
         {predicas.map(predica => {
-          const thumbUrl = cmsImageUrl(predica.thumbnail)
+          const thumbUrl = predica.thumbnail_url
           return (
             <div key={predica.id} className="rounded-2xl border overflow-hidden"
               style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
@@ -56,8 +58,8 @@ export default async function AdminPredicasPage() {
                   <p className="font-bold text-white text-sm truncate">{predica.title}</p>
                   <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
                     {predica.speaker ?? '—'} · {predica.series ?? '—'} ·{' '}
-                    {predica.date
-                      ? new Date(predica.date).toLocaleDateString('es-DO', { month: 'short', day: 'numeric', year: 'numeric' })
+                    {predica.sermon_date
+                      ? new Date(predica.sermon_date).toLocaleDateString('es-DO', { month: 'short', day: 'numeric', year: 'numeric' })
                       : '—'}
                   </p>
                 </div>

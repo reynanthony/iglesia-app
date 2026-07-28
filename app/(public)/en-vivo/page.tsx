@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Radio, Clock } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { cmsSingleton, cmsImageUrl, type DEnVivo } from '@/lib/directus'
 import LivePlayer from '@/components/LivePlayer'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
@@ -19,11 +18,9 @@ function getYoutubeId(url?: string | null) {
 }
 
 export default async function EnVivoPage() {
-  const [supabase, cms] = await Promise.all([
-    createClient(),
-    cmsSingleton<DEnVivo>('en_vivo'),
-  ])
-  const c = cms ?? {} as DEnVivo
+  const supabase = await createClient()
+  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'en-vivo').single()
+  const c = (pageData?.content ?? {}) as Record<string, any>
 
   const offlineTitle    = c.offline_title    ?? 'Estamos en *camino.'
   const offlineSubtitle = c.offline_subtitle ?? 'Todos los domingos transmitimos nuestro servicio. Vuelve el próximo domingo para unirte.'
@@ -33,16 +30,16 @@ export default async function EnVivoPage() {
   const ctaEyebrow      = c.cta_eyebrow ?? '— La iglesia es más que una pantalla'
   const ctaTitle        = c.cta_title   ?? 'Conéctate con la *comunidad.'
   const ctaBody         = c.cta_body    ?? 'El stream es el primer paso. La comunidad en línea te permite participar, orar y crecer.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? '#051828'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = '#051828'
 
   const SCHEDULE = [
-    { day: c.schedule_1_day ?? 'Domingo',   time: c.schedule_1_time ?? '10:00 AM', type: c.schedule_1_type ?? 'Servicio principal', live: c.schedule_1_live !== false },
-    { day: c.schedule_2_day ?? 'Miércoles', time: c.schedule_2_time ?? '7:00 PM',  type: c.schedule_2_type ?? 'Estudio bíblico',   live: c.schedule_2_live === true  },
-    { day: c.schedule_3_day ?? 'Viernes',   time: c.schedule_3_time ?? '7:00 PM',  type: c.schedule_3_type ?? 'Noche de oración',  live: c.schedule_3_live === true  },
+    { day: c.schedule_1_day ?? 'Domingo',   time: c.schedule_1_time ?? '10:00 AM', type: c.schedule_1_type ?? 'Servicio principal', live: c.schedule_1_live !== 'false' },
+    { day: c.schedule_2_day ?? 'Miércoles', time: c.schedule_2_time ?? '7:00 PM',  type: c.schedule_2_type ?? 'Estudio bíblico',   live: c.schedule_2_live === 'true'  },
+    { day: c.schedule_3_day ?? 'Viernes',   time: c.schedule_3_time ?? '7:00 PM',  type: c.schedule_3_type ?? 'Noche de oración',  live: c.schedule_3_live === 'true'  },
   ]
 
   let cfg: Record<string, string> = {}

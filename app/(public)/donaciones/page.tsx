@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { ArrowRight, Heart, Shield, ChevronRight, BookOpen, Users } from 'lucide-react'
-import { cmsSingleton, cmsImageUrl, type DDonaciones } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
-import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { HeroTitle } from '@/components/public/HeroTitle'
 import { heroStyle } from '@/lib/hero-style'
 
 export const dynamic = 'force-dynamic'
@@ -13,27 +13,22 @@ const CREAM = '#F6F3EB'
 const SAGE  = '#869B7E'
 
 export default async function DonacionesPage() {
-  const cms = await cmsSingleton<DDonaciones>('donaciones')
-  const c = cms ?? {} as DDonaciones
+  const supabase = await createClient()
+  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'donaciones').single()
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const heroEyebrow  = c.hero_eyebrow   ?? 'Donaciones · Apoyo a la misión'
   const heroTitle    = c.hero_title     ?? 'Da con *alegría.'
   const heroVerse    = c.hero_verse     ?? '"Dios ama al dador alegre." Cada ofrenda es un acto de fe y un voto de confianza en el trabajo que Dios está haciendo a través de esta comunidad.'
   const heroVerseRef = c.hero_verse_ref ?? '— 2 Corintios 9:7'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.65
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroTitleAnimation = (c.hero_title_animation ?? 'none') as TitleAnimation
-  const heroLayout         = c.hero_layout ?? 'default'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.65
+  const heroShowGrid       = true
+  const heroTitleAnimation = 'none'
+  const heroLayout: string = 'default'
 
   const hs = heroStyle({
-    textColor:       c.hero_text_color,
-    bgColor:         c.hero_bg_color,
-    titleSize:       c.hero_title_size,
-    titleColorHex:   c.hero_title_color,
-    accentColorHex:  c.hero_accent_color,
-    eyebrowColorHex: c.hero_eyebrow_color,
     defaultBg: '#051828',
     defaultTitleSize: 'xl',
   })

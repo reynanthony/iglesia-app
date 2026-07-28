@@ -60,7 +60,7 @@ export default function NuevoPredicaPage() {
 
           <div>
             <label className={label} style={labelStyle}>Fecha del mensaje</label>
-            <input name="date" type="date" className={field} style={fieldStyle} />
+            <input name="sermon_date" type="date" className={field} style={fieldStyle} />
           </div>
 
           <div>

@@ -1,7 +1,7 @@
 ﻿import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Calendar, FileText, Megaphone, Play, Video } from 'lucide-react'
-import { cmsGet, cmsById, cmsImageUrl, type DMinisterio, type DMinisterioContenido } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { detectSocialEmbed } from '@/lib/social-embed'
 
 export const revalidate = 60
@@ -20,7 +20,6 @@ function fmtDate(d: string) {
 const TYPE_META: Record<string, { label: string; Icon: typeof FileText }> = {
   articulo:  { label: 'Artículo',   Icon: FileText  },
   video:     { label: 'Video',      Icon: Video     },
-  devocional:{ label: 'Devocional', Icon: FileText  },
   anuncio:   { label: 'Anuncio',    Icon: Megaphone },
 }
 
@@ -30,32 +29,34 @@ export default async function ContentDetailPage({
   params: Promise<{ slug: string; id: string }>
 }) {
   const { slug, id } = await params
+  const supabase = await createClient()
 
-  const [ministries, item] = await Promise.all([
-    cmsGet<DMinisterio>('ministerios', {
-      'filter[slug][_eq]': slug,
-      'filter[status][_eq]': 'published',
-      'limit': '1',
-    }),
-    cmsById<DMinisterioContenido>('ministerio_contenido', id),
-  ])
+  const { data: ministry } = await supabase
+    .from('ministries').select('*').eq('slug', slug).maybeSingle()
+  if (!ministry) notFound()
 
-  const ministry = ministries[0]
-  if (!ministry || !item || item.status !== 'published') notFound()
-  if (item.ministerio !== ministry.id) notFound()
+  const { data: item } = await supabase
+    .from('ministry_content')
+    .select('id, ministry_id, title, body, type, video_url, image_url, pinned, created_at, profiles(full_name)')
+    .eq('id', id)
+    .maybeSingle()
+  if (!item || item.ministry_id !== ministry.id) notFound()
 
-  const displayDate = fmtDate(item.date_published ?? item.date_created)
-  const imgUrl      = cmsImageUrl(item.image)
+  const author      = (item.profiles as unknown as { full_name: string | null } | null)?.full_name ?? null
+  const displayDate = fmtDate(item.created_at)
+  const imgUrl      = item.image_url
   const meta        = TYPE_META[item.type] ?? TYPE_META.articulo
   const embed       = item.video_url ? detectSocialEmbed(item.video_url) : null
 
-  const related = await cmsGet<DMinisterioContenido>('ministerio_contenido', {
-    'filter[ministerio][_eq]': String(ministry.id),
-    'filter[status][_eq]': 'published',
-    'filter[id][_neq]': String(item.id),
-    'sort': '-pinned,-date_published,-date_created',
-    'limit': '3',
-  })
+  const { data: relatedRows } = await supabase
+    .from('ministry_content')
+    .select('id, title, type, created_at, profiles(full_name)')
+    .eq('ministry_id', ministry.id)
+    .neq('id', item.id)
+    .order('pinned', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(3)
+  const related = relatedRows ?? []
 
   return (
     <div>
@@ -86,8 +87,8 @@ export default async function ContentDetailPage({
 
           <div className="flex flex-wrap items-center gap-5 pt-5"
             style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
-            {item.author && (
-              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.86)' }}>{item.author}</p>
+            {author && (
+              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.86)' }}>{author}</p>
             )}
             <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
               <Calendar size={11} />
@@ -139,7 +140,7 @@ export default async function ContentDetailPage({
       <section style={{ background: CREAM, borderBottom: '1px solid #D2CDB8' }}>
         <div className="max-w-2xl mx-auto px-6 py-16 md:py-20">
           {item.body ? (
-            item.body.split('\n\n').map((paragraph, i) =>
+            item.body.split('\n\n').map((paragraph: string, i: number) =>
               paragraph.trim() ? (
                 <p key={i} className="mb-6 text-base leading-relaxed" style={{ color: `${NAVY}85` }}>
                   {paragraph}
@@ -170,7 +171,7 @@ export default async function ContentDetailPage({
                   <h3 className="font-black text-sm tracking-tight leading-tight mb-2 group-hover:opacity-70 transition" style={{ color: NAVY }}>
                     {r.title}
                   </h3>
-                  <p className="text-[10px]" style={{ color: SAGE }}>{r.author ?? ministry.name}</p>
+                  <p className="text-[10px]" style={{ color: SAGE }}>{(r.profiles as unknown as { full_name: string | null } | null)?.full_name ?? ministry.name}</p>
                 </Link>
               ))}
             </div>

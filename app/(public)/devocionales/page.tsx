@@ -1,6 +1,6 @@
 ﻿import Link from 'next/link'
 import { ArrowRight, Quote, BookOpen } from 'lucide-react'
-import { cmsGet, cmsSingleton, cmsImageUrl, type DDevocional, type DDevoccionalesPage } from '@/lib/directus'
+import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 
 export const revalidate = 3600
@@ -17,28 +17,26 @@ function fmtDate(d: string) {
 }
 
 export default async function DevoccionalesPage() {
-  const [devocionales, cms] = await Promise.all([
-    cmsGet<DDevocional>('devocionales', {
-      'filter[status][_eq]': 'published',
-      'sort': '-date_published,-date_created',
-      'limit': '25',
-    }),
-    cmsSingleton<DDevoccionalesPage>('devocionales_page'),
+  const supabase = await createClient()
+  const [{ data: devocionales }, { data: pageData }] = await Promise.all([
+    supabase.from('devocionales').select('*').eq('published', true).order('created_at', { ascending: false }).limit(25),
+    supabase.from('page_content').select('content').eq('page', 'devocionales').single(),
   ])
-  const c = cms ?? {} as DDevoccionalesPage
+  const c = (pageData?.content ?? {}) as Record<string, string>
 
   const heroEyebrow        = c.hero_eyebrow  ?? 'Reflexiones · Devocionales'
   const heroTitle          = c.hero_title    ?? 'Palabra\npara hoy.'
   const heroSubtitle       = c.hero_subtitle ?? 'Reflexiones escritas por nuestros líderes para nutrir tu vida espiritual cada día.'
-  const heroImageUrl       = c.hero_image_url || cmsImageUrl(c.hero_image)
-  const heroVideoUrl       = c.hero_video_url || cmsImageUrl(c.hero_video) || null
-  const heroOverlayOpacity = c.hero_overlay_opacity ?? 0.60
-  const heroShowGrid       = c.hero_show_grid !== false
-  const heroBg             = c.hero_bg_color ?? '#051828'
-  const heroWatermark      = c.hero_watermark ?? 'DEV'
+  const heroImageUrl       = c.hero_image_url || null
+  const heroVideoUrl       = c.hero_video_url || null
+  const heroOverlayOpacity = 0.60
+  const heroShowGrid       = true
+  const heroBg             = '#051828'
+  const heroWatermark      = 'DEV'
 
-  const featured = devocionales[0] ?? null
-  const rest     = devocionales.slice(1)
+  const devos    = devocionales ?? []
+  const featured = devos[0] ?? null
+  const rest     = devos.slice(1)
 
   return (
     <div>
@@ -110,9 +108,9 @@ export default async function DevoccionalesPage() {
               className="group grid grid-cols-1 lg:grid-cols-12 rounded-2xl overflow-hidden border transition"
               style={{ borderColor: '#D2CDB8' }}>
 
-              {cmsImageUrl(featured.image) ? (
+              {featured.image_url ? (
                 <div className="lg:col-span-5 overflow-hidden h-64 lg:h-auto" style={{ minHeight: 280 }}>
-                  <img src={cmsImageUrl(featured.image)!} alt={featured.title}
+                  <img src={featured.image_url!} alt={featured.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                 </div>
               ) : (
@@ -151,7 +149,7 @@ export default async function DevoccionalesPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-[11px] uppercase tracking-wider" style={{ color: SAGE }}>
-                    {featured.author && `${featured.author} · `}{fmtDate(featured.date_published ?? featured.date_created)}
+                    {featured.author && `${featured.author} · `}{fmtDate(featured.created_at)}
                   </p>
                   <span className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl"
                     style={{ background: NAVY, color: CREAM }}>
@@ -177,9 +175,9 @@ export default async function DevoccionalesPage() {
                 <Link key={d.id} href={`/biblia/devocional/${d.id}`}
                   className="group flex flex-col rounded-2xl overflow-hidden transition"
                   style={{ border: '1px solid #D2CDB8', background: CREAM }}>
-                  {cmsImageUrl(d.image) ? (
+                  {d.image_url ? (
                     <div className="overflow-hidden" style={{ height: 160 }}>
-                      <img src={cmsImageUrl(d.image)!} alt={d.title}
+                      <img src={d.image_url!} alt={d.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                     </div>
                   ) : d.verse ? (
@@ -204,7 +202,7 @@ export default async function DevoccionalesPage() {
                     )}
                     <div className="flex items-center justify-between pt-3 mt-auto" style={{ borderTop: '1px solid #D2CDB8' }}>
                       <p className="text-[10px]" style={{ color: SAGE }}>
-                        {fmtDate(d.date_published ?? d.date_created)}
+                        {fmtDate(d.created_at)}
                       </p>
                       <span className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1" style={{ color: TEAL }}>
                         Leer <ArrowRight size={10} />
@@ -218,7 +216,7 @@ export default async function DevoccionalesPage() {
         </section>
       )}
 
-      {devocionales.length === 0 && (
+      {devos.length === 0 && (
         <section style={{ background: CREAM }}>
           <div className="max-w-6xl mx-auto px-6 py-32 text-center">
             <Quote size={36} style={{ color: `${TEAL}40`, margin: '0 auto 16px' }} />

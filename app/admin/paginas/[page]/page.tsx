@@ -4,12 +4,18 @@ import type { Block } from '@/lib/blocks'
 import PageEditorTabs from './PageEditorTabs'
 
 const pagesMeta: Record<string, { label: string; previewPath: string }> = {
-  home:        { label: 'Página de inicio',       previewPath: '/'           },
-  nosotros:    { label: 'Quiénes somos',           previewPath: '/nosotros'   },
-  contacto:    { label: 'Contacto',                previewPath: '/contacto'   },
-  eventos:     { label: 'Eventos',                 previewPath: '/eventos'    },
-  predicas:    { label: 'Prédicas',                previewPath: '/predicas'   },
-  ministerios: { label: 'Ministerios',             previewPath: '/ministerios'},
+  home:         { label: 'Página de inicio',       previewPath: '/'            },
+  nosotros:     { label: 'Quiénes somos',           previewPath: '/nosotros'    },
+  contacto:     { label: 'Contacto',                previewPath: '/contacto'    },
+  eventos:      { label: 'Eventos',                 previewPath: '/eventos'     },
+  predicas:     { label: 'Prédicas',                previewPath: '/predicas'    },
+  ministerios:  { label: 'Ministerios',             previewPath: '/ministerios' },
+  donaciones:   { label: 'Donaciones',              previewPath: '/donaciones'  },
+  oracion:      { label: 'Oración',                 previewPath: '/oracion'     },
+  'en-vivo':    { label: 'En Vivo',                 previewPath: '/en-vivo'     },
+  educacion:    { label: 'Educación',               previewPath: '/educacion'   },
+  publicaciones:{ label: 'Publicaciones',           previewPath: '/publicaciones' },
+  devocionales: { label: 'Devocionales',            previewPath: '/devocionales' },
   'app-feed':  { label: 'App — Banner del feed',   previewPath: '/app/feed'   },
 }
 

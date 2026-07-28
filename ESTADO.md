@@ -8,8 +8,7 @@
 | Capa | Tecnología |
 |------|-----------|
 | Framework | Next.js 16.2.6 (App Router, Turbopack) |
-| Auth + DB comunidad | Supabase (Postgres, Realtime, Storage) |
-| CMS contenido público | Directus (Railway) |
+| Auth + DB + CMS | Supabase (Postgres, Realtime, Storage) — todo el contenido web/app se administra desde `/admin/*` |
 | Audio WebRTC | LiveKit |
 | Estilos | Tailwind CSS v4 |
 | Estado cliente | Zustand |
@@ -23,13 +22,6 @@
 ### Supabase
 - URL: `https://gjftpjaxbguzsifvbxhn.supabase.co`
 - Anon key: en `.env.local` → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
-### Directus CMS (Railway)
-- Panel admin: `https://directus-production-7860.up.railway.app/admin`
-- API URL: `https://directus-production-7860.up.railway.app`
-- Token: en `.env.local` → `STRAPI_API_TOKEN`
-- **Credenciales admin: RECUPERAR** — resetear desde Railway Variables con `ADMIN_EMAIL` + `ADMIN_PASSWORD` y redesplegar
-- Helper en código: `lib/directus.ts` → `cmsSingleton()`, `cmsGet()`, `cmsById()`, `cmsImageUrl()`
 
 ### LiveKit
 - URL: `wss://iglesia-app-nwtiwcs8.livekit.cloud`
@@ -66,29 +58,21 @@ SAGE  = '#869B7E'  → Texto secundario, metadatos
 
 | Ruta | Datos | Estado |
 |------|-------|--------|
-| `/` (Home) | Directus `homepage` + `predicas` | ✅ Completo — Directus + versículo diario |
-| `/nosotros` | Directus `nosotros` + Supabase `church_leaders` | ✅ |
-| `/ministerios` | Directus `ministerios` | ✅ |
-| `/ministerios/[slug]` | Directus `ministerios` + `ministerio_contenido` | ✅ |
-| `/predicas` | Supabase `ministry_content` (tipo articulo/anuncio) | ✅ |
-| `/predicas/[id]` | Supabase `ministry_content` (todos los tipos) | ✅ |
-| `/eventos` | Directus `eventos` | ✅ |
-| `/contacto` | Directus `contacto` + formulario | ✅ |
-| `/en-vivo` | Supabase `ministry_content` tipo video | ✅ |
-| `/educacion` | Estático | ✅ |
-| `/educacion/discipulado` | Estático | ✅ |
-| `/educacion/estudio-biblico` | Estático | ✅ |
+| `/` (Home) | Supabase `page_content` (copy) + `ministry_content` (predicas) | ✅ |
+| `/nosotros` | Supabase `page_content` + `church_leaders` + `ministry_assignments` | ✅ |
+| `/ministerios` | Supabase `ministries` + `page_content` | ✅ |
+| `/ministerios/[slug]` | Supabase `ministries` + `ministry_content` | ✅ |
+| `/predicas` | Supabase `sermons` + `page_content` | ✅ |
+| `/predicas/[id]` | Supabase `sermons` | ✅ |
+| `/eventos` | Supabase `events` + `page_content` | ✅ |
+| `/contacto` | Supabase `page_content` + formulario | ✅ |
+| `/en-vivo` | Supabase `site_config` (live) + `page_content` (copy) | ✅ |
+| `/devocionales`, `/biblia/devocional/[id]` | Supabase `devocionales` + `page_content` | ✅ |
+| `/educacion` | Supabase `page_content` (copy, estático el resto) | ✅ |
 | `/biblia` | Bible API (`BIBLE_API_KEY`) | ✅ |
-| `/donaciones` | Estático | ✅ |
+| `/donaciones` | Supabase `page_content` (copy, estático el resto) | ✅ |
 
-### Colecciones Directus requeridas
-- `homepage` (singleton) — campos en `lib/directus.ts → DHomepage`
-- `nosotros` (singleton) — campos en `lib/directus.ts → DNosotros`
-- `contacto` (singleton) — campos en `lib/directus.ts → DContacto`
-- `ministerios` (collection) — campos en `lib/directus.ts → DMinisterio`
-- `ministerio_contenido` (collection) — campos en `lib/directus.ts → DMinisterioContenido`
-- `predicas` (collection) — campos en `lib/directus.ts → DPredica`
-- `eventos` (collection) — campos en `lib/directus.ts → DEvento`
+Todo el copy editorial de estas páginas se administra desde `/admin/paginas/<pagina>` (editor de campos simple + editor de bloques avanzado). Contenido tipo colección (ministerios, eventos, prédicas, devocionales) tiene su propio CRUD en `/admin/ministerios`, `/admin/eventos`, `/admin/predicas`, `/admin/devocionales`.
 
 ---
 
@@ -135,9 +119,11 @@ SAGE  = '#869B7E'  → Texto secundario, metadatos
 | `/admin/oracion` | ✅ |
 | `/admin/grupos` | ✅ |
 | `/admin/discipulado` | ✅ |
-| `/admin/eventos` | ✅ CRUD → debería migrar a Directus |
-| `/admin/predicas` | ✅ CRUD → debería migrar a Directus |
-| `/admin/ministerios` | ✅ CRUD → debería migrar a Directus |
+| `/admin/eventos` | ✅ CRUD sobre `events` |
+| `/admin/predicas` | ✅ CRUD sobre `sermons` |
+| `/admin/ministerios` | ✅ CRUD sobre `ministries` |
+| `/admin/devocionales` | ✅ CRUD sobre `devocionales` |
+| `/admin/paginas` | ✅ Editor de copy para todas las páginas públicas |
 | `/admin/en-vivo` | ✅ |
 
 ---
@@ -201,10 +187,6 @@ Roles con permiso de publicar en ministerios: `admin | pastor | moderador | lide
 ---
 
 ## Pendiente prioritario (Plan Maestro)
-
-### Inmediato
-- [ ] Recuperar acceso a Directus admin (resetear desde Railway Variables)
-- [ ] Poblar colecciones Directus: `homepage`, `nosotros`, `contacto`, `ministerios`, `predicas`, `eventos`
 
 ### Fase 2 — Comunidad
 - [x] Reacciones espirituales — `toggleReaction` action + `ReactionBar` (inline en PostCard, vertical en ShortsCard)
