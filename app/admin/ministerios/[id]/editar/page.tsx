@@ -4,8 +4,15 @@ import { ArrowLeft } from 'lucide-react'
 import { updateMinistry } from '@/app/actions/ministerios-admin'
 import { notFound } from 'next/navigation'
 
-export default async function EditarMinisterioPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditarMinisterioPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ error?: string }>
+}) {
   const { id } = await params
+  const { error: saveError } = await searchParams
   const supabase = await createClient()
 
   const [{ data: ministry }, { data: parents }] = await Promise.all([
@@ -40,6 +47,12 @@ export default async function EditarMinisterioPage({ params }: { params: Promise
       {/* Form */}
       </div>
       <div className="max-w-3xl mx-auto px-4 md:px-8 py-6">
+        {saveError && (
+          <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium"
+            style={{ background: 'rgba(248,113,113,0.10)', color: '#F87171', border: '1px solid rgba(248,113,113,0.25)' }}>
+            No se pudo guardar. Intenta de nuevo.
+          </div>
+        )}
         <form action={action} encType="multipart/form-data" className="space-y-5">
 
           <div>

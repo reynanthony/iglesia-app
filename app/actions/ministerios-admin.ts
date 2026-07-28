@@ -39,7 +39,7 @@ export async function createMinistry(formData: FormData) {
   let image_url: string | null = null
   if (image && image.size > 0) image_url = await uploadImage(supabase, image)
 
-  await supabase.from('ministries').insert({
+  const { error } = await supabase.from('ministries').insert({
     name,
     slug: toSlug(name),
     description,
@@ -48,6 +48,7 @@ export async function createMinistry(formData: FormData) {
     icon: '⛪',
     color: '#000000',
   })
+  if (error) redirect('/admin/ministerios/nuevo?error=1')
 
   revalidatePath('/admin/ministerios')
   revalidatePath('/ministerios')
@@ -73,7 +74,8 @@ export async function updateMinistry(id: string, formData: FormData) {
     if (url) updates.image_url = url
   }
 
-  await supabase.from('ministries').update(updates).eq('id', id)
+  const { error } = await supabase.from('ministries').update(updates).eq('id', id)
+  if (error) redirect(`/admin/ministerios/${id}/editar?error=1`)
 
   revalidatePath('/admin/ministerios')
   revalidatePath('/ministerios')
@@ -82,7 +84,8 @@ export async function updateMinistry(id: string, formData: FormData) {
 
 export async function deleteMinistry(id: string) {
   const supabase = await getAdminClient()
-  await supabase.from('ministries').delete().eq('id', id)
+  const { error } = await supabase.from('ministries').delete().eq('id', id)
+  if (error) throw error
   revalidatePath('/admin/ministerios')
   revalidatePath('/ministerios')
 }

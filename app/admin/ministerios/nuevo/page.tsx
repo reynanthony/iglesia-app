@@ -6,9 +6,9 @@ import { createMinistry } from '@/app/actions/ministerios-admin'
 export default async function NuevoMinisterioPage({
   searchParams,
 }: {
-  searchParams: Promise<{ parent?: string }>
+  searchParams: Promise<{ parent?: string; error?: string }>
 }) {
-  const { parent } = await searchParams
+  const { parent, error } = await searchParams
   const supabase = await createClient()
   const { data: parents } = await supabase
     .from('ministries')
@@ -40,6 +40,12 @@ export default async function NuevoMinisterioPage({
       {/* Form */}
       </div>
       <div className="max-w-3xl mx-auto px-4 md:px-8 py-6">
+        {error && (
+          <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium"
+            style={{ background: 'rgba(248,113,113,0.10)', color: '#F87171', border: '1px solid rgba(248,113,113,0.25)' }}>
+            No se pudo crear el ministerio. Intenta de nuevo.
+          </div>
+        )}
         <form action={createMinistry} encType="multipart/form-data" className="space-y-5">
 
           <div>
