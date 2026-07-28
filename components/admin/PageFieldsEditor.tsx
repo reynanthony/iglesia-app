@@ -627,9 +627,14 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
       // Auto-save only this field — don't touch other fields
       setStatus('saving')
       startTransition(async () => {
-        const result = await savePageFields(page, { [key]: url })
-        setStatus(result?.error ? 'error' : 'saved')
-        if (result?.error) setErrorMsg(result.error)
+        try {
+          const result = await savePageFields(page, { [key]: url })
+          setStatus(result?.error ? 'error' : 'saved')
+          if (result?.error) setErrorMsg(result.error)
+        } catch (e) {
+          setStatus('error')
+          setErrorMsg(e instanceof Error ? e.message : 'No se pudo conectar con el servidor')
+        }
       })
     } catch {
       setUploadError(prev => ({ ...prev, [key]: 'Error al subir. Intenta de nuevo.' }))
@@ -643,9 +648,14 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
     // Auto-save only this field when user pastes/types a URL and leaves
     setStatus('saving')
     startTransition(async () => {
-      const result = await savePageFields(page, { [key]: val })
-      setStatus(result?.error ? 'error' : 'saved')
-      if (result?.error) setErrorMsg(result.error)
+      try {
+        const result = await savePageFields(page, { [key]: val })
+        setStatus(result?.error ? 'error' : 'saved')
+        if (result?.error) setErrorMsg(result.error)
+      } catch (e) {
+        setStatus('error')
+        setErrorMsg(e instanceof Error ? e.message : 'No se pudo conectar con el servidor')
+      }
     })
   }
 
@@ -665,12 +675,17 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
           }
         })
       )
-      const result = await savePageFields(page, fields)
-      if (result?.error) {
+      try {
+        const result = await savePageFields(page, fields)
+        if (result?.error) {
+          setStatus('error')
+          setErrorMsg(result.error)
+        } else {
+          setStatus('saved')
+        }
+      } catch (e) {
         setStatus('error')
-        setErrorMsg(result.error)
-      } else {
-        setStatus('saved')
+        setErrorMsg(e instanceof Error ? e.message : 'No se pudo conectar con el servidor')
       }
     })
   }
@@ -786,9 +801,14 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                               handleChange(field.key, '')
                               setStatus('saving')
                               startTransition(async () => {
-                                const result = await savePageFields(page, { [field.key]: null })
-                                setStatus(result?.error ? 'error' : 'saved')
-                                if (result?.error) setErrorMsg(result.error)
+                                try {
+                                  const result = await savePageFields(page, { [field.key]: null })
+                                  setStatus(result?.error ? 'error' : 'saved')
+                                  if (result?.error) setErrorMsg(result.error)
+                                } catch (e) {
+                                  setStatus('error')
+                                  setErrorMsg(e instanceof Error ? e.message : 'No se pudo conectar con el servidor')
+                                }
                               })
                             }}
                             className="flex items-center justify-center w-10 rounded-xl flex-shrink-0 transition"
