@@ -80,12 +80,12 @@ export default function LiveChatBox({
                   </p>
                 )}
                 <div className="px-3 py-2 rounded-2xl text-[13px] leading-snug"
-                  style={{
-                    background: isMe ? '#76ABAE' : '#0B2D47',
-                    color:      isMe ? '#061E30' : '#F6F3EB',
-                    borderBottomRightRadius: isMe ? 4 : 16,
-                    borderBottomLeftRadius:  isMe ? 16 : 4,
-                  }}>
+                  style={isMe
+                    ? { background: '#76ABAE', color: '#061E30', borderBottomRightRadius: 4 }
+                    : {
+                        background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.08)', color: '#F6F3EB', borderBottomLeftRadius: 4,
+                      }}>
                   {m.text}
                 </div>
               </div>
@@ -97,7 +97,7 @@ export default function LiveChatBox({
 
       {/* Input */}
       <div className="flex items-center gap-2 px-3 py-3"
-        style={{ borderTop: '1px solid #0D3352' }}>
+        style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
         <input
           id="chat-input"
           name="message"
@@ -109,8 +109,10 @@ export default function LiveChatBox({
           maxLength={300}
           className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
           style={{
-            background: '#0B2D47',
-            border: '1px solid #0D3352',
+            background: 'rgba(255,255,255,0.06)',
+            backdropFilter: 'blur(14px) saturate(150%)',
+            border: '1px solid rgba(255,255,255,0.10)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
             borderRadius: 20,
             padding: '8px 14px',
             color: '#F6F3EB',
@@ -119,8 +121,11 @@ export default function LiveChatBox({
         <button onClick={send} disabled={!input.trim()}
           aria-label="Enviar mensaje"
           className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-          style={{ background: '#76ABAE' }}>
-          <Send size={14} style={{ color: '#061E30' }} aria-hidden="true" />
+          style={{
+            background: 'rgba(118,171,174,0.28)', backdropFilter: 'blur(14px) saturate(160%)',
+            border: '1px solid rgba(118,171,174,0.5)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)',
+          }}>
+          <Send size={14} style={{ color: '#fff' }} aria-hidden="true" />
         </button>
       </div>
     </div>

@@ -2,8 +2,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
-import LiveChatBox from '@/components/app/LiveChatBox'
-import LivePlayer from '@/components/LivePlayer'
+import LiveVideoChat from '@/components/app/LiveVideoChat'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
@@ -76,30 +75,12 @@ export default async function EnVivoPage() {
           <p className="font-black text-lg truncate max-w-full" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
         </div>
 
-        {/* Responsive split: video top, chat bottom on mobile; side by side on desktop */}
-        <div className="flex flex-col md:flex-row flex-1" style={{ minHeight: 0 }}>
-
-          {/* Video player */}
-          <div className="md:flex-1 bg-black">
-            {liveUrl
-              ? <LivePlayer url={liveUrl} title={liveTitle} />
-              : <div className="flex items-center justify-center py-20">
-                  <Radio size={24} style={{ color: '#76ABAE', opacity: 0.4 }} />
-                </div>
-            }
-          </div>
-
-          {/* Live chat */}
-          <div className="flex flex-col md:w-80 md:border-l" style={{ borderColor: '#0D3352', minHeight: 320 }}>
-            <div className="px-4 py-3 flex-shrink-0" style={{ borderBottom: '1px solid #0D3352' }}>
-              <p className="text-[11px] font-black uppercase tracking-wider"
-                style={{ color: 'rgba(118,171,174,0.60)' }}>Chat del culto</p>
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <LiveChatBox currentUserId={user.id} currentProfile={currentProfile} />
-            </div>
-          </div>
-        </div>
+        <LiveVideoChat
+          liveUrl={liveUrl}
+          liveTitle={liveTitle}
+          currentUserId={user.id}
+          currentProfile={currentProfile}
+        />
 
         {/* Oración en vivo */}
         <div className="px-4 py-4" style={{ borderTop: '1px solid #0D3352' }}>

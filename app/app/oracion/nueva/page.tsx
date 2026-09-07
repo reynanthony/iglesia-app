@@ -1,15 +1,44 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPrayerRequest } from '@/app/actions/prayer'
-import { ArrowLeft, Flame, Lock, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Flame, Lock, AlertCircle, Heart, Headphones, Sparkles, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 const ORANGE = '#E89563'
+const RED    = '#E37B85'
+const GREEN  = '#6FBF8B'
+const AMBER  = '#E3A94C'
+const PURPLE = '#A99BD1'
+
+// Atajos reales: tocar uno sugiere un punto de partida para el título,
+// no son solo decoración — ahorran escritura en el momento más difícil.
+const TOPICS = [
+  { icon: Heart,       label: 'Salud y sanidad',     color: RED },
+  { icon: Headphones,  label: 'Paz interior',        color: GREEN },
+  { icon: Sparkles,    label: 'Gratitud',            color: AMBER },
+  { icon: Zap,         label: 'Fortaleza y guía',    color: PURPLE },
+]
+
+const WAVE_COLORS = [GREEN, AMBER, PURPLE, RED]
+const WAVE_HEIGHTS = [10, 20, 14, 26, 18, 24, 12, 20, 9, 16]
 
 export default function NuevaPeticionPage() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState<string | null>(null)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState<string | null>(null)
+  const [titleValue, setTitleValue] = useState('')
+  const [greeting, setGreeting] = useState('Hola')
+  const titleRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const h = new Date().getHours()
+    setGreeting(h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches')
+  }, [])
+
+  function pickTopic(label: string) {
+    setTitleValue(label)
+    titleRef.current?.focus()
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -28,7 +57,7 @@ export default function NuevaPeticionPage() {
     <div style={{ background: '#061E30', minHeight: '100%' }}>
       <div className="max-w-2xl mx-auto px-4 py-6">
 
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-3 mb-1">
           <Link href="/app/oracion"
             className="p-2.5 rounded-full transition"
             style={{ background: 'rgba(255,255,255,0.06)', color: '#76ABAE' }}>
@@ -39,33 +68,79 @@ export default function NuevaPeticionPage() {
           </p>
         </div>
 
-        {/* ── Esfera — centro visual, un solo tono cálido, sin arcoíris ── */}
-        <div className="flex flex-col items-center py-6">
-          <div
-            className="rounded-full flex items-center justify-center"
+        {/* ── Esfera con atajos de tema reales alrededor ── */}
+        <div className="relative flex flex-col items-center pt-3 pb-2">
+          <span
+            className="inline-flex items-center gap-1.5 text-[10.5px] font-bold px-3 py-1.5 rounded-full mb-4"
             style={{
-              width: 108, height: 108,
-              background: `radial-gradient(circle at 32% 28%, #F2B98A, ${ORANGE} 55%, #D67D48 100%)`,
-              boxShadow: `0 0 44px 6px ${ORANGE}55, 0 0 90px 20px ${ORANGE}22`,
+              background: `${AMBER}24`, backdropFilter: 'blur(12px) saturate(160%)',
+              border: `1px solid ${AMBER}45`, color: '#F6F3EB',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
             }}
           >
+            {greeting}
+          </span>
+
+          <div className="relative flex items-center justify-center" style={{ width: 240, height: 180 }}>
+            {TOPICS.map((t, i) => {
+              const angle = [225, 315, 135, 45][i]
+              const rad = (angle * Math.PI) / 180
+              const x = Math.cos(rad) * 92
+              const y = Math.sin(rad) * 68
+              const TIcon = t.icon
+              return (
+                <button
+                  key={t.label}
+                  type="button"
+                  onClick={() => pickTopic(t.label)}
+                  title={t.label}
+                  className="absolute w-9 h-9 rounded-full flex items-center justify-center transition active:scale-90"
+                  style={{
+                    left: `calc(50% + ${x}px - 18px)`, top: `calc(50% + ${y}px - 18px)`,
+                    background: `${t.color}26`, backdropFilter: 'blur(14px) saturate(160%)',
+                    border: `1px solid ${t.color}55`, color: '#fff',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)',
+                  }}
+                >
+                  <TIcon size={16} />
+                </button>
+              )
+            })}
+
             <div
               className="rounded-full flex items-center justify-center"
-              style={{ width: 82, height: 82, background: 'radial-gradient(circle at 40% 35%, #2a1a10, #0d0805 75%)' }}
+              style={{
+                width: 108, height: 108,
+                background: `radial-gradient(circle at 32% 28%, #F2B98A, ${ORANGE} 55%, #D67D48 100%)`,
+                boxShadow: `0 0 44px 6px ${ORANGE}55, 0 0 90px 20px ${ORANGE}22`,
+              }}
             >
-              <Flame size={30} color={ORANGE} style={{ filter: `drop-shadow(0 0 8px ${ORANGE}99)` }} />
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{ width: 82, height: 82, background: 'radial-gradient(circle at 40% 35%, #2a1a10, #0d0805 75%)' }}
+              >
+                <Flame size={30} color={ORANGE} style={{ filter: `drop-shadow(0 0 8px ${ORANGE}99)` }} />
+              </div>
             </div>
           </div>
-          <h1 className="font-black tracking-tighter text-center mt-5"
+
+          <h1 className="font-black tracking-tighter text-center mt-1"
             style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', lineHeight: 1.15, color: '#F6F3EB' }}>
             ¿Qué necesitas<br />hoy?
           </h1>
           <p className="text-sm text-center mt-2 max-w-xs" style={{ color: 'rgba(246,243,235,0.60)' }}>
-            Cuéntanos qué llevas en el corazón y la comunidad orará contigo.
+            Toca un tema para empezar, o escribe lo que llevas en el corazón.
           </p>
+
+          {/* Onda decorativa — mismo lenguaje visual del mockup, sin pretender ser audio real */}
+          <div className="flex items-end justify-center gap-[3px] h-7 mt-4" aria-hidden="true">
+            {WAVE_HEIGHTS.map((h, i) => (
+              <span key={i} className="w-[3px] rounded-full" style={{ height: h, background: WAVE_COLORS[i % WAVE_COLORS.length], opacity: 0.7 }} />
+            ))}
+          </div>
         </div>
 
-        <div className="rounded-3xl p-6 space-y-5"
+        <div className="rounded-3xl p-6 space-y-5 mt-4"
           style={{
             background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(18px) saturate(150%)',
             border: '1px solid rgba(255,255,255,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
@@ -77,7 +152,8 @@ export default function NuevaPeticionPage() {
                 style={{ color: 'rgba(246,243,235,0.70)' }}>
                 ¿Por qué necesitas oración? *
               </label>
-              <input name="title" type="text" required maxLength={120}
+              <input ref={titleRef} name="title" type="text" required maxLength={120}
+                value={titleValue} onChange={e => setTitleValue(e.target.value)}
                 placeholder="Ej: Sanidad para mi familia"
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition placeholder:opacity-40"
                 style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: '#F6F3EB' }} />
