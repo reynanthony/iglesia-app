@@ -72,7 +72,10 @@ export default async function OracionPage({
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: '#0D3352' }}>
+                style={{
+                  background: 'rgba(118,171,174,0.16)', backdropFilter: 'blur(12px) saturate(160%)',
+                  border: '1px solid rgba(118,171,174,0.3)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
+                }}>
                 <Flame size={18} style={{ color: '#76ABAE' }} />
               </div>
               <h1 className="font-black tracking-tighter"
@@ -86,7 +89,7 @@ export default async function OracionPage({
             </div>
             <Link href="/app/oracion/nueva"
               className="flex-shrink-0 flex items-center gap-2 text-sm font-black uppercase tracking-wider px-5 py-3 rounded-xl transition"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: '#F6F3EB', color: '#061E30', boxShadow: '0 10px 22px -8px rgba(0,0,0,0.5)' }}>
               <Plus size={14} /> Nueva
             </Link>
           </div>
