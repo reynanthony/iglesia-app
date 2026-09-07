@@ -53,12 +53,15 @@ export default async function EnVivoPage() {
 
   if (isLive) {
     return (
-      <div style={{ background: '#061E30', minHeight: '100%' }}>
+      <div className="flex flex-col" style={{ background: '#061E30', height: '100%' }}>
 
-        {/* Live badge header */}
-        <div className="flex items-center gap-3 px-4 py-3"
-          style={{ borderBottom: '1px solid #0D3352' }}>
-          <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full"
+        {/* Hero — franja centrada con degradado, como una portada de transmisión */}
+        <div className="relative overflow-hidden flex flex-col items-center text-center px-4 py-6"
+          style={{
+            background: 'radial-gradient(ellipse 130% 100% at 50% 0%, rgba(227,123,133,0.16), transparent 65%), linear-gradient(180deg, #0c3757 0%, #061E30 100%)',
+            borderBottom: '1px solid rgba(255,255,255,0.08)',
+          }}>
+          <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full mb-2.5"
             style={{
               background: 'rgba(227,123,133,0.24)', backdropFilter: 'blur(12px) saturate(160%)',
               color: '#F2A3AC', border: '1px solid rgba(227,123,133,0.4)',
@@ -67,11 +70,14 @@ export default async function EnVivoPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
             En vivo
           </span>
-          <p className="font-bold text-sm truncate" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: 'rgba(246,243,235,0.50)' }}>
+            Transmitiendo desde
+          </p>
+          <p className="font-black text-lg truncate max-w-full" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
         </div>
 
         {/* Responsive split: video top, chat bottom on mobile; side by side on desktop */}
-        <div className="flex flex-col md:flex-row" style={{ height: 'calc(100% - 57px)' }}>
+        <div className="flex flex-col md:flex-row flex-1" style={{ minHeight: 0 }}>
 
           {/* Video player */}
           <div className="md:flex-1 bg-black">
