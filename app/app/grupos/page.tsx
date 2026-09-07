@@ -15,6 +15,19 @@ const TYPE_LABELS: Record<string, string> = {
   general:     'General',
 }
 
+// Un acento de color por tipo de grupo — para que la lista se pueda escanear
+// por categoría de un vistazo, en vez de que cada fila sea idéntica.
+const TYPE_COLOR: Record<string, string> = {
+  jovenes:     '#76ABAE',
+  caballeros:  '#60A5FA',
+  damas:       '#F472B6',
+  matrimonios: '#C084FC',
+  evangelismo: '#F59E0B',
+  intercesion: '#4ADE80',
+  alabanza:    '#F87171',
+  general:     'rgba(246,243,235,0.45)',
+}
+
 export default async function GruposPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -123,9 +136,8 @@ export default async function GruposPage() {
         {/* Mis grupos */}
         {myGroups.length > 0 && (
           <section>
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>Mis grupos</p>
-            <div className="space-y-2">
+            <h2 className="font-display font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Mis grupos</h2>
+            <div className="border-t" style={{ borderColor: '#0D3352' }}>
               {myGroups.map((g: any) => <GroupRow key={g.id} group={g} joined />)}
             </div>
           </section>
@@ -134,9 +146,8 @@ export default async function GruposPage() {
         {/* Grupos públicos disponibles */}
         {publicOther.length > 0 && (
           <section>
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>Explorar grupos</p>
-            <div className="space-y-2">
+            <h2 className="font-display font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Explorar grupos</h2>
+            <div className="border-t" style={{ borderColor: '#0D3352' }}>
               {publicOther.map((g: any) => <GroupRow key={g.id} group={g} joined={false} />)}
             </div>
           </section>
@@ -165,32 +176,28 @@ export default async function GruposPage() {
 function GroupRow({ group, joined }: { group: any; joined: boolean }) {
   const count = group.group_members?.[0]?.count ?? 0
   const type  = TYPE_LABELS[group.type] ?? group.type
+  const color = TYPE_COLOR[group.type] ?? '#76ABAE'
 
   return (
-    <div className="flex items-center gap-3 p-4 rounded-2xl"
-      style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-      <Link href={`/app/grupos/${group.id}`} className="flex-1 flex items-center gap-3 min-w-0">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: '#0D3352' }}>
-          <UsersRound size={18} style={{ color: '#76ABAE' }} />
+    <div className="flex items-center gap-4 py-4 border-b" style={{ borderColor: '#0D3352' }}>
+      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} aria-hidden="true" />
+
+      <Link href={`/app/grupos/${group.id}`} className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5">
+          <p className="font-display font-bold text-base truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
+          {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.62)', flexShrink: 0 }} />}
         </div>
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <p className="font-black text-sm truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
-            {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.62)', flexShrink: 0 }} />}
-          </div>
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[11px]" style={{ color: 'rgba(118,171,174,0.70)' }}>{type}</span>
-            <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{count} miembros</span>
-          </div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-[11px] font-bold uppercase tracking-[0.08em]" style={{ color }}>{type}</span>
+          <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
+          <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{count} miembros</span>
         </div>
       </Link>
 
       {joined && (
         <form action={leaveGroup.bind(null, group.id)}>
-          <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl"
-            style={{ background: '#0D3352', color: 'rgba(246,243,235,0.50)', border: '1px solid #1A4A6E' }}>
+          <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl transition hover:bg-white/5"
+            style={{ color: 'rgba(246,243,235,0.50)', border: '1px solid #1A4A6E' }}>
             Salir
           </button>
         </form>

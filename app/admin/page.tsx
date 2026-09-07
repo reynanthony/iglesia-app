@@ -94,40 +94,37 @@ export default async function AdminPage() {
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-      <div className="relative mb-8 pb-6 border-b overflow-hidden" style={{ borderColor: '#0D3352' }}>
-        {/* Textura sutil — la misma retícula que usan las secciones hero del sitio público */}
-        <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 64px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 64px)' }} />
-        <div className="relative flex items-center gap-4 mb-2">
-          <div className="w-8 h-px" style={{ background: '#76ABAE' }} />
-          <p className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: '#76ABAE' }}>Panel Admin</p>
-        </div>
-        <h1 className="relative font-display text-3xl md:text-4xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
-        <p className="relative text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
+      <div className="mb-8">
+        <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
+        <p className="text-sm mt-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4 mb-5 md:mb-8">
-        {stats.map(({ label, value, icon: Icon, iconColor, bgColor, change }) => (
-          <div key={label} className="rounded-xl md:rounded-2xl p-3 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <div className="flex items-start justify-between mb-2 md:mb-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={{ background: bgColor }}>
-                <Icon size={15} style={{ color: iconColor }} />
-              </div>
+      {/* Stats — una sola franja con reglas finas entre valores, no seis tarjetas idénticas */}
+      <div className="flex flex-wrap mb-8 md:mb-10 border-t border-b" style={{ borderColor: '#0D3352' }}>
+        {stats.map(({ label, value, icon: Icon, iconColor, change }, i) => (
+          <div
+            key={label}
+            className="flex-1 min-w-[9.5rem] py-4 md:py-6 px-4 md:px-6"
+            style={{ borderLeft: i > 0 ? '1px solid #0D3352' : 'none' }}
+          >
+            <div className="flex items-center gap-1.5 mb-2">
+              <Icon size={12} style={{ color: iconColor }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: 'rgba(246,243,235,0.55)' }}>{label}</p>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <p className="font-display text-2xl md:text-[2rem] font-black tracking-tight" style={{ color: '#F6F3EB' }}>
+                {value.toLocaleString()}
+              </p>
               {change && (
                 <span
-                  className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded-full"
-                  style={change.positive
-                    ? { color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }
-                    : { color: '#F87171', background: 'rgba(248,113,113,0.10)' }}
+                  className="text-[11px] font-bold"
+                  style={{ color: change.positive ? '#4ADE80' : '#F87171' }}
                   title="Comparado con los 7 días anteriores"
                 >
-                  {change.label}
+                  {change.positive ? '↑' : '↓'} {change.label.replace(/^[+-]/, '')}
                 </span>
               )}
             </div>
-            <p className="text-xl md:text-3xl font-bold" style={{ color: '#F6F3EB' }}>{value.toLocaleString()}</p>
-            <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</p>
           </div>
         ))}
       </div>
@@ -143,10 +140,7 @@ export default async function AdminPage() {
 
         {/* Usuarios recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <div className="flex items-center gap-2.5 mb-3 md:mb-4">
-            <span className="text-[10px] font-black tracking-[0.1em]" style={{ color: '#76ABAE' }}>01</span>
-            <h2 className="font-display font-bold text-[15px]" style={{ color: '#F6F3EB' }}>Usuarios recientes</h2>
-          </div>
+          <h2 className="font-display font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Usuarios recientes</h2>
           <div className="space-y-3">
             {recentUsers?.map((u: any) => {
               const badge = roleBadge(u.role)
@@ -176,10 +170,7 @@ export default async function AdminPage() {
 
         {/* Posts recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <div className="flex items-center gap-2.5 mb-3 md:mb-4">
-            <span className="text-[10px] font-black tracking-[0.1em]" style={{ color: '#76ABAE' }}>02</span>
-            <h2 className="font-display font-bold text-[15px]" style={{ color: '#F6F3EB' }}>Publicaciones recientes</h2>
-          </div>
+          <h2 className="font-display font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Publicaciones recientes</h2>
           <div className="space-y-3">
             {recentPosts?.map((p: any) => (
               <div key={p.id} className="flex items-start gap-3">
