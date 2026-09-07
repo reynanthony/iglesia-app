@@ -50,7 +50,7 @@ export default async function GruposPage() {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: '#0D3352' }}>
             <UsersRound size={18} style={{ color: '#76ABAE' }} />
           </div>
-          <h1 className="font-black tracking-tighter"
+          <h1 className="font-display font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Grupos<br /><span style={{ color: '#76ABAE' }}>de Comunidad.</span>
           </h1>

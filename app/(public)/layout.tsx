@@ -45,7 +45,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <div className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: '#0D3352' }}>
               <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
-            <span className="font-black text-[15px] tracking-tight" style={{ color: '#F6F3EB' }}>
+            <span className="font-display font-black text-[16px] tracking-tight" style={{ color: '#F6F3EB' }}>
               El Manantial
             </span>
           </Link>
@@ -73,7 +73,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: '#0D3352' }}>
                   <Cross size={13} strokeWidth={2.5} style={{ color: '#F6F3EB' }} />
                 </div>
-                <span className="font-black text-base tracking-tight">El Manantial</span>
+                <span className="font-display font-black text-base tracking-tight">El Manantial</span>
               </div>
               <p className="text-[#FFFFFF]/68 text-sm leading-relaxed max-w-xs mb-8">
                 Una comunidad de fe comprometida con el crecimiento espiritual y el servicio a nuestra ciudad.

@@ -45,7 +45,7 @@ export default async function SalasPage() {
                   </div>
                 )}
               </div>
-              <h1 className="font-black tracking-tighter"
+              <h1 className="font-display font-black tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
                 Salas de<br /><span style={{ color: '#76ABAE' }}>Oración.</span>
               </h1>

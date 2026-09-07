@@ -156,12 +156,14 @@ export default function LoginPage() {
 
       {/* ── PANEL DERECHO — formulario ── */}
       <div
-        className="flex-[3] lg:flex-none lg:w-1/2 flex items-center justify-center px-6 py-4 lg:py-16"
+        className="flex-[3] lg:flex-none lg:w-1/2 overflow-y-auto"
         style={{ background: '#FAFAFA' }}
       >
-        <Suspense fallback={null}>
-          <LoginForm />
-        </Suspense>
+        <div className="min-h-full flex items-center justify-center px-6 py-8 lg:py-16">
+          <Suspense fallback={null}>
+            <LoginForm />
+          </Suspense>
+        </div>
       </div>
     </main>
   )

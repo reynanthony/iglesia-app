@@ -161,12 +161,18 @@ export default function RegistroPage() {
         eyebrow="Únete a la comunidad"
       />
 
-      {/* ── PANEL DERECHO — formulario ── */}
+      {/* ── PANEL DERECHO — formulario ──
+          overflow-y-auto vive en este div (no flex), y el centrado vertical
+          vive en el hijo con min-h-full: así, si el formulario es más alto
+          que la pantalla, se puede hacer scroll completo sin que el
+          centrado de flexbox recorte la parte superior del contenido. */}
       <div
-        className="flex-[3] lg:flex-none lg:w-1/2 flex items-center justify-center px-6 py-4 lg:py-16 overflow-y-auto"
+        className="flex-[3] lg:flex-none lg:w-1/2 overflow-y-auto"
         style={{ background: '#FAFAFA' }}
       >
-        <RegistroForm />
+        <div className="min-h-full flex items-center justify-center px-6 py-8 lg:py-16">
+          <RegistroForm />
+        </div>
       </div>
     </main>
   )

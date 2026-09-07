@@ -51,7 +51,7 @@ export default async function MentoriaPage() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
-          <h1 className="font-black tracking-tighter mb-1"
+          <h1 className="font-display font-black tracking-tighter mb-1"
             style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: '#F6F3EB' }}>
             Mis discípulos.
           </h1>

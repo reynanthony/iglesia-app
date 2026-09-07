@@ -60,7 +60,7 @@ export default function BuscarPage() {
           <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3" style={{ color: 'rgba(246,243,235,0.68)' }}>
             — Comunidad
           </p>
-          <h1 className="font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
+          <h1 className="font-display font-black tracking-tighter" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Buscar personas.
           </h1>
         </div>

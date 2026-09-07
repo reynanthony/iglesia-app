@@ -94,10 +94,16 @@ export default async function AdminPage() {
   return (
     <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-      <div className="mb-8">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-1.5" style={{ color: '#76ABAE' }}>Panel Admin</p>
-        <h1 className="font-display text-3xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
-        <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
+      <div className="relative mb-8 pb-6 border-b overflow-hidden" style={{ borderColor: '#0D3352' }}>
+        {/* Textura sutil — la misma retícula que usan las secciones hero del sitio público */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 64px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 64px)' }} />
+        <div className="relative flex items-center gap-4 mb-2">
+          <div className="w-8 h-px" style={{ background: '#76ABAE' }} />
+          <p className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: '#76ABAE' }}>Panel Admin</p>
+        </div>
+        <h1 className="relative font-display text-3xl md:text-4xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
+        <p className="relative text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
       </div>
 
       {/* Stats grid */}
@@ -137,7 +143,10 @@ export default async function AdminPage() {
 
         {/* Usuarios recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-semibold mb-3 md:mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Usuarios recientes</h2>
+          <div className="flex items-center gap-2.5 mb-3 md:mb-4">
+            <span className="text-[10px] font-black tracking-[0.1em]" style={{ color: '#76ABAE' }}>01</span>
+            <h2 className="font-display font-bold text-[15px]" style={{ color: '#F6F3EB' }}>Usuarios recientes</h2>
+          </div>
           <div className="space-y-3">
             {recentUsers?.map((u: any) => {
               const badge = roleBadge(u.role)
@@ -167,7 +176,10 @@ export default async function AdminPage() {
 
         {/* Posts recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-semibold mb-3 md:mb-4 text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>Publicaciones recientes</h2>
+          <div className="flex items-center gap-2.5 mb-3 md:mb-4">
+            <span className="text-[10px] font-black tracking-[0.1em]" style={{ color: '#76ABAE' }}>02</span>
+            <h2 className="font-display font-bold text-[15px]" style={{ color: '#F6F3EB' }}>Publicaciones recientes</h2>
+          </div>
           <div className="space-y-3">
             {recentPosts?.map((p: any) => (
               <div key={p.id} className="flex items-start gap-3">

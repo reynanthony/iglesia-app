@@ -116,7 +116,7 @@ export default async function EnVivoPage() {
             style={{ background: '#0D3352' }}>
             <Radio size={18} style={{ color: '#76ABAE' }} />
           </div>
-          <h1 className="font-black tracking-tighter"
+          <h1 className="font-display font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Iglesia<br /><span style={{ color: '#76ABAE' }}>en Vivo.</span>
           </h1>
