@@ -116,7 +116,7 @@ export default async function PastoralRoomPage() {
                 </Link>
               )}
             </div>
-            <h1 className="font-display font-black tracking-tighter leading-none mb-4"
+            <h1 className="font-black tracking-tighter leading-none mb-4"
               style={{ fontSize: 'clamp(2.2rem, 8vw, 3rem)' }}>
               {pastor?.name ?? 'El Pastor'}
             </h1>

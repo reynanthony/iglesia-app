@@ -63,7 +63,7 @@ export default async function GruposPage() {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: '#0D3352' }}>
             <UsersRound size={18} style={{ color: '#76ABAE' }} />
           </div>
-          <h1 className="font-display font-black tracking-tighter"
+          <h1 className="font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Grupos<br /><span style={{ color: '#76ABAE' }}>de Comunidad.</span>
           </h1>
@@ -136,7 +136,7 @@ export default async function GruposPage() {
         {/* Mis grupos */}
         {myGroups.length > 0 && (
           <section>
-            <h2 className="font-display font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Mis grupos</h2>
+            <h2 className="font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Mis grupos</h2>
             <div className="border-t" style={{ borderColor: '#0D3352' }}>
               {myGroups.map((g: any) => <GroupRow key={g.id} group={g} joined />)}
             </div>
@@ -146,7 +146,7 @@ export default async function GruposPage() {
         {/* Grupos públicos disponibles */}
         {publicOther.length > 0 && (
           <section>
-            <h2 className="font-display font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Explorar grupos</h2>
+            <h2 className="font-bold text-xl mb-1" style={{ color: '#F6F3EB' }}>Explorar grupos</h2>
             <div className="border-t" style={{ borderColor: '#0D3352' }}>
               {publicOther.map((g: any) => <GroupRow key={g.id} group={g} joined={false} />)}
             </div>
@@ -184,7 +184,7 @@ function GroupRow({ group, joined }: { group: any; joined: boolean }) {
 
       <Link href={`/app/grupos/${group.id}`} className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <p className="font-display font-bold text-base truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
+          <p className="font-bold text-base truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
           {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.62)', flexShrink: 0 }} />}
         </div>
         <div className="flex items-center gap-2 mt-0.5">

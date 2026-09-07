@@ -95,7 +95,7 @@ export default async function AdminPage() {
     <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
+        <h1 className="text-3xl md:text-4xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
         <p className="text-sm mt-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
       </div>
 
@@ -112,7 +112,7 @@ export default async function AdminPage() {
               <p className="text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: 'rgba(246,243,235,0.55)' }}>{label}</p>
             </div>
             <div className="flex items-baseline gap-2">
-              <p className="font-display text-2xl md:text-[2rem] font-black tracking-tight" style={{ color: '#F6F3EB' }}>
+              <p className="text-2xl md:text-[2rem] font-black tracking-tight" style={{ color: '#F6F3EB' }}>
                 {value.toLocaleString()}
               </p>
               {change && (
@@ -140,7 +140,7 @@ export default async function AdminPage() {
 
         {/* Usuarios recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-display font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Usuarios recientes</h2>
+          <h2 className="font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Usuarios recientes</h2>
           <div className="space-y-3">
             {recentUsers?.map((u: any) => {
               const badge = roleBadge(u.role)
@@ -170,7 +170,7 @@ export default async function AdminPage() {
 
         {/* Posts recientes */}
         <div className="rounded-xl md:rounded-2xl p-4 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <h2 className="font-display font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Publicaciones recientes</h2>
+          <h2 className="font-bold text-[17px] mb-3 md:mb-4" style={{ color: '#F6F3EB' }}>Publicaciones recientes</h2>
           <div className="space-y-3">
             {recentPosts?.map((p: any) => (
               <div key={p.id} className="flex items-start gap-3">

@@ -60,9 +60,10 @@ export default async function ComunidadPage() {
         style={{
           bottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
           left: 16,
-          background: 'rgba(118,171,174,0.20)',
-          border: '1px solid rgba(118,171,174,0.35)',
-          backdropFilter: 'blur(8px)',
+          background: 'rgba(118,171,174,0.24)',
+          border: '1px solid rgba(118,171,174,0.4)',
+          backdropFilter: 'blur(18px) saturate(160%)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 26px -8px rgba(9,60,93,0.5)',
         }}
         aria-label="Nueva publicación"
       >

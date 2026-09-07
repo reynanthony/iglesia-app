@@ -9,6 +9,24 @@ import CommentItem from '@/components/CommentItem'
 import ReactionBar from '@/components/app/ReactionBar'
 import { openExternal } from '@/lib/open-external'
 
+// Color por categoría de publicación — para que el badge distinga de un vistazo,
+// en vez de que todas las categorías compartan el mismo teal.
+const CATEGORY_COLOR: Record<string, string> = {
+  testimonio: '#E3A94C',
+  oracion: '#76ABAE',
+  anuncio: '#A99BD1',
+  general: '#6FBF8B',
+}
+
+// Vidrio esmerilado compartido por los botones de acción flotantes de la tarjeta.
+const GLASS_BTN: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.10)',
+  backdropFilter: 'blur(16px) saturate(160%)',
+  WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+  border: '1px solid rgba(255,255,255,0.14)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 8px 18px -6px rgba(0,0,0,0.5)',
+}
+
 function useSaved(postId: string) {
   const key = 'saved-posts'
   const [saved, setSaved] = useState(false)
@@ -263,7 +281,13 @@ export default function ShortsCard({
         <button
           onClick={() => setIsFullscreen(f => !f)}
           className="absolute active:scale-90 transition-transform"
-          style={{ top: 12, right: 12, zIndex: 10, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            top: 12, right: 12, zIndex: 10, borderRadius: '50%', width: 36, height: 36,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(16px) saturate(160%)',
+            border: '1px solid rgba(255,255,255,0.14)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 8px 18px -6px rgba(0,0,0,0.5)',
+          }}
         >
           {isFullscreen
             ? <Minimize2 size={16} strokeWidth={2} style={{ color: '#fff' }} />
@@ -294,11 +318,16 @@ export default function ShortsCard({
           <button onClick={toggleMute} className="flex flex-col items-center gap-0.5 active:scale-90 transition-transform">
             <div
               className="w-11 h-11 rounded-full flex items-center justify-center"
-              style={{ background: isMuted ? 'rgba(0,0,0,0.5)' : 'rgba(118,171,174,0.35)', backdropFilter: 'blur(6px)' }}
+              style={{
+                background: isMuted ? 'rgba(255,255,255,0.10)' : 'rgba(111,191,139,0.28)',
+                backdropFilter: 'blur(16px) saturate(160%)',
+                border: isMuted ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(111,191,139,0.45)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 8px 18px -6px rgba(0,0,0,0.5)',
+              }}
             >
               {isMuted
                 ? <VolumeX size={20} strokeWidth={1.8} style={{ color: '#fff' }} />
-                : <Volume2 size={20} strokeWidth={1.8} style={{ color: '#76ABAE' }} />
+                : <Volume2 size={20} strokeWidth={1.8} style={{ color: '#8FD9A8' }} />
               }
             </div>
           </button>
@@ -309,7 +338,7 @@ export default function ShortsCard({
 
         {/* Comentarios */}
         <button onClick={() => setShowComments(true)} className="flex flex-col items-center gap-0.5 active:scale-90 transition-transform">
-          <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)' }}>
+          <div className="w-11 h-11 rounded-full flex items-center justify-center" style={GLASS_BTN}>
             <MessageCircle size={22} strokeWidth={1.8} style={{ color: '#fff' }} />
           </div>
           {totalComments > 0 && <span className="text-[11px] font-bold text-white leading-none">{totalComments}</span>}
@@ -317,14 +346,19 @@ export default function ShortsCard({
 
         {/* Guardar */}
         <button onClick={() => { toggleSave(); setTapSave(true); setTimeout(() => setTapSave(false), 400) }} className="flex flex-col items-center gap-0.5">
-          <div className={`w-11 h-11 rounded-full flex items-center justify-center ${tapSave ? 'animate-tap' : ''}`} style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)' }}>
-            <Bookmark size={22} strokeWidth={1.8} fill={saved ? '#76ABAE' : 'none'} style={{ color: saved ? '#76ABAE' : '#fff' }} />
+          <div
+            className={`w-11 h-11 rounded-full flex items-center justify-center ${tapSave ? 'animate-tap' : ''}`}
+            style={saved
+              ? { background: 'rgba(227,169,76,0.28)', backdropFilter: 'blur(16px) saturate(160%)', border: '1px solid rgba(227,169,76,0.45)', boxShadow: GLASS_BTN.boxShadow }
+              : GLASS_BTN}
+          >
+            <Bookmark size={22} strokeWidth={1.8} fill={saved ? '#E3A94C' : 'none'} style={{ color: saved ? '#E3A94C' : '#fff' }} />
           </div>
         </button>
 
         {/* Compartir */}
         <button onClick={handleShare} className="flex flex-col items-center gap-0.5 active:scale-90 transition-transform">
-          <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)' }}>
+          <div className="w-11 h-11 rounded-full flex items-center justify-center" style={GLASS_BTN}>
             <Share2 size={20} strokeWidth={1.8} style={{ color: '#fff' }} />
           </div>
         </button>
@@ -351,12 +385,15 @@ export default function ShortsCard({
           <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
             {timeAgo(post.created_at)}
           </span>
-          {post.category && (
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(118,171,174,0.25)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.35)' }}>
-              {post.category}
-            </span>
-          )}
+          {post.category && (() => {
+            const c = CATEGORY_COLOR[post.category] ?? '#76ABAE'
+            return (
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full backdrop-blur-md"
+                style={{ background: `${c}30`, color: c, border: `1px solid ${c}55` }}>
+                {post.category}
+              </span>
+            )
+          })()}
         </Link>
         {hasMedia && post.content && (
           <p className="text-sm leading-snug line-clamp-3"

@@ -94,7 +94,7 @@ export default async function DiscipuladoPage() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
-          <h1 className="font-display font-black tracking-tighter mb-4"
+          <h1 className="font-black tracking-tighter mb-4"
             style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: '#F6F3EB' }}>
             Mi camino de<br /><span style={{ color: '#76ABAE' }}>Discipulado.</span>
           </h1>

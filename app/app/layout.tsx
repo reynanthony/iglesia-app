@@ -31,7 +31,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (
-    <div className="min-h-screen" style={{ background: '#061E30', color: '#F6F3EB' }}>
+    <div className="min-h-screen font-app" style={{ background: '#061E30', color: '#F6F3EB' }}>
       <CapacitorBridge />
       <AnnouncementGate
         onboardingCompleted={profile?.onboarding_completed ?? false}
@@ -51,7 +51,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Cross size={15} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
             <div>
-              <p className="font-display font-black text-[14px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</p>
+              <p className="font-black text-[14px] leading-tight tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.62)' }}>Comunidad</p>
             </div>
           </Link>
@@ -110,7 +110,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
               <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
-            <span className="font-display font-black text-[16px] tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
+            <span className="font-black text-[16px] tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
           </Link>
 
           {/* Acciones */}

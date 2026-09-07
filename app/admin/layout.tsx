@@ -53,7 +53,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const panelLabel = isLider ? 'Mi Ministerio' : 'Panel Admin'
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#061E30', color: '#F6F3EB' }}>
+    <div className="min-h-screen flex font-app" style={{ background: '#061E30', color: '#F6F3EB' }}>
       <CapacitorBridge />
 
       {/* Sidebar — desktop only */}
@@ -66,7 +66,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               {isLider ? 'M' : 'A'}
             </div>
             <div>
-              <p className="font-display font-black text-[15px] text-white leading-tight tracking-tight">El Manantial</p>
+              <p className="font-black text-[15px] text-white leading-tight tracking-tight">El Manantial</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: '#76ABAE' }}>{panelLabel}</p>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             style={{ background: isLider ? '#76ABAE' : '#F6F3EB', color: '#061E30' }}>
             {isLider ? 'M' : 'A'}
           </div>
-          <span className="font-display font-black text-sm text-white tracking-tight">El Manantial</span>
+          <span className="font-black text-sm text-white tracking-tight">El Manantial</span>
         </div>
         <div className="flex items-center gap-1">
           <Link href="/app/comunidad"

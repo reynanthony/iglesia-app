@@ -37,6 +37,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ── Tipografía de la app/admin (member area) — Plus Jakarta Sans ───
+   El sitio público sigue con Geist + Playfair; esto es solo para las
+   pantallas autenticadas (app/app/** y app/admin/**). ── */
+.font-app {
+  font-family: var(--font-plus-jakarta), var(--font-geist-sans), system-ui, sans-serif;
+}
+
 html,
 body {
   overflow-x: hidden;

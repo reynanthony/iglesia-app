@@ -91,8 +91,13 @@ export default function ReactionBar({
               className="fixed inset-0 z-40 w-full h-full"
               style={{ background: 'transparent', border: 'none', cursor: 'default' }}
             />
-            <div className="absolute z-50 flex flex-row gap-1 p-2 rounded-2xl shadow-xl"
-              style={{ bottom: '32px', left: 0, background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="absolute z-50 flex flex-row gap-1 p-2 rounded-2xl"
+              style={{
+                bottom: '32px', left: 0,
+                background: 'rgba(11,45,71,0.55)', backdropFilter: 'blur(20px) saturate(160%)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), 0 20px 40px -14px rgba(0,0,0,0.6)',
+              }}>
               {REACTIONS.map(r => {
                 const RIcon = r.icon
                 const isSelected = myReaction?.type === r.type
@@ -124,9 +129,10 @@ export default function ReactionBar({
         onClick={() => setPickerOpen(p => !p)}
         className="w-11 h-11 rounded-full flex items-center justify-center transition-transform active:scale-90 motion-reduce:active:scale-100"
         style={{
-          background: myReaction ? 'rgba(118,171,174,0.20)' : 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(6px)',
-          border: myReaction ? `1px solid ${currentDef?.activeColor ?? '#76ABAE'}` : 'none',
+          background: myReaction ? `${currentDef?.activeColor ?? '#76ABAE'}30` : 'rgba(255,255,255,0.10)',
+          backdropFilter: 'blur(16px) saturate(160%)',
+          border: `1px solid ${myReaction ? `${currentDef?.activeColor ?? '#76ABAE'}70` : 'rgba(255,255,255,0.14)'}`,
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 8px 18px -6px rgba(0,0,0,0.5)',
         }}
         aria-label="Reaccionar"
       >
@@ -153,12 +159,14 @@ export default function ReactionBar({
           />
           {/* Picker panel */}
           <div
-            className="absolute z-50 flex flex-col gap-1.5 p-2 rounded-2xl shadow-xl"
+            className="absolute z-50 flex flex-col gap-1.5 p-2 rounded-2xl"
             style={{
               right: '52px',
               bottom: 0,
-              background: '#0B2D47',
-              border: '1px solid #0D3352',
+              background: 'rgba(11,45,71,0.55)',
+              backdropFilter: 'blur(20px) saturate(160%)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10), 0 20px 40px -14px rgba(0,0,0,0.6)',
               minWidth: 130,
             }}
           >
