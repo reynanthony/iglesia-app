@@ -131,3 +131,27 @@ export async function getChapterContent(
 export function hasBibleApi(): boolean {
   return !!BIBLE_API_KEY
 }
+
+// Extrae el texto plano de un solo versículo del HTML de un capítulo ya cargado.
+// Reutiliza el mismo HTML que consume el lector, así que el texto siempre
+// coincide exactamente con lo que el usuario ve al abrir el capítulo.
+export function extractVerseText(html: string, verseNum: number): string | null {
+  const re = new RegExp(
+    `<span[^>]*class="v"[^>]*data-number="${verseNum}"[^>]*>.*?</span>([\\s\\S]*?)(?=<span[^>]*class="v"|</p>|$)`,
+    'i',
+  )
+  const m = html.match(re)
+  if (!m) return null
+  const text = m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+  return text || null
+}
+
+export async function getVerseOfDayText(
+  bookId: string,
+  chapter: number,
+  verse: number,
+): Promise<string | null> {
+  const content = await getChapterContent(bookId, chapter)
+  if (!content?.content) return null
+  return extractVerseText(content.content, verse)
+}

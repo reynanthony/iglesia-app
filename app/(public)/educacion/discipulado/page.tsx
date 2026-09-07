@@ -157,8 +157,8 @@ export default async function DiscipuladoPage() {
                 const activeCourses = (p.discipleship_courses ?? []).filter((c: any) => c.is_active)
                 return (
                   <Link key={p.id} href={`/educacion/discipulado/${p.slug}`}
-                    className="group flex items-start gap-4 p-5 rounded-2xl transition"
-                    style={{ background: NAVY, border: `1px solid ${NAVY}`, borderLeft: `4px solid ${TEAL}` }}>
+                    className="group flex items-start gap-4 p-5 rounded-2xl transition hover:-translate-y-0.5"
+                    style={{ background: NAVY, border: `1px solid ${TEAL}30` }}>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: `${TEAL}20`, border: `1px solid ${TEAL}35` }}>
                       <GraduationCap size={18} style={{ color: TEAL }} strokeWidth={1.8} />

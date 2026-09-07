@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Flame, ThumbsUp, BookOpen, Sparkles, X } from 'lucide-react'
 import { toggleReaction } from '@/app/actions/reactions'
+import { hapticLight } from '@/lib/haptics'
 
 type ReactionType = 'orando' | 'amen' | 'edifico' | 'gracias'
 
@@ -46,6 +47,7 @@ export default function ReactionBar({
 
   async function handleSelect(type: ReactionType) {
     setPickerOpen(false)
+    hapticLight()
     setReactions(prev => {
       const mine = prev.find(r => r.user_id === currentUserId)
       if (mine) {

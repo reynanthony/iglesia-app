@@ -1,7 +1,9 @@
-﻿import { createClient } from '@/lib/supabase/server'
+﻿import { Suspense } from 'react'
+import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Flame, Mic2, ChevronRight, Sparkles, Lock, HandHeart } from 'lucide-react'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
+import PrayerCreatedBanner from '@/components/app/PrayerCreatedBanner'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -44,6 +46,7 @@ export default async function OracionPage({
   }
 
   const { data: requests, error } = await query
+  if (error) console.error('[app/oracion] error al cargar peticiones:', error)
 
   const tabs = [
     { key: 'todas',       label: 'Todas' },
@@ -57,6 +60,9 @@ export default async function OracionPage({
   return (
     <div style={{ background: '#061E30', minHeight: '100%' }}>
       <RealtimeRefresh channelName="oracion-list" watches={[{ table: 'prayer_requests' }]} />
+      <Suspense fallback={null}>
+        <PrayerCreatedBanner />
+      </Suspense>
 
       {/* Header */}
       <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
@@ -109,15 +115,10 @@ export default async function OracionPage({
         {error && (
           <div className="rounded-2xl p-6 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
             <p className="text-sm font-bold mb-1" style={{ color: '#F87171' }}>
-              {error.code === '42P01' ? 'Tabla no encontrada' : 'Error al cargar peticiones'}
+              No se pudieron cargar las peticiones
             </p>
-            <p className="text-[12px] mb-2" style={{ color: 'rgba(246,243,235,0.68)' }}>
-              {error.code === '42P01'
-                ? 'Ejecuta la migración SQL en Supabase Dashboard → SQL Editor → supabase/v2_ecosystem.sql'
-                : error.message}
-            </p>
-            <p className="text-[11px] font-mono" style={{ color: 'rgba(246,243,235,0.50)' }}>
-              código: {error.code}
+            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              Intenta de nuevo en unos minutos.
             </p>
           </div>
         )}

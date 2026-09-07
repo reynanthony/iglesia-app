@@ -5,7 +5,7 @@ import { isUUID } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function createPrayerRequest(formData: FormData): Promise<void> {
+export async function createPrayerRequest(formData: FormData): Promise<{ error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -15,14 +15,16 @@ export async function createPrayerRequest(formData: FormData): Promise<void> {
   const is_anonymous = formData.get('is_anonymous') === 'on'
   const is_public    = formData.get('is_private') !== 'on'
 
-  if (!title) return
+  if (!title) return { error: 'Escribe brevemente qué necesitas orar.' }
 
-  await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous, is_public })
+  const { error } = await supabase.from('prayer_requests').insert({ user_id: user.id, title, body, is_anonymous, is_public })
+  if (error) return { error: 'No se pudo publicar tu petición. Intenta de nuevo.' }
+
   revalidatePath('/app/oracion')
-  redirect('/app/oracion')
+  redirect('/app/oracion?creada=1')
 }
 
-export async function createPublicPrayerRequest(formData: FormData): Promise<void> {
+export async function createPublicPrayerRequest(formData: FormData): Promise<{ error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -32,18 +34,20 @@ export async function createPublicPrayerRequest(formData: FormData): Promise<voi
   const is_anonymous = formData.get('is_anonymous') === 'on'
   const is_public    = formData.get('is_public') === 'on'
 
-  if (!body) return
+  if (!body) return { error: 'Escribe tu oración antes de publicarla.' }
 
-  await supabase.from('prayer_requests').insert({
+  const { error } = await supabase.from('prayer_requests').insert({
     user_id: user.id,
     title: title || body.slice(0, 100),
     body,
     is_anonymous,
     is_public,
   })
+  if (error) return { error: 'No se pudo publicar tu oración. Intenta de nuevo.' }
+
   revalidatePath('/oracion')
   revalidatePath('/app/oracion')
-  redirect('/oracion')
+  redirect('/oracion?creada=1')
 }
 
 export async function togglePrayerParticipation(requestId: string): Promise<void> {

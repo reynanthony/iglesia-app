@@ -1,8 +1,10 @@
-﻿import Link from 'next/link'
+﻿import { Suspense } from 'react'
+import Link from 'next/link'
 import { Flame, Plus, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { PrayerCard } from '@/components/public/PrayerCard'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import PrayerCreatedBanner from '@/components/public/PrayerCreatedBanner'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,6 +57,8 @@ export default async function OracionPublicaPage() {
     requests = fallback.data
     error    = fallback.error
   }
+
+  if (error) console.error('[oracion pública] error al cargar peticiones:', error)
 
   const [{ data: allParticipants }, { data: allResponses }] = await Promise.all([
     supabase.from('prayer_participants').select('request_id, user_id'),
@@ -157,6 +161,10 @@ export default async function OracionPublicaPage() {
         )}
       </section>
 
+      <Suspense fallback={null}>
+        <PrayerCreatedBanner />
+      </Suspense>
+
       {/* ── Peticiones activas ──────────────────────────── */}
       <section className="bg-card border-b border-edge">
         <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16 md:py-24">
@@ -164,11 +172,9 @@ export default async function OracionPublicaPage() {
           {error && (
             <div className="rounded-2xl p-8 text-center border border-edge">
               <p className="font-bold text-sm text-ink mb-1">
-                {error.code === '42P01'
-                  ? 'Ejecuta la migración v22 en Supabase SQL Editor.'
-                  : 'No se pudieron cargar las peticiones.'}
+                No se pudieron cargar las peticiones en este momento.
               </p>
-              <p className="text-[12px] text-ink-3">{error.message}</p>
+              <p className="text-[12px] text-ink-3">Intenta de nuevo en unos minutos.</p>
             </div>
           )}
 

@@ -83,7 +83,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex items-center gap-3 bg-[#000000] hover:bg-[#222222] disabled:opacity-60 text-white text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition"
+        className="inline-flex items-center gap-3 bg-[#093C5D] hover:bg-[#0D4A72] disabled:opacity-60 text-white text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition"
       >
         {isPending ? 'Enviando…' : <>Enviar mensaje <ArrowRight size={13} /></>}
       </button>

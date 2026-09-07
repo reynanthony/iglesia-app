@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Flame } from 'lucide-react'
+import { ArrowLeft, Flame, AlertCircle } from 'lucide-react'
 import { createPublicPrayerRequest } from '@/app/actions/prayer'
 
 const NAVY  = '#093C5D'
@@ -11,11 +11,17 @@ const CREAM = '#F6F3EB'
 
 export default function NuevaPeticionPublicaPage() {
   const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError(null)
     setLoading(true)
-    await createPublicPrayerRequest(new FormData(e.currentTarget))
+    const result = await createPublicPrayerRequest(new FormData(e.currentTarget))
+    if (result?.error) {
+      setError(result.error)
+      setLoading(false)
+    }
   }
 
   return (
@@ -94,6 +100,13 @@ export default function NuevaPeticionPublicaPage() {
                 </div>
               </label>
             </div>
+
+            {error && (
+              <div className="flex items-center gap-3 rounded-xl px-4 py-3 border border-edge" style={{ background: 'rgba(239,68,68,0.06)' }}>
+                <AlertCircle size={14} style={{ color: '#DC4040', flexShrink: 0 }} />
+                <p className="text-sm" style={{ color: '#DC4040' }}>{error}</p>
+              </div>
+            )}
 
             <div className="flex gap-3 justify-end pt-2">
               <Link href="/oracion"

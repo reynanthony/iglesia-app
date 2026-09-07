@@ -2,17 +2,24 @@
 
 import { useState } from 'react'
 import { createPrayerRequest } from '@/app/actions/prayer'
-import { ArrowLeft, Flame, Lock } from 'lucide-react'
+import { ArrowLeft, Flame, Lock, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NuevaPeticionPage() {
   const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError(null)
     setLoading(true)
     const formData = new FormData(e.currentTarget)
-    await createPrayerRequest(formData)
+    const result = await createPrayerRequest(formData)
+    // Si hubo redirect (éxito) esta línea nunca se alcanza porque la página navega.
+    if (result?.error) {
+      setError(result.error)
+      setLoading(false)
+    }
   }
 
   return (
@@ -85,6 +92,14 @@ export default function NuevaPeticionPage() {
                 </p>
               </div>
             </label>
+
+            {error && (
+              <div className="flex items-center gap-3 rounded-xl px-4 py-3"
+                style={{ background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                <AlertCircle size={14} style={{ color: '#f87171', flexShrink: 0 }} />
+                <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
+              </div>
+            )}
 
             <div className="flex gap-3 justify-end pt-1">
               <Link href="/app/oracion"

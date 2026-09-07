@@ -5,13 +5,15 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft, Copy, Share2, ChevronLeft, ChevronRight,
-  BookOpen, Check, X, Bookmark, FileText, Image, ScrollText,
+  BookOpen, Check, Bookmark, FileText, Image, ScrollText,
+  Volume2, VolumeX,
 } from 'lucide-react'
 import type { BibleBook } from '@/lib/bible'
 import {
   upsertBibleHighlight, deleteBibleHighlight,
   upsertBibleNote, deleteBibleNote,
 } from '@/app/actions/bible'
+import { hapticLight } from '@/lib/haptics'
 
 // ── Types ──────────────────────────────────────────────────────
 type Theme      = 'cream' | 'sepia' | 'dark'
@@ -272,31 +274,53 @@ export function BibleReader({
   const touchX        = useRef(0)
   const touchY        = useRef(0)
 
-  // ── Audio TTS (pending activation) ────────────────────────
-  // const [audioPlaying, setAudioPlaying] = useState(false)
-  // const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
-  //
-  // const handleAudio = useCallback(() => {
-  //   if (!content || typeof window === 'undefined') return
-  //   if (audioPlaying) {
-  //     window.speechSynthesis.cancel()
-  //     setAudioPlaying(false)
-  //     return
-  //   }
-  //   const text = contentRef.current?.textContent ?? ''
-  //   const utter = new SpeechSynthesisUtterance(text)
-  //   utter.lang = 'es-419'
-  //   utter.rate = 0.9
-  //   const voices = window.speechSynthesis.getVoices()
-  //   const spanish = voices.find(v => v.lang.startsWith('es'))
-  //   if (spanish) utter.voice = spanish
-  //   utter.onend = () => setAudioPlaying(false)
-  //   utteranceRef.current = utter
-  //   window.speechSynthesis.speak(utter)
-  //   setAudioPlaying(true)
-  // }, [audioPlaying, content])
-  //
-  // useEffect(() => () => { window.speechSynthesis?.cancel() }, [])
+  // ── Audio TTS: escuchar el capítulo con la voz del dispositivo ──
+  const [audioPlaying, setAudioPlaying] = useState(false)
+  const [audioSupported, setAudioSupported] = useState(false)
+
+  useEffect(() => {
+    setAudioSupported(typeof window !== 'undefined' && 'speechSynthesis' in window)
+  }, [])
+
+  const handleAudio = useCallback(() => {
+    if (!content || typeof window === 'undefined' || !('speechSynthesis' in window)) return
+    if (audioPlaying) {
+      window.speechSynthesis.cancel()
+      setAudioPlaying(false)
+      return
+    }
+    const text = contentRef.current?.textContent ?? ''
+    if (!text.trim()) return
+    const speak = () => {
+      const utter = new SpeechSynthesisUtterance(text)
+      utter.lang = 'es-419'
+      utter.rate = 0.92
+      const voices = window.speechSynthesis.getVoices()
+      const spanish = voices.find(v => v.lang.startsWith('es'))
+      if (spanish) utter.voice = spanish
+      utter.onend = () => setAudioPlaying(false)
+      utter.onerror = () => setAudioPlaying(false)
+      window.speechSynthesis.cancel()
+      window.speechSynthesis.speak(utter)
+      setAudioPlaying(true)
+    }
+    // Algunos navegadores cargan las voces de forma asíncrona la primera vez.
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = speak
+    } else {
+      speak()
+    }
+  }, [audioPlaying, content])
+
+  // Detener el audio al cambiar de capítulo o salir del lector.
+  useEffect(() => {
+    setAudioPlaying(false)
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [bookId, chapterNum])
+
+  useEffect(() => () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [])
 
   const t  = T[theme]
   const fs = FS[fontSize]
@@ -398,6 +422,7 @@ export function BibleReader({
 
   // ── Highlight actions ──────────────────────────────────────
   const toggleHighlight = useCallback((verseNum: string, colorIdx: number) => {
+    hapticLight()
     const isRemoving = highlightsRef.current[verseNum] === colorIdx
     setHighlights(prev => {
       const next = { ...prev }
@@ -419,6 +444,7 @@ export function BibleReader({
   // ── Bookmark actions ───────────────────────────────────────
   const toggleBookmark = useCallback(() => {
     if (!verse) return
+    hapticLight()
     setBookmarks(prev => {
       const exists = prev.some(
         b => b.bookId === bookId && b.chapterNum === chapterNum && b.verseNum === verse.num
@@ -496,6 +522,7 @@ export function BibleReader({
     const dx = touchX.current - e.changedTouches[0].clientX
     const dy = Math.abs(touchY.current - e.changedTouches[0].clientY)
     if (Math.abs(dx) < SWIPE_MIN || dy > 80) return
+    hapticLight()
     if (dx > 0 && next) { setNavigating(true); router.push(`/biblia/lectura/${next.bookId}/${next.chapter}`) }
     if (dx < 0 && prev) { setNavigating(true); router.push(`/biblia/lectura/${prev.bookId}/${prev.chapter}`) }
   }, [prev, next, router])
@@ -791,14 +818,18 @@ export function BibleReader({
           ) : <div className="flex-1" />}
 
           <div className="flex-shrink-0 flex items-center gap-2">
-            {/* Audio button — pending activation */}
-            {/* <button
-              aria-label={audioPlaying ? 'Detener audio' : 'Escuchar capítulo'}
-              onClick={handleAudio}
-              className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-              style={{ background: audioPlaying ? TEAL : t.surface, color: audioPlaying ? CREAM_TEXT : t.text }}>
-              <Volume2 size={15} aria-hidden="true" />
-            </button> */}
+            {audioSupported && (
+              <button
+                aria-label={audioPlaying ? 'Detener audio' : 'Escuchar capítulo'}
+                aria-pressed={audioPlaying}
+                onClick={handleAudio}
+                className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                style={{ background: audioPlaying ? TEAL : t.surface, color: audioPlaying ? CREAM_TEXT : t.text }}>
+                {audioPlaying
+                  ? <VolumeX size={15} aria-hidden="true" />
+                  : <Volume2 size={15} aria-hidden="true" />}
+              </button>
+            )}
             <button onClick={() => setShowPanel(v => !v)}
               aria-label="Opciones de lectura"
               aria-expanded={showPanel}

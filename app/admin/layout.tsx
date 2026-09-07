@@ -5,6 +5,7 @@ import { logout } from '@/app/actions/auth'
 import { LogOut } from 'lucide-react'
 import AdminNav from '@/components/admin/AdminNav'
 import AdminMobileNav from '@/components/admin/AdminMobileNav'
+import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -53,6 +54,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen flex" style={{ background: '#061E30', color: '#F6F3EB' }}>
+      <CapacitorBridge />
 
       {/* Sidebar — desktop only */}
       <aside className="hidden md:flex w-56 border-r flex-col fixed h-full z-40"
@@ -64,10 +66,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               {isLider ? 'M' : 'A'}
             </div>
             <div>
-              <p className="font-bold text-[13px] text-white leading-tight">{panelLabel}</p>
-              <p className="text-[11px] leading-tight" style={{ color: 'rgba(246,243,235,0.68)' }}>{profile?.full_name}</p>
+              <p className="font-display font-black text-[15px] text-white leading-tight tracking-tight">El Manantial</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: '#76ABAE' }}>{panelLabel}</p>
             </div>
           </div>
+          <p className="text-[11px] leading-tight mt-2.5" style={{ color: 'rgba(246,243,235,0.55)' }}>{profile?.full_name}</p>
         </div>
         <AdminNav
           logoutAction={logout}
@@ -85,7 +88,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             style={{ background: isLider ? '#76ABAE' : '#F6F3EB', color: '#061E30' }}>
             {isLider ? 'M' : 'A'}
           </div>
-          <span className="font-bold text-sm text-white">{panelLabel}</span>
+          <span className="font-display font-black text-sm text-white tracking-tight">El Manantial</span>
         </div>
         <div className="flex items-center gap-1">
           <Link href="/app/comunidad"

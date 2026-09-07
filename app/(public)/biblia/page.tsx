@@ -1,6 +1,7 @@
 ﻿import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import { hasBibleApi } from '@/lib/bible'
+import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
 
@@ -61,6 +62,9 @@ export default async function BibliaPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ VERSO DEL DÍA — visible para todos, incluso primera visita ══ */}
+      <BibleVerseOfDay />
 
       {/* ══ CONTINUAR LEYENDO + MARCADORES ═════════════════ */}
       <BibleContinue />

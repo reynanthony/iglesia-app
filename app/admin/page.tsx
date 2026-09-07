@@ -2,6 +2,23 @@
 import { Users, FileText, MessageCircle, Mic, TrendingUp, AlertTriangle } from 'lucide-react'
 import AdminChart from '@/components/admin/AdminChart'
 
+// Delta real semana-vs-semana-anterior para una tabla, o null si la tabla no tiene created_at / falla la consulta.
+async function weeklyChange(supabase: Awaited<ReturnType<typeof createClient>>, table: string) {
+  const now = Date.now()
+  const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString()
+  const twoWeeksAgo = new Date(now - 14 * 24 * 60 * 60 * 1000).toISOString()
+
+  const [{ count: current, error: e1 }, { count: previous, error: e2 }] = await Promise.all([
+    supabase.from(table).select('*', { count: 'exact', head: true }).gte('created_at', weekAgo),
+    supabase.from(table).select('*', { count: 'exact', head: true }).gte('created_at', twoWeeksAgo).lt('created_at', weekAgo),
+  ])
+  if (e1 || e2 || current === null || previous === null) return null
+  if (previous === 0) return current > 0 ? { label: 'Nuevo', positive: true } : null
+  const pct = Math.round(((current - previous) / previous) * 100)
+  if (pct === 0) return null
+  return { label: `${pct > 0 ? '+' : ''}${pct}%`, positive: pct > 0 }
+}
+
 export default async function AdminPage() {
   const supabase = await createClient()
 
@@ -12,6 +29,12 @@ export default async function AdminPage() {
     { count: totalRooms },
     { count: totalReports },
     { count: totalLikes },
+    usersChange,
+    postsChange,
+    messagesChange,
+    roomsChange,
+    ,
+    likesChange,
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('posts').select('*', { count: 'exact', head: true }),
@@ -19,6 +42,12 @@ export default async function AdminPage() {
     supabase.from('rooms').select('*', { count: 'exact', head: true }),
     supabase.from('reports').select('*', { count: 'exact', head: true }),
     supabase.from('likes').select('*', { count: 'exact', head: true }),
+    weeklyChange(supabase, 'profiles'),
+    weeklyChange(supabase, 'posts'),
+    weeklyChange(supabase, 'messages'),
+    weeklyChange(supabase, 'rooms'),
+    weeklyChange(supabase, 'reports'),
+    weeklyChange(supabase, 'likes'),
   ])
 
   const { data: usersByDay } = await supabase
@@ -46,12 +75,13 @@ export default async function AdminPage() {
     .limit(5)
 
   const stats = [
-    { label: 'Usuarios',      value: totalUsers    ?? 0, icon: Users,         iconColor: '#60A5FA', bgColor: 'rgba(96,165,250,0.10)',  change: '+12%' },
-    { label: 'Publicaciones', value: totalPosts    ?? 0, icon: FileText,       iconColor: '#76ABAE', bgColor: 'rgba(118,171,174,0.12)', change: '+8%'  },
-    { label: 'Mensajes',      value: totalMessages ?? 0, icon: MessageCircle,  iconColor: '#4ADE80', bgColor: 'rgba(74,222,128,0.10)',  change: '+24%' },
-    { label: 'Likes totales', value: totalLikes    ?? 0, icon: TrendingUp,     iconColor: '#F472B6', bgColor: 'rgba(244,114,182,0.10)', change: '+16%' },
-    { label: 'Salas creadas', value: totalRooms    ?? 0, icon: Mic,            iconColor: '#C084FC', bgColor: 'rgba(192,132,252,0.10)', change: '+2%'  },
-    { label: 'Reportes',      value: totalReports  ?? 0, icon: AlertTriangle,  iconColor: '#F87171', bgColor: 'rgba(248,113,113,0.10)', change: ''     },
+    { label: 'Usuarios',      value: totalUsers    ?? 0, icon: Users,         iconColor: '#60A5FA', bgColor: 'rgba(96,165,250,0.10)',  change: usersChange },
+    { label: 'Publicaciones', value: totalPosts    ?? 0, icon: FileText,       iconColor: '#76ABAE', bgColor: 'rgba(118,171,174,0.12)', change: postsChange },
+    { label: 'Mensajes',      value: totalMessages ?? 0, icon: MessageCircle,  iconColor: '#4ADE80', bgColor: 'rgba(74,222,128,0.10)',  change: messagesChange },
+    { label: 'Likes totales', value: totalLikes    ?? 0, icon: TrendingUp,     iconColor: '#F472B6', bgColor: 'rgba(244,114,182,0.10)', change: likesChange },
+    { label: 'Salas creadas', value: totalRooms    ?? 0, icon: Mic,            iconColor: '#C084FC', bgColor: 'rgba(192,132,252,0.10)', change: roomsChange },
+    // Un aumento de reportes no es "crecimiento": nunca se muestra como badge positivo, solo el conteo real.
+    { label: 'Reportes',      value: totalReports  ?? 0, icon: AlertTriangle,  iconColor: '#F87171', bgColor: 'rgba(248,113,113,0.10)', change: null as { label: string; positive: boolean } | null },
   ]
 
   const roleBadge = (role: string) => {
@@ -65,7 +95,8 @@ export default async function AdminPage() {
     <div className="p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Dashboard</h1>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] mb-1.5" style={{ color: '#76ABAE' }}>Panel Admin</p>
+        <h1 className="font-display text-3xl font-black tracking-tight" style={{ color: '#F6F3EB' }}>Dashboard</h1>
         <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>Vista general de la plataforma</p>
       </div>
 
@@ -78,8 +109,14 @@ export default async function AdminPage() {
                 <Icon size={15} style={{ color: iconColor }} />
               </div>
               {change && (
-                <span className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded-full" style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }}>
-                  {change}
+                <span
+                  className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded-full"
+                  style={change.positive
+                    ? { color: '#4ADE80', background: 'rgba(74,222,128,0.10)' }
+                    : { color: '#F87171', background: 'rgba(248,113,113,0.10)' }}
+                  title="Comparado con los 7 días anteriores"
+                >
+                  {change.label}
                 </span>
               )}
             </div>

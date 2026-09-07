@@ -43,19 +43,34 @@ const ADMIN_MENU_SECTIONS = [
     ],
   },
   {
-    label: 'Comunidad',
+    label: 'Gente',
     items: [
-      { href: '/admin/usuarios',         icon: Users,        label: 'Usuarios'          },
-      { href: '/admin/lideres',          icon: UserCheck,    label: 'Líderes'           },
-      { href: '/admin/posts',            icon: FileText,     label: 'Posts'             },
-      { href: '/admin/publicaciones',    icon: Newspaper,    label: 'Publicaciones'     },
-      { href: '/admin/grupos',           icon: UsersRound,   label: 'Grupos'            },
-      { href: '/admin/discipulado',      icon: BookOpen,     label: 'Discipulado'       },
-      { href: '/admin/estudio-biblico',  icon: ScrollText,   label: 'Estudio Bíblico'  },
-      { href: '/admin/oracion',          icon: Mic,          label: 'Salas de oración' },
-      { href: '/admin/en-vivo',          icon: Radio,        label: 'En Vivo'           },
-      { href: '/admin/campanas',         icon: Zap,          label: 'Campañas'          },
-      { href: '/admin/pastoral',         icon: Cross,        label: 'Pastoral Room'     },
+      { href: '/admin/usuarios', icon: Users,      label: 'Usuarios' },
+      { href: '/admin/lideres',  icon: UserCheck,  label: 'Líderes'  },
+      { href: '/admin/grupos',   icon: UsersRound, label: 'Grupos'   },
+    ],
+  },
+  {
+    label: 'Contenido comunitario',
+    items: [
+      { href: '/admin/posts',         icon: FileText,  label: 'Posts'         },
+      { href: '/admin/publicaciones', icon: Newspaper, label: 'Publicaciones' },
+      { href: '/admin/campanas',      icon: Zap,       label: 'Campañas'      },
+    ],
+  },
+  {
+    label: 'Formación',
+    items: [
+      { href: '/admin/discipulado',     icon: BookOpen,   label: 'Discipulado'     },
+      { href: '/admin/estudio-biblico', icon: ScrollText, label: 'Estudio Bíblico' },
+    ],
+  },
+  {
+    label: 'En vivo y pastoral',
+    items: [
+      { href: '/admin/oracion',  icon: Mic,   label: 'Salas de oración' },
+      { href: '/admin/en-vivo',  icon: Radio, label: 'En Vivo'          },
+      { href: '/admin/pastoral', icon: Cross, label: 'Pastoral Room'    },
     ],
   },
   {

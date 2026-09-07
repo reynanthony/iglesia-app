@@ -133,7 +133,7 @@ export default async function AdminUsuariosPage({
                 <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
               </div>
               <div className="flex items-center gap-2 flex-wrap mb-2">
-                <RoleSelector userId={user.id} currentRole={user.role} />
+                <RoleSelector userId={user.id} username={user.username ?? user.full_name ?? ''} currentRole={user.role} />
                 {['lider', 'pastor'].includes(user.role) && (
                   <ConsejoToggle userId={user.id} value={user.is_consejo_pastoral ?? false} />
                 )}
@@ -203,7 +203,7 @@ export default async function AdminUsuariosPage({
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <RoleSelector userId={user.id} currentRole={user.role} />
+                      <RoleSelector userId={user.id} username={user.username ?? user.full_name ?? ''} currentRole={user.role} />
                       {['lider', 'pastor'].includes(user.role) && (
                         <ConsejoToggle userId={user.id} value={user.is_consejo_pastoral ?? false} />
                       )}
