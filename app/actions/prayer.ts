@@ -186,5 +186,6 @@ export async function shareTestimony(requestId: string, formData: FormData): Pro
   revalidatePath(`/app/oracion/${requestId}`)
   revalidatePath('/app/oracion')
   revalidatePath('/app/comunidad')
+  revalidatePath('/app/comunidad/feed')
   redirect(`/app/oracion/${requestId}`)
 }

@@ -31,4 +31,5 @@ export async function toggleReaction(postId: string, type: ReactionType) {
   }
 
   revalidatePath('/app/comunidad')
+  revalidatePath('/app/comunidad/feed')
 }

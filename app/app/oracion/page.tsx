@@ -97,11 +97,15 @@ export default async function OracionPage({
               <Link key={tab.key}
                 href={tab.key === 'todas' ? '/app/oracion' : `/app/oracion?estado=${tab.key}`}
                 className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition"
-                style={{
-                  background: activeTab === tab.key ? '#0D3352' : 'transparent',
-                  color: activeTab === tab.key ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
-                  border: activeTab === tab.key ? '1px solid #1A4A6E' : '1px solid transparent',
-                }}>
+                style={activeTab === tab.key
+                  ? {
+                      background: 'rgba(118,171,174,0.20)',
+                      backdropFilter: 'blur(12px) saturate(160%)',
+                      border: '1px solid rgba(118,171,174,0.4)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
+                      color: '#F6F3EB',
+                    }
+                  : { color: 'rgba(246,243,235,0.55)', border: '1px solid transparent' }}>
                 {tab.label}
               </Link>
             ))}
@@ -154,14 +158,19 @@ export default async function OracionPage({
             <Link key={req.id} href={`/app/oracion/${req.id}`}
               className="group block rounded-2xl transition"
               style={{
-                background: '#0B2D47',
-                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.25)' : isPrivate ? 'rgba(246,243,235,0.08)' : '#0D3352'}`,
+                background: 'rgba(255,255,255,0.04)',
+                backdropFilter: 'blur(14px) saturate(150%)',
+                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.3)' : isPrivate ? 'rgba(246,243,235,0.08)' : 'rgba(255,255,255,0.07)'}`,
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
               }}>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[9px] font-black uppercase tracking-[0.25em] px-2.5 py-1 rounded-full"
-                      style={{ background: `${sc}18`, color: sc, border: `1px solid ${sc}30` }}>
+                      style={{
+                        background: `${sc}22`, backdropFilter: 'blur(10px)', color: sc,
+                        border: `1px solid ${sc}45`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
+                      }}>
                       {STATUS_LABEL[req.status]}
                     </span>
                     {isPrivate && (
@@ -214,10 +223,13 @@ export default async function OracionPage({
         {/* Enlace a salas de audio */}
         <Link href="/app/oracion/salas"
           className="flex items-center justify-between p-5 rounded-2xl transition mt-4"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          style={{
+            background: 'rgba(118,171,174,0.10)', backdropFilter: 'blur(16px) saturate(160%)',
+            border: '1px solid rgba(118,171,174,0.28)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
+          }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: '#0D3352' }}>
+              style={{ background: 'rgba(118,171,174,0.16)' }}>
               <Mic2 size={16} style={{ color: '#76ABAE' }} />
             </div>
             <div>

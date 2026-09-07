@@ -35,7 +35,15 @@ export default function AppNav({ profileHref }: Props) {
         return (
           <Link key={href} href={href}
             className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-            style={{ background: active ? '#0D3352' : undefined, color: active ? '#F6F3EB' : INACTIVE }}>
+            style={active
+              ? {
+                  background: 'rgba(118,171,174,0.16)',
+                  backdropFilter: 'blur(12px) saturate(160%)',
+                  border: '1px solid rgba(118,171,174,0.30)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
+                  color: '#F6F3EB',
+                }
+              : { border: '1px solid transparent', color: INACTIVE }}>
             <Icon size={18} aria-hidden="true" style={{ color: active ? ACCENT : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
             <span className={active ? 'font-bold' : ''}>{label}</span>
             {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: ACCENT }} />}
@@ -125,12 +133,19 @@ export function AppBottomNav({ profileHref }: Props) {
               className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
               style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
             >
-              <Icon
-                size={22}
-                aria-hidden="true"
-                strokeWidth={active ? 2.5 : 1.8}
-                style={{ color: active ? ACCENT : INACTIVE }}
-              />
+              <span
+                className="flex items-center justify-center rounded-full transition-all"
+                style={active
+                  ? { width: 40, height: 26, background: 'rgba(118,171,174,0.18)', backdropFilter: 'blur(10px) saturate(160%)', border: '1px solid rgba(118,171,174,0.32)' }
+                  : { width: 40, height: 26 }}
+              >
+                <Icon
+                  size={20}
+                  aria-hidden="true"
+                  strokeWidth={active ? 2.5 : 1.8}
+                  style={{ color: active ? ACCENT : INACTIVE }}
+                />
+              </span>
               <span
                 className="font-semibold truncate w-full text-center"
                 style={{ color: active ? ACCENT : INACTIVE, fontSize: 12, lineHeight: 1.2 }}

@@ -83,6 +83,7 @@ export async function createPost(formData: FormData) {
   if (error) return { error: 'No se pudo publicar' }
 
   revalidatePath('/app/comunidad')
+  revalidatePath('/app/comunidad/feed')
   if (group_id) revalidatePath(`/app/grupos/${group_id}`)
   return { success: true }
 }

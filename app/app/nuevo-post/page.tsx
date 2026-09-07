@@ -66,7 +66,7 @@ export default function NuevoPostPage() {
         setLoading(false)
       } else {
         hapticSuccess()
-        router.push(groupId ? `/app/grupos/${groupId}` : '/app/comunidad')
+        router.push(groupId ? `/app/grupos/${groupId}` : '/app/comunidad/feed')
       }
     } catch {
       setError('Error al publicar. Verifica tu conexión e intenta de nuevo.')
@@ -84,7 +84,7 @@ export default function NuevoPostPage() {
       >
         <div className="flex items-center gap-3">
           <Link
-            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad'}
+            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad/feed'}
             className="p-2.5 rounded-xl transition"
             style={{ color: '#76ABAE', background: '#0B2D47', border: '1px solid #0D3352' }}
           >
@@ -240,7 +240,7 @@ export default function NuevoPostPage() {
 
           {/* Cancelar al final (accesible en mobile) */}
           <Link
-            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad'}
+            href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad/feed'}
             className="block text-center py-3 text-sm transition"
             style={{ color: 'rgba(118,171,174,0.50)' }}
           >

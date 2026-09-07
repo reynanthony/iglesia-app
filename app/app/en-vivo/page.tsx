@@ -59,7 +59,11 @@ export default async function EnVivoPage() {
         <div className="flex items-center gap-3 px-4 py-3"
           style={{ borderBottom: '1px solid #0D3352' }}>
           <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full"
-            style={{ background: 'rgba(248,113,113,0.15)', color: '#F87171', border: '1px solid rgba(248,113,113,0.30)' }}>
+            style={{
+              background: 'rgba(227,123,133,0.24)', backdropFilter: 'blur(12px) saturate(160%)',
+              color: '#F2A3AC', border: '1px solid rgba(227,123,133,0.4)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
+            }}>
             <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
             En vivo
           </span>
@@ -95,7 +99,11 @@ export default async function EnVivoPage() {
         <div className="px-4 py-4" style={{ borderTop: '1px solid #0D3352' }}>
           <Link href="/app/oracion/nueva"
             className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold w-full max-w-sm mx-auto"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}>
+            style={{
+              background: 'rgba(118,171,174,0.14)', backdropFilter: 'blur(16px) saturate(160%)',
+              border: '1px solid rgba(118,171,174,0.32)', color: '#76ABAE',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
+            }}>
             <Flame size={16} /> Enviar petición de oración
           </Link>
         </div>
@@ -129,7 +137,11 @@ export default async function EnVivoPage() {
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
 
         {/* Horario */}
-        <div className="p-5 rounded-2xl" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+        <div className="p-5 rounded-2xl"
+          style={{
+            background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(14px) saturate(150%)',
+            border: '1px solid rgba(255,255,255,0.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)',
+          }}>
           <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
             style={{ color: 'rgba(118,171,174,0.60)' }}>Próximo culto</p>
           <p className="font-black text-xl tracking-tight" style={{ color: '#F6F3EB' }}>
@@ -150,7 +162,10 @@ export default async function EnVivoPage() {
                 <Link key={p.id}
                   href={`/app/predicas/${p.id}`}
                   className="flex items-center gap-4 p-4 rounded-2xl group transition"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                  style={{
+                    background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(14px) saturate(150%)',
+                    border: '1px solid rgba(255,255,255,0.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)',
+                  }}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
                     style={{ background: '#0D3352' }}>
                     {p.thumbnail
