@@ -3,13 +3,13 @@ import { Search, ArrowRight, Sparkles, Play, BookOpen } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import { createClient } from '@/lib/supabase/server'
-import NotificationBell from '@/components/NotificationBell'
 
 const TEAL  = '#76ABAE'
 const GREEN = '#6FBF8B'
 const AMBER = '#E3A94C'
 const PURPLE = '#A99BD1'
-const RING_COLORS = [TEAL, AMBER, PURPLE, GREEN]
+const RED   = '#E37B85'
+const RING_COLORS = [AMBER, PURPLE, GREEN, RED, TEAL]
 
 const GRADIENT_FALLBACK = [
   'linear-gradient(150deg, #093C5D 0%, #76ABAE 100%)',
@@ -38,7 +38,6 @@ export default async function ComunidadPage() {
   ])
 
   const firstName = (profile?.full_name ?? 'amigo').split(' ')[0]
-  const initial = (profile?.full_name?.[0] ?? 'U').toUpperCase()
   const latestSermon = sermons?.[0] ?? null
   const latestDevocional = devocionales?.[0] ?? null
 
@@ -49,21 +48,9 @@ export default async function ComunidadPage() {
           style={{ background: `radial-gradient(ellipse 100% 45% at 30% 0%, ${TEAL}26, transparent 60%), radial-gradient(ellipse 80% 45% at 100% 15%, rgba(255,255,255,0.06), transparent 55%)` }} />
 
         <div className="relative max-w-2xl mx-auto px-4 pt-6 pb-8">
-          <div className="flex items-center justify-between mb-6">
-            <Link href={profile?.username ? `/app/perfil/${profile.username}` : '#'} className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                style={{ background: '#0D3352', color: TEAL }}>
-                {profile?.avatar_url
-                  ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
-                  : initial}
-              </div>
-              <div className="min-w-0">
-                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Bienvenido de vuelta</p>
-                <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{firstName}</p>
-              </div>
-            </Link>
-            <NotificationBell userId={user.id} />
-          </div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] mb-2" style={{ color: 'rgba(246,243,235,0.50)' }}>
+            Bienvenido de vuelta, {firstName}
+          </p>
 
           <h1 className="font-black tracking-tighter mb-5" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', lineHeight: 1.1, color: '#F6F3EB' }}>
             Tu comunidad,<br /><span style={{ color: TEAL }}>en un solo lugar.</span>
@@ -98,7 +85,7 @@ export default async function ComunidadPage() {
               <h2 className="font-bold text-base" style={{ color: '#F6F3EB' }}>Ministerios activos</h2>
               <Link href="/ministerios" className="text-[11px] font-bold" style={{ color: TEAL }}>Ver todos</Link>
             </div>
-            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-1">
+            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-1 -mx-4 px-4">
               {ministries.map((m, i) => {
                 const ring = RING_COLORS[i % RING_COLORS.length]
                 return (
@@ -172,15 +159,15 @@ export default async function ComunidadPage() {
           href="/app/comunidad/feed"
           className="flex items-center justify-between rounded-2xl px-5 py-4"
           style={{
-            background: `${TEAL}18`, backdropFilter: 'blur(16px) saturate(160%)',
-            border: `1px solid ${TEAL}40`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
+            background: `${AMBER}1E`, backdropFilter: 'blur(16px) saturate(160%)',
+            border: `1px solid ${AMBER}50`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
           }}
         >
           <div>
             <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Ver publicaciones de la comunidad</p>
             <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.60)' }}>Testimonios, oraciones y anuncios recientes</p>
           </div>
-          <ArrowRight size={18} color={TEAL} />
+          <ArrowRight size={18} color={AMBER} />
         </Link>
 
       </div>

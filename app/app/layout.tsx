@@ -99,49 +99,67 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         id="app-mobile-header"
         className="md:hidden fixed top-0 left-0 right-0 z-30"
         style={{
-          background: 'rgba(6,30,48,0.97)',
-          borderBottom: '1px solid #0D3352',
+          background: 'rgba(6,30,48,0.68)',
+          backdropFilter: 'blur(22px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
         <div className="flex items-center justify-between px-4" style={{ height: 56 }}>
           {/* Brand */}
           <Link href="/app/comunidad" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#0D3352' }}>
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{
+                background: 'rgba(118,171,174,0.18)', backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(118,171,174,0.32)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
+              }}
+            >
               <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
             </div>
             <span className="font-black text-[16px] tracking-tight" style={{ color: '#F6F3EB' }}>El Manantial</span>
           </Link>
 
           {/* Acciones */}
-          <div className="flex items-center gap-0.5">
-            <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.72)' }} title="Sitio público">
-              <Globe size={19} />
+          <div
+            className="flex items-center gap-0.5 rounded-full pl-1 pr-1 py-1"
+            style={{
+              background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(14px) saturate(160%)',
+              border: '1px solid rgba(255,255,255,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
+            }}
+          >
+            <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: 'rgba(246,243,235,0.72)' }} title="Sitio público">
+              <Globe size={18} />
             </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
-              <Link href="/admin" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: 'rgba(246,243,235,0.72)' }}>
-                <ShieldCheck size={19} />
+              <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                <ShieldCheck size={18} />
               </Link>
             )}
             {isLiderAdmin && (
-              <Link href="/admin/ministerio" className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ color: '#76ABAE' }} title="Mi Ministerio">
-                <Building2 size={19} />
+              <Link href="/admin/ministerio" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: '#76ABAE' }} title="Mi Ministerio">
+                <Building2 size={18} />
               </Link>
             )}
             <NotificationBell userId={user.id} />
-            <Link href={profileHref} className="ml-1">
-              <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm" style={{ background: '#0D3352', color: '#76ABAE' }}>
-                {profile?.avatar_url
-                  ? <img src={profile.avatar_url} alt="" width={32} height={32} loading="lazy" className="w-full h-full object-cover" />
-                  : initial}
-              </div>
-            </Link>
             <form action={logout}>
-              <button type="submit" className="w-10 h-10 flex items-center justify-center rounded-xl transition" style={{ color: 'rgba(246,243,235,0.68)' }} title="Cerrar sesión">
-                <LogOut size={18} />
+              <button type="submit" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: 'rgba(246,243,235,0.68)' }} title="Cerrar sesión">
+                <LogOut size={17} />
               </button>
             </form>
           </div>
+
+          <Link href={profileHref} className="ml-2 flex-shrink-0">
+            <div
+              className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
+              style={{ background: '#0D3352', color: '#76ABAE', border: '2px solid rgba(118,171,174,0.4)' }}
+            >
+              {profile?.avatar_url
+                ? <img src={profile.avatar_url} alt="" width={36} height={36} loading="lazy" className="w-full h-full object-cover" />
+                : initial}
+            </div>
+          </Link>
         </div>
       </header>
 
@@ -157,8 +175,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         id="app-mobile-nav"
         className="md:hidden fixed bottom-0 left-0 right-0 z-[9100]"
         style={{
-          background: 'rgba(6,30,48,0.97)',
-          borderTop: '1px solid #0D3352',
+          background: 'rgba(6,30,48,0.68)',
+          backdropFilter: 'blur(22px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         }}
       >
