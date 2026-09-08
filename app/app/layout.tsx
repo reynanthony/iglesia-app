@@ -8,7 +8,7 @@ import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import AnnouncementGate from '@/components/app/AnnouncementEngine/AnnouncementGate'
 import { createClient } from '@/lib/supabase/server'
-import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser()
@@ -49,7 +49,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="px-5 py-6" style={{ borderBottom: `1px solid ${BORDER}` }}>
           <Link href="/app/comunidad" className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD})` }}>
+              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}>
               <Cross size={15} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
             <div>
@@ -113,7 +113,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Link href="/app/comunidad" className="flex items-center gap-2.5">
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD})` }}
+              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}
             >
               <Cross size={14} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>

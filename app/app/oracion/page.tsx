@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Plus, Flame, Mic2, ChevronRight, Sparkles, Lock, HandHeart } from 'lucide-react'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
 import PrayerCreatedBanner from '@/components/app/PrayerCreatedBanner'
-import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, GOLD_HOVER, GOLD_INK, INK, CARD_SHADOW } from '@/lib/gold-theme'
+import { GoldArt } from '@/components/app/GoldArt'
+import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, GOLD_INK, INK, CARD_SHADOW } from '@/lib/gold-theme'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
@@ -72,9 +73,8 @@ export default async function OracionPage({
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD_HOVER})`, boxShadow: '0 8px 18px -6px rgba(255,204,0,0.4)' }}>
-                <Flame size={18} style={{ color: GOLD_INK }} />
+              <div className="relative w-11 h-11 mb-4">
+                <GoldArt uid="oracion-header" light="#FFC773" dark="#C9631A" icon={Flame} iconSize={18} />
               </div>
               <h1 className="font-black tracking-tighter"
                 style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: INK }}>
@@ -211,8 +211,8 @@ export default async function OracionPage({
           className="flex items-center justify-between p-5 rounded-2xl transition mt-4"
           style={{ background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${GOLD}18` }}>
-              <Mic2 size={16} style={{ color: GOLD }} />
+            <div className="relative w-11 h-11 flex-shrink-0">
+              <GoldArt uid="oracion-salas" light="#9FE3D1" dark="#1B6E56" icon={Mic2} iconSize={16} />
             </div>
             <div>
               <p className="font-bold text-sm" style={{ color: INK }}>Salas de oración en vivo</p>

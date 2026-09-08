@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveVideoChat from '@/components/app/LiveVideoChat'
+import { GoldArt } from '@/components/app/GoldArt'
 import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, GOLD_INK, INK, CARD_SHADOW } from '@/lib/gold-theme'
 
 function getYoutubeId(url: string): string | null {
@@ -100,9 +101,8 @@ export default async function EnVivoPage() {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: `radial-gradient(ellipse 90% 70% at 50% 0%, ${GOLD}10, transparent 65%)` }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
-          <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-            style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD})`, boxShadow: '0 8px 18px -6px rgba(255,204,0,0.4)' }}>
-            <Radio size={20} style={{ color: GOLD_INK }} />
+          <div className="relative w-12 h-12 mb-4">
+            <GoldArt uid="envivo-header" light="#B9A6FF" dark="#4B3A8F" icon={Radio} iconSize={20} />
           </div>
           <h1 className="font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: INK }}>
@@ -137,10 +137,10 @@ export default async function EnVivoPage() {
                   href={`/app/predicas/${p.id}`}
                   className="flex items-center gap-4 p-4 rounded-2xl group transition"
                   style={{ background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW }}>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: CARD }}>
+                  <div className="relative w-12 h-12 rounded-xl flex-shrink-0 overflow-hidden" style={{ background: CARD }}>
                     {p.thumbnail
                       ? <img src={p.thumbnail} alt="" className="w-full h-full object-cover" />
-                      : <Play size={18} style={{ color: GOLD }} />}
+                      : <GoldArt uid={`predica-${p.id}`} light="#FFE08A" dark="#C98A00" icon={Play} iconSize={16} />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm truncate transition" style={{ color: INK }}>{p.title}</p>
