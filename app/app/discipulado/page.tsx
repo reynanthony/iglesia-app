@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronRight, GraduationCap, User, Lock, ArrowRight, CheckCircle2, Award } from 'lucide-react'
+import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function DiscipuladoPage() {
   const supabase = await createClient()
@@ -87,37 +88,37 @@ export default async function DiscipuladoPage() {
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }} className="font-app">
 
       {/* ── Hero ── */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: `radial-gradient(ellipse 60% 80% at 50% 0%, ${GOLD}12, transparent 70%)` }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <h1 className="font-black tracking-tighter mb-4"
-            style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: '#F6F3EB' }}>
-            Mi camino de<br /><span style={{ color: '#76ABAE' }}>Discipulado.</span>
+            style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: INK }}>
+            Mi camino de<br /><span style={{ color: GOLD }}>Discipulado.</span>
           </h1>
           <div className="flex items-center gap-3 flex-wrap">
             {currentStage ? (
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black"
                 style={{ background: `${currentStage.color}18`, color: currentStage.color, border: `1px solid ${currentStage.color}35` }}>
                 <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black"
-                  style={{ background: currentStage.color, color: '#061E30' }}>
+                  style={{ background: currentStage.color, color: BG }}>
                   {currentStage.order_index}
                 </span>
                 {currentStage.name}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
+                style={{ background: BORDER, color: MUTED }}>
                 Sin etapa asignada
               </span>
             )}
             {mentor && (
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.55)' }}>
-                <div className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center" style={{ background: '#1A4A6E' }}>
+                style={{ background: BORDER, color: MUTED }}>
+                <div className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center" style={{ background: BORDER }}>
                   {mentor.avatar_url
                     ? <img src={mentor.avatar_url} alt="" className="w-full h-full object-cover" />
                     : <User size={8} />}
@@ -138,32 +139,32 @@ export default async function DiscipuladoPage() {
           const pct     = activeEnrollment.progress_pct ?? 0
           return (
             <section>
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(118,171,174,0.55)' }}>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: `${GOLD}8C` }}>
                 Continuar
               </p>
               <Link href={`/educacion/discipulado/${program?.slug}/${course?.slug}`}
                 className="block rounded-2xl overflow-hidden transition hover:brightness-110 group"
-                style={{ background: 'linear-gradient(135deg, #0B2D47 0%, #093C5D 100%)', border: '1px solid rgba(118,171,174,0.25)' }}>
+                style={{ background: CARD_GRAD, border: `1px solid ${GOLD}40` }}>
                 {/* Barra teal superior */}
-                <div className="h-[3px]" style={{ background: `linear-gradient(90deg, #76ABAE ${pct}%, #0D3352 ${pct}%)` }} />
+                <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${GOLD} ${pct}%, ${BORDER} ${pct}%)` }} />
                 <div className="p-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] mb-2" style={{ color: 'rgba(118,171,174,0.55)' }}>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] mb-2" style={{ color: `${GOLD}8C` }}>
                     {program?.title}
                   </p>
-                  <p className="font-black text-xl tracking-tight mb-4 leading-tight" style={{ color: '#F6F3EB' }}>
+                  <p className="font-black text-xl tracking-tight mb-4 leading-tight" style={{ color: INK }}>
                     {course?.title}
                   </p>
                   <div className="flex items-end justify-between">
                     <div>
-                      <span className="font-black tabular-nums" style={{ fontSize: '2.8rem', lineHeight: 1, color: '#76ABAE' }}>
+                      <span className="font-black tabular-nums" style={{ fontSize: '2.8rem', lineHeight: 1, color: GOLD }}>
                         {pct}<span className="text-2xl">%</span>
                       </span>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1" style={{ color: MUTED }}>
                         {pct === 0 ? 'Sin comenzar' : 'Completado'}
                       </p>
                     </div>
                     <div className="flex items-center gap-1.5 text-sm font-black pb-1 group-hover:gap-2.5 transition-all"
-                      style={{ color: '#76ABAE' }}>
+                      style={{ color: GOLD }}>
                       {pct === 0 ? 'Comenzar' : 'Continuar'}
                       <ChevronRight size={16} />
                     </div>
@@ -176,10 +177,10 @@ export default async function DiscipuladoPage() {
 
         {/* ── MI RUTA ── */}
         <section>
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(118,171,174,0.55)' }}>
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: `${GOLD}8C` }}>
             Mi ruta
           </p>
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
 
             {/* Barra de etapas */}
             <div className="p-5 pb-4">
@@ -193,13 +194,13 @@ export default async function DiscipuladoPage() {
                       <div title={stage.name}
                         className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-black flex-shrink-0"
                         style={{
-                          background: isCurrent ? stage.color : isDone ? `${stage.color}35` : '#0D3352',
-                          border: isCurrent ? `2px solid ${stage.color}` : isDone ? `1px solid ${stage.color}40` : '1px solid #1A4A6E',
-                          color: isCurrent ? '#061E30' : isDone ? stage.color : 'rgba(246,243,235,0.20)',
+                          background: isCurrent ? stage.color : isDone ? `${stage.color}35` : BORDER,
+                          border: isCurrent ? `2px solid ${stage.color}` : isDone ? `1px solid ${stage.color}40` : `1px solid ${BORDER}`,
+                          color: isCurrent ? BG : isDone ? stage.color : MUTED,
                         }}>
                         {isDone ? <CheckCircle2 size={14} /> : stage.order_index}
                       </div>
-                      {!isLast && <div className="h-0.5 flex-1 mx-1" style={{ background: isDone ? `${stage.color}40` : '#0D3352' }} />}
+                      {!isLast && <div className="h-0.5 flex-1 mx-1" style={{ background: isDone ? `${stage.color}40` : BORDER }} />}
                     </div>
                   )
                 })}
@@ -210,12 +211,12 @@ export default async function DiscipuladoPage() {
                   <p className="font-black text-sm mb-1" style={{ color: currentStage.color }}>
                     {currentStage.order_index}. {currentStage.name}
                   </p>
-                  <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                  <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
                     {STAGE_DESC[currentStage.order_index]}
                   </p>
                 </div>
               ) : (
-                <p className="text-xs text-center" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                <p className="text-xs text-center" style={{ color: MUTED }}>
                   Un pastor asignará tu etapa pronto
                 </p>
               )}
@@ -223,18 +224,18 @@ export default async function DiscipuladoPage() {
 
             {/* Próximo paso */}
             {currentStage && currentStage.order_index < 7 && nextStage && (
-              <div className="px-5 py-4" style={{ borderTop: '1px solid #0D3352', background: 'rgba(118,171,174,0.04)' }}>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: 'rgba(118,171,174,0.50)' }}>
+              <div className="px-5 py-4" style={{ borderTop: `1px solid ${BORDER}`, background: `${GOLD}0A` }}>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: `${GOLD}7F` }}>
                   Próximo paso → {nextStage.name}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
                   {NEXT_STEP[currentStage.order_index]}
                 </p>
               </div>
             )}
             {currentStage?.order_index === 7 && (
-              <div className="px-5 py-4" style={{ borderTop: '1px solid #0D3352', background: 'rgba(118,171,174,0.04)' }}>
-                <p className="text-xs font-black" style={{ color: '#76ABAE' }}>
+              <div className="px-5 py-4" style={{ borderTop: `1px solid ${BORDER}`, background: `${GOLD}0A` }}>
+                <p className="text-xs font-black" style={{ color: GOLD }}>
                   🎉 {NEXT_STEP[7]}
                 </p>
               </div>
@@ -245,7 +246,7 @@ export default async function DiscipuladoPage() {
         {/* ── PROGRAMAS PARA TU ETAPA ── */}
         {myPrograms.length > 0 && (
           <section>
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(118,171,174,0.55)' }}>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: `${GOLD}8C` }}>
               {currentStage ? 'Para tu etapa' : 'Programas disponibles'}
             </p>
             <div className="space-y-3">
@@ -265,13 +266,13 @@ export default async function DiscipuladoPage() {
                   <Link key={p.id} href={`/educacion/discipulado/${p.slug}`}
                     className="block rounded-2xl overflow-hidden transition hover:brightness-110 group"
                     style={{
-                      background: '#0B2D47',
-                      border: `1px solid ${allDone ? 'rgba(118,171,174,0.35)' : started ? '#1A4A6E' : '#0D3352'}`,
+                      background: CARD,
+                      border: `1px solid ${allDone ? `${GOLD}59` : started ? BORDER : BORDER}`,
                     }}>
 
                     {/* Cabecera de la card */}
                     <div className="px-5 pt-5 pb-4"
-                      style={{ background: allDone ? 'rgba(118,171,174,0.07)' : 'linear-gradient(135deg, rgba(26,74,110,0.5) 0%, transparent 100%)' }}>
+                      style={{ background: allDone ? `${GOLD}11` : `linear-gradient(135deg, ${CARD} 0%, transparent 100%)` }}>
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           {isMyStage && (
@@ -281,18 +282,18 @@ export default async function DiscipuladoPage() {
                             </span>
                           )}
                           <h3 className="font-black tracking-tight leading-tight"
-                            style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)', color: '#F6F3EB' }}>
+                            style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)', color: INK }}>
                             {p.title}
                           </h3>
                         </div>
                         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                           style={{
-                            background: allDone ? 'rgba(118,171,174,0.18)' : 'rgba(118,171,174,0.10)',
-                            border: `1px solid ${allDone ? 'rgba(118,171,174,0.30)' : 'rgba(118,171,174,0.15)'}`,
+                            background: allDone ? `${GOLD}2D` : `${GOLD}19`,
+                            border: `1px solid ${allDone ? `${GOLD}4C` : `${GOLD}26`}`,
                           }}>
                           {allDone
-                            ? <CheckCircle2 size={22} style={{ color: '#76ABAE' }} />
-                            : <GraduationCap size={22} style={{ color: '#76ABAE' }} />}
+                            ? <CheckCircle2 size={22} style={{ color: GOLD }} />
+                            : <GraduationCap size={22} style={{ color: GOLD }} />}
                         </div>
                       </div>
                     </div>
@@ -303,29 +304,29 @@ export default async function DiscipuladoPage() {
                       <div className="flex items-center gap-5">
                         <div>
                           <span className="font-black text-2xl tabular-nums leading-none"
-                            style={{ color: allDone ? '#76ABAE' : '#F6F3EB' }}>
+                            style={{ color: allDone ? GOLD : INK }}>
                             {activeCourses.length}
                           </span>
                           <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-0.5"
-                            style={{ color: 'rgba(246,243,235,0.62)' }}>
+                            style={{ color: MUTED }}>
                             curso{activeCourses.length !== 1 ? 's' : ''}
                           </p>
                         </div>
                         {(started || allDone) && (
                           <div>
                             <span className="font-black text-2xl tabular-nums leading-none"
-                              style={{ color: allDone ? '#76ABAE' : '#F6F3EB' }}>
+                              style={{ color: allDone ? GOLD : INK }}>
                               {completedCount}
                             </span>
                             <p className="text-[9px] font-bold uppercase tracking-[0.2em] mt-0.5"
-                              style={{ color: 'rgba(246,243,235,0.62)' }}>
+                              style={{ color: MUTED }}>
                               complet.
                             </p>
                           </div>
                         )}
                       </div>
                       <div className="flex items-center gap-1.5 text-[13px] font-black group-hover:gap-2.5 transition-all"
-                        style={{ color: '#76ABAE' }}>
+                        style={{ color: GOLD }}>
                         {allDone ? 'Ver' : started ? 'Continuar' : 'Ver programa'}
                         <ArrowRight size={14} />
                       </div>
@@ -333,8 +334,8 @@ export default async function DiscipuladoPage() {
 
                     {/* Barra de progreso si está en curso */}
                     {started && (
-                      <div className="h-1" style={{ background: '#0D3352' }}>
-                        <div className="h-full" style={{ width: `${progPct}%`, background: 'linear-gradient(90deg, #1A4A6E, #76ABAE)' }} />
+                      <div className="h-1" style={{ background: BORDER }}>
+                        <div className="h-full" style={{ width: `${progPct}%`, background: `linear-gradient(90deg, ${BORDER}, ${GOLD})` }} />
                       </div>
                     )}
                   </Link>
@@ -347,22 +348,22 @@ export default async function DiscipuladoPage() {
         {/* ── PROGRAMAS BLOQUEADOS ── */}
         {lockedPrograms.length > 0 && (
           <section>
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: 'rgba(246,243,235,0.20)' }}>
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: MUTED }}>
               Próximamente en tu camino
             </p>
             <div className="space-y-2">
               {lockedPrograms.map((p: any) => {
                 const req = p.discipleship_stages
                 return (
-                  <div key={p.id} className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352', opacity: 0.45 }}>
+                  <div key={p.id} className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}`, opacity: 0.45 }}>
                     <div className="px-5 py-4 flex items-center gap-4">
                       <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: 'rgba(246,243,235,0.04)', border: '1px solid rgba(246,243,235,0.07)' }}>
-                        <Lock size={18} style={{ color: 'rgba(246,243,235,0.20)' }} />
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                        <Lock size={18} style={{ color: MUTED }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-black text-base truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>{p.title}</p>
-                        <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.22)' }}>
+                        <p className="font-black text-base truncate" style={{ color: MUTED }}>{p.title}</p>
+                        <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                           Se desbloquea en etapa {req.order_index} · {req.name}
                         </p>
                       </div>
@@ -378,22 +379,22 @@ export default async function DiscipuladoPage() {
         <Link href="/app/discipulado/certificados"
           className="block rounded-2xl overflow-hidden transition hover:brightness-110 group"
           style={{
-            background: totalCerts > 0 ? 'linear-gradient(135deg, #0B2D47, #093C5D)' : '#0B2D47',
-            border: `1px solid ${totalCerts > 0 ? 'rgba(118,171,174,0.30)' : '#0D3352'}`,
+            background: totalCerts > 0 ? CARD_GRAD : CARD,
+            border: `1px solid ${totalCerts > 0 ? `${GOLD}4C` : BORDER}`,
           }}>
           <div className="px-5 py-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{
-                background: totalCerts > 0 ? 'rgba(118,171,174,0.18)' : 'rgba(246,243,235,0.05)',
-                border: `1px solid ${totalCerts > 0 ? 'rgba(118,171,174,0.28)' : 'rgba(246,243,235,0.08)'}`,
+                background: totalCerts > 0 ? `${GOLD}2D` : MUTED,
+                border: `1px solid ${totalCerts > 0 ? `${GOLD}47` : MUTED}`,
               }}>
-              <Award size={22} style={{ color: totalCerts > 0 ? '#76ABAE' : 'rgba(246,243,235,0.22)' }} />
+              <Award size={22} style={{ color: totalCerts > 0 ? GOLD : MUTED }} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-black text-base" style={{ color: totalCerts > 0 ? '#F6F3EB' : 'rgba(246,243,235,0.55)' }}>
+              <p className="font-black text-base" style={{ color: totalCerts > 0 ? INK : MUTED }}>
                 Mis certificados
               </p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.38)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 {totalCerts > 0
                   ? `${totalCerts} certificado${totalCerts !== 1 ? 's' : ''} obtenido${totalCerts !== 1 ? 's' : ''}`
                   : 'Completa un programa para obtener tu primer certificado'}
@@ -401,7 +402,7 @@ export default async function DiscipuladoPage() {
             </div>
             {totalCerts > 0 && (
               <div className="flex items-center gap-1 text-[13px] font-black group-hover:gap-2 transition-all"
-                style={{ color: '#76ABAE' }}>
+                style={{ color: GOLD }}>
                 Ver <ArrowRight size={14} />
               </div>
             )}

@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Bell, Heart, MessageCircle, MessageSquare, AlertTriangle, Megaphone } from 'lucide-react'
 import PushNotificationToggle from '@/components/app/PushNotificationToggle'
+import { GoldArt } from '@/components/app/GoldArt'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type Notification = {
   id: string
@@ -34,9 +36,9 @@ function notifText(n: Notification) {
 }
 
 function NotifIcon({ type }: { type: string }) {
-  if (type === 'announcement') return <Megaphone size={13} style={{ color: '#76ABAE' }} />
+  if (type === 'announcement') return <Megaphone size={13} style={{ color: GOLD }} />
   if (type === 'like')    return <Heart size={13} className="text-red-400 fill-red-400" />
-  if (type === 'comment') return <MessageCircle size={13} style={{ color: '#76ABAE' }} />
+  if (type === 'comment') return <MessageCircle size={13} style={{ color: GOLD }} />
   if (type === 'reply')   return <MessageSquare size={13} style={{ color: '#869B7E' }} />
   return <AlertTriangle size={13} style={{ color: '#C9A227' }} />
 }
@@ -68,18 +70,17 @@ export default async function NotificacionesPage() {
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }} className="font-app">
 
       {/* Header */}
-      <div className="px-4 pt-6 pb-4" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="px-4 pt-6 pb-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="flex items-center gap-3 max-w-xl mx-auto">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: '#0B2D47' }}>
-            <Bell size={16} style={{ color: '#76ABAE' }} />
+          <div className="relative w-10 h-10">
+            <GoldArt uid="notif-header" light="#B9A6FF" dark="#4B3A8F" icon={Bell} iconSize={16} />
           </div>
           <div>
-            <h1 className="font-black text-lg" style={{ color: '#F6F3EB' }}>Notificaciones</h1>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <h1 className="font-black text-lg" style={{ color: INK }}>Notificaciones</h1>
+            <p className="text-[11px]" style={{ color: MUTED }}>
               {notifications?.length ?? 0} en total
             </p>
           </div>
@@ -94,12 +95,12 @@ export default async function NotificacionesPage() {
         {!notifications || notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4 text-center px-8">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <Bell size={22} style={{ color: 'rgba(118,171,174,0.40)' }} />
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <Bell size={22} style={{ color: MUTED }} />
             </div>
             <div>
-              <p className="font-black text-base" style={{ color: '#F6F3EB' }}>Sin notificaciones</p>
-              <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
+              <p className="font-black text-base" style={{ color: INK }}>Sin notificaciones</p>
+              <p className="text-sm mt-1" style={{ color: MUTED }}>
                 Cuando alguien reaccione o comente, aparecerá aquí.
               </p>
             </div>
@@ -108,7 +109,7 @@ export default async function NotificacionesPage() {
           Object.entries(grouped).map(([date, items]) => (
             <div key={date}>
               <p className="px-4 pt-5 pb-2 text-[10px] font-black uppercase tracking-[0.3em]"
-                style={{ color: 'rgba(246,243,235,0.25)' }}>
+                style={{ color: MUTED }}>
                 {date}
               </p>
               {items.map(n => {
@@ -122,36 +123,36 @@ export default async function NotificacionesPage() {
                   <Link key={n.id} href={href}
                     className="flex items-start gap-3.5 px-4 py-3.5 transition"
                     style={{
-                      background: !n.read ? 'rgba(13,51,82,0.50)' : 'transparent',
-                      borderBottom: '1px solid rgba(13,51,82,0.40)',
+                      background: !n.read ? `${GOLD}0F` : 'transparent',
+                      borderBottom: `1px solid ${BORDER}`,
                     }}>
                     <div className="relative flex-shrink-0">
                       <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm"
-                        style={{ background: '#0D3352', color: '#76ABAE' }}>
+                        style={{ background: CARD, color: GOLD }}>
                         {n.profiles?.avatar_url
                           ? <img src={n.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                           : initial}
                       </div>
                       <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center"
-                        style={{ background: '#061E30', border: '1px solid #0D3352' }}>
+                        style={{ background: BG, border: `1px solid ${BORDER}` }}>
                         <NotifIcon type={n.type} />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] leading-snug" style={{ color: '#F6F3EB' }}>
+                      <p className="text-[13px] leading-snug" style={{ color: INK }}>
                         {notifText(n)}
                       </p>
                       {n.type === 'announcement' && n.body && (
-                        <p className="text-[11px] mt-0.5 line-clamp-2" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                        <p className="text-[11px] mt-0.5 line-clamp-2" style={{ color: MUTED }}>
                           {n.body}
                         </p>
                       )}
-                      <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                      <p className="text-[11px] mt-1" style={{ color: MUTED }}>
                         {timeAgo(n.created_at)}
                       </p>
                     </div>
                     {!n.read && (
-                      <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ background: '#76ABAE' }} />
+                      <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ background: GOLD }} />
                     )}
                   </Link>
                 )
