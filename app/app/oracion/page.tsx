@@ -1,15 +1,16 @@
-﻿import { Suspense } from 'react'
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Flame, Mic2, ChevronRight, Sparkles, Lock, HandHeart } from 'lucide-react'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
 import PrayerCreatedBanner from '@/components/app/PrayerCreatedBanner'
+import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, GOLD_HOVER, GOLD_INK, INK, CARD_SHADOW } from '@/lib/gold-theme'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
 }
 const STATUS_COLOR: Record<string, string> = {
-  nueva: '#76ABAE', seguimiento: '#F59E0B', respondida: '#4ADE80',
+  nueva: GOLD, seguimiento: '#F59E0B', respondida: '#4ADE80',
 }
 
 function timeAgo(date: string) {
@@ -58,38 +59,34 @@ export default async function OracionPage({
   const activeTab = estado ?? 'todas'
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }} className="font-app">
       <RealtimeRefresh channelName="oracion-list" watches={[{ table: 'prayer_requests' }]} />
       <Suspense fallback={null}>
         <PrayerCreatedBanner />
       </Suspense>
 
       {/* Header */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: `radial-gradient(ellipse 60% 80% at 50% 0%, ${GOLD}12, transparent 70%)` }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <div className="flex items-start justify-between mb-6">
             <div>
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{
-                  background: 'rgba(118,171,174,0.16)', backdropFilter: 'blur(12px) saturate(160%)',
-                  border: '1px solid rgba(118,171,174,0.3)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
-                }}>
-                <Flame size={18} style={{ color: '#76ABAE' }} />
+                style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD_HOVER})`, boxShadow: '0 8px 18px -6px rgba(255,204,0,0.4)' }}>
+                <Flame size={18} style={{ color: GOLD_INK }} />
               </div>
               <h1 className="font-black tracking-tighter"
-                style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
-                Peticiones de<br /><span style={{ color: '#76ABAE' }}>Oración.</span>
+                style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: INK }}>
+                Peticiones de<br /><span style={{ color: GOLD }}>Oración.</span>
               </h1>
-              <p className="text-sm mt-3 max-w-xs leading-relaxed"
-                style={{ color: 'rgba(246,243,235,0.72)' }}>
+              <p className="text-sm mt-3 max-w-xs leading-relaxed" style={{ color: MUTED }}>
                 Comparte tu petición y deja que la comunidad ore contigo.
               </p>
             </div>
             <Link href="/app/oracion/nueva"
               className="flex-shrink-0 flex items-center gap-2 text-sm font-black uppercase tracking-wider px-5 py-3 rounded-xl transition"
-              style={{ background: '#F6F3EB', color: '#061E30', boxShadow: '0 10px 22px -8px rgba(0,0,0,0.5)' }}>
+              style={{ background: GOLD, color: GOLD_INK, boxShadow: '0 10px 22px -8px rgba(255,204,0,0.4)' }}>
               <Plus size={14} /> Nueva
             </Link>
           </div>
@@ -101,14 +98,8 @@ export default async function OracionPage({
                 href={tab.key === 'todas' ? '/app/oracion' : `/app/oracion?estado=${tab.key}`}
                 className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition"
                 style={activeTab === tab.key
-                  ? {
-                      background: 'rgba(118,171,174,0.20)',
-                      backdropFilter: 'blur(12px) saturate(160%)',
-                      border: '1px solid rgba(118,171,174,0.4)',
-                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
-                      color: '#F6F3EB',
-                    }
-                  : { color: 'rgba(246,243,235,0.55)', border: '1px solid transparent' }}>
+                  ? { background: GOLD, color: GOLD_INK }
+                  : { background: CARD, color: MUTED, border: `1px solid ${BORDER}` }}>
                 {tab.label}
               </Link>
             ))}
@@ -120,11 +111,11 @@ export default async function OracionPage({
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-3">
 
         {error && (
-          <div className="rounded-2xl p-6 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl p-6 text-center" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <p className="text-sm font-bold mb-1" style={{ color: '#F87171' }}>
               No se pudieron cargar las peticiones
             </p>
-            <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[12px]" style={{ color: MUTED }}>
               Intenta de nuevo en unos minutos.
             </p>
           </div>
@@ -133,26 +124,25 @@ export default async function OracionPage({
         {!error && (!requests || requests.length === 0) && (
           <div className="text-center py-24 flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <Flame size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <Flame size={24} style={{ color: MUTED }} />
             </div>
-            <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+            <p className="font-black text-lg tracking-tight mb-2" style={{ color: INK }}>
               No hay peticiones aún
             </p>
-            <p className="text-sm mb-8 max-w-[220px] leading-relaxed mx-auto"
-              style={{ color: 'rgba(246,243,235,0.72)' }}>
+            <p className="text-sm mb-8 max-w-[220px] leading-relaxed mx-auto" style={{ color: MUTED }}>
               Sé el primero en compartir una petición de oración con la comunidad
             </p>
             <Link href="/app/oracion/nueva"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-wider px-6 py-3 rounded-xl"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               <Plus size={13} /> Crear petición
             </Link>
           </div>
         )}
 
         {requests?.map((req: any) => {
-          const sc           = STATUS_COLOR[req.status] ?? '#76ABAE'
+          const sc           = STATUS_COLOR[req.status] ?? GOLD
           const isOwn        = req.user_id === user?.id
           const hasTestimony = !!req.testimony_post_id
           const isPrivate    = req.is_public === false
@@ -161,60 +151,53 @@ export default async function OracionPage({
             <Link key={req.id} href={`/app/oracion/${req.id}`}
               className="group block rounded-2xl transition"
               style={{
-                background: 'rgba(255,255,255,0.04)',
-                backdropFilter: 'blur(14px) saturate(150%)',
-                border: `1px solid ${hasTestimony ? 'rgba(118,171,174,0.3)' : isPrivate ? 'rgba(246,243,235,0.08)' : 'rgba(255,255,255,0.07)'}`,
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                background: CARD_GRAD,
+                border: `1px solid ${hasTestimony ? `${GOLD}50` : BORDER}`,
+                boxShadow: CARD_SHADOW,
               }}>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[9px] font-black uppercase tracking-[0.25em] px-2.5 py-1 rounded-full"
-                      style={{
-                        background: `${sc}22`, backdropFilter: 'blur(10px)', color: sc,
-                        border: `1px solid ${sc}45`, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
-                      }}>
+                      style={{ background: `${sc}22`, color: sc, border: `1px solid ${sc}45` }}>
                       {STATUS_LABEL[req.status]}
                     </span>
                     {isPrivate && (
                       <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                        style={{ background: 'rgba(246,243,235,0.06)', color: 'rgba(246,243,235,0.45)', border: '1px solid rgba(246,243,235,0.10)' }}>
+                        style={{ background: CARD, color: MUTED, border: `1px solid ${BORDER}` }}>
                         <Lock size={8} /> Privada
                       </span>
                     )}
                     {hasTestimony && (
                       <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                        style={{ background: 'rgba(118,171,174,0.12)', color: '#76ABAE' }}>
+                        style={{ background: `${GOLD}18`, color: GOLD }}>
                         <Sparkles size={9} /> Testimonio
                       </span>
                     )}
                     {isOwn && !hasTestimony && !isPrivate && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider"
-                        style={{ color: 'rgba(246,243,235,0.55)' }}>
+                      <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: MUTED }}>
                         Mi petición
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {responseCount > 0 && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold"
-                        style={{ color: 'rgba(118,171,174,0.70)' }}>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold" style={{ color: GOLD }}>
                         <HandHeart size={11} /> {responseCount}
                       </span>
                     )}
-                    <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', marginTop: 2 }} />
+                    <ChevronRight size={14} style={{ color: MUTED, marginTop: 2 }} />
                   </div>
                 </div>
-                <p className="font-black text-base leading-snug mb-2 group-hover:text-[#76ABAE] transition"
-                  style={{ color: '#F6F3EB' }}>
+                <p className="font-black text-base leading-snug mb-2 transition" style={{ color: INK }}>
                   {req.title}
                 </p>
                 <div className="flex items-center gap-3">
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <p className="text-[11px]" style={{ color: MUTED }}>
                     {req.is_anonymous ? 'Anónimo' : ((req.profiles as any)?.full_name ?? 'Usuario')}
                   </p>
-                  <span style={{ color: 'rgba(246,243,235,0.20)' }}>·</span>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <span style={{ color: BORDER }}>·</span>
+                  <p className="text-[11px]" style={{ color: MUTED }}>
                     {timeAgo(req.created_at)}
                   </p>
                 </div>
@@ -226,23 +209,19 @@ export default async function OracionPage({
         {/* Enlace a salas de audio */}
         <Link href="/app/oracion/salas"
           className="flex items-center justify-between p-5 rounded-2xl transition mt-4"
-          style={{
-            background: 'rgba(118,171,174,0.10)', backdropFilter: 'blur(16px) saturate(160%)',
-            border: '1px solid rgba(118,171,174,0.28)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
-          }}>
+          style={{ background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: 'rgba(118,171,174,0.16)' }}>
-              <Mic2 size={16} style={{ color: '#76ABAE' }} />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${GOLD}18` }}>
+              <Mic2 size={16} style={{ color: GOLD }} />
             </div>
             <div>
-              <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Salas de oración en vivo</p>
-              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="font-bold text-sm" style={{ color: INK }}>Salas de oración en vivo</p>
+              <p className="text-[11px]" style={{ color: MUTED }}>
                 Oración grupal por voz en tiempo real
               </p>
             </div>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
+          <ChevronRight size={16} style={{ color: MUTED }} />
         </Link>
       </div>
     </div>

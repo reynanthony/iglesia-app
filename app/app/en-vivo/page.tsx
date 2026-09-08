@@ -1,8 +1,9 @@
-﻿import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Radio, Play, Flame } from 'lucide-react'
 import LiveVideoChat from '@/components/app/LiveVideoChat'
+import { BG, CARD, CARD_GRAD, BORDER, MUTED, GOLD, GOLD_INK, INK, CARD_SHADOW } from '@/lib/gold-theme'
 
 function getYoutubeId(url: string): string | null {
   if (!url) return null
@@ -52,27 +53,23 @@ export default async function EnVivoPage() {
 
   if (isLive) {
     return (
-      <div className="flex flex-col" style={{ background: '#061E30', height: '100%' }}>
+      <div className="flex flex-col font-app" style={{ background: BG, height: '100%' }}>
 
         {/* Hero — franja centrada con degradado, como una portada de transmisión */}
         <div className="relative overflow-hidden flex flex-col items-center text-center px-4 py-6"
           style={{
-            background: 'radial-gradient(ellipse 130% 100% at 50% 0%, rgba(227,123,133,0.16), transparent 65%), linear-gradient(180deg, #0c3757 0%, #061E30 100%)',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            background: `radial-gradient(ellipse 130% 100% at 50% 0%, rgba(227,123,133,0.14), transparent 65%), linear-gradient(180deg, #1a1c22 0%, ${BG} 100%)`,
+            borderBottom: `1px solid ${BORDER}`,
           }}>
           <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full mb-2.5"
-            style={{
-              background: 'rgba(227,123,133,0.24)', backdropFilter: 'blur(12px) saturate(160%)',
-              color: '#F2A3AC', border: '1px solid rgba(227,123,133,0.4)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
-            }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+            style={{ background: 'rgba(214,40,75,0.9)', color: '#fff' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             En vivo
           </span>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: 'rgba(246,243,235,0.50)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: MUTED }}>
             Transmitiendo desde
           </p>
-          <p className="font-black text-lg truncate max-w-full" style={{ color: '#F6F3EB' }}>{liveTitle}</p>
+          <p className="font-black text-lg truncate max-w-full" style={{ color: INK }}>{liveTitle}</p>
         </div>
 
         <LiveVideoChat
@@ -83,14 +80,10 @@ export default async function EnVivoPage() {
         />
 
         {/* Oración en vivo */}
-        <div className="px-4 py-4" style={{ borderTop: '1px solid #0D3352' }}>
+        <div className="px-4 py-4" style={{ borderTop: `1px solid ${BORDER}` }}>
           <Link href="/app/oracion/nueva"
             className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold w-full max-w-sm mx-auto"
-            style={{
-              background: 'rgba(118,171,174,0.14)', backdropFilter: 'blur(16px) saturate(160%)',
-              border: '1px solid rgba(118,171,174,0.32)', color: '#76ABAE',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
-            }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Flame size={16} /> Enviar petición de oración
           </Link>
         </div>
@@ -100,25 +93,22 @@ export default async function EnVivoPage() {
 
   // Offline state
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div className="font-app" style={{ background: BG, minHeight: '100%' }}>
 
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(227,123,133,0.14), transparent 65%), linear-gradient(180deg, #0c2f42 0%, #061E30 100%)' }} />
+          style={{ background: `radial-gradient(ellipse 90% 70% at 50% 0%, ${GOLD}10, transparent 65%)` }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-            style={{
-              background: 'rgba(227,123,133,0.16)', backdropFilter: 'blur(14px) saturate(160%)',
-              border: '1px solid rgba(227,123,133,0.32)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
-            }}>
-            <Radio size={20} style={{ color: '#F2A3AC' }} />
+            style={{ background: `linear-gradient(140deg, #FFDD66, ${GOLD})`, boxShadow: '0 8px 18px -6px rgba(255,204,0,0.4)' }}>
+            <Radio size={20} style={{ color: GOLD_INK }} />
           </div>
           <h1 className="font-black tracking-tighter"
-            style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
-            Iglesia<br /><span style={{ color: '#76ABAE' }}>en Vivo.</span>
+            style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: INK }}>
+            Iglesia<br /><span style={{ color: GOLD }}>en Vivo.</span>
           </h1>
-          <p className="text-sm mt-3 leading-relaxed max-w-sm" style={{ color: 'rgba(246,243,235,0.72)' }}>
+          <p className="text-sm mt-3 leading-relaxed max-w-sm" style={{ color: MUTED }}>
             No hay transmisión activa en este momento. Te avisamos cada domingo.
           </p>
         </div>
@@ -127,17 +117,12 @@ export default async function EnVivoPage() {
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
 
         {/* Horario */}
-        <div className="p-5 rounded-2xl"
-          style={{
-            background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(14px) saturate(150%)',
-            border: '1px solid rgba(255,255,255,0.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)',
-          }}>
-          <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-            style={{ color: 'rgba(118,171,174,0.60)' }}>Próximo culto</p>
-          <p className="font-black text-xl tracking-tight" style={{ color: '#F6F3EB' }}>
+        <div className="p-5 rounded-2xl" style={{ background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW }}>
+          <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: GOLD }}>Próximo culto</p>
+          <p className="font-black text-xl tracking-tight" style={{ color: INK }}>
             Domingo
           </p>
-          <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.50)' }}>
+          <p className="text-sm mt-1" style={{ color: MUTED }}>
             10:00 AM — Culto principal · También en línea
           </p>
         </div>
@@ -145,37 +130,29 @@ export default async function EnVivoPage() {
         {/* Últimas predicas */}
         {predicas.length > 0 && (
           <section>
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>Últimas predicas</p>
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: GOLD }}>Últimas predicas</p>
             <div className="space-y-2">
               {predicas.map(p => (
                 <Link key={p.id}
                   href={`/app/predicas/${p.id}`}
                   className="flex items-center gap-4 p-4 rounded-2xl group transition"
-                  style={{
-                    background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(14px) saturate(150%)',
-                    border: '1px solid rgba(255,255,255,0.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07)',
-                  }}>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
-                    style={{ background: '#0D3352' }}>
+                  style={{ background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ background: CARD }}>
                     {p.thumbnail
                       ? <img src={p.thumbnail} alt="" className="w-full h-full object-cover" />
-                      : <Play size={18} style={{ color: '#76ABAE' }} />}
+                      : <Play size={18} style={{ color: GOLD }} />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate group-hover:text-[#76ABAE] transition"
-                      style={{ color: '#F6F3EB' }}>{p.title}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                    <p className="font-bold text-sm truncate transition" style={{ color: INK }}>{p.title}</p>
+                    <p className="text-[11px]" style={{ color: MUTED }}>
                       {p.speaker}{p.date ? ` · ${new Date(p.date).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })}` : ''}
                     </p>
                   </div>
-                  <Play size={14} style={{ color: 'rgba(246,243,235,0.55)', flexShrink: 0 }} />
+                  <Play size={14} style={{ color: MUTED, flexShrink: 0 }} />
                 </Link>
               ))}
             </div>
-            <Link href="/predicas"
-              className="block text-center mt-3 text-[12px] font-bold"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>
+            <Link href="/predicas" className="block text-center mt-3 text-[12px] font-bold" style={{ color: MUTED }}>
               Ver todas las predicas →
             </Link>
           </section>
@@ -184,7 +161,7 @@ export default async function EnVivoPage() {
         {/* Oración */}
         <Link href="/app/oracion/nueva"
           className="flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold w-full"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           <Flame size={16} /> Enviar petición de oración
         </Link>
 

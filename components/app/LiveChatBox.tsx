@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send } from 'lucide-react'
+import { GOLD, GOLD_INK, MUTED, BORDER, SURFACE, CARD } from '@/lib/gold-theme'
 
 type Msg = { id: string; text: string; name: string; avatar: string | null; ts: number }
 
@@ -58,8 +59,7 @@ export default function LiveChatBox({
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3"
         style={{ scrollbarWidth: 'none' }}>
         {messages.length === 0 && (
-          <p className="text-center text-[12px] py-8"
-            style={{ color: 'rgba(246,243,235,0.55)' }}>
+          <p className="text-center text-[12px] py-8" style={{ color: MUTED }}>
             Sé el primero en saludar 👋
           </p>
         )}
@@ -68,24 +68,21 @@ export default function LiveChatBox({
           return (
             <div key={m.id} className={`flex items-end gap-2 ${isMe ? 'flex-row-reverse' : ''}`}>
               <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black flex-shrink-0"
-                style={{ background: '#0D3352', color: '#76ABAE' }}>
+                style={{ background: CARD, color: GOLD }}>
                 {m.avatar
                   ? <img src={m.avatar} alt="" className="w-full h-full object-cover rounded-full" />
                   : m.name[0]?.toUpperCase()}
               </div>
               <div className={`max-w-[75%] ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-0.5`}>
                 {!isMe && (
-                  <p className="text-[10px] font-bold px-1" style={{ color: 'rgba(118,171,174,0.70)' }}>
+                  <p className="text-[10px] font-bold px-1" style={{ color: GOLD }}>
                     {m.name}
                   </p>
                 )}
                 <div className="px-3 py-2 rounded-2xl text-[13px] leading-snug"
                   style={isMe
-                    ? { background: '#76ABAE', color: '#061E30', borderBottomRightRadius: 4 }
-                    : {
-                        background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255,255,255,0.08)', color: '#F6F3EB', borderBottomLeftRadius: 4,
-                      }}>
+                    ? { background: GOLD, color: GOLD_INK, borderBottomRightRadius: 4 }
+                    : { background: SURFACE, border: `1px solid ${BORDER}`, color: '#F6F3EB', borderBottomLeftRadius: 4 }}>
                   {m.text}
                 </div>
               </div>
@@ -96,8 +93,7 @@ export default function LiveChatBox({
       </div>
 
       {/* Input */}
-      <div className="flex items-center gap-2 px-3 py-3"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="flex items-center gap-2 px-3 py-3" style={{ borderTop: `1px solid ${BORDER}` }}>
         <input
           id="chat-input"
           name="message"
@@ -107,12 +103,10 @@ export default function LiveChatBox({
           onKeyDown={handleKey}
           placeholder="Escribe un mensaje…"
           maxLength={300}
-          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
           style={{
-            background: 'rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(14px) saturate(150%)',
-            border: '1px solid rgba(255,255,255,0.10)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
+            background: SURFACE,
+            border: `1px solid ${BORDER}`,
             borderRadius: 20,
             padding: '8px 14px',
             color: '#F6F3EB',
@@ -120,12 +114,9 @@ export default function LiveChatBox({
         />
         <button onClick={send} disabled={!input.trim()}
           aria-label="Enviar mensaje"
-          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-          style={{
-            background: 'rgba(118,171,174,0.28)', backdropFilter: 'blur(14px) saturate(160%)',
-            border: '1px solid rgba(118,171,174,0.5)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)',
-          }}>
-          <Send size={14} style={{ color: '#fff' }} aria-hidden="true" />
+          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+          style={{ background: GOLD }}>
+          <Send size={14} style={{ color: GOLD_INK }} aria-hidden="true" />
         </button>
       </div>
     </div>

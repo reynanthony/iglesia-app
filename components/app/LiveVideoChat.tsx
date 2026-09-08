@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { Radio } from 'lucide-react'
 import LiveChatBox from '@/components/app/LiveChatBox'
 import LivePlayer from '@/components/LivePlayer'
-
-const GREEN = '#6FBF8B'
+import { GOLD, GOLD_INK, MUTED, BORDER, SURFACE } from '@/lib/gold-theme'
 
 interface Props {
   liveUrl: string
@@ -21,10 +20,10 @@ export default function LiveVideoChat({ liveUrl, liveTitle, currentUserId, curre
     <div className="flex flex-col md:flex-row flex-1" style={{ minHeight: 0 }}>
 
       {/* Pestañas — solo en mobile, para no tener que hacer scroll entre video y chat */}
-      <div className="md:hidden flex justify-center py-2.5 flex-shrink-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="md:hidden flex justify-center py-2.5 flex-shrink-0" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div
           className="inline-flex gap-1 rounded-full p-1"
-          style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(14px) saturate(160%)', border: '1px solid rgba(255,255,255,0.08)' }}
+          style={{ background: SURFACE, border: `1px solid ${BORDER}` }}
         >
           {(['video', 'chat'] as const).map(t => (
             <button
@@ -32,8 +31,8 @@ export default function LiveVideoChat({ liveUrl, liveTitle, currentUserId, curre
               onClick={() => setTab(t)}
               className="px-5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition"
               style={tab === t
-                ? { background: `${GREEN}30`, color: '#fff', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16)' }
-                : { color: 'rgba(246,243,235,0.50)' }}
+                ? { background: GOLD, color: GOLD_INK }
+                : { color: MUTED }}
             >
               {t === 'video' ? 'En vivo' : 'Chat'}
             </button>
@@ -46,17 +45,16 @@ export default function LiveVideoChat({ liveUrl, liveTitle, currentUserId, curre
         {liveUrl
           ? <LivePlayer url={liveUrl} title={liveTitle} />
           : <div className="flex items-center justify-center py-20">
-              <Radio size={24} style={{ color: '#76ABAE', opacity: 0.4 }} />
+              <Radio size={24} style={{ color: GOLD, opacity: 0.4 }} />
             </div>
         }
       </div>
 
       {/* Live chat */}
       <div className={`flex-col md:flex md:w-80 md:border-l ${tab === 'video' ? 'hidden md:flex' : 'flex'}`}
-        style={{ borderColor: 'rgba(255,255,255,0.08)', minHeight: 320 }}>
-        <div className="px-4 py-3 flex-shrink-0 hidden md:block" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          <p className="text-[11px] font-black uppercase tracking-wider"
-            style={{ color: 'rgba(118,171,174,0.60)' }}>Chat del culto</p>
+        style={{ borderColor: BORDER, minHeight: 320 }}>
+        <div className="px-4 py-3 flex-shrink-0 hidden md:block" style={{ borderBottom: `1px solid ${BORDER}` }}>
+          <p className="text-[11px] font-black uppercase tracking-wider" style={{ color: MUTED }}>Chat del culto</p>
         </div>
         <div className="flex-1 overflow-hidden">
           <LiveChatBox currentUserId={currentUserId} currentProfile={currentProfile} />

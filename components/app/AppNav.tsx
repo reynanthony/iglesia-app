@@ -7,24 +7,18 @@ import {
   Users2, Flame, User, Bell,
   UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross,
 } from 'lucide-react'
+import { GOLD, GOLD_INK, MUTED } from '@/lib/gold-theme'
 
-const ACCENT   = '#76ABAE'
-const INACTIVE = 'rgba(118,171,174,0.45)'
-
-// Un color de acento por destino — para que el nav no dependa solo del teal.
-const AMBER  = '#E3A94C'
-const PURPLE = '#A99BD1'
-const RED    = '#E37B85'
-const GREEN  = '#6FBF8B'
+const INACTIVE = MUTED
 
 const navItems = [
-  { href: '/app/comunidad',       icon: Users2,     label: 'Comunidad',      exact: false, color: ACCENT },
-  { href: '/app/grupos',          icon: UsersRound, label: 'Grupos',         exact: false, color: GREEN },
-  { href: '/app/oracion',         icon: Flame,      label: 'Oración',        exact: false, color: AMBER },
-  { href: '/app/en-vivo',         icon: Radio,      label: 'En Vivo',        exact: false, color: RED },
-  { href: '/app/discipulado',     icon: BookOpen,   label: 'Discipulado',    exact: true,  color: PURPLE },
-  { href: '/app/pastoral',        icon: Cross,      label: 'Pastoral',       exact: false, color: ACCENT },
-  { href: '/app/notificaciones',  icon: Bell,       label: 'Notificaciones', exact: true,  color: ACCENT },
+  { href: '/app/comunidad',       icon: Users2,     label: 'Comunidad',      exact: false },
+  { href: '/app/grupos',          icon: UsersRound, label: 'Grupos',         exact: false },
+  { href: '/app/oracion',         icon: Flame,      label: 'Oración',        exact: false },
+  { href: '/app/en-vivo',         icon: Radio,      label: 'En Vivo',        exact: false },
+  { href: '/app/discipulado',     icon: BookOpen,   label: 'Discipulado',    exact: true  },
+  { href: '/app/pastoral',        icon: Cross,      label: 'Pastoral',       exact: false },
+  { href: '/app/notificaciones',  icon: Bell,       label: 'Notificaciones', exact: true  },
 ]
 
 interface Props { profileHref: string }
@@ -36,23 +30,17 @@ export default function AppNav({ profileHref }: Props) {
 
   return (
     <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-      {navItems.map(({ href, icon: Icon, label, exact, color }) => {
+      {navItems.map(({ href, icon: Icon, label, exact }) => {
         const active = isActive(href, exact)
         return (
           <Link key={href} href={href}
-            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
             style={active
-              ? {
-                  background: `${color}22`,
-                  backdropFilter: 'blur(12px) saturate(160%)',
-                  border: `1px solid ${color}55`,
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)',
-                  color: '#F6F3EB',
-                }
+              ? { background: `${GOLD}1E`, border: `1px solid ${GOLD}55`, color: '#F6F3EB' }
               : { border: '1px solid transparent', color: INACTIVE }}>
-            <Icon size={18} aria-hidden="true" style={{ color: active ? color : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
+            <Icon size={18} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
             <span className={active ? 'font-bold' : ''}>{label}</span>
-            {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: color }} />}
+            {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: GOLD }} />}
           </Link>
         )
       })}
@@ -64,10 +52,10 @@ export default function AppNav({ profileHref }: Props) {
 
 // 4 ítems primarios siempre visibles
 const MAIN_ITEMS = [
-  { href: '/app/comunidad',   icon: Users2,   label: 'Comunidad',   exact: false, color: ACCENT },
-  { href: '/app/discipulado', icon: BookOpen, label: 'Discipulado', exact: true,  color: PURPLE },
-  { href: '/app/oracion',     icon: Flame,    label: 'Oración',     exact: false, color: AMBER  },
-  { href: '/app/en-vivo',     icon: Radio,    label: 'En Vivo',     exact: false, color: RED    },
+  { href: '/app/comunidad',   icon: Users2,   label: 'Comunidad',   exact: false },
+  { href: '/app/discipulado', icon: BookOpen, label: 'Discipulado', exact: true  },
+  { href: '/app/oracion',     icon: Flame,    label: 'Oración',     exact: false },
+  { href: '/app/en-vivo',     icon: Radio,    label: 'En Vivo',     exact: false },
 ]
 
 // Ítems secundarios en la fila expandible
@@ -93,12 +81,7 @@ export function AppBottomNav({ profileHref }: Props) {
       {open && (
         <div
           className="flex items-center"
-          style={{
-            height: 56,
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
-            background: 'rgba(6,30,48,0.4)',
-            backdropFilter: 'blur(16px) saturate(160%)',
-          }}
+          style={{ height: 56, borderBottom: '1px solid #292E3B', background: 'rgba(16,18,23,0.6)' }}
         >
           {allMore.map(({ href, icon: Icon, label }) => {
             const active = isActive(href)
@@ -107,18 +90,18 @@ export function AppBottomNav({ profileHref }: Props) {
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
                 style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
               >
                 <Icon
                   size={20}
                   aria-hidden="true"
                   strokeWidth={active ? 2.5 : 1.8}
-                  style={{ color: active ? ACCENT : INACTIVE }}
+                  style={{ color: active ? GOLD : INACTIVE }}
                 />
                 <span
                   className="font-semibold text-center w-full truncate"
-                  style={{ color: active ? ACCENT : INACTIVE, fontSize: 11, lineHeight: 1.2 }}
+                  style={{ color: active ? GOLD : INACTIVE, fontSize: 11, lineHeight: 1.2 }}
                 >
                   {label}
                 </span>
@@ -130,36 +113,32 @@ export function AppBottomNav({ profileHref }: Props) {
 
       {/* Fila principal — siempre visible */}
       <div className="flex" style={{ height: 56 }}>
-        {MAIN_ITEMS.map(({ href, icon: Icon, label, exact, color }) => {
+        {MAIN_ITEMS.map(({ href, icon: Icon, label, exact }) => {
           const active = isActive(href, exact)
           return (
             <Link
               key={href}
               href={href}
               onClick={() => open && setOpen(false)}
-              className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+              className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
               style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
             >
               <span
                 className="flex items-center justify-center rounded-full transition-all"
                 style={active
-                  ? {
-                      width: 44, height: 28, background: `${color}2E`,
-                      backdropFilter: 'blur(12px) saturate(160%)', border: `1px solid ${color}70`,
-                      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.18), 0 4px 12px -4px ${color}80`,
-                    }
+                  ? { width: 44, height: 28, background: GOLD, boxShadow: '0 4px 12px -4px rgba(255,204,0,0.6)' }
                   : { width: 44, height: 28 }}
               >
                 <Icon
                   size={20}
                   aria-hidden="true"
                   strokeWidth={active ? 2.5 : 1.8}
-                  style={{ color: active ? color : INACTIVE }}
+                  style={{ color: active ? GOLD_INK : INACTIVE }}
                 />
               </span>
               <span
                 className="font-semibold truncate w-full text-center"
-                style={{ color: active ? color : INACTIVE, fontSize: 12, lineHeight: 1.2 }}
+                style={{ color: active ? GOLD : INACTIVE, fontSize: 12, lineHeight: 1.2 }}
               >
                 {label}
               </span>
@@ -172,7 +151,7 @@ export function AppBottomNav({ profileHref }: Props) {
           onClick={() => setOpen(v => !v)}
           aria-expanded={open}
           aria-label={open ? 'Cerrar más opciones' : 'Más opciones'}
-          className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+          className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
           style={{
             WebkitTapHighlightColor: 'transparent',
             touchAction: 'manipulation',
@@ -183,21 +162,17 @@ export function AppBottomNav({ profileHref }: Props) {
           }}
         >
           {open
-            ? <X size={22} strokeWidth={2.5} aria-hidden="true" style={{ color: ACCENT }} />
+            ? <X size={22} strokeWidth={2.5} aria-hidden="true" style={{ color: GOLD }} />
             : <MoreHorizontal
                 size={22}
                 aria-hidden="true"
                 strokeWidth={anyMoreActive ? 2.5 : 1.8}
-                style={{ color: anyMoreActive ? ACCENT : INACTIVE }}
+                style={{ color: anyMoreActive ? GOLD : INACTIVE }}
               />
           }
           <span
             className="font-semibold"
-            style={{
-              color: anyMoreActive || open ? ACCENT : INACTIVE,
-              fontSize: 12,
-              lineHeight: 1.2,
-            }}
+            style={{ color: anyMoreActive || open ? GOLD : INACTIVE, fontSize: 12, lineHeight: 1.2 }}
           >
             {open ? 'Cerrar' : 'Más'}
           </span>

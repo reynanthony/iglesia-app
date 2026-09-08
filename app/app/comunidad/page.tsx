@@ -4,14 +4,7 @@ import { redirect } from 'next/navigation'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import { createClient } from '@/lib/supabase/server'
 import { GoldArt } from '@/components/app/GoldArt'
-
-const BG = '#101217'
-const CARD_GRAD = 'linear-gradient(165deg, #1d2029, #131520)'
-const FEATURED_GRAD = 'linear-gradient(150deg, #262b38, #171922)'
-const BORDER = '#292E3B'
-const MUTED = '#8B92A2'
-const GOLD = '#FFCC00'
-const INK = '#FFFFFF'
+import { BG, CARD, CARD_GRAD, FEATURED_GRAD, BORDER, MUTED, GOLD, GOLD_INK, INK, SURFACE, CARD_SHADOW, FEATURED_SHADOW } from '@/lib/gold-theme'
 
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
@@ -59,13 +52,13 @@ export default async function ComunidadPage() {
           <Link
             href="/app/buscar"
             className="flex items-center gap-2.5 rounded-2xl px-4 py-3.5"
-            style={{ background: '#161820', border: `1px solid ${BORDER}` }}
+            style={{ background: SURFACE, border: `1px solid ${BORDER}` }}
           >
             <Search size={16} color={MUTED} />
             <span className="flex-1 text-sm" style={{ color: MUTED }}>Buscar personas, grupos…</span>
             <span
               className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full"
-              style={{ background: GOLD, color: '#14140F' }}
+              style={{ background: GOLD, color: GOLD_INK }}
             >
               <Sparkles size={10} /> Explorar
             </span>
@@ -83,13 +76,13 @@ export default async function ComunidadPage() {
               <Link href="/ministerios" className="text-[11px] font-bold" style={{ color: MUTED }}>Ver todos</Link>
             </div>
             <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 pb-1">
-              <Link href="/ministerios" className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold" style={{ background: GOLD, color: '#14140F' }}>
+              <Link href="/ministerios" className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold" style={{ background: GOLD, color: GOLD_INK }}>
                 Todos
               </Link>
               {ministries.map(m => (
                 <Link key={m.id} href={`/ministerios/${m.slug}`}
                   className="flex-shrink-0 px-4 py-2 rounded-xl text-[11px] font-semibold"
-                  style={{ background: '#181A22', color: MUTED, border: `1px solid ${BORDER}` }}>
+                  style={{ background: CARD, color: MUTED, border: `1px solid ${BORDER}` }}>
                   {m.name}
                 </Link>
               ))}
@@ -106,8 +99,7 @@ export default async function ComunidadPage() {
             </div>
             <div className="relative rounded-[22px] p-4 overflow-hidden"
               style={{
-                background: FEATURED_GRAD, border: `1px solid ${BORDER}`,
-                boxShadow: '0 14px 28px -10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+                background: FEATURED_GRAD, border: `1px solid ${BORDER}`, boxShadow: FEATURED_SHADOW,
               }}>
               <div className="absolute right-[-10px] top-0 bottom-0 w-[42%]">
                 <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(90deg, #171922, transparent 60%)' }} />
@@ -124,7 +116,7 @@ export default async function ComunidadPage() {
                 </div>
                 <Link href={`/app/predicas/${latestSermon.id}`}
                   className="inline-flex items-center gap-1.5 mt-3.5 px-4 py-2.5 rounded-xl text-[11px] font-extrabold"
-                  style={{ background: GOLD, color: '#14140F' }}>
+                  style={{ background: GOLD, color: GOLD_INK }}>
                   Ver prédica <ArrowRight size={11} />
                 </Link>
               </div>
@@ -137,8 +129,7 @@ export default async function ComunidadPage() {
           <section className="grid grid-cols-2 gap-3">
             <Link href="/app/oracion" className="relative rounded-[18px] p-3.5 overflow-hidden"
               style={{
-                height: 168, background: CARD_GRAD, border: `1px solid ${BORDER}`,
-                boxShadow: '0 10px 22px -10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+                height: 168, background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW,
               }}>
               <div className="absolute" style={{ right: 4, bottom: 30, width: 78, height: 78 }}>
                 <GoldArt uid="prayer-wall" light="#FF9AA8" dark="#C6304A" icon={Flame} iconSize={26} />
@@ -158,8 +149,7 @@ export default async function ComunidadPage() {
             {latestDevocional && (
               <Link href={`/biblia/devocional/${latestDevocional.id}`} className="relative rounded-[18px] p-3.5 overflow-hidden"
                 style={{
-                  height: 168, background: CARD_GRAD, border: `1px solid ${BORDER}`,
-                  boxShadow: '0 10px 22px -10px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+                  height: 168, background: CARD_GRAD, border: `1px solid ${BORDER}`, boxShadow: CARD_SHADOW,
                 }}>
                 <div className="absolute" style={{ right: 4, bottom: 30, width: 78, height: 78 }}>
                   <GoldArt uid="devocional" light="#FFD98A" dark="#C98A1F" icon={BookOpen} iconSize={26} />
@@ -181,7 +171,7 @@ export default async function ComunidadPage() {
         <Link
           href="/app/comunidad/feed"
           className="flex items-center justify-between rounded-2xl px-5 py-4"
-          style={{ background: '#1d2029', border: `1px solid ${BORDER}` }}
+          style={{ background: CARD, border: `1px solid ${BORDER}` }}
         >
           <div>
             <p className="text-sm font-bold" style={{ color: INK }}>Ver publicaciones de la comunidad</p>
