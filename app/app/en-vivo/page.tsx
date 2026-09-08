@@ -103,19 +103,22 @@ export default async function EnVivoPage() {
     <div style={{ background: '#061E30', minHeight: '100%' }}>
 
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(227,123,133,0.14), transparent 65%), linear-gradient(180deg, #0c2f42 0%, #061E30 100%)' }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-            style={{ background: '#0D3352' }}>
-            <Radio size={18} style={{ color: '#76ABAE' }} />
+          <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
+            style={{
+              background: 'rgba(227,123,133,0.16)', backdropFilter: 'blur(14px) saturate(160%)',
+              border: '1px solid rgba(227,123,133,0.32)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
+            }}>
+            <Radio size={20} style={{ color: '#F2A3AC' }} />
           </div>
           <h1 className="font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: '#F6F3EB' }}>
             Iglesia<br /><span style={{ color: '#76ABAE' }}>en Vivo.</span>
           </h1>
-          <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(246,243,235,0.72)' }}>
+          <p className="text-sm mt-3 leading-relaxed max-w-sm" style={{ color: 'rgba(246,243,235,0.72)' }}>
             No hay transmisión activa en este momento. Te avisamos cada domingo.
           </p>
         </div>

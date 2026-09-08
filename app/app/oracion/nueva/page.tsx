@@ -94,15 +94,15 @@ export default function NuevaPeticionPage() {
                   type="button"
                   onClick={() => pickTopic(t.label)}
                   title={t.label}
-                  className="absolute w-9 h-9 rounded-full flex items-center justify-center transition active:scale-90"
+                  className="absolute w-10 h-10 rounded-full flex items-center justify-center transition active:scale-90"
                   style={{
-                    left: `calc(50% + ${x}px - 18px)`, top: `calc(50% + ${y}px - 18px)`,
-                    background: `${t.color}26`, backdropFilter: 'blur(14px) saturate(160%)',
-                    border: `1px solid ${t.color}55`, color: '#fff',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18)',
+                    left: `calc(50% + ${x}px - 20px)`, top: `calc(50% + ${y}px - 20px)`,
+                    background: `${t.color}55`, backdropFilter: 'blur(14px) saturate(180%)',
+                    border: `1.5px solid ${t.color}`, color: '#fff',
+                    boxShadow: `inset 0 1px 0 rgba(255,255,255,0.25), 0 6px 16px -4px ${t.color}90`,
                   }}
                 >
-                  <TIcon size={16} />
+                  <TIcon size={17} strokeWidth={2.2} />
                 </button>
               )
             })}
