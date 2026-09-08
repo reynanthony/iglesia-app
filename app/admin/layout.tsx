@@ -6,6 +6,7 @@ import { LogOut } from 'lucide-react'
 import AdminNav from '@/components/admin/AdminNav'
 import AdminMobileNav from '@/components/admin/AdminMobileNav'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
+import { BG, BORDER, MUTED, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -53,24 +54,24 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const panelLabel = isLider ? 'Mi Ministerio' : 'Panel Admin'
 
   return (
-    <div className="min-h-screen flex font-app" style={{ background: '#061E30', color: '#F6F3EB' }}>
+    <div className="min-h-screen flex font-app" style={{ background: BG, color: INK }}>
       <CapacitorBridge />
 
       {/* Sidebar — desktop only */}
       <aside className="hidden md:flex w-56 border-r flex-col fixed h-full z-40"
-        style={{ borderColor: '#0D3352', background: '#061E30' }}>
-        <div className="px-5 py-5 border-b" style={{ borderColor: '#0D3352' }}>
+        style={{ borderColor: BORDER, background: BG }}>
+        <div className="px-5 py-5 border-b" style={{ borderColor: BORDER }}>
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black"
-              style={{ background: isLider ? '#76ABAE' : '#F6F3EB', color: '#061E30' }}>
+              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})`, color: GOLD_INK }}>
               {isLider ? 'M' : 'A'}
             </div>
             <div>
               <p className="font-black text-[15px] text-white leading-tight tracking-tight">El Manantial</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: '#76ABAE' }}>{panelLabel}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: GOLD }}>{panelLabel}</p>
             </div>
           </div>
-          <p className="text-[11px] leading-tight mt-2.5" style={{ color: 'rgba(246,243,235,0.55)' }}>{profile?.full_name}</p>
+          <p className="text-[11px] leading-tight mt-2.5" style={{ color: MUTED }}>{profile?.full_name}</p>
         </div>
         <AdminNav
           logoutAction={logout}
@@ -82,10 +83,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 border-b flex items-center justify-between px-4"
-        style={{ background: '#061E30', borderColor: '#0D3352', paddingTop: 'env(safe-area-inset-top, 0px)', minHeight: 56 }}>
+        style={{ background: BG, borderColor: BORDER, paddingTop: 'env(safe-area-inset-top, 0px)', minHeight: 56 }}>
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black"
-            style={{ background: isLider ? '#76ABAE' : '#F6F3EB', color: '#061E30' }}>
+            style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})`, color: GOLD_INK }}>
             {isLider ? 'M' : 'A'}
           </div>
           <span className="font-black text-sm text-white tracking-tight">El Manantial</span>
@@ -93,13 +94,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="flex items-center gap-1">
           <Link href="/app/comunidad"
             className="px-3 py-2 rounded-lg text-[11px] font-bold transition"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             ← App
           </Link>
           <form action={logout}>
             <button type="submit"
               className="w-10 h-10 flex items-center justify-center rounded-lg transition"
-              style={{ color: 'rgba(246,243,235,0.68)' }}
+              style={{ color: MUTED }}
               title="Cerrar sesión">
               <LogOut size={17} />
             </button>
@@ -109,7 +110,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
-        style={{ background: '#061E30', borderColor: '#0D3352' }}>
+        style={{ background: BG, borderColor: BORDER }}>
         <AdminMobileNav
           unreadMessages={unreadMessages}
           logoutAction={logout}

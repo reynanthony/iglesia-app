@@ -10,12 +10,7 @@ import {
   Globe, ArrowLeft, LogOut, Newspaper, Building2,
   Layers, Church, Calendar, Video, Quote,
 } from 'lucide-react'
-
-const ACCENT   = '#76ABAE'
-const INACTIVE = 'rgba(246,243,235,0.62)'
-const BG       = '#061E30'
-const SURFACE  = '#0B2D47'
-const BORDER   = '#0D3352'
+import { BG, CARD as SURFACE, BORDER, MUTED as INACTIVE, GOLD as ACCENT, GOLD_INK } from '@/lib/gold-theme'
 
 const ADMIN_PRIMARY = [
   { href: '/admin',          icon: LayoutDashboard, label: 'Dashboard', exact: true  },
@@ -174,7 +169,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
                           <span className="flex-1">{label}</span>
                           {isMensajes && unreadMessages > 0 && (
                             <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full"
-                              style={{ background: ACCENT, color: BG }}>
+                              style={{ background: ACCENT, color: GOLD_INK }}>
                               {unreadMessages}
                             </span>
                           )}
@@ -229,7 +224,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
                   style={{ color: active ? ACCENT : INACTIVE }} />
                 {isMensajes && unreadMessages > 0 && (
                   <span className="absolute -top-1 -right-1.5 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center"
-                    style={{ background: ACCENT, color: BG }}>
+                    style={{ background: ACCENT, color: GOLD_INK }}>
                     {unreadMessages > 9 ? '9+' : unreadMessages}
                   </span>
                 )}

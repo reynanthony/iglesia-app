@@ -8,6 +8,7 @@ import {
   Globe, ArrowLeft, LogOut, Mail, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
   Layers, Church, Calendar, Video, Quote,
 } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 type NavItem = { href: string; icon: React.ComponentType<{ size?: number }>; label: string; exact?: boolean; external?: boolean }
 type NavSection = { label: string; items: NavItem[] }
@@ -122,8 +123,8 @@ export default function AdminNav({
                     href={href}
                     className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
                     style={{
-                      background: active ? '#0B2D47' : 'transparent',
-                      color: active ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
+                      background: active ? CARD : 'transparent',
+                      color: active ? INK : MUTED,
                     }}
                   >
                     <Icon size={14} />
@@ -131,7 +132,7 @@ export default function AdminNav({
                     {isMensajes && unreadMessages > 0 && (
                       <span
                         className="text-[10px] font-black px-1.5 py-0.5 rounded-full"
-                        style={{ background: '#76ABAE', color: '#061E30' }}
+                        style={{ background: GOLD, color: GOLD_INK }}
                       >
                         {unreadMessages}
                       </span>
@@ -152,7 +153,7 @@ export default function AdminNav({
             </p>
             {liderMinistries.map(m => (
               <div key={m.id} className="px-3 py-2 text-[12px] flex items-center gap-2"
-                style={{ color: '#76ABAE' }}>
+                style={{ color: GOLD }}>
                 <Building2 size={12} />
                 {m.name}
               </div>
@@ -161,23 +162,23 @@ export default function AdminNav({
         )}
       </nav>
 
-      <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: '#0D3352' }}>
+      <div className="px-3 py-3 border-t space-y-0.5" style={{ borderColor: BORDER }}>
         {!isLider && (
           <Link href="/" target="_blank"
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             <Globe size={14} /> Ver sitio web
           </Link>
         )}
         <Link href="/app/comunidad"
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-          style={{ color: 'rgba(246,243,235,0.68)' }}>
+          style={{ color: MUTED }}>
           <ArrowLeft size={14} /> Volver a la app
         </Link>
         <form action={logoutAction}>
           <button type="submit"
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             <LogOut size={14} /> Cerrar sesión
           </button>
         </form>
