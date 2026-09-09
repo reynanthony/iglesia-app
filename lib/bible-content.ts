@@ -92,3 +92,67 @@ export async function getVerseOfDayText(
   if (!content?.content) return null
   return extractVerseText(content.content, verse)
 }
+
+// ── Búsqueda en toda la Biblia ──────────────────────────────────
+// Índice plano en memoria (~31k versículos de una sola traducción),
+// construido una vez y cacheado en variable de módulo junto al JSON.
+
+export interface BibleSearchHit {
+  bookId: string
+  bookName: string
+  chapter: number
+  verse: number
+  text: string
+  ref: string
+}
+
+interface SearchIndexEntry {
+  bookId: string; bookName: string; chapter: number; verse: number
+  text: string; normalized: string
+}
+
+let searchIndexCache: SearchIndexEntry[] | null = null
+
+function normalize(s: string): string {
+  // Quita marcas diacríticas combinantes (acentos) tras descomponer NFD,
+  // por código de punto en vez de un rango literal en el regex (evita
+  // problemas de encoding con caracteres combinantes en el código fuente).
+  return Array.from(s.normalize('NFD'))
+    .filter(ch => { const c = ch.codePointAt(0) ?? 0; return c < 0x0300 || c > 0x036f })
+    .join('')
+    .toLowerCase()
+}
+
+function buildSearchIndex(): SearchIndexEntry[] {
+  if (searchIndexCache) return searchIndexCache
+  const data = loadRV1960()
+  const index: SearchIndexEntry[] = []
+  for (const book of ALL_BOOKS) {
+    const bookName = rv1960BookName(book.id)
+    const bookData = bookName ? data[bookName] : null
+    if (!bookName || !bookData) continue
+    for (const [chapterStr, verses] of Object.entries(bookData.capitulos)) {
+      const chapter = parseInt(chapterStr, 10)
+      for (const v of verses) {
+        index.push({ bookId: book.id, bookName, chapter, verse: v.n, text: v.texto, normalized: normalize(v.texto) })
+      }
+    }
+  }
+  searchIndexCache = index
+  return index
+}
+
+export function searchBible(query: string, limit = 50): BibleSearchHit[] {
+  const q = normalize(query.trim())
+  if (q.length < 3) return []
+  const hits: BibleSearchHit[] = []
+  for (const entry of buildSearchIndex()) {
+    if (!entry.normalized.includes(q)) continue
+    hits.push({
+      bookId: entry.bookId, bookName: entry.bookName, chapter: entry.chapter, verse: entry.verse,
+      text: entry.text, ref: `${entry.bookName} ${entry.chapter}:${entry.verse}`,
+    })
+    if (hits.length >= limit) break
+  }
+  return hits
+}

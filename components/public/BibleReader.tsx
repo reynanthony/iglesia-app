@@ -6,7 +6,7 @@ import Link from 'next/link'
 import {
   ArrowLeft, Copy, Share2, ChevronLeft, ChevronRight,
   BookOpen, Check, Bookmark, FileText, Image, ScrollText,
-  Volume2, VolumeX,
+  Volume2, VolumeX, Search,
 } from 'lucide-react'
 import type { BibleBook } from '@/lib/bible'
 import {
@@ -853,6 +853,12 @@ export function BibleReader({
           ) : <div className="flex-1" />}
 
           <div className="flex-shrink-0 flex items-center gap-2">
+            <Link href="/biblia/buscar"
+              aria-label="Buscar en la Biblia"
+              className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+              style={{ background: t.surface, color: t.text }}>
+              <Search size={15} aria-hidden="true" />
+            </Link>
             {audioSupported && (
               <button
                 aria-label={audioPlaying ? 'Detener audio' : 'Escuchar capítulo'}

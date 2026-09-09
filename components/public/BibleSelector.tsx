@@ -2,7 +2,8 @@
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, BookOpen, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { ChevronLeft, BookOpen, Loader2, Search } from 'lucide-react'
 import { OT_BOOKS, NT_BOOKS, type BibleBook } from '@/lib/bible'
 import { fetchVerseCount } from '@/app/actions/bible'
 
@@ -123,6 +124,13 @@ export default function BibleSelector() {
             <Crumb label="Elige un versículo" dim />
           </>
         )}
+
+        <Link href="/biblia/buscar"
+          className="ml-auto flex-shrink-0 flex items-center gap-1.5 transition-opacity hover:opacity-60"
+          style={{ color: `${NAVY}B0` }}>
+          <Search size={11} />
+          <span className="text-[9px] font-bold uppercase tracking-[0.32em]">Buscar</span>
+        </Link>
       </div>
 
       {/* ── Content ── */}
