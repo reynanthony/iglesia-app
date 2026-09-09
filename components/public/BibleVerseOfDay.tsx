@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
-import { hasBibleApi, getVerseOfDayText } from '@/lib/bible'
+import { hasBibleApi, getVerseOfDayText } from '@/lib/bible-content'
 import { pickVerseOfDay } from '@/lib/bible-verse-of-day'
 import { CARD, GOLD, INK } from '@/lib/gold-theme'
 

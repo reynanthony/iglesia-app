@@ -224,7 +224,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
     // Reference
     ctx.font      = `bold 32px -apple-system, BlinkMacSystemFont, “Helvetica Neue”, sans-serif`
     ctx.fillStyle = '#C79A2A'
-    ctx.fillText(`— ${verse.ref}  (NTV)`, PAD, sepY + REF_OFFSET)
+    ctx.fillText(`— ${verse.ref}  (RVR1960)`, PAD, sepY + REF_OFFSET)
 
     // Branding
     ctx.font      = `22px -apple-system, BlinkMacSystemFont, sans-serif`
@@ -530,14 +530,14 @@ export function BibleReader({
   // ── Share / copy ───────────────────────────────────────────
   const handleCopy = async () => {
     if (!verse) return
-    await navigator.clipboard.writeText(`"${verse.text}" — ${verse.ref} (NTV)`)
+    await navigator.clipboard.writeText(`"${verse.text}" — ${verse.ref} (RVR1960)`)
     setCopied(true)
     setTimeout(() => { setCopied(false); setVerse(null) }, 1800)
   }
 
   const handleShareText = async () => {
     if (!verse) return
-    const text = `"${verse.text}" — ${verse.ref} (NTV)`
+    const text = `"${verse.text}" — ${verse.ref} (RVR1960)`
     if (navigator.share) { await navigator.share({ text }) }
     else {
       await navigator.clipboard.writeText(text)
@@ -566,7 +566,7 @@ export function BibleReader({
       const blob = await res.blob()
       const file = new File([blob], 'versiculo.png', { type: 'image/png' })
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: `${verse.ref} (NTV)` })
+        await navigator.share({ files: [file], title: `${verse.ref} (RVR1960)` })
       } else {
         const a = document.createElement('a')
         a.href     = shareCardUrl
@@ -620,7 +620,7 @@ export function BibleReader({
             <span style={{ color: 'rgba(255,255,255,0.88)' }}>{bookName}</span>
             <span style={{ color: TEAL }}>{chapterNum}</span>
             <span className="text-[8px] font-bold uppercase tracking-[0.28em] px-2 py-0.5 rounded"
-              style={{ background: `${TEAL}18`, color: TEAL }}>NTV</span>
+              style={{ background: `${TEAL}18`, color: TEAL }}>RVR1960</span>
           </Link>
           <div className="flex-shrink-0 flex items-center gap-1">
             {prev ? (
@@ -750,7 +750,7 @@ export function BibleReader({
               No se pudo cargar este capítulo. Verifica tu conexión o intenta de nuevo.
             </p>
             <a
-              href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=NTV`}
+              href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=RVR1960`}
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
               style={{ background: TEAL, color: '#101217' }}>

@@ -96,7 +96,7 @@ export default function BibleSelector() {
           <>
             <Crumb label="La Biblia" dim />
             <Sep />
-            <Crumb label="NTV" color={TEAL} bold />
+            <Crumb label="RVR1960" color={TEAL} bold />
             <Sep />
             <Crumb label="Elige un libro" dim />
           </>
@@ -149,7 +149,7 @@ export default function BibleSelector() {
             <StepHeading
               eyebrow={isOT ? 'Antiguo Testamento' : 'Nuevo Testamento'}
               title={book.name}
-              sub={`${book.chapters} capítulos · NTV`}
+              sub={`${book.chapters} capítulos · RVR1960`}
               accent={accent}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))', gap: 8 }}>

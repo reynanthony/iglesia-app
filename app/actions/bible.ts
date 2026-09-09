@@ -1,6 +1,6 @@
 'use server'
 
-import { getChapterContent } from '@/lib/bible'
+import { getChapterContent } from '@/lib/bible-content'
 import { createClient } from '@/lib/supabase/server'
 
 export async function fetchVerseCount(bookId: string, chapter: number): Promise<number> {

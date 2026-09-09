@@ -1,7 +1,3 @@
-const BIBLE_API_KEY = process.env.BIBLE_API_KEY
-const BIBLE_ID      = 'b32b9d1b64b4ef29-01' // Nueva Traducción Viviente (NTV)
-const BASE_URL      = 'https://api.scripture.api.bible/v1'
-
 export type BibleChapterContent = {
   id: string
   reference: string
@@ -108,50 +104,3 @@ export function nextChapter(bookId: string, chapter: number): { bookId: string; 
   return { bookId: ALL_BOOKS[idx + 1].id, chapter: 1 }
 }
 
-export async function getChapterContent(
-  bookId: string,
-  chapter: string | number,
-): Promise<BibleChapterContent | null> {
-  if (!BIBLE_API_KEY) return null
-  try {
-    const chapterId = `${bookId.toUpperCase()}.${chapter}`
-    const url = `${BASE_URL}/bibles/${BIBLE_ID}/chapters/${chapterId}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false`
-    const res = await fetch(url, {
-      headers: { 'api-key': BIBLE_API_KEY },
-      next: { revalidate: 86400 },
-    })
-    if (!res.ok) return null
-    const { data } = await res.json()
-    return data as BibleChapterContent
-  } catch {
-    return null
-  }
-}
-
-export function hasBibleApi(): boolean {
-  return !!BIBLE_API_KEY
-}
-
-// Extrae el texto plano de un solo versículo del HTML de un capítulo ya cargado.
-// Reutiliza el mismo HTML que consume el lector, así que el texto siempre
-// coincide exactamente con lo que el usuario ve al abrir el capítulo.
-export function extractVerseText(html: string, verseNum: number): string | null {
-  const re = new RegExp(
-    `<span[^>]*class="v"[^>]*data-number="${verseNum}"[^>]*>.*?</span>([\\s\\S]*?)(?=<span[^>]*class="v"|</p>|$)`,
-    'i',
-  )
-  const m = html.match(re)
-  if (!m) return null
-  const text = m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
-  return text || null
-}
-
-export async function getVerseOfDayText(
-  bookId: string,
-  chapter: number,
-  verse: number,
-): Promise<string | null> {
-  const content = await getChapterContent(bookId, chapter)
-  if (!content?.content) return null
-  return extractVerseText(content.content, verse)
-}

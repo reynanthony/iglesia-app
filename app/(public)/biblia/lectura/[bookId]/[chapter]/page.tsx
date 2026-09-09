@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { findBook, prevChapter, nextChapter, getChapterContent, ALL_BOOKS } from '@/lib/bible'
+import { findBook, prevChapter, nextChapter, ALL_BOOKS } from '@/lib/bible'
+import { getChapterContent } from '@/lib/bible-content'
 import { BibleReader } from '@/components/public/BibleReader'
 import { createClient } from '@/lib/supabase/server'
 import type { RelatedContent } from '@/components/public/BibleReader'
