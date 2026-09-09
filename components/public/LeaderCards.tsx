@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ArrowRight, Heart, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type Leader = {
   id: string
@@ -14,11 +15,11 @@ type Leader = {
   category: string
 }
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
 const SAGE  = '#869B7E'
-const CREAM = '#F6F3EB'
+const CREAM = INK
 
 // Parsea el nombre: si tiene ' & ' trata a cada parte como persona
 // Si no, divide en primer nombre (light) y apellido (bold)
@@ -54,20 +55,20 @@ function PastoralCard({ leader }: { leader: Leader }) {
     >
       <div className="pt-6 flex flex-col gap-4">
         {leader.bio && (
-          <p className="text-sm leading-[1.8]" style={{ color: 'rgba(246,243,235,0.82)' }}>
+          <p className="text-sm leading-[1.8]" style={{ color: MUTED }}>
             {leader.bio}
           </p>
         )}
         <div className="space-y-2">
           <Link href="/contacto"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.15em] transition group"
-            style={{ background: TEAL, color: DARK }}>
+            style={{ background: CREAM, color: DARK }}>
             <span className="flex items-center gap-2"><MessageCircle size={12} /> Enviar mensaje</span>
             <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link href="/contacto"
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.15em] transition group"
-            style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.86)' }}>
+            style={{ border: '1px solid rgba(199,154,42,0.22)', color: MUTED }}>
             <span className="flex items-center gap-2"><Heart size={12} /> Solicitar oración</span>
             <ArrowRight size={11} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Link>
@@ -114,7 +115,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
           )}
           {/* Degradado inferior */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
-            style={{ height: 160, background: 'linear-gradient(to top, #051828 0%, rgba(5,24,40,0.6) 40%, transparent 100%)' }} />
+            style={{ height: 160, background: 'linear-gradient(to top, #101217 0%, rgba(16,18,23,0.6) 40%, transparent 100%)' }} />
         </motion.div>
 
         {/* Nombre e info fuera de la foto, debajo */}
@@ -158,7 +159,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
             onClick={() => setExpanded(v => !v)}
             className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300"
             style={{
-              border: `1px solid ${expanded ? `${TEAL}60` : 'rgba(118,171,174,0.28)'}`,
+              border: `1px solid ${expanded ? `${TEAL}60` : `${GOLD}47`}`,
               background: expanded ? `${TEAL}12` : 'transparent',
             }}
             aria-label={expanded ? 'Cerrar' : `Ver más sobre ${leader.name}`}
@@ -194,7 +195,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
           )}
           {/* Degradado inferior */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
-            style={{ height: 100, background: 'linear-gradient(to top, #051828 0%, rgba(5,24,40,0.5) 50%, transparent 100%)' }} />
+            style={{ height: 100, background: 'linear-gradient(to top, #101217 0%, rgba(16,18,23,0.5) 50%, transparent 100%)' }} />
         </motion.div>
 
         {/* Nombre e info fuera de la foto */}
@@ -232,7 +233,7 @@ function PastoralCard({ leader }: { leader: Leader }) {
             onClick={() => setExpanded(v => !v)}
             className="flex h-14 w-14 items-center justify-center rounded-full transition-colors duration-300"
             style={{
-              border: `1px solid ${expanded ? `${TEAL}60` : 'rgba(118,171,174,0.28)'}`,
+              border: `1px solid ${expanded ? `${TEAL}60` : `${GOLD}47`}`,
               background: expanded ? `${TEAL}12` : 'transparent',
             }}
             aria-label={expanded ? 'Cerrar' : `Ver más sobre ${leader.name}`}
@@ -272,7 +273,7 @@ function ProfileCard({ leader }: { leader: Leader }) {
           </div>
         )}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10"
-          style={{ height: 110, background: 'linear-gradient(to top, #051828 0%, rgba(5,24,40,0.55) 45%, transparent 100%)' }} />
+          style={{ height: 110, background: 'linear-gradient(to top, #101217 0%, rgba(16,18,23,0.55) 45%, transparent 100%)' }} />
       </div>
 
       {/* Nombre y cargo fuera de la foto */}
@@ -307,7 +308,7 @@ function ProfileCard({ leader }: { leader: Leader }) {
           onClick={() => setExpanded(v => !v)}
           className="flex h-12 w-12 items-center justify-center rounded-full transition-colors duration-300"
           style={{
-            border: `1px solid ${expanded ? `${TEAL}60` : 'rgba(118,171,174,0.28)'}`,
+            border: `1px solid ${expanded ? `${TEAL}60` : `${GOLD}47`}`,
             background: expanded ? `${TEAL}12` : 'transparent',
           }}
           aria-label={expanded ? 'Cerrar' : `Ver más de ${leader.name}`}
@@ -330,19 +331,19 @@ function ProfileCard({ leader }: { leader: Leader }) {
             >
               <div style={{ paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {leader.bio && (
-                  <p style={{ fontSize: 12, lineHeight: 1.7, color: 'rgba(246,243,235,0.52)', marginBottom: 4 }}>
+                  <p style={{ fontSize: 12, lineHeight: 1.7, color: MUTED, marginBottom: 4 }}>
                     {leader.bio}
                   </p>
                 )}
                 <Link href="/contacto"
                   className="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-[0.12em] transition group"
-                  style={{ background: TEAL, color: DARK }}>
+                  style={{ background: CREAM, color: DARK }}>
                   <span className="flex items-center gap-1.5"><MessageCircle size={11} /> Mensaje</span>
                   <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
                 <Link href="/contacto"
                   className="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-[0.12em] transition group"
-                  style={{ border: '1px solid rgba(118,171,174,0.22)', color: 'rgba(246,243,235,0.86)' }}>
+                  style={{ border: '1px solid rgba(199,154,42,0.22)', color: MUTED }}>
                   <span className="flex items-center gap-1.5"><Heart size={11} /> Oración</span>
                   <ArrowRight size={10} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                 </Link>
@@ -369,9 +370,9 @@ function ProfileCarousel({ leaders }: { leaders: Leader[] }) {
   const navBtn = (disabled: boolean): React.CSSProperties => ({
     width: 36, height: 36, borderRadius: '50%', padding: 0, flexShrink: 0,
     cursor: disabled ? 'default' : 'pointer',
-    background: disabled ? 'rgba(118,171,174,0.05)' : 'rgba(118,171,174,0.10)',
-    border: `1px solid ${disabled ? 'rgba(118,171,174,0.08)' : 'rgba(118,171,174,0.20)'}`,
-    color: disabled ? 'rgba(246,243,235,0.20)' : CREAM,
+    background: disabled ? `${GOLD}0D` : `${GOLD}1A`,
+    border: `1px solid ${disabled ? `${GOLD}14` : `${GOLD}33`}`,
+    color: disabled ? MUTED : CREAM,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   })
 
@@ -402,7 +403,7 @@ function ProfileCarousel({ leaders }: { leaders: Leader[] }) {
                 style={{
                   width: i === startIdx ? 18 : 5, height: 5, borderRadius: 999,
                   border: 'none', padding: 0, cursor: 'pointer',
-                  background: i === startIdx ? TEAL : 'rgba(118,171,174,0.22)',
+                  background: i === startIdx ? TEAL : `${GOLD}38`,
                   transition: 'all 0.25s ease',
                 }} />
             ))}
@@ -427,7 +428,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
           <div className="flex items-center gap-3 mb-12">
             <div className="w-px h-5" style={{ background: TEAL }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
-              style={{ color: 'rgba(246,243,235,0.52)' }}>
+              style={{ color: MUTED }}>
               Liderazgo pastoral
             </p>
           </div>
@@ -442,7 +443,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
           <div className="flex items-center gap-3 mb-10">
             <div className="w-px h-5" style={{ background: TEAL }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
-              style={{ color: 'rgba(246,243,235,0.52)' }}>
+              style={{ color: MUTED }}>
               Líderes de ministerios
             </p>
           </div>

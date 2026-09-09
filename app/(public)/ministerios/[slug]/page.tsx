@@ -11,6 +11,7 @@ import {
   Zap, Sparkles, type LucideIcon,
 } from 'lucide-react'
 import { VideoPlayButton } from '@/components/public/VideoModal'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type MinistryContent = {
   id: string
@@ -27,10 +28,10 @@ type MinistryContent = {
 
 export const revalidate = 60
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 
 const SLUG_ICON: Record<string, LucideIcon> = {
   joven: Flame,    matrimoni: Heart,
@@ -210,7 +211,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
 
         {/* Overlay degradado */}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `linear-gradient(160deg, rgba(5,24,40,${overlayOpacity}) 0%, rgba(9,60,93,${Math.max(0, overlayOpacity - 0.20)}) 60%, rgba(118,171,174,0.10) 100%)` }} />
+          style={{ background: `linear-gradient(160deg, rgba(16,18,23,${overlayOpacity}) 0%, rgba(24,26,34,${Math.max(0, overlayOpacity - 0.20)}) 60%, rgba(199,154,42,0.10) 100%)` }} />
 
         {/* Grilla sutil */}
         {showGrid && (
@@ -268,13 +269,13 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
                 ].map(({ n, label }) => (
                   <div key={label} className="text-center">
                     <p className="text-3xl font-black leading-none" style={{ color: CREAM }}>{n}</p>
-                    <p className="text-[10px] uppercase tracking-[0.2em] mt-1" style={{ color: 'rgba(246,243,235,0.86)' }}>{label}</p>
+                    <p className="text-[10px] uppercase tracking-[0.2em] mt-1" style={{ color: MUTED }}>{label}</p>
                   </div>
                 ))}
               </div>
               <Link href="/login"
                 className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] px-5 py-3 rounded-lg transition hover:opacity-90"
-                style={{ backgroundColor: TEAL, color: NAVY }}>
+                style={{ backgroundColor: CREAM, color: NAVY }}>
                 <Users size={13} /> Participar
               </Link>
             </div>
@@ -303,7 +304,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
       {items.length === 0 && (
         <section className="max-w-6xl mx-auto px-6 py-40 text-center">
           <div className="w-24 h-24 flex items-center justify-center rounded-3xl mx-auto mb-8"
-            style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.20)' }}>
+            style={{ background: `${GOLD}1A`, border: '1px solid rgba(199,154,42,0.20)' }}>
             <IconComponent size={40} color={TEAL} strokeWidth={1.5} />
           </div>
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3 mb-3">Próximamente</p>
@@ -452,9 +453,9 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
 
       {/* ══ CTA ═════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, #0D4A72 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, #0D4A72 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 50% 100% at 20% 50%, rgba(118,171,174,0.08), transparent 70%)` }} />
+          style={{ background: `radial-gradient(ellipse 50% 100% at 20% 50%, rgba(199,154,42,0.08), transparent 70%)` }} />
         <div className="pointer-events-none absolute select-none font-black leading-none tracking-tighter right-0 bottom-0"
           style={{ fontSize: 'clamp(8rem, 20vw, 18rem)', color: TEAL, opacity: 0.05, lineHeight: 1 }}
           aria-hidden>
@@ -462,7 +463,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
         </div>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8" style={{ color: 'rgba(118,171,174,0.50)' }}>— {ministry.name}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8" style={{ color: `${GOLD}80` }}>— {ministry.name}</p>
             <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter" style={{ color: CREAM }}>
               Sé parte<br />de este<br />ministerio.
             </h2>
@@ -475,7 +476,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             </Link>
             <Link href="/contacto"
               className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] px-8 py-4 rounded-lg transition"
-              style={{ border: '1px solid rgba(118,171,174,0.25)', color: 'rgba(246,243,235,0.84)' }}>
+              style={{ border: '1px solid rgba(199,154,42,0.25)', color: MUTED }}>
               Contáctanos
             </Link>
           </div>

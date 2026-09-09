@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { HeroTitle } from '@/components/public/HeroTitle'
 import { heroStyle } from '@/lib/hero-style'
+import { BG, GOLD } from '@/lib/gold-theme'
 
 export const revalidate = 60
 
@@ -22,12 +23,12 @@ function getIcon(slug: string, name: string) {
 }
 
 const placeholders = [
-  'linear-gradient(150deg, #093C5D 0%, #76ABAE 100%)',
-  'linear-gradient(150deg, #051828 0%, #093C5D 100%)',
+  'linear-gradient(150deg, #181A22 0%, #C79A2A 100%)',
+  'linear-gradient(150deg, #101217 0%, #181A22 100%)',
   'linear-gradient(150deg, #869B7E 0%, #A8BCA2 100%)',
-  'linear-gradient(150deg, #093C5D 0%, #0D4A72 100%)',
-  'linear-gradient(150deg, #76ABAE 0%, #093C5D 100%)',
-  'linear-gradient(150deg, #0D4A72 0%, #76ABAE 100%)',
+  'linear-gradient(150deg, #181A22 0%, #0D4A72 100%)',
+  'linear-gradient(150deg, #C79A2A 0%, #181A22 100%)',
+  'linear-gradient(150deg, #0D4A72 0%, #C79A2A 100%)',
 ]
 
 export default async function MinisteriosPage() {
@@ -55,7 +56,7 @@ export default async function MinisteriosPage() {
   const heroLayout: string   = 'default'
 
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'xl',
   })
 
@@ -71,14 +72,14 @@ export default async function MinisteriosPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{ backgroundImage: `repeating-linear-gradient(90deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, ${hs.gridColor} 0px, ${hs.gridColor} 1px, transparent 1px, transparent 80px)` }} />
         )}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(118,171,174,0.12), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 70%, rgba(199,154,42,0.12), transparent 70%)' }} />
         {heroWatermark && (
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter block"
@@ -111,7 +112,7 @@ export default async function MinisteriosPage() {
             {heroSubtitle}
           </p>
         </div>
-        <div className="h-px w-full" style={{ background: 'rgba(118,171,174,0.15)' }} />
+        <div className="h-px w-full" style={{ background: `${GOLD}26` }} />
       </section>
 
       {/* Grid */}
@@ -142,7 +143,7 @@ export default async function MinisteriosPage() {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center transition-transform duration-700 group-hover:scale-105"
-                          style={{ background: m.color ? `linear-gradient(150deg, ${m.color} 0%, #093C5D 100%)` : placeholders[idx % placeholders.length] }}>
+                          style={{ background: m.color ? `linear-gradient(150deg, ${m.color} 0%, #181A22 100%)` : placeholders[idx % placeholders.length] }}>
                           <Icon size={48} strokeWidth={1} className="text-white/15" />
                         </div>
                       )}
@@ -171,7 +172,7 @@ export default async function MinisteriosPage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #101217 0%, #181A22 60%, #C79A2A 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{ctaEyebrow}</p>

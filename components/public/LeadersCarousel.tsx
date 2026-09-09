@@ -1,6 +1,7 @@
 ﻿'use client'
 import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type Leader = { id: string; name: string; title: string; bio: string | null; avatar_url: string | null }
 
@@ -20,7 +21,7 @@ export function LeadersCarousel({ leaders }: { leaders: Leader[] }) {
           onClick={() => scroll('left')}
           aria-label="Anterior"
           className="w-9 h-9 rounded-full flex items-center justify-center border transition hover:opacity-80"
-          style={{ borderColor: 'rgba(118,171,174,0.30)', color: '#76ABAE', background: '#0B2D47' }}
+          style={{ borderColor: `${GOLD}4C`, color: GOLD, background: CARD }}
         >
           <ChevronLeft size={16} />
         </button>
@@ -28,7 +29,7 @@ export function LeadersCarousel({ leaders }: { leaders: Leader[] }) {
           onClick={() => scroll('right')}
           aria-label="Siguiente"
           className="w-9 h-9 rounded-full flex items-center justify-center border transition hover:opacity-80"
-          style={{ borderColor: 'rgba(118,171,174,0.30)', color: '#76ABAE', background: '#0B2D47' }}
+          style={{ borderColor: `${GOLD}4C`, color: GOLD, background: CARD }}
         >
           <ChevronRight size={16} />
         </button>
@@ -37,9 +38,9 @@ export function LeadersCarousel({ leaders }: { leaders: Leader[] }) {
       {/* Fade edges */}
       <div className="relative">
         <div className="pointer-events-none absolute left-0 top-0 bottom-4 w-8 z-10"
-          style={{ background: 'linear-gradient(to right, #061E30, transparent)' }} />
+          style={{ background: 'linear-gradient(to right, #101217, transparent)' }} />
         <div className="pointer-events-none absolute right-0 top-0 bottom-4 w-8 z-10"
-          style={{ background: 'linear-gradient(to left, #061E30, transparent)' }} />
+          style={{ background: 'linear-gradient(to left, #101217, transparent)' }} />
 
         {/* Track */}
         <div
@@ -53,31 +54,31 @@ export function LeadersCarousel({ leaders }: { leaders: Leader[] }) {
               <div
                 key={l.id}
                 className="snap-start flex-shrink-0 flex flex-col items-center text-center gap-5 p-7 rounded-2xl border transition"
-                style={{ width: 280, background: '#0B2D47', borderColor: '#0D3352' }}
+                style={{ width: 280, background: CARD, borderColor: BORDER }}
               >
                 {/* Foto */}
                 <div
                   className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                  style={{ background: '#093C5D', border: '2px solid rgba(118,171,174,0.25)' }}
+                  style={{ background: CARD, border: '2px solid rgba(199,154,42,0.25)' }}
                 >
                   {l.avatar_url
                     ? <img src={l.avatar_url} alt={l.name} width={96} height={96} loading="lazy" className="w-full h-full object-cover object-top" />
-                    : <span className="font-black text-2xl" style={{ color: '#76ABAE' }}>{initials}</span>
+                    : <span className="font-black text-2xl" style={{ color: GOLD }}>{initials}</span>
                   }
                 </div>
 
                 {/* Info */}
                 <div className="flex flex-col gap-1">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.28em]" style={{ color: '#76ABAE' }}>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.28em]" style={{ color: GOLD }}>
                     {l.title}
                   </p>
-                  <h3 className="font-black text-base leading-tight" style={{ color: '#F6F3EB' }}>
+                  <h3 className="font-black text-base leading-tight" style={{ color: INK }}>
                     {l.name}
                   </h3>
                 </div>
 
                 {l.bio && (
-                  <p className="text-[12px] leading-relaxed line-clamp-5" style={{ color: 'rgba(246,243,235,0.76)' }}>
+                  <p className="text-[12px] leading-relaxed line-clamp-5" style={{ color: MUTED }}>
                     {l.bio}
                   </p>
                 )}

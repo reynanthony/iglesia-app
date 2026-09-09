@@ -3,12 +3,13 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Calendar, FileText, Megaphone, Play, Video } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { detectSocialEmbed } from '@/lib/social-embed'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 60
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
@@ -62,7 +63,7 @@ export default async function ContentDetailPage({
     <div>
 
       {/* NAV */}
-      <div style={{ background: '#051828', borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+      <div style={{ background: BG, borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
         <div className="max-w-4xl mx-auto px-6 py-5 flex items-center gap-3">
           <Link href={`/ministerios/${slug}`}
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] transition"
@@ -86,11 +87,11 @@ export default async function ContentDetailPage({
           </h1>
 
           <div className="flex flex-wrap items-center gap-5 pt-5"
-            style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
+            style={{ borderTop: `1px solid rgba(199,154,42,0.15)` }}>
             {author && (
-              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.86)' }}>{author}</p>
+              <p className="text-[11px] font-bold" style={{ color: MUTED }}>{author}</p>
             )}
-            <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
+            <div className="flex items-center gap-2" style={{ color: MUTED }}>
               <Calendar size={11} />
               <span className="text-[11px]">{displayDate}</span>
             </div>
@@ -129,7 +130,7 @@ export default async function ContentDetailPage({
           <div className="max-w-4xl mx-auto px-6 py-8">
             <a href={item.video_url} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl"
-              style={{ background: TEAL, color: NAVY }}>
+              style={{ background: CREAM, color: NAVY }}>
               <Play size={13} /> Ver video
             </a>
           </div>
@@ -184,12 +185,12 @@ export default async function ContentDetailPage({
         <div className="max-w-4xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link href={`/ministerios/${slug}`}
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: 'rgba(246,243,235,0.88)' }}>
+            style={{ color: MUTED }}>
             <ArrowLeft size={12} /> Volver al ministerio
           </Link>
           <Link href="/registro"
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
-            style={{ background: TEAL, color: NAVY }}>
+            style={{ background: CREAM, color: NAVY }}>
             Unirme a la comunidad <ArrowRight size={12} />
           </Link>
         </div>
