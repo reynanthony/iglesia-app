@@ -6,12 +6,13 @@ import { ArrowLeft, ArrowUp, ArrowDown, Trash2, Plus, Check, Loader2, X, Chevron
 import type { Block, BlockType } from '@/lib/blocks'
 import { createBlock, BLOCK_META, BLOCK_GROUPS } from '@/lib/blocks'
 import { savePublicacionBlocks } from '@/app/actions/publicaciones'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 /* ── style constants ──────────────────────────────────────────── */
 const field  = 'w-full px-3 py-2 text-sm focus:outline-none rounded-xl'
-const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' } as const
+const fStyle = { background: CARD, border: `1px solid ${BORDER}`, color: INK } as const
 const lbl    = 'block text-[10px] font-black uppercase tracking-[0.2em] mb-1'
-const lStyle = { color: 'rgba(246,243,235,0.72)' } as const
+const lStyle = { color: MUTED } as const
 
 const ICONS: Record<string, string> = {
   hero: '🎯', heading: 'T', text: '¶', image: '🖼', video: '▶',
@@ -25,7 +26,7 @@ function AddRow({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick}
       className="w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5"
-      style={{ background: 'rgba(118,171,174,0.08)', color: '#76ABAE', border: '1px dashed rgba(118,171,174,0.25)' }}>
+      style={{ background: `${GOLD}14`, color: GOLD, border: '1px dashed rgba(217,166,42,0.25)' }}>
       <Plus size={12} /> {label}
     </button>
   )
@@ -36,10 +37,10 @@ function ItemWrap({ index, label, onRemove, children }: {
   index: number; label: string; onRemove: () => void; children: React.ReactNode
 }) {
   return (
-    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(13,51,82,0.5)', border: '1px solid #0D3352' }}>
+    <div className="p-3 rounded-xl space-y-2" style={{ background: 'rgba(13,51,82,0.5)', border: `1px solid ${BORDER}` }}>
       <div className="flex justify-between items-center">
-        <span className="text-[10px] font-bold" style={{ color: 'rgba(246,243,235,0.55)' }}>{label} {index + 1}</span>
-        <button type="button" onClick={onRemove} className="p-1 rounded" style={{ color: 'rgba(246,243,235,0.62)' }}>
+        <span className="text-[10px] font-bold" style={{ color: MUTED }}>{label} {index + 1}</span>
+        <button type="button" onClick={onRemove} className="p-1 rounded" style={{ color: MUTED }}>
           <Trash2 size={12} />
         </button>
       </div>
@@ -76,7 +77,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
               <input value={item.value} placeholder="Valor" onChange={e => setItem('items', i, { value: e.target.value })}
                 className={`${field} flex-1`} style={fStyle} />
               <button type="button" onClick={() => removeItem('items', i)}
-                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
+                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: MUTED, background: CARD }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -120,7 +121,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
               <input value={url} placeholder="https://..." onChange={e => { const imgs = [...(p.images || [])]; imgs[i] = e.target.value; set('images', imgs) }}
                 className={`${field} flex-1`} style={fStyle} />
               <button type="button" onClick={() => set('images', (p.images || []).filter((_: any, j: number) => j !== i))}
-                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
+                className="p-1.5 rounded-lg flex-shrink-0" style={{ color: MUTED, background: CARD }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -295,7 +296,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
             <div key={i} className="flex gap-2 items-center">
               <input value={item.value} placeholder="Valor" onChange={e => setItem('items', i, { value: e.target.value })} className={`${field} flex-1`} style={fStyle} />
               <input value={item.label} placeholder="Etiqueta" onChange={e => setItem('items', i, { label: e.target.value })} className={`${field} flex-1`} style={fStyle} />
-              <button type="button" onClick={() => removeItem('items', i)} className="p-1.5 rounded-lg flex-shrink-0" style={{ color: 'rgba(246,243,235,0.62)', background: '#0B2D47' }}>
+              <button type="button" onClick={() => removeItem('items', i)} className="p-1.5 rounded-lg flex-shrink-0" style={{ color: MUTED, background: CARD }}>
                 <Trash2 size={13} />
               </button>
             </div>
@@ -390,7 +391,7 @@ function PropEditor({ block, onChange }: { block: Block; onChange: (p: Record<st
       )
 
     default:
-      return <p className="text-xs py-4 text-center" style={{ color: 'rgba(246,243,235,0.55)' }}>Editor no disponible.</p>
+      return <p className="text-xs py-4 text-center" style={{ color: MUTED }}>Editor no disponible.</p>
   }
 }
 
@@ -447,30 +448,30 @@ export default function PublicacionBlockEditor({
   }
 
   return (
-    <div className="flex flex-col" style={{ minHeight: '100vh', background: '#051828', color: '#F6F3EB' }}>
+    <div className="flex flex-col" style={{ minHeight: '100vh', background: '#051828', color: INK }}>
 
       {/* ── top bar ── */}
       <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-        style={{ borderBottom: '1px solid rgba(246,243,235,0.07)', background: '#061E30' }}>
+        style={{ borderBottom: '1px solid rgba(139,146,162,0.07)', background: BG }}>
         <Link href="/admin/publicaciones"
           className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}>
+          style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}>
           <ArrowLeft size={15} />
         </Link>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: MUTED }}>
             Editor de bloques
           </p>
-          <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{publicacionTitle}</p>
+          <p className="text-sm font-bold truncate" style={{ color: INK }}>{publicacionTitle}</p>
         </div>
         <Link href={`/publicaciones/${publicacionSlug}`} target="_blank"
           className="px-3 py-1.5 rounded-xl text-xs font-bold hidden md:flex items-center gap-1.5"
-          style={{ background: 'rgba(118,171,174,0.10)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.20)' }}>
+          style={{ background: `${GOLD}1A`, color: GOLD, border: '1px solid rgba(217,166,42,0.20)' }}>
           Vista previa ↗
         </Link>
         <button onClick={handleSave} disabled={saving}
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition flex-shrink-0"
-          style={{ background: saved ? 'rgba(74,222,128,0.15)' : '#F6F3EB', color: saved ? '#4ADE80' : '#061E30' }}>
+          style={{ background: saved ? 'rgba(74,222,128,0.15)' : INK, color: saved ? '#4ADE80' : BG }}>
           {saving ? <Loader2 size={14} className="animate-spin" /> : saved ? <Check size={14} /> : null}
           {saving ? 'Guardando…' : saved ? 'Guardado' : 'Guardar'}
         </button>
@@ -481,10 +482,10 @@ export default function PublicacionBlockEditor({
 
         {/* left: block list */}
         <div className="w-60 flex-shrink-0 flex flex-col overflow-hidden"
-          style={{ borderRight: '1px solid rgba(246,243,235,0.07)', background: '#061E30' }}>
+          style={{ borderRight: '1px solid rgba(139,146,162,0.07)', background: BG }}>
           <div className="flex-1 overflow-y-auto p-3 space-y-1">
             {blocks.length === 0 && (
-              <p className="text-[11px] text-center py-10" style={{ color: 'rgba(246,243,235,0.25)' }}>
+              <p className="text-[11px] text-center py-10" style={{ color: MUTED }}>
                 Sin bloques.
               </p>
             )}
@@ -495,29 +496,29 @@ export default function PublicacionBlockEditor({
                   onClick={() => { setSelectedId(block.id); setAdding(false) }}
                   className="flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer transition group"
                   style={{
-                    background: isSelected ? 'rgba(118,171,174,0.12)' : 'transparent',
-                    border: isSelected ? '1px solid rgba(118,171,174,0.25)' : '1px solid transparent',
+                    background: isSelected ? `${GOLD}1F` : 'transparent',
+                    border: isSelected ? '1px solid rgba(217,166,42,0.25)' : '1px solid transparent',
                   }}>
                   <span className="text-sm w-5 text-center flex-shrink-0" style={{ opacity: 0.7 }}>
                     {ICONS[block.type] ?? '□'}
                   </span>
                   <span className="text-xs flex-1 truncate"
-                    style={{ color: isSelected ? '#F6F3EB' : 'rgba(246,243,235,0.55)' }}>
+                    style={{ color: isSelected ? INK : MUTED }}>
                     {BLOCK_META[block.type]?.label ?? block.type}
                   </span>
                   {/* move + delete (appear on hover) */}
                   <div className="flex gap-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                     onClick={e => e.stopPropagation()}>
                     <button onClick={() => moveUp(i)} disabled={i === 0}
-                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                      className="p-0.5 rounded disabled:opacity-20" style={{ color: MUTED }}>
                       <ArrowUp size={11} />
                     </button>
                     <button onClick={() => moveDown(i)} disabled={i === blocks.length - 1}
-                      className="p-0.5 rounded disabled:opacity-20" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                      className="p-0.5 rounded disabled:opacity-20" style={{ color: MUTED }}>
                       <ArrowDown size={11} />
                     </button>
                     <button onClick={() => removeBlock(block.id)}
-                      className="p-0.5 rounded" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                      className="p-0.5 rounded" style={{ color: MUTED }}>
                       <Trash2 size={11} />
                     </button>
                   </div>
@@ -527,14 +528,14 @@ export default function PublicacionBlockEditor({
           </div>
 
           {/* add block button */}
-          <div className="p-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(246,243,235,0.07)' }}>
+          <div className="p-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(139,146,162,0.07)' }}>
             <button
               onClick={() => { setAdding(true); setSelectedId(null) }}
               className="w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition"
               style={{
-                background: adding ? 'rgba(118,171,174,0.15)' : 'rgba(118,171,174,0.08)',
-                color: '#76ABAE',
-                border: '1px dashed rgba(118,171,174,0.35)',
+                background: adding ? `${GOLD}26` : `${GOLD}14`,
+                color: GOLD,
+                border: '1px dashed rgba(217,166,42,0.35)',
               }}>
               <Plus size={13} /> Añadir bloque
             </button>
@@ -548,24 +549,24 @@ export default function PublicacionBlockEditor({
           {adding && (
             <div>
               <div className="flex items-center justify-between mb-5">
-                <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Tipo de bloque</p>
-                <button onClick={() => setAdding(false)} style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-sm font-bold" style={{ color: INK }}>Tipo de bloque</p>
+                <button onClick={() => setAdding(false)} style={{ color: MUTED }}>
                   <X size={16} />
                 </button>
               </div>
               {BLOCK_GROUPS.map(group => (
                 <div key={group.name} className="mb-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
-                    style={{ color: 'rgba(246,243,235,0.62)' }}>
+                    style={{ color: MUTED }}>
                     {group.name}
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {group.types.map(type => (
                       <button key={type} onClick={() => addBlock(type)}
                         className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl text-center transition hover:scale-[1.03] active:scale-95"
-                        style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                        style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                         <span className="text-xl leading-none">{ICONS[type]}</span>
-                        <span className="text-[11px] font-bold leading-tight" style={{ color: '#F6F3EB' }}>
+                        <span className="text-[11px] font-bold leading-tight" style={{ color: INK }}>
                           {BLOCK_META[type]?.label}
                         </span>
                       </button>
@@ -580,13 +581,13 @@ export default function PublicacionBlockEditor({
           {!adding && selected && (
             <div>
               <div className="flex items-center gap-2.5 mb-5 pb-5"
-                style={{ borderBottom: '1px solid rgba(246,243,235,0.07)' }}>
+                style={{ borderBottom: '1px solid rgba(139,146,162,0.07)' }}>
                 <span className="text-xl leading-none">{ICONS[selected.type]}</span>
                 <div>
-                  <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
+                  <p className="text-sm font-bold" style={{ color: INK }}>
                     {BLOCK_META[selected.type]?.label ?? selected.type}
                   </p>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                  <p className="text-[11px]" style={{ color: MUTED }}>
                     {BLOCK_META[selected.type]?.description}
                   </p>
                 </div>
@@ -601,8 +602,8 @@ export default function PublicacionBlockEditor({
           {/* empty states */}
           {!adding && !selected && (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
-              <ChevronRight size={20} style={{ color: 'rgba(246,243,235,0.15)' }} className="rotate-180" />
-              <p className="text-sm mt-3" style={{ color: 'rgba(246,243,235,0.25)' }}>
+              <ChevronRight size={20} style={{ color: MUTED }} className="rotate-180" />
+              <p className="text-sm mt-3" style={{ color: MUTED }}>
                 {blocks.length > 0 ? 'Selecciona un bloque' : 'Añade el primer bloque'}
               </p>
             </div>

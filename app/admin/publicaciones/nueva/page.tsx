@@ -3,11 +3,12 @@ import Link from 'next/link'
 import { ArrowLeft, Newspaper } from 'lucide-react'
 import { createPublicacion } from '@/app/actions/publicaciones'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
-const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
+const fStyle = { background: CARD, border: `1px solid ${BORDER}`, color: INK }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.72)' }
+const lStyle = { color: MUTED }
 
 async function handleCreate(formData: FormData) {
   'use server'
@@ -28,17 +29,17 @@ export default function NuevaPublicacionPage() {
         <div className="flex items-center gap-3 mb-5 md:mb-8">
           <Link href="/admin/publicaciones"
             className="w-9 h-9 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}>
             <ArrowLeft size={16} />
           </Link>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(118,171,174,0.12)' }}>
-              <Newspaper size={14} style={{ color: '#76ABAE' }} />
+              style={{ background: `${GOLD}1F` }}>
+              <Newspaper size={14} style={{ color: GOLD }} />
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Nueva publicación</h1>
-              <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Landing page editorial</p>
+              <p className="text-[11px]" style={{ color: MUTED }}>Landing page editorial</p>
             </div>
           </div>
         </div>
@@ -89,13 +90,13 @@ export default function NuevaPublicacionPage() {
           {/* Slug */}
           <div>
             <label className={label} style={lStyle}>Slug (URL)</label>
-            <div className="flex items-center gap-0" style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, overflow: 'hidden' }}>
-              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>/publicaciones/</span>
+            <div className="flex items-center gap-0" style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, overflow: 'hidden' }}>
+              <span className="px-3 text-sm flex-shrink-0" style={{ color: MUTED }}>/publicaciones/</span>
               <input name="slug" placeholder="conferencia-familia-2026"
                 className="flex-1 px-2 py-2.5 text-sm focus:outline-none bg-transparent"
-                style={{ color: '#F6F3EB' }} />
+                style={{ color: INK }} />
             </div>
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <p className="text-[10px] mt-1" style={{ color: MUTED }}>
               Opcional — se genera automáticamente del título si lo dejas vacío.
             </p>
           </div>
@@ -110,10 +111,10 @@ export default function NuevaPublicacionPage() {
           <div>
             <label className={label} style={lStyle}>Color de portada (si no hay imagen)</label>
             <div className="flex items-center gap-2">
-              <input name="cover_color" type="color" defaultValue="#093C5D"
+              <input name="cover_color" type="color" defaultValue={BG}
                 className="w-10 h-10 rounded-lg border cursor-pointer"
-                style={{ background: '#0B2D47', borderColor: '#0D3352', padding: 2 }} />
-              <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                style={{ background: CARD, borderColor: BORDER, padding: 2 }} />
+              <span className="text-[11px]" style={{ color: MUTED }}>
                 Se usa como fondo si no hay imagen de portada
               </span>
             </div>
@@ -125,7 +126,7 @@ export default function NuevaPublicacionPage() {
             <textarea name="body" rows={10}
               placeholder={`## Bienvenidos\n\nEscribe el contenido completo de la landing page aquí.\n\nPuedes usar **negrita**, *cursiva*, ## encabezados, y párrafos separados por línea en blanco.\n\n> Citas destacadas con >`}
               className={`${field} resize-y font-mono text-[13px]`} style={fStyle} />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <p className="text-[10px] mt-1" style={{ color: MUTED }}>
               Markdown: **negrita**, *cursiva*, ## título, &gt; cita, - lista
             </p>
           </div>
@@ -146,11 +147,11 @@ export default function NuevaPublicacionPage() {
 
           {/* Activo */}
           <label className="flex items-center gap-3 p-3.5 rounded-xl cursor-pointer"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <input type="checkbox" name="is_active" className="flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicar inmediatamente</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm font-bold" style={{ color: INK }}>Publicar inmediatamente</p>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 La página estará visible en /publicaciones/slug al activarla
               </p>
             </div>
@@ -158,7 +159,7 @@ export default function NuevaPublicacionPage() {
 
           <button type="submit"
             className="w-full py-3 rounded-xl text-sm font-bold transition"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             Crear publicación
           </button>
         </form>

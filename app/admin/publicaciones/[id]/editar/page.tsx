@@ -4,11 +4,12 @@ import Link from 'next/link'
 import { ArrowLeft, Newspaper, Layout, ArrowRight } from 'lucide-react'
 import { updatePublicacion } from '@/app/actions/publicaciones'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
-const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
+const fStyle = { background: CARD, border: `1px solid ${BORDER}`, color: INK }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.72)' }
+const lStyle = { color: MUTED }
 
 export default async function EditarPublicacionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -32,17 +33,17 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
         <div className="flex items-center gap-3 mb-5 md:mb-8">
           <Link href="/admin/publicaciones"
             className="w-9 h-9 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}>
             <ArrowLeft size={16} />
           </Link>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(118,171,174,0.12)' }}>
-              <Newspaper size={14} style={{ color: '#76ABAE' }} />
+              style={{ background: `${GOLD}1F` }}>
+              <Newspaper size={14} style={{ color: GOLD }} />
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Editar publicación</h1>
-              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{item.title}</p>
+              <p className="text-[11px] truncate max-w-[200px]" style={{ color: MUTED }}>{item.title}</p>
             </div>
           </div>
         </div>
@@ -50,7 +51,7 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
         {/* Editor de bloques link */}
         <Link href={`/admin/publicaciones/${id}/editor`}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition mb-6"
-          style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.25)', color: '#76ABAE' }}>
+          style={{ background: `${GOLD}1A`, border: '1px solid rgba(217,166,42,0.25)', color: GOLD }}>
           <Layout size={15} className="flex-shrink-0" />
           <span className="flex-1">Editor de bloques</span>
           <ArrowRight size={14} />
@@ -97,11 +98,11 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
 
           <div>
             <label className={label} style={lStyle}>Slug (URL)</label>
-            <div className="flex items-center gap-0" style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, overflow: 'hidden' }}>
-              <span className="px-3 text-sm flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>/publicaciones/</span>
+            <div className="flex items-center gap-0" style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, overflow: 'hidden' }}>
+              <span className="px-3 text-sm flex-shrink-0" style={{ color: MUTED }}>/publicaciones/</span>
               <input name="slug" defaultValue={item.slug}
                 className="flex-1 px-2 py-2.5 text-sm focus:outline-none bg-transparent"
-                style={{ color: '#F6F3EB' }} />
+                style={{ color: INK }} />
             </div>
           </div>
 
@@ -113,9 +114,9 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
           <div>
             <label className={label} style={lStyle}>Color de portada</label>
             <div className="flex items-center gap-2">
-              <input name="cover_color" type="color" defaultValue={item.cover_color ?? '#093C5D'}
+              <input name="cover_color" type="color" defaultValue={item.cover_color ?? BG}
                 className="w-10 h-10 rounded-lg border cursor-pointer"
-                style={{ background: '#0B2D47', borderColor: '#0D3352', padding: 2 }} />
+                style={{ background: CARD, borderColor: BORDER, padding: 2 }} />
             </div>
           </div>
 
@@ -139,11 +140,11 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
           </div>
 
           <label className="flex items-center gap-3 p-3.5 rounded-xl cursor-pointer"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <input type="checkbox" name="is_active" defaultChecked={item.is_active} className="flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicación activa</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm font-bold" style={{ color: INK }}>Publicación activa</p>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 Visible en /publicaciones/{item.slug}
               </p>
             </div>
@@ -151,7 +152,7 @@ export default async function EditarPublicacionPage({ params }: { params: Promis
 
           <button type="submit"
             className="w-full py-3 rounded-xl text-sm font-bold transition"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             Guardar cambios
           </button>
         </form>
