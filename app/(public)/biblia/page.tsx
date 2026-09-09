@@ -1,15 +1,35 @@
 ﻿import Link from 'next/link'
-import { ArrowRight, BookOpen, CalendarDays } from 'lucide-react'
+import { ArrowRight, BookOpen, CalendarDays, Flame, Search, Bookmark } from 'lucide-react'
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
 import { findBook } from '@/lib/bible'
+import { formatDayReference } from '@/lib/bible-reading-plans'
 import { createClient } from '@/lib/supabase/server'
-import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const NAVY  = CARD
 const TEAL  = GOLD
 const CREAM = INK
+
+interface ActivePlan {
+  title: string
+  slug: string
+  dayNumber: number
+  duration: number
+  reference: string
+}
+
+function computeStreak(dates: Set<string>): number {
+  let streak = 0
+  const cursor = new Date()
+  if (!dates.has(cursor.toISOString().slice(0, 10))) cursor.setUTCDate(cursor.getUTCDate() - 1)
+  while (dates.has(cursor.toISOString().slice(0, 10))) {
+    streak++
+    cursor.setUTCDate(cursor.getUTCDate() - 1)
+  }
+  return streak
+}
 
 export default async function BibliaPage() {
   const supabase = await createClient()
@@ -19,12 +39,19 @@ export default async function BibliaPage() {
   let initialBookmarks: Array<{
     bookId: string; chapterNum: number; verseNum: string; ref: string; text: string; savedAt: string
   }> | undefined
+  let activePlan: ActivePlan | null = null
+  let streak = 0
 
   if (user) {
-    const [positionResult, bookmarksResult] = await Promise.all([
+    const [positionResult, bookmarksResult, enrollmentResult, completionsResult] = await Promise.all([
       supabase.from('bible_reading_position').select('book_id, chapter').eq('user_id', user.id).maybeSingle(),
       supabase.from('bible_bookmarks').select('book_id, chapter, verse, verse_text, created_at')
         .eq('user_id', user.id).order('created_at', { ascending: false }).limit(6),
+      supabase.from('user_reading_plan_enrollments')
+        .select('plan_id, current_day, bible_reading_plans(title, slug, duration_days)')
+        .eq('user_id', user.id).is('completed_at', null)
+        .order('started_at', { ascending: false }).limit(1).maybeSingle(),
+      supabase.from('user_reading_plan_day_completions').select('completed_at').eq('user_id', user.id),
     ])
     if (positionResult.data) {
       const book = findBook(positionResult.data.book_id)
@@ -43,12 +70,91 @@ export default async function BibliaPage() {
         savedAt: r.created_at,
       }
     })
+
+    if (enrollmentResult.data) {
+      const planRow = enrollmentResult.data.bible_reading_plans as unknown as
+        { title: string; slug: string; duration_days: number } | null
+      if (planRow) {
+        const { data: dayRow } = await supabase
+          .from('bible_reading_plan_days')
+          .select('book_id, chapter_start, chapter_end')
+          .eq('plan_id', enrollmentResult.data.plan_id)
+          .eq('day_number', enrollmentResult.data.current_day)
+          .maybeSingle()
+        if (dayRow) {
+          activePlan = {
+            title: planRow.title, slug: planRow.slug,
+            dayNumber: enrollmentResult.data.current_day, duration: planRow.duration_days,
+            reference: formatDayReference(dayRow.book_id, dayRow.chapter_start, dayRow.chapter_end),
+          }
+        }
+      }
+    }
+
+    const dates = new Set((completionsResult.data ?? []).map(c => c.completed_at.slice(0, 10)))
+    streak = computeStreak(dates)
   }
+
+  const showDashboard = !!user && (!!initialLastRead || !!activePlan)
 
   return (
     <div>
 
-      {/* ══ HERO ════════════════════════════════════════════ */}
+      {/* ══ DASHBOARD (usuarios con historial) ══════════════ */}
+      {showDashboard ? (
+        <section style={{ background: BG }}>
+          <div className="max-w-6xl mx-auto px-6 pt-28 pb-10 md:pt-36">
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <Flame size={14} style={{ color: streak > 0 ? TEAL : MUTED }} />
+                <span className="text-[12px] font-black" style={{ color: streak > 0 ? TEAL : MUTED }}>
+                  {streak > 0 ? `${streak} día${streak !== 1 ? 's' : ''} seguidos` : 'Empieza tu racha'}
+                </span>
+              </div>
+              <Link href="/biblia/buscar"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <Search size={14} style={{ color: MUTED }} />
+                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Buscar</span>
+              </Link>
+              <Link href="/biblia/planes"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <CalendarDays size={14} style={{ color: MUTED }} />
+                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Planes</span>
+              </Link>
+              <Link href="#selector"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <Bookmark size={14} style={{ color: MUTED }} />
+                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Explorar</span>
+              </Link>
+            </div>
+
+            <h1 className="font-display font-black tracking-tighter text-white mb-8"
+              style={{ fontSize: 'clamp(2.2rem, 6vw, 4rem)', lineHeight: 0.9 }}>
+              Bienvenido de vuelta.
+            </h1>
+
+            {activePlan && (
+              <Link href={`/biblia/planes/${activePlan.slug}/dia/${activePlan.dayNumber}`}
+                className="group flex items-center gap-4 rounded-2xl p-5 mb-4 transition hover:brightness-110"
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${GOLD}18` }}>
+                  <CalendarDays size={18} style={{ color: GOLD }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[9px] font-black uppercase tracking-[0.25em] mb-1" style={{ color: `${GOLD}99` }}>
+                    {activePlan.title} · Día {activePlan.dayNumber} de {activePlan.duration}
+                  </p>
+                  <p className="font-black text-base" style={{ color: INK }}>Hoy toca: {activePlan.reference}</p>
+                </div>
+                <ArrowRight size={16} style={{ color: GOLD, flexShrink: 0 }} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            )}
+          </div>
+        </section>
+      ) : (
       <section className="relative overflow-hidden" style={{ background: BG, minHeight: '72vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
@@ -98,6 +204,7 @@ export default async function BibliaPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ══ VERSO DEL DÍA — visible para todos, incluso primera visita ══ */}
       <BibleVerseOfDay />
@@ -108,33 +215,35 @@ export default async function BibliaPage() {
       {/* ══ SELECTOR DE LIBROS ══════════════════════════════ */}
       <BibleSelector />
 
-      {/* ══ CTA ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 100%)` }}>
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: MUTED }}>
-                — También en la comunidad
-              </p>
-              <h2 className="font-display font-black tracking-tighter text-white"
-                style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.85 }}>
-                La Palabra<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
-              </h2>
-            </div>
-            <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: MUTED }}>
-                Únete para compartir reflexiones, pedir oración y crecer en la fe con nuestra comunidad en línea.
-              </p>
-              <Link href="/registro"
-                className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ background: CREAM, color: NAVY }}>
-                Crear mi cuenta <ArrowRight size={12} />
-              </Link>
+      {/* ══ CTA — solo para visitantes sin cuenta ═══════════ */}
+      {!showDashboard && (
+        <section className="relative overflow-hidden"
+          style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 100%)` }}>
+          <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: MUTED }}>
+                  — También en la comunidad
+                </p>
+                <h2 className="font-display font-black tracking-tighter text-white"
+                  style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', lineHeight: 0.85 }}>
+                  La Palabra<br />es mejor<br /><em style={{ color: TEAL }}>en comunidad.</em>
+                </h2>
+              </div>
+              <div className="flex flex-col gap-4">
+                <p className="text-base leading-relaxed mb-4" style={{ color: MUTED }}>
+                  Únete para compartir reflexiones, pedir oración y crecer en la fe con nuestra comunidad en línea.
+                </p>
+                <Link href="/registro"
+                  className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
+                  style={{ background: CREAM, color: NAVY }}>
+                  Crear mi cuenta <ArrowRight size={12} />
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
     </div>
   )
