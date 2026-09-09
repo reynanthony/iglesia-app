@@ -5,12 +5,13 @@ import { ArrowLeft, Flame, CheckCircle, Clock, Users, Sparkles, MessageSquareHea
 import { togglePrayerParticipation, markPrayerAnswered, markPrayerFollowUp } from '@/app/actions/prayer'
 import RealtimeRefresh from '@/components/RealtimeRefresh'
 import PrayerResponseForm from '@/components/app/PrayerResponseForm'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const STATUS_LABEL: Record<string, string> = {
   nueva: 'Nueva', seguimiento: 'En seguimiento', respondida: 'Respondida',
 }
 const STATUS_COLOR: Record<string, string> = {
-  nueva: '#76ABAE', seguimiento: '#F59E0B', respondida: '#4ADE80',
+  nueva: GOLD, seguimiento: '#F59E0B', respondida: '#4ADE80',
 }
 
 function timeAgo(date: string) {
@@ -48,7 +49,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   const isOwner      = req.user_id === user?.id
   const isPraying    = participants?.some(p => p.user_id === user?.id) ?? false
   const prayerCount  = participants?.length ?? 0
-  const sc           = STATUS_COLOR[req.status] ?? '#76ABAE'
+  const sc           = STATUS_COLOR[req.status] ?? GOLD
   const authorName   = req.is_anonymous
     ? 'Anónimo'
     : ((req.profiles as any)?.full_name ?? 'Usuario')
@@ -62,7 +63,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
   })
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
       <RealtimeRefresh
         channelName={`oracion-detail-${id}`}
         watches={[
@@ -74,19 +75,19 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
 
       {/* Header */}
       <div className="sticky top-0 z-20 flex items-center gap-3 px-4 py-4"
-        style={{ background: '#061E30', borderBottom: '1px solid #0D3352' }}>
+        style={{ background: BG, borderBottom: `1px solid ${BORDER}` }}>
         <Link href="/app/oracion"
-          className="p-2.5 hover:bg-[#0D3352] rounded-xl transition"
-          style={{ color: '#76ABAE' }}>
+          className="p-2.5 hover:bg-[#292E3B] rounded-xl transition"
+          style={{ color: GOLD }}>
           <ArrowLeft size={18} />
         </Link>
         <span className="text-[11px] font-bold uppercase tracking-wider"
-          style={{ color: 'rgba(246,243,235,0.40)' }}>
+          style={{ color: MUTED }}>
           Petición de oración
         </span>
         {isPrivate && (
           <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full ml-auto"
-            style={{ background: 'rgba(246,243,235,0.06)', color: 'rgba(246,243,235,0.40)', border: '1px solid rgba(246,243,235,0.10)' }}>
+            style={{ background: 'rgba(255,255,255,0.06)', color: MUTED, border: '1px solid rgba(246,243,235,0.10)' }}>
             <Lock size={9} /> Privada
           </span>
         )}
@@ -96,34 +97,34 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
 
         {/* Card principal */}
         <div className="rounded-2xl p-6 space-y-5"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          style={{ background: CARD, border: `1px solid ${BORDER}` }}>
 
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-[9px] font-black uppercase tracking-[0.25em] px-3 py-1.5 rounded-full"
               style={{ background: `${sc}18`, color: sc, border: `1px solid ${sc}30` }}>
               {STATUS_LABEL[req.status]}
             </span>
-            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <span className="text-[11px]" style={{ color: MUTED }}>
               {authorName} · {timeAgo(req.created_at)}
             </span>
           </div>
 
           <h1 className="font-black text-xl leading-snug tracking-tight"
-            style={{ color: '#F6F3EB' }}>
+            style={{ color: INK }}>
             {req.title}
           </h1>
 
           {req.body && (
             <p className="text-sm leading-relaxed whitespace-pre-wrap"
-              style={{ color: 'rgba(246,243,235,0.65)' }}>
+              style={{ color: MUTED }}>
               {req.body}
             </p>
           )}
 
           <div className="flex items-center gap-2 pt-1"
-            style={{ borderTop: '1px solid #0D3352', paddingTop: 16 }}>
-            <Users size={14} style={{ color: 'rgba(118,171,174,0.60)' }} />
-            <span className="text-[12px] font-bold" style={{ color: 'rgba(246,243,235,0.50)' }}>
+            style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 16 }}>
+            <Users size={14} style={{ color: `${GOLD}99` }} />
+            <span className="text-[12px] font-bold" style={{ color: MUTED }}>
               {prayerCount === 0
                 ? 'Nadie está orando aún — sé el primero'
                 : `${prayerCount} persona${prayerCount !== 1 ? 's' : ''} orando`}
@@ -137,9 +138,9 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
             <button type="submit"
               className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition"
               style={isPraying
-                ? { background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.30)' }
-                : { background: '#F6F3EB', color: '#061E30' }}>
-              <Flame size={16} style={{ color: isPraying ? '#76ABAE' : '#061E30' }} />
+                ? { background: `${GOLD}26`, color: GOLD, border: `1px solid ${GOLD}4D` }
+                : { background: GOLD, color: GOLD_INK }}>
+              <Flame size={16} style={{ color: isPraying ? GOLD : GOLD_INK }} />
               {isPraying ? 'Orando — toca para dejar de orar' : 'Estoy orando por esto'}
             </button>
           </form>
@@ -175,7 +176,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
               <CheckCircle size={22} style={{ color: '#4ADE80', flexShrink: 0 }} />
               <div>
                 <p className="font-black text-sm" style={{ color: '#4ADE80' }}>¡Oración respondida!</p>
-                <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                <p className="text-[12px]" style={{ color: MUTED }}>
                   Dios oyó el clamor de su pueblo. Gloria a Dios.
                 </p>
               </div>
@@ -183,19 +184,19 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
 
             {testimony && (
               <div className="rounded-2xl p-5 space-y-3"
-                style={{ background: 'rgba(118,171,174,0.07)', border: '1px solid rgba(118,171,174,0.20)' }}>
+                style={{ background: `${GOLD}12`, border: `1px solid ${GOLD}33` }}>
                 <div className="flex items-center gap-2">
-                  <Sparkles size={14} style={{ color: '#76ABAE' }} />
+                  <Sparkles size={14} style={{ color: GOLD }} />
                   <p className="text-[10px] font-black uppercase tracking-[0.2em]"
-                    style={{ color: 'rgba(118,171,174,0.60)' }}>
+                    style={{ color: `${GOLD}99` }}>
                     Testimonio compartido
                   </p>
                 </div>
                 <p className="text-sm leading-relaxed whitespace-pre-wrap"
-                  style={{ color: 'rgba(246,243,235,0.70)' }}>
+                  style={{ color: MUTED }}>
                   {testimony.content}
                 </p>
-                <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                <p className="text-[10px]" style={{ color: MUTED }}>
                   {new Date(testimony.created_at).toLocaleDateString('es-ES', {
                     day: 'numeric', month: 'long', year: 'numeric'
                   })}
@@ -206,18 +207,18 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
             {isOwner && !testimony && (
               <Link href={`/app/oracion/${id}/testimonio`}
                 className="flex items-center gap-3 p-5 rounded-2xl transition hover:brightness-110"
-                style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}>
+                style={{ background: CARD, border: `1px solid ${GOLD}33` }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(118,171,174,0.12)' }}>
-                  <MessageSquareHeart size={16} style={{ color: '#76ABAE' }} />
+                  style={{ background: `${GOLD}1F` }}>
+                  <MessageSquareHeart size={16} style={{ color: GOLD }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Compartir testimonio</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  <p className="font-bold text-sm" style={{ color: INK }}>Compartir testimonio</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                     Cuéntale a la comunidad cómo Dios respondió
                   </p>
                 </div>
-                <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)' }} />
+                <ChevronRight size={14} style={{ color: MUTED }} />
               </Link>
             )}
           </div>
@@ -227,7 +228,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
         {(responses && responses.length > 0) && (
           <div className="space-y-3">
             <p className="text-[10px] font-black uppercase tracking-[0.25em] px-1"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>
+              style={{ color: `${GOLD}99` }}>
               Oraciones de la comunidad ({responses.length})
             </p>
             {responses.map((r: any) => {
@@ -235,21 +236,21 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
               const name = r.is_anonymous ? 'Anónimo' : (profile?.full_name ?? 'Usuario')
               return (
                 <div key={r.id} className="rounded-2xl p-5 space-y-2"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'rgba(118,171,174,0.15)' }}>
-                      <HandHeart size={12} style={{ color: '#76ABAE' }} />
+                      style={{ background: `${GOLD}26` }}>
+                      <HandHeart size={12} style={{ color: GOLD }} />
                     </div>
-                    <span className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.60)' }}>
+                    <span className="text-[11px] font-bold" style={{ color: MUTED }}>
                       {name}
                     </span>
-                    <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                    <span className="text-[10px]" style={{ color: MUTED }}>
                       · {timeAgo(r.created_at)}
                     </span>
                   </div>
                   <p className="text-sm leading-relaxed whitespace-pre-wrap pl-8"
-                    style={{ color: 'rgba(246,243,235,0.80)' }}>
+                    style={{ color: MUTED }}>
                     {r.body}
                   </p>
                 </div>
@@ -266,7 +267,7 @@ export default async function PeticionPage({ params }: { params: Promise<{ id: s
         {!user && (
           <Link href={`/login?next=/app/oracion/${id}`}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition"
-            style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)', color: '#76ABAE' }}>
+            style={{ background: CARD, border: `1px solid ${GOLD}40`, color: GOLD }}>
             <MessageSquareHeart size={16} /> Inicia sesión para responder
           </Link>
         )}

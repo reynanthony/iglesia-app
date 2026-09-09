@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, Play, Calendar, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import VideoPlayer from '@/components/VideoPlayer'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 300
 
@@ -33,17 +34,17 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
     : null
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
 
       {/* NAV */}
       <div className="flex items-center gap-3 px-4 py-4 sticky top-0 z-10"
-        style={{ borderBottom: '1px solid #0D3352', background: '#061E30' }}>
+        style={{ borderBottom: `1px solid ${BORDER}`, background: BG }}>
         <Link href="/app/en-vivo"
           className="flex items-center justify-center w-9 h-9 rounded-xl flex-shrink-0"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}>
+          style={{ background: CARD, border: `1px solid ${BORDER}`, color: GOLD }}>
           <ArrowLeft size={16} />
         </Link>
-        <p className="font-bold text-sm truncate flex-1" style={{ color: '#F6F3EB' }}>
+        <p className="font-bold text-sm truncate flex-1" style={{ color: INK }}>
           {item.title}
         </p>
       </div>
@@ -56,26 +57,26 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
           <img src={thumb} alt={item.title} className="w-full h-full object-cover opacity-60" />
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center" style={{ aspectRatio: '16/9', background: '#0B2D47' }}>
-          <Play size={40} style={{ color: '#76ABAE', opacity: 0.4 }} />
+        <div className="w-full flex items-center justify-center" style={{ aspectRatio: '16/9', background: CARD }}>
+          <Play size={40} style={{ color: GOLD, opacity: 0.4 }} />
         </div>
       )}
 
       {/* META */}
-      <div className="px-4 py-5" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="px-4 py-5" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <h1 className="font-black tracking-tight leading-tight mb-3"
-          style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', color: '#F6F3EB' }}>
+          style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', color: INK }}>
           {item.title}
         </h1>
         <div className="flex flex-wrap items-center gap-4">
           {item.speaker && (
-            <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <div className="flex items-center gap-1.5" style={{ color: MUTED }}>
               <User size={12} />
               <span className="text-[12px] font-bold">{item.speaker}</span>
             </div>
           )}
           {fmtDate && (
-            <div className="flex items-center gap-1.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+            <div className="flex items-center gap-1.5" style={{ color: MUTED }}>
               <Calendar size={12} />
               <span className="text-[12px]">{fmtDate}</span>
             </div>
@@ -85,10 +86,10 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
 
       {/* DESCRIPTION */}
       {item.description && (
-        <div className="px-4 py-5" style={{ borderBottom: '1px solid #0D3352' }}>
+        <div className="px-4 py-5" style={{ borderBottom: `1px solid ${BORDER}` }}>
           {item.description.split('\n\n').map((p: string, i: number) =>
             p.trim() ? (
-              <p key={i} className="text-sm leading-relaxed mb-3" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p key={i} className="text-sm leading-relaxed mb-3" style={{ color: MUTED }}>
                 {p}
               </p>
             ) : null
@@ -100,7 +101,7 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
       {related.length > 0 && (
         <div className="px-4 py-5">
           <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-            style={{ color: 'rgba(118,171,174,0.60)' }}>Más prédicas</p>
+            style={{ color: `${GOLD}99` }}>Más prédicas</p>
           <div className="space-y-2">
             {related.map(r => {
               const rYtId = getYoutubeId(r.video_url)
@@ -108,19 +109,19 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
               return (
                 <Link key={r.id} href={`/app/predicas/${r.id}`}
                   className="flex items-center gap-3 p-3 rounded-2xl group transition"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                   <div className="w-16 h-10 rounded-lg flex-shrink-0 overflow-hidden relative"
-                    style={{ background: '#0D3352' }}>
+                    style={{ background: BORDER }}>
                     {rThumb
                       ? <img src={rThumb} alt="" className="w-full h-full object-cover" />
-                      : <Play size={14} style={{ color: '#76ABAE', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
+                      : <Play size={14} style={{ color: GOLD, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate group-hover:text-[#76ABAE] transition"
-                      style={{ color: '#F6F3EB' }}>{r.title}</p>
+                    <p className="font-bold text-sm truncate group-hover:text-[#D9A62A] transition"
+                      style={{ color: INK }}>{r.title}</p>
                   </div>
-                  <Play size={13} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0 }} />
+                  <Play size={13} style={{ color: MUTED, flexShrink: 0 }} />
                 </Link>
               )
             })}
