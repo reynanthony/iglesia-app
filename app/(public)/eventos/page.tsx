@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { EventRsvpButton } from '@/components/public/EventRsvpButton'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { BG, CARD, MUTED, GOLD } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,10 +37,10 @@ function badgeLabel(badge?: string) {
 }
 function badgeColor(badge?: string) {
   const b = (badge ?? '').toLowerCase()
-  if (b === 'especial') return '#093C5D'
+  if (b === 'especial') return CARD
   if (b === 'por_confirmar' || b === 'por confirmar') return '#869B7E'
-  if (b === 'hoy') return '#76ABAE'
-  return '#093C5D'
+  if (b === 'hoy') return GOLD
+  return CARD
 }
 
 const MESES_CORTOS = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
@@ -71,7 +72,7 @@ export default async function EventosPage() {
   const heroVideoUrl       = (c.hero_video_url as string) || null
   const heroOverlayOpacity = 0.60
   const heroShowGrid       = true
-  const heroBg             = '#051828'
+  const heroBg             = BG
   const heroWatermark      = '2026'
 
   const regularServices: RegularService[] = Array.isArray(c.regular_services) && c.regular_services.length > 0
@@ -117,36 +118,36 @@ export default async function EventosPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-            style={{ backgroundImage: 'repeating-linear-gradient(90deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #76ABAE 0px, #76ABAE 1px, transparent 1px, transparent 90px)' }} />
+            style={{ backgroundImage: 'repeating-linear-gradient(90deg, #C79A2A 0px, #C79A2A 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, #C79A2A 0px, #C79A2A 1px, transparent 1px, transparent 90px)' }} />
         )}
         {heroWatermark && (
           <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-end overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter block"
-              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: '#76ABAE', paddingRight: '1rem' }}>
+              style={{ fontSize: 'clamp(16rem, 35vw, 32rem)', opacity: 0.06, color: GOLD, paddingRight: '1rem' }}>
               {heroWatermark}
             </span>
           </div>
         )}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
+          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(199,154,42,0.10), transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32">
           <div className="flex items-center gap-5 mb-10 sm:mb-14">
-            <div className="w-12 h-px" style={{ background: '#76ABAE' }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: 'rgba(118,171,174,0.7)' }}>
+            <div className="w-12 h-px" style={{ background: GOLD }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${GOLD}B2` }}>
               {heroEyebrow}
             </p>
           </div>
           <h1 className="font-display font-black tracking-tighter text-white mb-8 leading-[0.9] md:leading-[0.85]"
             style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)' }}>
             {heroTitle.includes('*')
-              ? <>{heroTitle.split('*')[0]}<em style={{ color: '#76ABAE' }}>{heroTitle.split('*')[1]}</em></>
+              ? <>{heroTitle.split('*')[0]}<em style={{ color: GOLD }}>{heroTitle.split('*')[1]}</em></>
               : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
           </h1>
-          <p className="text-base leading-relaxed max-w-md" style={{ color: 'rgba(246,243,235,0.82)' }}>
+          <p className="text-base leading-relaxed max-w-md" style={{ color: MUTED }}>
             {heroSubtitle}
           </p>
         </div>
@@ -228,7 +229,7 @@ export default async function EventosPage() {
                           <img src={imgUrl} alt={event.titulo}
                             className="absolute inset-0 w-full h-full object-cover" />
                           <div className="absolute inset-0"
-                            style={{ background: 'linear-gradient(135deg, rgba(9,60,93,0.82) 0%, rgba(9,60,93,0.60) 60%, rgba(118,171,174,0.40) 100%)' }} />
+                            style={{ background: 'linear-gradient(135deg, rgba(24,26,34,0.82) 0%, rgba(24,26,34,0.60) 60%, rgba(199,154,42,0.40) 100%)' }} />
                         </>
                       )}
                       <div className="relative p-5 sm:p-8 md:p-10 flex flex-col justify-between h-full gap-6">
@@ -325,7 +326,7 @@ export default async function EventosPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #051828 0%, #093C5D 60%, #76ABAE 100%)' }}>
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #101217 0%, #181A22 60%, #C79A2A 100%)' }}>
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-10 sm:gap-16">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-white/30 mb-10">{evCtaEyebrow}</p>

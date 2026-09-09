@@ -6,6 +6,7 @@ import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import type { Metadata } from 'next'
 import PublicacionBlockRenderer from '@/components/PublicacionBlockRenderer'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 60
 
@@ -20,10 +21,10 @@ const CAT_LABEL: Record<string, string> = {
 const CAT_COLOR: Record<string, string> = {
   campana:          '#C9A227',
   serie:            '#A855F7',
-  'evento-especial': '#76ABAE',
+  'evento-especial': '#4D9EFF',
   ministerio:       '#4ADE80',
   anuncio:          '#F87171',
-  general:          'rgba(246,243,235,0.76)',
+  general:          MUTED,
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -51,7 +52,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
 
   if (!item) notFound()
 
-  const cc = CAT_COLOR[item.category] ?? '#76ABAE'
+  const cc = CAT_COLOR[item.category] ?? GOLD
   const htmlBody = item.body
     ? sanitizeHtml(await marked.parse(item.body), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
@@ -71,29 +72,29 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
     .limit(3)
 
   return (
-    <div style={{ background: '#051828', color: '#F6F3EB', minHeight: '100vh' }}>
+    <div style={{ background: BG, color: INK, minHeight: '100vh' }}>
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden"
-        style={{ minHeight: '70vh', background: item.cover_color ?? '#093C5D' }}>
+        style={{ minHeight: '70vh', background: item.cover_color ?? CARD }}>
         {item.cover_image && (
           <>
             <img src={item.cover_image} alt={item.title}
               className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0"
-              style={{ background: 'linear-gradient(to bottom, rgba(5,24,40,0.30) 0%, rgba(5,24,40,0.65) 60%, rgba(5,24,40,0.96) 100%)' }} />
+              style={{ background: 'linear-gradient(to bottom, rgba(16,18,23,0.30) 0%, rgba(16,18,23,0.65) 60%, rgba(16,18,23,0.96) 100%)' }} />
           </>
         )}
         {!item.cover_image && (
           <div className="absolute inset-0"
-            style={{ background: 'linear-gradient(135deg, rgba(118,171,174,0.08) 0%, transparent 60%)' }} />
+            style={{ background: 'linear-gradient(135deg, rgba(199,154,42,0.08) 0%, transparent 60%)' }} />
         )}
 
         {/* Back link */}
         <div className="relative max-w-4xl mx-auto px-6 pt-8">
           <Link href="/publicaciones"
             className="inline-flex items-center gap-2 text-[12px] font-bold transition hover:opacity-70"
-            style={{ color: 'rgba(246,243,235,0.82)' }}>
+            style={{ color: MUTED }}>
             <ArrowLeft size={13} /> Publicaciones
           </Link>
         </div>
@@ -108,7 +109,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
               style={{ background: `${cc}20`, color: cc, border: `1px solid ${cc}40` }}>
               {CAT_LABEL[item.category] ?? item.category}
             </span>
-            <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.76)' }}>
+            <span className="text-[12px]" style={{ color: MUTED }}>
               {new Date(item.published_at).toLocaleDateString('es-DO', {
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
               })}
@@ -117,14 +118,14 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
 
           {/* Title */}
           <h1 className="font-display font-black leading-[0.92] mb-4"
-            style={{ fontSize: 'clamp(32px, 6vw, 72px)', color: '#F6F3EB', maxWidth: 800 }}>
+            style={{ fontSize: 'clamp(32px, 6vw, 72px)', color: INK, maxWidth: 800 }}>
             {item.title}
           </h1>
 
           {/* Subtitle */}
           {item.subtitle && (
             <p className="text-base md:text-xl italic leading-relaxed"
-              style={{ color: 'rgba(246,243,235,0.75)', maxWidth: 620 }}>
+              style={{ color: MUTED, maxWidth: 620 }}>
               {item.subtitle}
             </p>
           )}
@@ -137,7 +138,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
       {item.excerpt && (
         <div className="max-w-4xl mx-auto px-6 pt-10">
           <p className="text-lg md:text-xl leading-relaxed font-medium pb-8"
-            style={{ color: 'rgba(246,243,235,0.75)', borderBottom: '1px solid rgba(246,243,235,0.08)' }}>
+            style={{ color: MUTED, borderBottom: '1px solid rgba(139,146,162,0.08)' }}>
             {item.excerpt}
           </p>
         </div>
@@ -156,22 +157,22 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
               <div
                 className="publicacion-body"
                 dangerouslySetInnerHTML={{ __html: htmlBody }}
-                style={{ color: 'rgba(246,243,235,0.80)', fontSize: 16, lineHeight: 1.8 }}
+                style={{ color: MUTED, fontSize: 16, lineHeight: 1.8 }}
               />
             </div>
             <aside className="space-y-6">
-              <div className="rounded-xl p-5" style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>Información</p>
+              <div className="rounded-xl p-5" style={{ background: CARD, border: '1px solid rgba(139,146,162,0.07)' }}>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: MUTED }}>Información</p>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.84)' }}>Categoría</p>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: MUTED }}>Categoría</p>
                     <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${cc}20`, color: cc }}>
                       {CAT_LABEL[item.category] ?? item.category}
                     </span>
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: 'rgba(246,243,235,0.84)' }}>Publicado</p>
-                    <p className="text-sm" style={{ color: '#F6F3EB' }}>
+                    <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: MUTED }}>Publicado</p>
+                    <p className="text-sm" style={{ color: INK }}>
                       {new Date(item.published_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>
                   </div>
@@ -179,18 +180,18 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
               </div>
               {others && others.length > 0 && (
                 <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: 'rgba(246,243,235,0.82)' }}>
+                  <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: MUTED }}>
                     Otras publicaciones
                   </p>
                   <div className="space-y-2">
                     {others.map(o => (
                       <Link key={o.id} href={`/publicaciones/${o.slug}`}
                         className="flex items-center gap-3 p-3 rounded-xl transition hover:opacity-80"
-                        style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? '#093C5D' }}>
+                        style={{ background: CARD, border: '1px solid rgba(139,146,162,0.07)' }}>
+                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? CARD }}>
                           {o.cover_image && <img src={o.cover_image} alt="" className="w-full h-full object-cover" />}
                         </div>
-                        <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: 'rgba(246,243,235,0.75)' }}>
+                        <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: MUTED }}>
                           {o.title}
                         </p>
                       </Link>
@@ -208,7 +209,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         <div className="max-w-4xl mx-auto px-6 pb-10 pt-4">
           <Link href={item.cta_url}
             className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl text-sm font-bold transition hover:opacity-90"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: INK, color: BG }}>
             {item.cta_label ?? 'Más información'} <ArrowRight size={15} />
           </Link>
         </div>
@@ -216,19 +217,19 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
 
       {/* Related publicaciones (shown after blocks) */}
       {hasBlocks && others && others.length > 0 && (
-        <div className="max-w-4xl mx-auto px-6 py-10" style={{ borderTop: '1px solid rgba(246,243,235,0.06)' }}>
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+        <div className="max-w-4xl mx-auto px-6 py-10" style={{ borderTop: '1px solid rgba(139,146,162,0.06)' }}>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4" style={{ color: MUTED }}>
             Otras publicaciones
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {others.map(o => (
               <Link key={o.id} href={`/publicaciones/${o.slug}`}
                 className="flex items-center gap-3 p-3 rounded-xl transition hover:opacity-80"
-                style={{ background: '#0B2D47', border: '1px solid rgba(246,243,235,0.07)' }}>
-                <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? '#093C5D' }}>
+                style={{ background: CARD, border: '1px solid rgba(139,146,162,0.07)' }}>
+                <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0" style={{ background: o.cover_color ?? CARD }}>
                   {o.cover_image && <img src={o.cover_image} alt="" className="w-full h-full object-cover" />}
                 </div>
-                <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: 'rgba(246,243,235,0.75)' }}>
+                <p className="text-[12px] font-medium leading-tight line-clamp-2" style={{ color: MUTED }}>
                   {o.title}
                 </p>
               </Link>
@@ -239,10 +240,10 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
 
       {/* ── FOOTER RULE ─────────────────────────────────────────── */}
       <div className="max-w-4xl mx-auto px-6 pb-12">
-        <div className="flex items-center gap-4 pt-8" style={{ borderTop: '1px solid rgba(246,243,235,0.08)' }}>
+        <div className="flex items-center gap-4 pt-8" style={{ borderTop: '1px solid rgba(139,146,162,0.08)' }}>
           <Link href="/publicaciones"
             className="inline-flex items-center gap-2 text-[12px] font-bold transition hover:opacity-70"
-            style={{ color: '#76ABAE' }}>
+            style={{ color: GOLD }}>
             <ArrowLeft size={13} /> Ver todas las publicaciones
           </Link>
         </div>
@@ -253,7 +254,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         .publicacion-body h1, .publicacion-body h2, .publicacion-body h3 {
           font-family: var(--font-playfair, serif);
           font-weight: 900;
-          color: #F6F3EB;
+          color: #FFFFFF;
           margin-top: 2em;
           margin-bottom: 0.5em;
           line-height: 1.15;
@@ -262,16 +263,16 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         .publicacion-body h2 { font-size: clamp(18px, 2.5vw, 28px); }
         .publicacion-body h3 { font-size: clamp(16px, 2vw, 22px); }
         .publicacion-body p  { margin-bottom: 1.4em; }
-        .publicacion-body strong { color: #F6F3EB; font-weight: 700; }
-        .publicacion-body em { color: rgba(246,243,235,0.88); font-style: italic; }
-        .publicacion-body a { color: #76ABAE; text-decoration: underline; text-underline-offset: 3px; }
+        .publicacion-body strong { color: #FFFFFF; font-weight: 700; }
+        .publicacion-body em { color: rgba(139,146,162,0.88); font-style: italic; }
+        .publicacion-body a { color: #C79A2A; text-decoration: underline; text-underline-offset: 3px; }
         .publicacion-body blockquote {
-          border-left: 3px solid #76ABAE;
+          border-left: 3px solid #C79A2A;
           padding: 0.75em 1.25em;
           margin: 1.5em 0;
-          background: rgba(118,171,174,0.06);
+          background: rgba(199,154,42,0.06);
           border-radius: 0 8px 8px 0;
-          color: rgba(246,243,235,0.88);
+          color: rgba(139,146,162,0.88);
           font-style: italic;
         }
         .publicacion-body ul, .publicacion-body ol {
@@ -281,7 +282,7 @@ export default async function PublicacionPage({ params }: { params: Promise<{ sl
         .publicacion-body li { margin-bottom: 0.4em; }
         .publicacion-body hr {
           border: none;
-          border-top: 1px solid rgba(246,243,235,0.10);
+          border-top: 1px solid rgba(139,146,162,0.10);
           margin: 2em 0;
         }
         .publicacion-body img {

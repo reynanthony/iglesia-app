@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Play, X } from 'lucide-react'
 import { detectSocialEmbed } from '@/lib/social-embed'
+import { MUTED } from '@/lib/gold-theme'
 
 export function VideoPlayButton({ url, label = 'Ver video' }: { url: string; label?: string }) {
   const [open, setOpen] = useState(false)
@@ -34,7 +35,7 @@ export function VideoPlayButton({ url, label = 'Ver video' }: { url: string; lab
         ref={triggerRef}
         onClick={() => setOpen(true)}
         className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-        style={{ color: 'rgba(246,243,235,0.88)' }}
+        style={{ color: MUTED }}
       >
         <span className="flex items-center justify-center w-9 h-9 rounded-full border border-white/30 hover:border-white/70 transition"
           style={{ background: 'rgba(255,255,255,0.10)' }}>
@@ -49,7 +50,7 @@ export function VideoPlayButton({ url, label = 'Ver video' }: { url: string; lab
           aria-modal="true"
           aria-label={label}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ background: 'rgba(5,24,40,0.92)', backdropFilter: 'blur(8px)' }}
+          style={{ background: 'rgba(16,18,23,0.92)', backdropFilter: 'blur(8px)' }}
         >
           {/* Backdrop — botón invisible para cerrar con clic fuera */}
           <button

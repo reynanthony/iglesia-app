@@ -3,12 +3,13 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Play, Calendar, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import VideoPlayer from '@/components/VideoPlayer'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 300
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
@@ -46,7 +47,7 @@ export default async function PredicaDetailPage({
     <div>
 
       {/* NAV */}
-      <div style={{ background: '#051828', borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+      <div style={{ background: BG, borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center gap-3">
           <Link href="/en-vivo"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] transition"
@@ -55,9 +56,9 @@ export default async function PredicaDetailPage({
           </Link>
           {item.series && (
             <>
-              <span style={{ color: 'rgba(118,171,174,0.25)' }}>/</span>
+              <span style={{ color: `${GOLD}40` }}>/</span>
               <span className="text-[10px] font-bold uppercase tracking-[0.3em]"
-                style={{ color: 'rgba(246,243,235,0.82)' }}>{item.series}</span>
+                style={{ color: MUTED }}>{item.series}</span>
             </>
           )}
         </div>
@@ -77,7 +78,7 @@ export default async function PredicaDetailPage({
       ) : null}
 
       {/* META */}
-      <section style={{ background: '#051828' }}>
+      <section style={{ background: BG }}>
         <div className="max-w-5xl mx-auto px-6 py-10 md:py-14">
           {item.series && (
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-6 text-[9px] font-black uppercase tracking-[0.25em]"
@@ -92,15 +93,15 @@ export default async function PredicaDetailPage({
           </h1>
 
           <div className="flex flex-wrap items-center gap-5 pt-5"
-            style={{ borderTop: '1px solid rgba(118,171,174,0.15)' }}>
+            style={{ borderTop: '1px solid rgba(199,154,42,0.15)' }}>
             {item.speaker && (
-              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.86)' }}>
+              <div className="flex items-center gap-2" style={{ color: MUTED }}>
                 <User size={12} />
                 <span className="text-[12px] font-bold">{item.speaker}</span>
               </div>
             )}
             {item.sermon_date && (
-              <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.84)' }}>
+              <div className="flex items-center gap-2" style={{ color: MUTED }}>
                 <Calendar size={12} />
                 <span className="text-[12px]">{fmtDate(item.sermon_date)}</span>
               </div>
@@ -171,12 +172,12 @@ export default async function PredicaDetailPage({
         <div className="max-w-5xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link href="/en-vivo"
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] transition"
-            style={{ color: 'rgba(246,243,235,0.88)' }}>
+            style={{ color: MUTED }}>
             <ArrowLeft size={12} /> Volver a Prédicas
           </Link>
           <Link href="/registro"
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition"
-            style={{ background: TEAL, color: NAVY }}>
+            style={{ background: CREAM, color: NAVY }}>
             Unirme a la comunidad <ArrowRight size={12} />
           </Link>
         </div>

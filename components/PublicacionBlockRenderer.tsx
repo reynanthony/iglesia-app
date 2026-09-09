@@ -2,15 +2,16 @@ import type { Block } from '@/lib/blocks'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { detectSocialEmbed } from '@/lib/social-embed'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 /* Colors */
-const FG       = '#F6F3EB'
-const FG55     = 'rgba(246,243,235,0.55)'
-const FG35     = 'rgba(246,243,235,0.35)'
-const FG06     = 'rgba(246,243,235,0.06)'
-const ACCENT   = '#76ABAE'
-const CARD_BG  = '#0B2D47'
-const CARD_BR  = '1px solid rgba(246,243,235,0.07)'
+const FG       = INK
+const FG55     = MUTED
+const FG35     = MUTED
+const FG06     = MUTED
+const ACCENT   = GOLD
+const CARD_BG  = CARD
+const CARD_BR  = '1px solid rgba(139,146,162,0.07)'
 
 /* ── helpers ──────────────────────────────────────────────────── */
 const px  = 'max-w-4xl mx-auto px-6'
@@ -118,7 +119,7 @@ function AnnouncementBlock({ p }: { p: Record<string, any> }) {
         {p.ctaLabel && p.ctaHref && (
           <Link href={p.ctaHref}
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-xl transition"
-            style={{ background: FG, color: '#061E30' }}>
+            style={{ background: FG, color: BG }}>
             {p.ctaLabel} <ArrowRight size={12} />
           </Link>
         )}
@@ -193,7 +194,7 @@ function CardsBlock({ p }: { p: Record<string, any> }) {
 function CtaBlock({ p }: { p: Record<string, any> }) {
   return (
     <section className="relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #061E30 0%, #0B3A5A 60%, rgba(118,171,174,0.15) 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, #101217 0%, #181A22 60%, rgba(199,154,42,0.15) 100%)' }}>
       <div className={`${px} py-16 md:py-20`}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
           <div>
@@ -209,7 +210,7 @@ function CtaBlock({ p }: { p: Record<string, any> }) {
               {p.btn1Label && (
                 <Link href={p.btn1Href || '#'}
                   className="inline-flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
-                  style={{ background: FG, color: '#061E30' }}>
+                  style={{ background: FG, color: BG }}>
                   {p.btn1Label}
                   <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -217,7 +218,7 @@ function CtaBlock({ p }: { p: Record<string, any> }) {
               {p.btn2Label && (
                 <Link href={p.btn2Href || '#'}
                   className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-6 py-4 rounded-xl transition group"
-                  style={{ border: `1px solid rgba(246,243,235,0.20)`, color: FG55 }}>
+                  style={{ border: `1px solid rgba(139,146,162,0.20)`, color: FG55 }}>
                   {p.btn2Label}
                   <ArrowRight size={13} className="opacity-50 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -319,7 +320,7 @@ function AgendaBlock({ p }: { p: Record<string, any> }) {
             <div className="min-w-[76px] text-right flex-shrink-0">
               <span className="text-[11px] font-black font-mono" style={{ color: ACCENT }}>{item.time}</span>
             </div>
-            <div className="w-px self-stretch flex-shrink-0" style={{ background: 'rgba(118,171,174,0.18)' }} />
+            <div className="w-px self-stretch flex-shrink-0" style={{ background: `${GOLD}2E` }} />
             <div className="flex-1">
               <p className="text-sm font-bold leading-snug" style={{ color: FG }}>{item.title}</p>
               {item.speaker && (
@@ -368,7 +369,7 @@ function PonenteBlock({ p }: { p: Record<string, any> }) {
                 className="w-16 h-16 rounded-full object-cover flex-shrink-0" />
             ) : (
               <div className="w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center text-xl font-black"
-                style={{ background: 'rgba(118,171,174,0.12)', color: ACCENT }}>
+                style={{ background: `${GOLD}1F`, color: ACCENT }}>
                 {(item.name || '?')[0]}
               </div>
             )}

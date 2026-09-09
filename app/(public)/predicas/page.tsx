@@ -2,12 +2,13 @@
 import { ArrowRight, Play } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 300
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
@@ -37,7 +38,7 @@ export default async function PredicasPage() {
   const heroVideoUrl       = c.hero_video_url || null
   const heroOverlayOpacity = 0.60
   const heroShowGrid       = true
-  const heroBg             = '#051828'
+  const heroBg             = BG
   const heroWatermark      = 'FE'
 
   const featuredEyebrow    = c.featured_eyebrow      ?? 'Prédica reciente'
@@ -74,14 +75,14 @@ export default async function PredicasPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         )}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)` }} />
+          style={{ background: `radial-gradient(ellipse 50% 70% at 90% 40%, rgba(199,154,42,0.10), transparent 65%)` }} />
         {heroWatermark && (
           <div className="pointer-events-none absolute right-0 bottom-0 select-none">
             <span className="font-black leading-none"
@@ -107,7 +108,7 @@ export default async function PredicasPage() {
                 : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
             </h1>
             <div>
-              <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-base leading-relaxed mb-6" style={{ color: MUTED }}>
                 {heroSubtitle}
               </p>
               {predicas.length > 0 && (
@@ -240,11 +241,11 @@ export default async function PredicasPage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: `${GOLD}80` }}>
                 {predCtaEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white leading-[0.9] md:leading-[0.85]"
@@ -255,7 +256,7 @@ export default async function PredicasPage() {
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: MUTED }}>
                 Únete a la comunidad en línea para comentar, compartir y discutir los mensajes con otros creyentes.
               </p>
               <Link href={predCtaUrl}
@@ -265,7 +266,7 @@ export default async function PredicasPage() {
               </Link>
               <Link href="/en-vivo"
                 className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-5 sm:py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
+                style={{ border: '1px solid rgba(199,154,42,0.30)', color: MUTED }}>
                 Ver transmisiones en vivo <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

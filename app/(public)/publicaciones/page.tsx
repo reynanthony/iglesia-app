@@ -2,13 +2,14 @@
 import Link from 'next/link'
 import { ArrowRight, Newspaper } from 'lucide-react'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { BG, CARD, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 60
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 
 const CAT_LABEL: Record<string, string> = {
   campana:           'Campaña',
@@ -21,7 +22,7 @@ const CAT_LABEL: Record<string, string> = {
 const CAT_COLOR: Record<string, string> = {
   campana:           '#C9A227',
   serie:             '#A855F7',
-  'evento-especial': '#76ABAE',
+  'evento-especial': '#4D9EFF',
   ministerio:        '#4ADE80',
   anuncio:           '#F87171',
   general:           '#869B7E',
@@ -64,14 +65,14 @@ export default async function PublicacionesPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         )}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.08), transparent 65%)' }} />
+          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(199,154,42,0.08), transparent 65%)' }} />
         {heroWatermark && (
           <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
             <span className="font-black leading-none tracking-tighter block"
@@ -122,12 +123,12 @@ export default async function PublicacionesPage() {
                     <img src={featured.cover_image} alt={featured.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     <div className="absolute inset-0"
-                      style={{ background: 'linear-gradient(to top, rgba(5,24,40,0.92) 0%, rgba(5,24,40,0.45) 50%, rgba(5,24,40,0.10) 100%)' }} />
+                      style={{ background: 'linear-gradient(to top, rgba(16,18,23,0.92) 0%, rgba(16,18,23,0.45) 50%, rgba(16,18,23,0.10) 100%)' }} />
                   </>
                 )}
                 {!featured.cover_image && (
                   <div className="absolute inset-0"
-                    style={{ background: 'linear-gradient(135deg, rgba(246,243,235,0.05) 0%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(135deg, rgba(139,146,162,0.05) 0%, transparent 100%)' }} />
                 )}
                 <div className="relative h-full flex flex-col justify-end p-6 md:p-10" style={{ minHeight: 420 }}>
                   <div className="flex items-center gap-3 mb-4">
@@ -186,7 +187,7 @@ export default async function PublicacionesPage() {
                           <>
                             <img src={item.cover_image} alt={item.title}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                            <div className="absolute inset-0" style={{ background: 'rgba(5,24,40,0.20)' }} />
+                            <div className="absolute inset-0" style={{ background: 'rgba(16,18,23,0.20)' }} />
                           </>
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
