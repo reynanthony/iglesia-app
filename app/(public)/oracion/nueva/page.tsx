@@ -4,10 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Flame, AlertCircle } from 'lucide-react'
 import { createPublicPrayerRequest } from '@/app/actions/prayer'
+import { BG, CARD, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 
 export default function NuevaPeticionPublicaPage() {
   const [loading, setLoading] = useState(false)
@@ -28,7 +29,7 @@ export default function NuevaPeticionPublicaPage() {
     <div>
 
       {/* Hero mínimo */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '35svh', display: 'flex', alignItems: 'flex-end' }}>
+      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '35svh', display: 'flex', alignItems: 'flex-end' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="relative max-w-4xl mx-auto w-full px-6 pt-16 pb-10">

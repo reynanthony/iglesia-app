@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { Flame } from 'lucide-react'
 import { togglePublicPrayer } from '@/app/actions/prayer'
+import { GOLD } from '@/lib/gold-theme'
 
 interface PublicPrayerButtonProps {
   requestId: string
@@ -29,11 +30,11 @@ export function PublicPrayerButton({ requestId, initialCount, initialPrayed, isA
       disabled={pending}
       className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-2 rounded-lg transition-all disabled:opacity-60 cursor-pointer flex-shrink-0"
       style={prayed
-        ? { background: 'rgba(118,171,174,0.12)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.30)' }
-        : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(9,60,93,0.15)' }
+        ? { background: `${GOLD}1F`, color: GOLD, border: '1px solid rgba(199,154,42,0.30)' }
+        : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(24,26,34,0.15)' }
       }
     >
-      <Flame size={12} style={{ color: prayed ? '#76ABAE' : '#869B7E' }} />
+      <Flame size={12} style={{ color: prayed ? GOLD : '#869B7E' }} />
       {count > 0 ? count : 'Orar'}
     </button>
   )

@@ -3,10 +3,11 @@
 import { useState, useTransition } from 'react'
 import { Flame, MessageSquarePlus, Send, X } from 'lucide-react'
 import { togglePublicPrayer, createPrayerResponse } from '@/app/actions/prayer'
+import { CARD, GOLD, INK } from '@/lib/gold-theme'
 
-const TEAL = '#76ABAE'
-const NAVY = '#093C5D'
-const CREAM = '#F6F3EB'
+const TEAL = GOLD
+const NAVY = CARD
+const CREAM = INK
 
 interface PrayerCardProps {
   requestId: string
@@ -105,7 +106,7 @@ export function PrayerCard({
                 className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] px-3 py-2 rounded-lg transition-all cursor-pointer flex-shrink-0"
                 style={open
                   ? { background: `${TEAL}15`, color: TEAL, border: `1px solid ${TEAL}35` }
-                  : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(9,60,93,0.12)' }
+                  : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(24,26,34,0.12)' }
                 }
               >
                 <MessageSquarePlus size={12} />
@@ -123,8 +124,8 @@ export function PrayerCard({
               disabled={prayPending}
               className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-2 rounded-lg transition-all disabled:opacity-60 cursor-pointer flex-shrink-0"
               style={prayed
-                ? { background: 'rgba(118,171,174,0.12)', color: TEAL, border: '1px solid rgba(118,171,174,0.30)' }
-                : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(9,60,93,0.15)' }
+                ? { background: `${GOLD}1F`, color: TEAL, border: '1px solid rgba(199,154,42,0.30)' }
+                : { background: 'transparent', color: '#869B7E', border: '1px solid rgba(24,26,34,0.15)' }
               }
             >
               <Flame size={12} style={{ color: prayed ? TEAL : '#869B7E' }} />
@@ -136,7 +137,7 @@ export function PrayerCard({
 
       {/* Expandable response form */}
       {open && (
-        <div className="border-t border-edge px-5 py-4" style={{ background: 'rgba(118,171,174,0.04)' }}>
+        <div className="border-t border-edge px-5 py-4" style={{ background: `${GOLD}0A` }}>
           <form onSubmit={handleSubmitResponse} className="space-y-3">
             <textarea
               name="body"

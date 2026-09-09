@@ -1,9 +1,10 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { BG } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
     <div>
-      <div style={{ background: '#051828', minHeight: '70svh' }} />
+      <div style={{ background: BG, minHeight: '70svh' }} />
       <section className="bg-card border-b border-edge">
         <div className="max-w-4xl mx-auto px-6 py-12 sm:py-16 md:py-24 space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (

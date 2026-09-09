@@ -3,12 +3,13 @@ import { ArrowRight, Radio, Clock } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import LivePlayer from '@/components/LivePlayer'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 0
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 function getYoutubeId(url?: string | null) {
@@ -34,7 +35,7 @@ export default async function EnVivoPage() {
   const heroVideoUrl       = c.hero_video_url || null
   const heroOverlayOpacity = 0.60
   const heroShowGrid       = true
-  const heroBg             = '#051828'
+  const heroBg             = BG
 
   const SCHEDULE = [
     { day: c.schedule_1_day ?? 'Domingo',   time: c.schedule_1_time ?? '10:00 AM', type: c.schedule_1_type ?? 'Servicio principal', live: c.schedule_1_live !== 'false' },
@@ -100,7 +101,7 @@ export default async function EnVivoPage() {
             </div>
             <Link href="/registro"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-xl flex-shrink-0"
-              style={{ background: TEAL, color: NAVY }}>
+              style={{ background: CREAM, color: NAVY }}>
               Únete a la comunidad <ArrowRight size={12} />
             </Link>
           </div>
@@ -116,7 +117,7 @@ export default async function EnVivoPage() {
           {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
           {(heroImageUrl || heroVideoUrl) && (
             <div className="pointer-events-none absolute inset-0"
-              style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+              style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
           )}
           {heroShowGrid && (
             <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -145,19 +146,19 @@ export default async function EnVivoPage() {
                 {renderTitle(offlineTitle)}
               </h1>
               <div>
-                <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(246,243,235,0.82)' }}>
+                <p className="text-base leading-relaxed mb-6" style={{ color: MUTED }}>
                   {offlineSubtitle}
                 </p>
                 <div className="flex items-center gap-3 p-4 rounded-xl mb-6"
-                  style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid rgba(118,171,174,0.18)' }}>
+                  style={{ background: `${GOLD}14`, border: '1px solid rgba(199,154,42,0.18)' }}>
                   <Clock size={14} style={{ color: TEAL, flexShrink: 0 }} />
-                  <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.84)' }}>
+                  <p className="text-[12px]" style={{ color: MUTED }}>
                     {offlineNextText}
                   </p>
                 </div>
                 <Link href="/predicas"
                   className="inline-flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em] px-6 py-3.5 rounded-xl transition"
-                  style={{ background: TEAL, color: NAVY }}>
+                  style={{ background: CREAM, color: NAVY }}>
                   <ArrowRight size={12} /> Ver archivo de prédicas
                 </Link>
               </div>
@@ -208,11 +209,11 @@ export default async function EnVivoPage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: `${GOLD}80` }}>
                 {ctaEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"
@@ -221,7 +222,7 @@ export default async function EnVivoPage() {
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: MUTED }}>
                 {ctaBody}
               </p>
               <Link href="/registro"
@@ -231,7 +232,7 @@ export default async function EnVivoPage() {
               </Link>
               <Link href="/contacto"
                 className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
+                style={{ border: '1px solid rgba(199,154,42,0.30)', color: MUTED }}>
                 Visitarnos en persona <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

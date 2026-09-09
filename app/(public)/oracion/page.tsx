@@ -5,12 +5,13 @@ import { createClient } from '@/lib/supabase/server'
 import { PrayerCard } from '@/components/public/PrayerCard'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import PrayerCreatedBanner from '@/components/public/PrayerCreatedBanner'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
-const TEAL  = '#76ABAE'
-const NAVY  = '#093C5D'
-const CREAM = '#F6F3EB'
+const TEAL  = GOLD
+const NAVY  = CARD
+const CREAM = INK
 
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
@@ -35,7 +36,7 @@ export default async function OracionPublicaPage() {
   const heroVideoUrl       = c.hero_video_url || null
   const heroOverlayOpacity = 0.60
   const heroShowGrid       = true
-  const heroBg             = '#051828'
+  const heroBg             = BG
   const { data: { user } } = await supabase.auth.getUser()
 
   const SELECT_FIELDS = 'id, title, body, is_anonymous, status, created_at, profiles!prayer_requests_user_id_fkey(full_name)'
@@ -94,14 +95,14 @@ export default async function OracionPublicaPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         )}
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 15% 60%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 60% 80% at 15% 60%, rgba(199,154,42,0.07), transparent 70%)' }} />
         <div className="pointer-events-none absolute right-0 bottom-0 overflow-hidden select-none">
           <span className="font-black leading-none tracking-tighter block"
             style={{ fontSize: 'clamp(14rem, 32vw, 30rem)', opacity: 0.05, color: TEAL, lineHeight: 1, paddingRight: '1rem' }}>
@@ -140,9 +141,9 @@ export default async function OracionPublicaPage() {
 
         {/* Stats strip */}
         {(active.length > 0 || totalPrayers > 0) && (
-          <div className="relative" style={{ borderTop: `1px solid rgba(118,171,174,0.12)` }}>
+          <div className="relative" style={{ borderTop: `1px solid rgba(199,154,42,0.12)` }}>
             <div className="max-w-6xl mx-auto px-6">
-              <div className="grid grid-cols-3 divide-x" style={{ borderColor: 'rgba(118,171,174,0.10)' }}>
+              <div className="grid grid-cols-3 divide-x" style={{ borderColor: `${GOLD}1A` }}>
                 {[
                   { value: active.length,   label: 'Peticiones activas' },
                   { value: answered.length,  label: 'Respondidas' },
@@ -152,7 +153,7 @@ export default async function OracionPublicaPage() {
                     <p className="font-black tracking-tighter leading-none mb-1"
                       style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', color: TEAL }}>{value}</p>
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                      style={{ color: 'rgba(246,243,235,0.82)' }}>{label}</p>
+                      style={{ color: MUTED }}>{label}</p>
                   </div>
                 ))}
               </div>
@@ -261,13 +262,13 @@ export default async function OracionPublicaPage() {
 
       {/* ── CTA ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, #0D4A72 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, #0D4A72 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(199,154,42,0.07), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-14 sm:py-20 md:py-28 flex flex-col md:flex-row items-start md:items-end justify-between gap-10">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10"
-              style={{ color: 'rgba(118,171,174,0.45)' }}>{ctaEyebrow}</p>
+              style={{ color: `${GOLD}73` }}>{ctaEyebrow}</p>
             <h2 className="font-display font-black tracking-tighter leading-[0.88] text-white"
               style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
               {ctaTitle.includes('*')

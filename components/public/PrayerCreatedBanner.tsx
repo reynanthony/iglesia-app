@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle2, X } from 'lucide-react'
+import { GOLD } from '@/lib/gold-theme'
 
-const TEAL = '#76ABAE'
+const TEAL = GOLD
 
 // Confirmación visible tras publicar en el muro público — antes el submit
 // redirigía en silencio y el usuario no tenía forma de saber que se envió.

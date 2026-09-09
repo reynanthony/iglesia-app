@@ -2,12 +2,13 @@
 import { ArrowRight, Quote, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 3600
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
@@ -31,7 +32,7 @@ export default async function DevoccionalesPage() {
   const heroVideoUrl       = c.hero_video_url || null
   const heroOverlayOpacity = 0.60
   const heroShowGrid       = true
-  const heroBg             = '#051828'
+  const heroBg             = BG
   const heroWatermark      = 'DEV'
 
   const devos    = devocionales ?? []
@@ -50,7 +51,7 @@ export default async function DevoccionalesPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.50) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.50) 0%, rgba(24,26,34,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -82,12 +83,12 @@ export default async function DevoccionalesPage() {
                 : heroTitle.split('\n').map((line, i) => <span key={i}>{line}{i < heroTitle.split('\n').length - 1 && <br />}</span>)}
             </h1>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.76)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: MUTED }}>
                 {heroSubtitle}
               </p>
               <Link href="/biblia"
                 className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
-                style={{ background: 'rgba(118,171,174,0.12)', color: TEAL, border: `1px solid ${TEAL}30` }}>
+                style={{ background: `${GOLD}1F`, color: TEAL, border: `1px solid ${TEAL}30` }}>
                 <BookOpen size={12} /> Leer la Biblia
               </Link>
             </div>
