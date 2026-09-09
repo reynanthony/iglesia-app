@@ -7,8 +7,8 @@ export function PublicStatusBar() {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return
     import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
-      StatusBar.setStyle({ style: Style.Light })
-      StatusBar.setBackgroundColor({ color: '#F6F3EB' })
+      StatusBar.setStyle({ style: Style.Dark })
+      StatusBar.setBackgroundColor({ color: '#101217' })
     })
     return () => {
       import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
