@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { updateAdminRoom } from '@/app/actions/admin'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function EditarSalaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -15,19 +16,19 @@ export default async function EditarSalaPage({ params }: { params: Promise<{ id:
     await updateAdminRoom(id, formData)
   }
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: 'rgba(246,243,235,0.68)' }
+  const lblStyle = { color: MUTED }
 
   return (
     <div>
-      <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4" style={{ borderColor: '#0D3352' }}>
-        <Link href="/admin/oracion" className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#0B2D47' }}>
-          <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+      <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4" style={{ borderColor: BORDER }}>
+        <Link href="/admin/oracion" className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: CARD }}>
+          <ArrowLeft size={14} style={{ color: MUTED }} />
         </Link>
         <div>
           <h1 className="font-bold text-lg text-white">Editar sala</h1>
-          <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>{room.name}</p>
+          <p className="text-[13px]" style={{ color: MUTED }}>{room.name}</p>
         </div>
       </div>
 
@@ -55,18 +56,18 @@ export default async function EditarSalaPage({ params }: { params: Promise<{ id:
           <label className="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" name="is_active" defaultChecked={room.is_active}
               className="w-4 h-4 accent-white rounded" />
-            <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <span className="text-[13px] font-medium" style={{ color: MUTED }}>
               Sala activa (visible en la app)
             </span>
           </label>
 
           <div className="flex gap-3 pt-2">
             <button type="submit" className="flex-1 py-3 rounded-xl text-sm font-bold"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               Guardar cambios
             </button>
             <Link href="/admin/oracion" className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+              style={{ background: CARD, color: MUTED }}>
               Cancelar
             </Link>
           </div>

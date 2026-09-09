@@ -1,6 +1,7 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import { setLiveUrl, toggleLive } from '@/app/actions/liveconfig'
 import { Radio, AlertCircle } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminEnVivoPage() {
   const supabase = await createClient()
@@ -20,12 +21,12 @@ export default async function AdminEnVivoPage() {
         {/* Header */}
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0D3352' }}>
-            <Radio size={15} style={{ color: '#76ABAE' }} />
+            style={{ background: BORDER }}>
+            <Radio size={15} style={{ color: GOLD }} />
           </div>
           <div>
             <h1 className="text-lg font-bold leading-tight">En Vivo</h1>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[11px]" style={{ color: MUTED }}>
               Gestión de la transmisión
             </p>
           </div>
@@ -40,7 +41,7 @@ export default async function AdminEnVivoPage() {
               <AlertCircle size={15} style={{ color: '#F87171', flexShrink: 0, marginTop: 1 }} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold" style={{ color: '#F87171' }}>Tabla no configurada</p>
-                <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                   Ejecuta el SQL en <strong>Supabase → SQL Editor</strong> para activar esta sección.
                 </p>
               </div>
@@ -50,24 +51,24 @@ export default async function AdminEnVivoPage() {
 
         {/* Status card */}
         <div className="p-4 rounded-xl"
-          style={{ background: '#0B2D47', border: `1px solid ${isLive ? 'rgba(248,113,113,0.40)' : '#0D3352'}` }}>
+          style={{ background: CARD, border: `1px solid ${isLive ? 'rgba(248,113,113,0.40)' : BORDER}` }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {isLive && <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />}
-              <p className="font-black text-sm" style={{ color: isLive ? '#F87171' : '#F6F3EB' }}>
+              <p className="font-black text-sm" style={{ color: isLive ? '#F87171' : INK }}>
                 {isLive ? 'Transmisión activa' : 'Sin transmisión'}
               </p>
             </div>
             <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
               style={{
-                background: isLive ? 'rgba(248,113,113,0.15)' : '#0D3352',
-                color: isLive ? '#F87171' : 'rgba(246,243,235,0.68)',
+                background: isLive ? 'rgba(248,113,113,0.15)' : BORDER,
+                color: isLive ? '#F87171' : MUTED,
               }}>
               {isLive ? 'EN VIVO' : 'OFFLINE'}
             </span>
           </div>
           {liveUrl && (
-            <p className="text-[11px] mt-1.5 truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[11px] mt-1.5 truncate" style={{ color: MUTED }}>
               {liveUrl}
             </p>
           )}
@@ -79,9 +80,9 @@ export default async function AdminEnVivoPage() {
           <button type="submit" disabled={!tableExists}
             className="w-full py-2.5 rounded-xl text-sm font-black transition disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
-              background: isLive ? 'rgba(248,113,113,0.15)' : 'rgba(118,171,174,0.15)',
-              color:      isLive ? '#F87171' : '#76ABAE',
-              border: `1px solid ${isLive ? 'rgba(248,113,113,0.30)' : 'rgba(118,171,174,0.30)'}`,
+              background: isLive ? 'rgba(248,113,113,0.15)' : `${GOLD}26`,
+              color:      isLive ? '#F87171' : GOLD,
+              border: `1px solid ${isLive ? 'rgba(248,113,113,0.30)' : `${GOLD}4C`}`,
             }}>
             {isLive ? 'Detener transmisión' : 'Iniciar transmisión'}
           </button>
@@ -91,7 +92,7 @@ export default async function AdminEnVivoPage() {
         <form action={setLiveUrl} className="space-y-3">
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider mb-1.5"
-              style={{ color: 'rgba(246,243,235,0.50)' }}>
+              style={{ color: MUTED }}>
               URL del stream (YouTube)
             </label>
             <input
@@ -100,16 +101,16 @@ export default async function AdminEnVivoPage() {
               defaultValue={liveUrl}
               placeholder="https://www.youtube.com/watch?v=…"
               className="w-full px-3.5 py-2.5 text-sm bg-transparent focus:outline-none"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 10, color: '#F6F3EB' }}
+              style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, color: INK }}
             />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <p className="text-[10px] mt-1" style={{ color: MUTED }}>
               URL pública del video (youtube.com/watch?v=... o youtu.be/...)
             </p>
           </div>
 
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider mb-1.5"
-              style={{ color: 'rgba(246,243,235,0.50)' }}>
+              style={{ color: MUTED }}>
               Título de la transmisión
             </label>
             <input
@@ -118,15 +119,15 @@ export default async function AdminEnVivoPage() {
               defaultValue={liveTitle}
               placeholder="Culto en vivo"
               className="w-full px-3.5 py-2.5 text-sm bg-transparent focus:outline-none"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 10, color: '#F6F3EB' }}
+              style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, color: INK }}
             />
           </div>
 
           {/* Visibilidad web */}
           <label className="flex items-start gap-3 p-3 rounded-xl cursor-pointer"
             style={{
-              background: liveVisibleWeb ? 'rgba(118,171,174,0.08)' : '#0B2D47',
-              border: `1px solid ${liveVisibleWeb ? 'rgba(118,171,174,0.30)' : '#0D3352'}`,
+              background: liveVisibleWeb ? `${GOLD}14` : CARD,
+              border: `1px solid ${liveVisibleWeb ? `${GOLD}4C` : BORDER}`,
             }}>
             <input
               type="checkbox"
@@ -135,10 +136,10 @@ export default async function AdminEnVivoPage() {
               className="mt-0.5 flex-shrink-0"
             />
             <div>
-              <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
+              <p className="text-sm font-bold" style={{ color: INK }}>
                 Publicar en el sitio web
               </p>
-              <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: MUTED }}>
                 Sin marcar: solo lo ven los miembros en la app.
               </p>
             </div>
@@ -146,7 +147,7 @@ export default async function AdminEnVivoPage() {
 
           <button type="submit" disabled={!tableExists}
             className="w-full py-2.5 rounded-xl text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             Guardar configuración
           </button>
         </form>

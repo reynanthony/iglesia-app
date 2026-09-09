@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { deletePrayerRequest } from '@/app/actions/admin'
 import { Trash2 } from 'lucide-react'
+import { CARD, BORDER } from '@/lib/gold-theme'
 
 export default function DeletePrayerRequestButton({ requestId }: { requestId: string }) {
   const [confirm, setConfirm] = useState(false)
@@ -26,8 +27,8 @@ export default function DeletePrayerRequestButton({ requestId }: { requestId: st
       title={confirm ? '¿Confirmar eliminación?' : 'Eliminar petición'}
       className="w-8 h-8 flex items-center justify-center rounded-lg transition disabled:opacity-40 flex-shrink-0"
       style={{
-        background: confirm ? 'rgba(127,29,29,0.60)' : '#0B2D47',
-        border: `1px solid ${confirm ? '#991B1B' : '#0D3352'}`,
+        background: confirm ? 'rgba(127,29,29,0.60)' : CARD,
+        border: `1px solid ${confirm ? '#991B1B' : BORDER}`,
         color: confirm ? '#FCA5A5' : 'rgba(248,113,113,0.40)',
       }}
     >

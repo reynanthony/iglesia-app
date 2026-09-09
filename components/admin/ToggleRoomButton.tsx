@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { toggleRoom } from '@/app/actions/admin'
 import { Power } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 export default function ToggleRoomButton({ roomId, isActive }: { roomId: string; isActive: boolean }) {
   const [active, setActive] = useState(isActive)
@@ -23,9 +24,9 @@ export default function ToggleRoomButton({ roomId, isActive }: { roomId: string;
       disabled={isPending}
       title={active ? 'Desactivar sala' : 'Activar sala'}
       className="w-9 h-9 rounded-xl flex items-center justify-center transition disabled:opacity-40"
-      style={{ background: active ? 'rgba(118,171,174,0.12)' : '#0B2D47', border: '1px solid #0D3352' }}
+      style={{ background: active ? `${GOLD}1F` : CARD, border: `1px solid ${BORDER}` }}
     >
-      <Power size={13} style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.68)' }} />
+      <Power size={13} style={{ color: active ? GOLD : MUTED }} />
     </button>
   )
 }
