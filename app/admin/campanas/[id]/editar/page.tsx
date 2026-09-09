@@ -6,11 +6,12 @@ import { updateAnnouncement } from '@/app/actions/announcements'
 import DeleteCampanaButton from '@/components/admin/DeleteCampanaButton'
 import ImageUploader from '@/components/admin/ImageUploader'
 import CtaDestinationField from '@/components/admin/CtaDestinationField'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const field  = "w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
-const fStyle = { background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }
+const fStyle = { background: CARD, border: `1px solid ${BORDER}`, color: INK }
 const label  = "block text-[10px] font-black uppercase tracking-[0.2em] mb-1.5"
-const lStyle = { color: 'rgba(246,243,235,0.72)' }
+const lStyle = { color: MUTED }
 
 function toLocalDatetime(iso: string | null): string {
   if (!iso) return ''
@@ -45,17 +46,17 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
         <div className="flex items-center gap-3 mb-5 md:mb-8">
           <Link href="/admin/campanas"
             className="w-9 h-9 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}>
             <ArrowLeft size={16} />
           </Link>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(118,171,174,0.12)' }}>
-              <Megaphone size={14} style={{ color: '#76ABAE' }} />
+              style={{ background: `${GOLD}1F` }}>
+              <Megaphone size={14} style={{ color: GOLD }} />
             </div>
             <div>
               <h1 className="text-base md:text-lg font-bold leading-tight">Editar campaña</h1>
-              <p className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-[11px] truncate max-w-[200px]" style={{ color: MUTED }}>
                 {item.title}
               </p>
             </div>
@@ -101,7 +102,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
           <div>
             <label className={label} style={lStyle}>Imagen o video de fondo</label>
             <ImageUploader name="image_url" defaultValue={item.image_url ?? ''} />
-            <p className="text-[10px] mt-1" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <p className="text-[10px] mt-1" style={{ color: MUTED }}>
               Sube una imagen desde tu dispositivo, o pega URL de imagen / YouTube.
             </p>
           </div>
@@ -159,22 +160,22 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
           </div>
 
           <label className="flex items-center gap-3 p-3.5 rounded-xl cursor-pointer"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <input type="checkbox" name="is_banner" defaultChecked={item.is_banner ?? false} className="flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Banner de texto (barra superior)</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm font-bold" style={{ color: INK }}>Banner de texto (barra superior)</p>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 Barra discreta en Comunidad. Sin imagen ni video. Desmarca para pantalla completa con imagen o video de fondo.
               </p>
             </div>
           </label>
 
           <label className="flex items-center gap-3 p-3.5 rounded-xl cursor-pointer"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <input type="checkbox" name="is_active" defaultChecked={item.is_active} className="flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Campaña activa</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm font-bold" style={{ color: INK }}>Campaña activa</p>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 Desactiva para pausar sin eliminar
               </p>
             </div>
@@ -182,7 +183,7 @@ export default async function EditarCampanaPage({ params }: { params: Promise<{ 
 
           <button type="submit"
             className="w-full py-3 rounded-xl text-sm font-bold"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             Guardar cambios
           </button>
         </form>

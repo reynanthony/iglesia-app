@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Play, FileText, Megaphone, ImageOff, Plus, Pencil, Pin } from 'lucide-react'
 import PinContentButton from '@/components/admin/PinContentButton'
 import DeleteContentButton from '@/components/admin/DeleteContentButton'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const typeLabels: Record<string, { label: string; Icon: any; color: string }> = {
   articulo:  { label: 'Artículo',  Icon: FileText,   color: 'text-blue-400 bg-blue-400/10' },
@@ -37,16 +38,16 @@ export default async function AdminContenidoPage({
     <div>
       {/* Header */}
       <div className="border-b px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
-        style={{ borderColor: '#0D3352' }}>
+        style={{ borderColor: BORDER }}>
         <div>
           <h1 className="font-bold text-lg text-white">Contenido de ministerios</h1>
-          <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-[13px] mt-0.5" style={{ color: MUTED }}>
             {content?.length ?? 0} publicaciones · artículos, videos, anuncios
           </p>
         </div>
         <Link href="/admin/contenido/nuevo"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black self-start"
-          style={{ background: '#F6F3EB' }}>
+          style={{ background: INK }}>
           <Plus size={14} /> Nuevo contenido
         </Link>
       </div>
@@ -66,16 +67,16 @@ export default async function AdminContenidoPage({
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
                   isActive
                     ? 'text-black font-bold'
-                    : 'text-[rgba(246,243,235,0.72)] hover:text-slate-200'
+                    : 'text-[rgba(139,146,162,0.72)] hover:text-slate-200'
                 }`}
-                style={{ background: isActive ? '#F6F3EB' : '#0B2D47', border: '1px solid #0D3352' }}>
+                style={{ background: isActive ? INK : CARD, border: `1px solid ${BORDER}` }}>
                 {m.name}
               </a>
             )
           })}
         </div>
 
-        <div className="w-px h-6 self-center" style={{ background: '#0D3352' }} />
+        <div className="w-px h-6 self-center" style={{ background: BORDER }} />
 
         {/* Type filter */}
         {[{ id: '', label: 'Tipo: todos' }, { id: 'articulo', label: 'Artículos' }, { id: 'video', label: 'Videos' }, { id: 'anuncio', label: 'Anuncios' }].map(t => {
@@ -87,9 +88,9 @@ export default async function AdminContenidoPage({
           return (
             <a key={t.id} href={href}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
-                isActive ? 'text-black' : 'text-[rgba(246,243,235,0.72)] hover:text-slate-200'
+                isActive ? 'text-black' : 'text-[rgba(139,146,162,0.72)] hover:text-slate-200'
               }`}
-              style={{ background: isActive ? '#F6F3EB' : '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: isActive ? INK : CARD, border: `1px solid ${BORDER}` }}>
               {t.label}
             </a>
           )
@@ -99,8 +100,8 @@ export default async function AdminContenidoPage({
       {/* List */}
       <div className="px-4 md:px-8 py-5 space-y-3">
         {(!content || content.length === 0) && (
-          <div className="py-20 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>Sin contenido publicado aún.</p>
+          <div className="py-20 text-center rounded-2xl border" style={{ borderColor: BORDER }}>
+            <p className="text-sm" style={{ color: MUTED }}>Sin contenido publicado aún.</p>
           </div>
         )}
 
@@ -109,11 +110,11 @@ export default async function AdminContenidoPage({
           const Icon = meta.Icon
           return (
             <div key={item.id} className="rounded-2xl border overflow-hidden flex items-center gap-4 p-4"
-              style={{ borderColor: item.pinned ? 'rgba(118,171,174,0.20)' : '#0D3352', background: item.pinned ? '#051828' : '#0B2D47' }}>
+              style={{ borderColor: item.pinned ? `${GOLD}33` : BORDER, background: item.pinned ? '#051828' : CARD }}>
 
               {/* Thumbnail */}
               <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
-                style={{ background: '#0B2D47' }}>
+                style={{ background: CARD }}>
                 {item.image_url
                   ? <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
                   : item.type === 'video'
@@ -127,19 +128,19 @@ export default async function AdminContenidoPage({
                 <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                   {item.pinned && (
                     <span className="flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       <Pin size={9} /> Fijado
                     </span>
                   )}
                   <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${meta.color}`}>
                     {meta.label}
                   </span>
-                  <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <span className="text-[11px]" style={{ color: MUTED }}>
                     {(item.ministries as any)?.name ?? '—'}
                   </span>
                 </div>
                 <p className="font-bold text-white text-sm truncate">{item.title}</p>
-                <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-[12px] truncate" style={{ color: MUTED }}>
                   {(item.profiles as any)?.full_name ?? 'Desconocido'} ·{' '}
                   {new Date(item.created_at).toLocaleDateString('es-DO', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
@@ -149,8 +150,8 @@ export default async function AdminContenidoPage({
               <div className="flex items-center gap-2 flex-shrink-0">
                 <Link href={`/admin/contenido/${item.id}/editar`}
                   className="w-9 h-9 rounded-xl flex items-center justify-center"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-                  <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <Pencil size={13} style={{ color: MUTED }} />
                 </Link>
                 <PinContentButton contentId={item.id} pinned={item.pinned} />
                 <DeleteContentButton contentId={item.id} />

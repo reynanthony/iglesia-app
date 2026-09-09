@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { ImagePlus, X, Loader2 } from 'lucide-react'
+import { CARD, BORDER, MUTED, INK } from '@/lib/gold-theme'
 
 export default function ImageUploader({
   name = 'image_url',
@@ -56,7 +57,7 @@ export default function ImageUploader({
         value={url}
         onChange={e => setUrl(e.target.value)}
         className="w-full px-3.5 py-2.5 text-sm focus:outline-none rounded-xl"
-        style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+        style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
       />
 
       {/* Upload button */}
@@ -66,7 +67,7 @@ export default function ImageUploader({
           onClick={() => inputRef.current?.click()}
           disabled={loading}
           className="flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-bold transition disabled:opacity-50"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.6)' }}
+          style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}
         >
           {loading
             ? <><Loader2 size={13} className="animate-spin" /> Subiendo…</>
@@ -78,7 +79,7 @@ export default function ImageUploader({
             type="button"
             onClick={() => setUrl('')}
             className="w-8 h-8 flex items-center justify-center rounded-xl"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.4)' }}
+            style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}
           >
             <X size={13} />
           </button>
@@ -98,12 +99,12 @@ export default function ImageUploader({
       {/* Preview */}
       {url && !url.includes('youtube.com') && !url.includes('youtu.be') && (
         <div className="relative w-full aspect-video rounded-xl overflow-hidden"
-          style={{ background: '#0B2D47' }}>
+          style={{ background: CARD }}>
           <img src={url} alt="" className="w-full h-full object-cover" />
         </div>
       )}
       {url && (url.includes('youtube.com') || url.includes('youtu.be')) && (
-        <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+        <p className="text-[11px]" style={{ color: MUTED }}>
           YouTube detectado — se usará el thumbnail como fondo
         </p>
       )}

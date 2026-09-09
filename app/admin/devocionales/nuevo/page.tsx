@@ -1,25 +1,26 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { createDevocional } from '@/app/actions/devocionales-admin'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default function NuevoDevocionalPage() {
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
+  const labelStyle = { color: MUTED }
 
   return (
     <div>
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
       <div className="max-w-3xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
         <Link href="/admin/devocionales"
           className="w-9 h-9 rounded-xl flex items-center justify-center"
-          style={{ background: '#0B2D47' }}>
-          <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+          style={{ background: CARD }}>
+          <ArrowLeft size={14} style={{ color: MUTED }} />
         </Link>
         <div>
           <h1 className="font-bold text-lg text-white">Nuevo devocional</h1>
-          <p className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Publica una reflexión</p>
+          <p className="text-[13px]" style={{ color: MUTED }}>Publica una reflexión</p>
         </div>
       </div>
 
@@ -59,22 +60,22 @@ export default function NuevoDevocionalPage() {
 
           <div>
             <label className={label} style={labelStyle}>Imagen (opcional)</label>
-            <div className="rounded-xl border-2 border-dashed p-6 text-center" style={{ borderColor: '#0D3352' }}>
+            <div className="rounded-xl border-2 border-dashed p-6 text-center" style={{ borderColor: BORDER }}>
               <input type="file" name="image" accept="image/*"
-                className="w-full text-sm cursor-pointer" style={{ color: 'rgba(246,243,235,0.68)' }} />
-              <p className="text-[11px] mt-2" style={{ color: 'rgba(246,243,235,0.68)' }}>JPG, PNG o WebP</p>
+                className="w-full text-sm cursor-pointer" style={{ color: MUTED }} />
+              <p className="text-[11px] mt-2" style={{ color: MUTED }}>JPG, PNG o WebP</p>
             </div>
           </div>
 
           <div className="flex gap-3 pt-2">
             <button type="submit"
               className="flex-1 py-3 rounded-xl text-sm font-bold transition"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               Publicar devocional
             </button>
             <Link href="/admin/devocionales"
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+              style={{ background: CARD, color: MUTED }}>
               Cancelar
             </Link>
           </div>

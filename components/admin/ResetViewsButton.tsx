@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { RotateCcw } from 'lucide-react'
 import { resetAllAnnouncementViews } from '@/app/actions/announcements'
+import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 function clearLocalAnnouncementStorage() {
   const keys = Object.keys(localStorage).filter(k => k.startsWith('elm_ann_'))
@@ -35,13 +36,13 @@ export default function ResetViewsButton() {
         onClick={handleReset}
         disabled={loading}
         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-medium disabled:opacity-50 transition"
-        style={{ background: '#0B2D47', border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}
+        style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}
       >
         <RotateCcw size={12} className={loading ? 'animate-spin' : ''} />
         {loading ? 'Reseteando…' : 'Resetear vistas'}
       </button>
       {msg && (
-        <p className="text-[11px] max-w-[220px] text-right" style={{ color: isError ? '#F87171' : '#76ABAE' }}>
+        <p className="text-[11px] max-w-[220px] text-right" style={{ color: isError ? '#F87171' : GOLD }}>
           {msg}
         </p>
       )}
