@@ -222,59 +222,30 @@ function Testament({
   )
 }
 
-/* ─── Book card — cream-tinted, visually rich ─── */
+/* ─── Book card — flat, modern, accent stripe ─── */
 function BookCard({ book, accent, onClick }: { book: BibleBook; accent: string; onClick: () => void }) {
-  const isGold = accent === GOLD
-
   return (
     <button
       onClick={onClick}
-      className="group relative flex flex-col items-center justify-center rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-[0.97] focus-visible:outline-none overflow-hidden"
+      className="group relative flex flex-col items-start justify-between rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none text-left overflow-hidden"
       style={{
-        height: 96,
-        background: isGold
-          ? 'linear-gradient(150deg, #FDF6E3 0%, #F0E6C0 100%)'
-          : 'linear-gradient(150deg, #EAF4F5 0%, #D6EAEC 100%)',
-        border: `1px solid ${isGold ? '#DDD0A0' : '#A8CCCE'}`,
-        boxShadow: '0 2px 6px rgba(9,60,93,0.08), 0 1px 2px rgba(9,60,93,0.05)',
+        height: 92,
+        padding: '13px 14px 12px',
+        background: '#FFFFFF',
+        border: '1px solid #E3DDD2',
+        borderTop: `3px solid ${accent}`,
         cursor: 'pointer',
       }}
     >
-      {/* Decorative watermark: large chapter count */}
       <span
-        style={{
-          position: 'absolute', right: 4, bottom: -4,
-          fontSize: 52, fontWeight: 900, lineHeight: 1,
-          color: isGold ? 'rgba(201,162,39,0.14)' : 'rgba(118,171,174,0.18)',
-          userSelect: 'none', pointerEvents: 'none',
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {book.chapters}
-      </span>
-
-      {/* Top accent dot */}
-      <div
-        style={{
-          position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
-          width: 20, height: 2, borderRadius: 99,
-          background: isGold
-            ? 'linear-gradient(90deg, transparent, #C9A227, transparent)'
-            : 'linear-gradient(90deg, transparent, #76ABAE, transparent)',
-          opacity: 0.6,
-        }}
-      />
-
-      {/* Content */}
-      <span
-        className="relative font-black text-center leading-tight px-2.5 mt-2"
-        style={{ fontSize: 12.5, color: NAVY, lineHeight: 1.25, zIndex: 1 }}
+        className="relative font-black leading-tight"
+        style={{ fontSize: 13, color: NAVY, lineHeight: 1.28, zIndex: 1 }}
       >
         {book.name}
       </span>
       <span
-        className="relative mt-1.5"
-        style={{ fontSize: 8.5, color: accent, opacity: 0.75, zIndex: 1 }}
+        className="relative inline-flex items-center self-start px-1.5 py-0.5 rounded-md font-bold"
+        style={{ fontSize: 9, color: accent, background: `${accent}14`, zIndex: 1 }}
       >
         {book.chapters} cap.
       </span>
@@ -282,11 +253,7 @@ function BookCard({ book, accent, onClick }: { book: BibleBook; accent: string; 
       {/* Hover tint */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        style={{
-          background: `${accent}0A`,
-          boxShadow: `inset 0 0 0 1px ${accent}30`,
-          borderRadius: 'inherit',
-        }}
+        style={{ background: `${accent}08` }}
       />
     </button>
   )
@@ -298,22 +265,22 @@ function ChapterCard({ n, accent, loading, onClick }: { n: number; accent: strin
     <button
       onClick={onClick}
       disabled={loading}
-      className="group relative flex items-center justify-center rounded-xl transition-all duration-150 hover:scale-[1.06] active:scale-[0.95] focus-visible:outline-none"
+      className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
-        height: 62,
-        background: 'linear-gradient(150deg, #EDEAE0 0%, #E3DDD2 100%)',
-        border: `1px solid ${accent}30`,
+        height: 58,
+        background: '#FFFFFF',
+        border: '1px solid #E3DDD2',
         cursor: loading ? 'default' : 'pointer',
       }}
     >
       {loading ? (
         <Loader2 size={14} className="animate-spin" style={{ color: accent }} />
       ) : (
-        <span className="font-black" style={{ fontSize: 17, color: NAVY }}>{n}</span>
+        <span className="font-black" style={{ fontSize: 16, color: NAVY }}>{n}</span>
       )}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 rounded-xl"
-        style={{ background: `${accent}14`, boxShadow: `inset 0 0 0 1px ${accent}50` }}
+        className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+        style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}
       />
     </button>
   )
@@ -324,18 +291,18 @@ function VerseCard({ n, accent, onClick }: { n: number; accent: string; onClick:
   return (
     <button
       onClick={onClick}
-      className="group relative flex items-center justify-center rounded-xl transition-all duration-150 hover:scale-[1.08] active:scale-[0.95] focus-visible:outline-none"
+      className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
-        height: 54,
-        background: 'linear-gradient(150deg, #F6F3EB 0%, #EDE9DF 100%)',
-        border: `1px solid ${accent}25`,
+        height: 48,
+        background: '#FFFFFF',
+        border: '1px solid #E3DDD2',
         cursor: 'pointer',
       }}
     >
-      <span className="font-bold" style={{ fontSize: 14, color: NAVY }}>{n}</span>
+      <span className="font-bold" style={{ fontSize: 13, color: NAVY }}>{n}</span>
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 rounded-xl"
-        style={{ background: `${accent}12`, boxShadow: `inset 0 0 0 1px ${accent}45` }}
+        className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+        style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}
       />
     </button>
   )
@@ -352,7 +319,7 @@ function StepHeading({ eyebrow, title, sub, accent }: { eyebrow: string; title: 
         style={{ fontSize: 'clamp(2.8rem, 9vw, 6rem)', color: NAVY }}>
         {title}
       </h2>
-      <p style={{ fontSize: 13, color: `${NAVY}45` }}>{sub}</p>
+      <p style={{ fontSize: 13, color: `${NAVY}99` }}>{sub}</p>
     </div>
   )
 }
@@ -362,7 +329,7 @@ function Crumb({ label, color, bold, dim }: { label: string; color?: string; bol
   return (
     <span
       className="text-[9px] uppercase tracking-[0.34em] whitespace-nowrap flex-shrink-0"
-      style={{ color: color ?? (dim ? `${NAVY}38` : `${NAVY}CC`), fontWeight: bold ? 900 : 700 }}
+      style={{ color: color ?? (dim ? `${NAVY}80` : `${NAVY}E0`), fontWeight: bold ? 900 : 700 }}
     >
       {label}
     </span>
