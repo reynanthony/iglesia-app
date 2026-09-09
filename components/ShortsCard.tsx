@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Share2, Bookmark, Volume2, VolumeX, Maximize2, Minimize2 } from 'lucide-react'
+import { MessageCircle, X, Share2, Bookmark, Volume2, VolumeX } from 'lucide-react'
 import Link from 'next/link'
 import { createComment } from '@/app/actions/posts'
 import { detectSocialEmbed, getAutoplayUrl, PLATFORM_LABEL } from '@/lib/social-embed'
@@ -66,7 +66,6 @@ export default function ShortsCard({
   const [commenting,    setCommenting]    = useState(false)
   const [tapSave,       setTapSave]       = useState(false)
   const [isMuted,       setIsMuted]       = useState(true)
-  const [isFullscreen,  setIsFullscreen]  = useState(false)
   const { saved, toggle: toggleSave } = useSaved(post.id)
 
   const embed     = detectSocialEmbed(post.content ?? '')
@@ -92,27 +91,13 @@ export default function ShortsCard({
       ([entry]) => {
         const visible = entry.intersectionRatio >= 0.7
         setIsVisible(visible)
-        if (!visible) { setIsMuted(true); setIsFullscreen(false) }
+        if (!visible) setIsMuted(true)
       },
       { threshold: 0.7 },
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [embed])
-
-  /* ── Toggle body class to hide header/nav when fullscreen ─── */
-  useEffect(() => {
-    if (isFullscreen) {
-      document.body.classList.add('card-fullscreen')
-      // Re-snap this card into view after the container resizes
-      requestAnimationFrame(() => {
-        cardRef.current?.parentElement?.scrollIntoView({ block: 'start', behavior: 'instant' })
-      })
-    } else {
-      document.body.classList.remove('card-fullscreen')
-    }
-    return () => { document.body.classList.remove('card-fullscreen') }
-  }, [isFullscreen])
 
   function timeAgo(date: string) {
     const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000)
@@ -153,14 +138,11 @@ export default function ShortsCard({
     setCommenting(false)
   }
 
-  /* ── Fullscreen: body class hides header/nav; card stays in snap flow ─── */
-  const fullscreenStyle: React.CSSProperties = {}
-
   return (
     <div
       ref={cardRef}
       className="relative w-full h-full overflow-hidden"
-      style={{ background: BG, ...fullscreenStyle }}
+      style={{ background: BG }}
     >
 
       {/* ══ FONDO / MEDIA ══ */}
@@ -254,30 +236,10 @@ export default function ShortsCard({
         </div>
       )}
 
-      {/* ══ BOTÓN FULLSCREEN (esquina superior derecha) ══ */}
-      {(hasIframe || post.image_url) && (
-        <button
-          onClick={() => setIsFullscreen(f => !f)}
-          className="absolute active:scale-90 transition-transform"
-          style={{
-            top: 12, right: 12, zIndex: 10, borderRadius: '50%', width: 36, height: 36,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(16px) saturate(160%)',
-            border: '1px solid rgba(255,255,255,0.14)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 8px 18px -6px rgba(0,0,0,0.5)',
-          }}
-        >
-          {isFullscreen
-            ? <Minimize2 size={16} strokeWidth={2} style={{ color: '#fff' }} />
-            : <Maximize2 size={16} strokeWidth={2} style={{ color: '#fff' }} />
-          }
-        </button>
-      )}
-
       {/* ══ BARRA DERECHA — acciones ══ */}
       <div
         className="absolute right-3 flex flex-col items-center gap-4"
-        style={{ bottom: isFullscreen ? 'calc(24px + env(safe-area-inset-bottom, 0px))' : 'calc(72px + env(safe-area-inset-bottom, 0px))', zIndex: 10 }}
+        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom, 0px))', zIndex: 10 }}
       >
         {/* Avatar */}
         <Link href={profileHref}>
@@ -354,7 +316,7 @@ export default function ShortsCard({
       {/* ══ INFO INFERIOR IZQUIERDA ══ */}
       <div
         className="absolute left-0 right-16 px-4"
-        style={{ bottom: isFullscreen ? 'calc(24px + env(safe-area-inset-bottom, 0px))' : 'calc(72px + env(safe-area-inset-bottom, 0px))', zIndex: 10 }}
+        style={{ bottom: 'calc(24px + env(safe-area-inset-bottom, 0px))', zIndex: 10 }}
       >
         <Link href={profileHref} className="inline-flex items-center gap-2 mb-1.5 flex-wrap">
           <span className="font-black text-white text-sm" style={{ textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}>

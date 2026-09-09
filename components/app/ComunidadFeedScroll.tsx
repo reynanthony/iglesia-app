@@ -35,6 +35,14 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
   const observerRef             = useRef<IntersectionObserver | null>(null)
   const supabase                = useRef(createClient()).current
 
+  // El feed vive siempre a pantalla completa (sin header/nav), como
+  // Reels/TikTok — se activa una sola vez para todo el feed, no por
+  // tarjeta, y se revierte al salir de esta pantalla.
+  useEffect(() => {
+    document.body.classList.add('card-fullscreen')
+    return () => { document.body.classList.remove('card-fullscreen') }
+  }, [])
+
   useEffect(() => {
     const uid = Math.random().toString(36).slice(2, 7)
     const channel = supabase
