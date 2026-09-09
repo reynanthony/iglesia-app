@@ -18,6 +18,7 @@ import { hapticLight } from '@/lib/haptics'
 // ── Types ──────────────────────────────────────────────────────
 type Theme      = 'cream' | 'sepia' | 'dark'
 type FontSize   = 'sm' | 'md' | 'lg'
+type FontFamily = 'sans' | 'serif'
 type Highlights = Record<string, number>   // verse number → color index
 type Notes      = Record<string, string>   // verse number → note text
 
@@ -79,6 +80,10 @@ const T = {
 } as const
 
 const FS: Record<FontSize, number> = { sm: 17, md: 20, lg: 24 }
+const FF: Record<FontFamily, { css: string; label: string }> = {
+  sans:  { css: "var(--font-plus-jakarta), var(--font-geist-sans), system-ui, sans-serif", label: 'Sans' },
+  serif: { css: "Georgia, 'Times New Roman', serif", label: 'Serif' },
+}
 
 const HL = [
   { bg: 'rgba(255,214,0,0.32)',   ring: 'rgba(195,155,0,0.50)',   dot: '#C49B00', label: 'Amarillo' },
@@ -251,6 +256,7 @@ export function BibleReader({
 
   const [theme, setTheme]           = useState<Theme>('cream')
   const [fontSize, setFontSize]     = useState<FontSize>('md')
+  const [fontFamily, setFontFamily] = useState<FontFamily>('sans')
   const [showPanel, setShowPanel]   = useState(false)
 
   const [progress, setProgress]     = useState(0)
@@ -324,6 +330,7 @@ export function BibleReader({
 
   const t  = T[theme]
   const fs = FS[fontSize]
+  const ff = FF[fontFamily]
 
   // Derived
   const isBookmarked = verse
@@ -338,11 +345,14 @@ export function BibleReader({
   useEffect(() => {
     const th = localStorage.getItem('bible-theme') as Theme | null
     const fz = localStorage.getItem('bible-fontsize') as FontSize | null
+    const fm = localStorage.getItem('bible-fontfamily') as FontFamily | null
     if (th && th in T) setTheme(th)
     if (fz && fz in FS) setFontSize(fz)
+    if (fm && fm in FF) setFontFamily(fm)
   }, [])
   useEffect(() => { localStorage.setItem('bible-theme', theme) }, [theme])
   useEffect(() => { localStorage.setItem('bible-fontsize', fontSize) }, [fontSize])
+  useEffect(() => { localStorage.setItem('bible-fontfamily', fontFamily) }, [fontFamily])
 
   // ── Scroll to start verse ──────────────────────────────────
   useEffect(() => {
@@ -714,7 +724,7 @@ export function BibleReader({
               .br-content p {
                 margin-bottom: ${fs <= 17 ? '1.15rem' : '1.5rem'};
                 line-height: ${fs <= 17 ? 1.88 : fs <= 20 ? 1.92 : 2.0};
-                color: ${t.text}; font-size: ${fs}px;
+                color: ${t.text}; font-size: ${fs}px; font-family: ${ff.css};
               }
               .br-content .s1, .br-content .s2 {
                 display: block; font-size: ${Math.round(fs * 0.62)}px;
@@ -769,6 +779,22 @@ export function BibleReader({
         }}>
         {showPanel && (
           <div className="px-5 pt-3.5 pb-3" style={{ borderBottom: `1px solid ${t.toolbarBorder}` }}>
+            <div className="max-w-xs mx-auto flex items-center justify-center gap-2 mb-3" role="group" aria-label="Tipografía">
+              {(['sans', 'serif'] as FontFamily[]).map(f => (
+                <button key={f} onClick={() => setFontFamily(f)}
+                  aria-label={FF[f].label}
+                  aria-pressed={fontFamily === f}
+                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-[13px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+                  style={{
+                    background: fontFamily === f ? `${TEAL}18` : t.surface,
+                    color: fontFamily === f ? TEAL : t.text,
+                    border: `1px solid ${fontFamily === f ? `${TEAL}50` : t.border}`,
+                    fontFamily: FF[f].css,
+                  }}>
+                  Aa <span className="text-[10px] font-bold uppercase tracking-[0.1em]" style={{ fontFamily: FF.sans.css }}>{FF[f].label}</span>
+                </button>
+              ))}
+            </div>
             <div className="max-w-xs mx-auto flex items-center justify-between gap-5">
               <div className="flex items-center gap-2.5">
                 <button onClick={() => setFontSize(s => s === 'lg' ? 'md' : s === 'md' ? 'sm' : 'sm')}

@@ -34,11 +34,14 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
+// Un <p> por versiculo — el CSS de resaltado/marcadores en BibleReader usa
+// selectores p:has(.v[data-number]) para pintar "el parrafo que contiene
+// este versiculo". Si todo el capitulo fuera un solo <p>, esa regla
+// terminaria sombreando el capitulo completo en vez de un solo versiculo.
 function buildChapterHtml(verses: RV1960Verse[]): string {
-  const spans = verses
-    .map(v => `<span class="v" data-number="${v.n}">${v.n}</span> ${escapeHtml(v.texto)} `)
+  return verses
+    .map(v => `<p><span class="v" data-number="${v.n}">${v.n}</span> ${escapeHtml(v.texto)}</p>`)
     .join('')
-  return `<p>${spans.trim()}</p>`
 }
 
 export async function getChapterContent(
