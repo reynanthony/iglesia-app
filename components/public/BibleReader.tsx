@@ -59,6 +59,7 @@ export interface BibleReaderProps {
   initialHighlights?: Record<string, number>
   initialNotes?: Record<string, string>
   initialBookmarks?: BookmarkItem[]
+  initialRead?: boolean
   relatedContent?: RelatedContent
 }
 
@@ -138,6 +139,14 @@ function buildNoteCSS(notes: Notes): string {
       ` margin-left:2px; vertical-align:super; }`
     )
     .join('\n')
+}
+
+// Los versos ya "pasados" al hacer scroll bajan de tono, como señal visual
+// de avance dentro del capítulo — se apoya en que cada verso es su propio
+// <p> en orden estricto (ver buildChapterHtml en lib/bible-content.ts).
+function buildReadCSS(readUpTo: number, mutedColor: string): string {
+  if (readUpTo <= 0) return ''
+  return `.br-content p:nth-of-type(-n+${readUpTo}) { color: ${mutedColor}; transition: color 0.6s ease; }`
 }
 
 function buildBookmarkCSS(nums: Set<string>): string {
@@ -252,7 +261,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
   bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
-  userId, initialHighlights, initialNotes, initialBookmarks, relatedContent,
+  userId, initialHighlights, initialNotes, initialBookmarks, initialRead, relatedContent,
 }: BibleReaderProps) {
   const router = useRouter()
 
@@ -277,6 +286,8 @@ export function BibleReader({
   const [navigating, setNavigating] = useState(false)
   const [shareCardUrl, setShareCardUrl] = useState<string | null>(null)
   const [cardLoading, setCardLoading]   = useState(false)
+  const [read, setRead]             = useState(initialRead ?? false)
+  const [readUpTo, setReadUpTo]     = useState(0)
 
   const contentRef    = useRef<HTMLDivElement>(null)
   const highlightsRef = useRef(highlights)
@@ -372,25 +383,39 @@ export function BibleReader({
     return () => clearTimeout(id)
   }, [startVerse, content])
 
-  // ── Save last reading position + registrar avance ───────────
+  // ── Save last reading position ──────────────────────────────
   useEffect(() => {
     localStorage.setItem('bible-last', JSON.stringify({ bookId, chapterNum, bookName }))
-    if (userId) {
-      upsertReadingPosition(bookId, chapterNum)
-      logChapterRead(bookId, chapterNum)
-    }
+    if (userId) upsertReadingPosition(bookId, chapterNum)
   }, [bookId, chapterNum, bookName, userId])
 
-  // ── Scroll progress ─────────────────────────────────────────
+  // ── Marcar como leído (manual) ───────────────────────────────
+  useLayoutEffect(() => {
+    setRead(initialRead ?? false)
+    setReadUpTo(0)
+  }, [bookId, chapterNum, initialRead])
+
+  const markRead = useCallback(() => {
+    if (read || !userId) return
+    setRead(true)
+    logChapterRead(bookId, chapterNum)
+  }, [read, userId, bookId, chapterNum])
+
+  // ── Scroll progress + versos ya leídos ───────────────────────
   useEffect(() => {
     const fn = () => {
       const el = document.documentElement
       const total = el.scrollHeight - el.clientHeight
-      setProgress(total > 0 ? (el.scrollTop / total) * 100 : 0)
+      const pct = total > 0 ? (el.scrollTop / total) * 100 : 0
+      setProgress(pct)
+      if (verseCount > 0) {
+        const upTo = Math.floor((pct / 100) * verseCount)
+        setReadUpTo(prev => Math.max(prev, upTo))
+      }
     }
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
-  }, [])
+  }, [verseCount])
 
   // ── Highlights ─────────────────────────────────────────────
   useEffect(() => { highlightsRef.current = highlights }, [highlights])
@@ -753,6 +778,7 @@ export function BibleReader({
               @media (prefers-reduced-motion: reduce) {
                 .br-content .v { transition: none; }
               }
+              ${buildReadCSS(readUpTo, t.muted)}
               ${buildHighlightCSS(highlights)}
               ${buildNoteCSS(notes)}
               ${buildBookmarkCSS(bookmarkNums)}
@@ -763,6 +789,27 @@ export function BibleReader({
               style={{ opacity: navigating ? 0.4 : 1, transition: 'opacity 0.2s' }}
               dangerouslySetInnerHTML={{ __html: content }}
             />
+
+            {/* ── Marcar capítulo como leído ── */}
+            <div className="mt-10 pt-8" style={{ borderTop: `1px solid ${t.border}` }}>
+              {userId ? (
+                <button onClick={markRead} disabled={read}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-black transition active:scale-[0.99]"
+                  style={read
+                    ? { background: `${TEAL}1A`, color: TEAL, border: `1px solid ${TEAL}40` }
+                    : { background: t.surface, color: t.text, border: `1px solid ${t.border}` }}>
+                  {read
+                    ? <><Check size={16} aria-hidden="true" /> Leído</>
+                    : <>Marcar {bookName} {chapterNum} como leído</>}
+                </button>
+              ) : (
+                <Link href="/login"
+                  className="flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-bold transition"
+                  style={{ background: t.surface, color: t.muted, border: `1px solid ${t.border}` }}>
+                  Inicia sesión para registrar tu avance
+                </Link>
+              )}
+            </div>
           </>
         ) : (
           <div className="text-center py-24">

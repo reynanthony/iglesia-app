@@ -50,11 +50,12 @@ export default async function BibleChapterPage({
   let initialHighlights: Record<string, number> | undefined
   let initialNotes: Record<string, string> | undefined
   let initialBookmarks: BookmarkItem[] | undefined
+  let initialRead = false
 
   // Name pattern for querying related content (Salmos -> Salmo%)
   const bookNamePattern = book.id === 'PSA' ? 'Salmo%' : `${book.name}%`
 
-  const [hlResult, noteResult, bookmarkResult, verseResult, sessionResult] = await Promise.all([
+  const [hlResult, noteResult, bookmarkResult, readResult, verseResult, sessionResult] = await Promise.all([
     user
       ? supabase.from('bible_highlights')
           .select('verse, color_index')
@@ -75,6 +76,14 @@ export default async function BibleChapterPage({
           .eq('user_id', user.id)
           .eq('book_id', book.id)
           .eq('chapter', chapterNum)
+      : Promise.resolve({ data: null }),
+    user
+      ? supabase.from('bible_reading_log')
+          .select('user_id')
+          .eq('user_id', user.id)
+          .eq('book_id', book.id)
+          .eq('chapter', chapterNum)
+          .maybeSingle()
       : Promise.resolve({ data: null }),
     supabase.from('lesson_bible_verses')
       .select(`
@@ -117,6 +126,7 @@ export default async function BibleChapterPage({
       savedAt: new Date().toISOString(),
     }))
   }
+  initialRead = !!readResult.data
 
   const relatedLessons = (verseResult.data ?? [])
     .filter((v: any) => {
@@ -169,6 +179,7 @@ export default async function BibleChapterPage({
       initialHighlights={initialHighlights}
       initialNotes={initialNotes}
       initialBookmarks={initialBookmarks}
+      initialRead={initialRead}
       relatedContent={relatedContent}
     />
   )
