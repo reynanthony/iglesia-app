@@ -200,7 +200,7 @@ export default async function EducacionPage() {
               </Link>
             </div>
             <div className="relative">
-              <div className="w-2 absolute left-0 top-0 bottom-0 rounded-full" style={{ background: TEAL }} />
+              <div className="w-2 absolute left-0 top-0 bottom-0 rounded-full" style={{ background: MUTED }} />
               <div className="pl-8">
                 <p className="font-display font-black tracking-tighter leading-tight mb-6"
                   style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', color: NAVY }}>

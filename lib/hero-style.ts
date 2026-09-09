@@ -34,8 +34,8 @@ export function heroStyle(opts: {
     titleColor:    opts.titleColorHex    || (isLight ? '#FFFFFF'                    : CARD),
     accentColor:   opts.accentColorHex   || (isLight ? GOLD                    : CARD),
     subtitleColor: opts.subtitleColorHex || (isLight ? MUTED     : 'rgba(16,18,23,0.62)'),
-    eyebrowColor:  opts.eyebrowColorHex  || (isLight ? `${GOLD}BF`     : 'rgba(16,18,23,0.55)'),
-    eyebrowLine:   opts.eyebrowColorHex  || (isLight ? GOLD                    : CARD),
-    gridColor:     isLight ? GOLD : CARD,
+    eyebrowColor:  opts.eyebrowColorHex  || (isLight ? MUTED     : 'rgba(16,18,23,0.55)'),
+    eyebrowLine:   opts.eyebrowColorHex  || (isLight ? MUTED                    : CARD),
+    gridColor:     isLight ? MUTED : CARD,
   }
 }

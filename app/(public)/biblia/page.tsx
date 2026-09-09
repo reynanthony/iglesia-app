@@ -28,8 +28,8 @@ export default async function BibliaPage() {
         <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-44 md:pb-20 flex flex-col justify-end"
           style={{ minHeight: '72vh' }}>
           <div className="flex items-center gap-5 mb-14">
-            <div className="w-12 h-px" style={{ background: TEAL }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+            <div className="w-12 h-px" style={{ background: MUTED }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
               La Palabra · RVR1960
             </p>
           </div>
@@ -70,11 +70,11 @@ export default async function BibliaPage() {
 
       {/* ══ CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: `${GOLD}80` }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: MUTED }}>
                 — También en la comunidad
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"

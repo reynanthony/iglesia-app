@@ -73,8 +73,8 @@ export default async function DiscipuladoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-px h-10" style={{ background: TEAL }} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+                <div className="w-px h-10" style={{ background: MUTED }} />
+                <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
                   Discipulado · 7 etapas de crecimiento
                 </p>
               </div>
@@ -224,7 +224,7 @@ export default async function DiscipuladoPage() {
                 { label: 'Resultado',   value: 'Multiplicación' },
               ].map(({ label, value }) => (
                 <div key={label} className="p-6 rounded-2xl" style={{ background: NAVY }}>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: `${TEAL}80` }}>{label}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: MUTED }}>{label}</p>
                   <p className="font-black text-base leading-tight" style={{ color: CREAM }}>{value}</p>
                 </div>
               ))}
@@ -239,7 +239,7 @@ export default async function DiscipuladoPage() {
           <div className="rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10"
             style={{ background: `${GOLD}1A`, border: '1px solid rgba(199,154,42,0.20)' }}>
             <div className="flex-1">
-              <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: `${TEAL}70` }}>
+              <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: MUTED }}>
                 Comenzá hoy
               </p>
               <h3 className="font-black text-2xl text-white tracking-tight mb-3">

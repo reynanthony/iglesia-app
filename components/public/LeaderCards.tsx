@@ -426,7 +426,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
       {pastoral.length > 0 && (
         <div>
           <div className="flex items-center gap-3 mb-12">
-            <div className="w-px h-5" style={{ background: TEAL }} />
+            <div className="w-px h-5" style={{ background: MUTED }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
               style={{ color: MUTED }}>
               Liderazgo pastoral
@@ -441,7 +441,7 @@ export function LeaderCards({ pastoral, ministerio }: { pastoral: Leader[]; mini
       {ministerio.length > 0 && (
         <div>
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-px h-5" style={{ background: TEAL }} />
+            <div className="w-px h-5" style={{ background: MUTED }} />
             <p className="text-[9px] font-bold uppercase tracking-[0.38em]"
               style={{ color: MUTED }}>
               Líderes de ministerios

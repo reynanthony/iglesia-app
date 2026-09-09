@@ -329,7 +329,7 @@ export default async function NosotrosPage() {
           6. CTA — gradiente, cierre dramático
       ══════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 100% at 20% 50%, rgba(0,0,0,0.30), transparent 70%)' }} />
 

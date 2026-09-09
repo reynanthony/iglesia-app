@@ -51,8 +51,8 @@ export default async function EstudioBiblicoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-px h-10" style={{ background: TEAL }} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+                <div className="w-px h-10" style={{ background: MUTED }} />
+                <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
                   Estudio Bíblico · Miércoles 7PM
                 </p>
               </div>
@@ -66,17 +66,17 @@ export default async function EstudioBiblicoPage() {
                 Cada miércoles nos reunimos para estudiar la Biblia con rigor, comunidad y aplicación práctica. No interpretamos la Escritura solos — la interpretamos juntos.
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: MUTED }}>
                   <Calendar size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">Miércoles</span>
                 </div>
                 <div className="hidden sm:block w-px h-4" style={{ background: `${TEAL}30` }} />
-                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: MUTED }}>
                   <Clock size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">7:00 PM</span>
                 </div>
                 <div className="hidden sm:block w-px h-4" style={{ background: `${TEAL}30` }} />
-                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: `${TEAL}80` }}>
+                <div className="flex items-center gap-2 whitespace-nowrap" style={{ color: MUTED }}>
                   <Users size={13} />
                   <span className="text-[11px] font-bold uppercase tracking-wider">Todas las edades</span>
                 </div>
@@ -181,13 +181,13 @@ export default async function EstudioBiblicoPage() {
 
       {/* VERSÍCULO + CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 80% at 80% 50%, rgba(255,255,255,0.04), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <div className="w-2 h-14 rounded-full mb-8" style={{ background: TEAL }} />
+              <div className="w-2 h-14 rounded-full mb-8" style={{ background: MUTED }} />
               <p className="font-display font-black tracking-tighter text-white mb-6"
                 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: 0.95 }}>
                 "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."

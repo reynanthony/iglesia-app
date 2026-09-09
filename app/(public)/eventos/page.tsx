@@ -136,8 +136,8 @@ export default async function EventosPage() {
           style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(199,154,42,0.10), transparent 65%)' }} />
         <div className="relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32">
           <div className="flex items-center gap-5 mb-10 sm:mb-14">
-            <div className="w-12 h-px" style={{ background: GOLD }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${GOLD}B2` }}>
+            <div className="w-12 h-px" style={{ background: MUTED }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
               {heroEyebrow}
             </p>
           </div>

@@ -111,8 +111,8 @@ export default async function OracionPublicaPage() {
         </div>
         <div className="relative max-w-6xl mx-auto w-full px-6 py-16 sm:py-20 md:py-32">
           <div className="flex items-center gap-5 mb-10">
-            <div className="w-12 h-px" style={{ background: TEAL }} />
-            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+            <div className="w-12 h-px" style={{ background: MUTED }} />
+            <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
               {heroEyebrow}
             </p>
           </div>

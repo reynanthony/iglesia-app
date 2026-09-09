@@ -274,7 +274,7 @@ export default async function HomePage() {
         <div className="relative max-w-6xl mx-auto px-6 py-16 sm:py-20 md:py-28 flex flex-col justify-end"
           style={{ minHeight: '50vh' }}>
           <div className="max-w-xl">
-            <div className="w-12 h-1 rounded-full mb-8" style={{ background: TEAL }} />
+            <div className="w-12 h-1 rounded-full mb-8" style={{ background: MUTED }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4" style={{ color: SAGE }}>
               {eventEyebrow}
             </p>
@@ -341,7 +341,7 @@ export default async function HomePage() {
 
         <Link href={ministry2Url}
           className="group relative flex flex-col justify-between overflow-hidden"
-          style={{ minHeight: '400px', background: TEAL }}>
+          style={{ minHeight: '400px', background: SAGE }}>
           {ministry2ImageUrl && (
             <img src={ministry2ImageUrl} alt="" aria-hidden
               className="absolute inset-0 w-full h-full object-cover"
@@ -441,7 +441,7 @@ export default async function HomePage() {
               className="group grid grid-cols-1 lg:grid-cols-5 rounded-2xl overflow-hidden mb-4 transition hover:shadow-lg"
               style={{ border: `1px solid #D2CDB8` }}>
               <div className="lg:col-span-2 relative min-h-[220px] flex items-center justify-center overflow-hidden"
-                style={{ background: featuredThumb ? undefined : `linear-gradient(135deg, ${DARK} 0%, ${TEAL} 100%)` }}>
+                style={{ background: featuredThumb ? undefined : `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 100%)` }}>
                 {featuredThumb && (
                   <img src={featuredThumb} alt="" className="absolute inset-0 w-full h-full object-cover opacity-80" />
                 )}
@@ -573,7 +573,7 @@ export default async function HomePage() {
           9. CTA FINAL
       ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 55%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, ${DARK} 0%, ${NAVY} 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,255,255,0.06), transparent 70%)' }} />
         <div className="pointer-events-none absolute left-0 bottom-0 overflow-hidden select-none">

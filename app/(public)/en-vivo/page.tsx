@@ -134,8 +134,8 @@ export default async function EnVivoPage() {
 
           <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-12 sm:pt-32 sm:pb-20 md:pt-44 md:pb-24 flex flex-col justify-end" style={{ minHeight: '85vh' }}>
             <div className="flex items-center gap-5 mb-12">
-              <div className="w-px h-10" style={{ background: TEAL }} />
-              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${TEAL}80` }}>
+              <div className="w-px h-10" style={{ background: MUTED }} />
+              <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
                 El Manantial · Transmisiones en vivo
               </p>
             </div>
@@ -209,11 +209,11 @@ export default async function EnVivoPage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: `${GOLD}80` }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: MUTED }}>
                 {ctaEyebrow}
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"

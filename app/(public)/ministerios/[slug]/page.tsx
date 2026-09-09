@@ -66,7 +66,7 @@ function itemAuthor(item: MinistryContent) {
 function SectionLabel({ label, count }: { label: string; count?: number }) {
   return (
     <div className="flex items-center gap-3 mb-10 pb-5 border-b border-edge">
-      <div className="w-2 h-6 rounded-full flex-shrink-0" style={{ background: TEAL }} />
+      <div className="w-2 h-6 rounded-full flex-shrink-0" style={{ background: MUTED }} />
       <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ink-3">{label}</p>
       {count !== undefined && <span className="ml-auto text-[10px] font-bold text-ink-3">{count}</span>}
     </div>
@@ -78,9 +78,9 @@ function AnnouncementCard({ item, href }: { item: MinistryContent; href: string 
     <Link href={href}>
       <article className="bg-card rounded-xl border border-edge hover:border-edge-2 transition p-6 flex flex-col gap-4 group cursor-pointer">
         <div className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md self-start"
-          style={{ backgroundColor: TEAL + '18', color: TEAL }}>
+          style={{ backgroundColor: 'rgba(139,146,162,0.14)', color: MUTED }}>
           <Megaphone size={9} /> Anuncio
-          {item.pinned && <><Pin size={8} className="ml-1" /> Fijado</>}
+          {item.pinned && <span className="inline-flex items-center gap-0.5 ml-1" style={{ color: TEAL }}><Pin size={8} /> Fijado</span>}
         </div>
         <h3 className="font-black text-ink text-lg leading-tight group-hover:text-ink-2 transition">{item.title}</h3>
         {item.body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-4 flex-1">{item.body}</p>}
@@ -145,9 +145,9 @@ function ArticleCard({ item, href }: { item: MinistryContent; href: string }) {
         )}
         <div className="p-6">
           <div className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md mb-4"
-            style={{ backgroundColor: TEAL + '18', color: TEAL }}>
+            style={{ backgroundColor: 'rgba(139,146,162,0.14)', color: MUTED }}>
             <FileText size={9} /> Artículo
-            {item.pinned && <><Pin size={8} className="ml-1" /> Fijado</>}
+            {item.pinned && <span className="inline-flex items-center gap-0.5 ml-1" style={{ color: TEAL }}><Pin size={8} /> Fijado</span>}
           </div>
           <h3 className="font-black text-ink text-lg leading-tight mb-3 group-hover:text-ink-2 transition">{item.title}</h3>
           {item.body && <p className="text-sm text-ink-2 leading-relaxed line-clamp-3 mb-4">{item.body}</p>}
@@ -281,17 +281,17 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
             </div>
           </div>
         </div>
-        <div className="h-1 w-full" style={{ backgroundColor: TEAL }} />
+        <div className="h-1 w-full" style={{ backgroundColor: MUTED }} />
       </section>
         )
       })()}
 
       {/* ══ LATEST ANNOUNCEMENT BANNER ══════════════════════ */}
       {latestAnuncio && (
-        <div className="border-b border-edge" style={{ backgroundColor: TEAL + '0f' }}>
+        <div className="border-b border-edge bg-muted">
           <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] px-2.5 py-1.5 rounded-md flex-shrink-0"
-              style={{ backgroundColor: TEAL + '20', color: TEAL }}>
+              style={{ backgroundColor: 'rgba(139,146,162,0.16)', color: MUTED }}>
               <Megaphone size={9} /> Último anuncio
             </div>
             <p className="text-sm font-bold text-ink flex-1 line-clamp-1">{latestAnuncio.title}</p>
@@ -463,7 +463,7 @@ export default async function PublicMinistryPage({ params }: { params: Promise<{
         </div>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-start md:items-end justify-between gap-12">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8" style={{ color: `${GOLD}80` }}>— {ministry.name}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-8" style={{ color: MUTED }}>— {ministry.name}</p>
             <h2 className="text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter" style={{ color: CREAM }}>
               Sé parte<br />de este<br />ministerio.
             </h2>
