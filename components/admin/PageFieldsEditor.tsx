@@ -4,6 +4,7 @@ import { useState, useTransition, useRef } from 'react'
 import { savePageFields } from '@/app/actions/admin'
 import { createClient } from '@/lib/supabase/client'
 import { Check, Loader2, AlertCircle, Upload, ImageIcon, Video, X } from 'lucide-react'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type FieldType = 'text' | 'textarea' | 'url' | 'json' | 'upload-image' | 'upload-video'
 
@@ -583,7 +584,7 @@ function fieldDisplayValue(type: FieldType, value: unknown): string {
 export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Props) {
   const schema = SCHEMAS[page]
   if (!schema) return (
-    <div className="p-6 rounded-xl text-sm" style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
+    <div className="p-6 rounded-xl text-sm" style={{ background: BORDER, color: MUTED }}>
       No hay campos configurados para esta página.
     </div>
   )
@@ -696,19 +697,19 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
     <div className="space-y-6">
       {/* Save bar — sticky at top */}
       <div className="sticky top-0 z-10 flex items-center gap-4 px-6 py-3 rounded-xl -mx-0"
-        style={{ background: '#061E30', borderBottom: '1px solid #0D3352' }}>
+        style={{ background: BG, borderBottom: `1px solid ${BORDER}` }}>
         <button
           onClick={handleSave}
           disabled={isBusy}
           className="inline-flex items-center gap-2.5 px-7 py-3 rounded-xl font-black text-[11px] uppercase tracking-[0.2em] transition disabled:opacity-60"
-          style={{ background: '#76ABAE', color: '#061E30' }}
+          style={{ background: GOLD, color: BG }}
         >
           {isBusy ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
           {isBusy ? 'Guardando…' : 'Guardar cambios'}
         </button>
 
         {status === 'saved' && (
-          <span className="flex items-center gap-2 text-[12px] font-bold" style={{ color: '#76ABAE' }}>
+          <span className="flex items-center gap-2 text-[12px] font-bold" style={{ color: GOLD }}>
             <Check size={13} />
             Guardado — recarga la página para ver los cambios
           </span>
@@ -734,20 +735,20 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
       )}
 
       {schema.map(section => (
-        <div key={section.title} className="rounded-2xl overflow-hidden" style={{ border: '1px solid #0D3352' }}>
-          <div className="px-6 py-4" style={{ background: '#0B2D47', borderBottom: '1px solid #0D3352' }}>
-            <p className="text-[11px] font-bold uppercase tracking-[0.25em]" style={{ color: '#76ABAE' }}>
+        <div key={section.title} className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
+          <div className="px-6 py-4" style={{ background: CARD, borderBottom: `1px solid ${BORDER}` }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em]" style={{ color: GOLD }}>
               {section.title}
             </p>
           </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5" style={{ background: '#061E30' }}>
+          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5" style={{ background: BG }}>
             {section.fields.map(field => {
               const isUpload = field.type === 'upload-image' || field.type === 'upload-video'
               const isTextArea = field.type === 'textarea' || field.type === 'json'
               const isFullWidth = isTextArea || isUpload
               return (
                 <div key={field.key} className={isFullWidth ? 'md:col-span-2' : ''}>
-                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: 'rgba(246,243,235,0.72)' }}>
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: MUTED }}>
                     {field.label}
                   </label>
 
@@ -758,13 +759,13 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                       onChange={e => handleChange(field.key, e.target.value)}
                       placeholder={field.placeholder}
                       className="w-full rounded-xl px-4 py-3 text-sm font-mono resize-y transition outline-none focus:ring-1"
-                      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                      style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
                     />
                   ) : isUpload ? (
                     <div className="space-y-2">
                       {/* Preview if URL is set and looks like a direct file */}
                       {values[field.key] && values[field.key].startsWith('http') && !values[field.key].includes(field.placeholder ?? '____') && (
-                        <div className="rounded-xl overflow-hidden border" style={{ borderColor: '#0D3352' }}>
+                        <div className="rounded-xl overflow-hidden border" style={{ borderColor: BORDER }}>
                           {field.type === 'upload-image' ? (
                             <img
                               src={values[field.key]}
@@ -791,7 +792,7 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                           onBlur={e => handleUrlBlur(field.key, e.target.value)}
                           placeholder={field.type === 'upload-image' ? 'Pega una URL de imagen o usa el botón Subir' : 'Pega una URL de video .mp4 o usa el botón Subir'}
                           className="flex-1 rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
-                          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                          style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
                         />
                         {values[field.key] && values[field.key].startsWith('http') && (
                           <button
@@ -812,7 +813,7 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                               })
                             }}
                             className="flex items-center justify-center w-10 rounded-xl flex-shrink-0 transition"
-                            style={{ background: '#0B2D47', border: '1px solid rgba(248,113,113,0.30)', color: '#F87171' }}
+                            style={{ background: CARD, border: '1px solid rgba(248,113,113,0.30)', color: '#F87171' }}
                           >
                             <X size={14} />
                           </button>
@@ -834,7 +835,7 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                           disabled={uploading[field.key]}
                           title={field.type === 'upload-image' ? 'Subir foto desde tu equipo' : 'Subir video desde tu equipo'}
                           className="flex items-center gap-2 px-4 py-3 rounded-xl text-[11px] font-bold uppercase tracking-[0.1em] transition flex-shrink-0 disabled:opacity-50"
-                          style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#76ABAE' }}
+                          style={{ background: CARD, border: `1px solid ${BORDER}`, color: GOLD }}
                         >
                           {uploading[field.key] ? (
                             <Loader2 size={14} className="animate-spin" />
@@ -857,12 +858,12 @@ export default function PageFieldsEditor({ page, initialValues, hasBlocks }: Pro
                       onChange={e => handleChange(field.key, e.target.value)}
                       placeholder={field.placeholder}
                       className="w-full rounded-xl px-4 py-3 text-sm transition outline-none focus:ring-1"
-                      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+                      style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
                     />
                   )}
 
                   {field.hint && (
-                    <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                    <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: MUTED }}>
                       {field.hint}
                     </p>
                   )}

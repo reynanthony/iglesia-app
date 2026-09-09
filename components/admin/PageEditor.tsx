@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { updatePageContent, uploadPageImage } from '@/app/actions/admin'
 import { CheckCircle2, AlertCircle, Save, ImageIcon, X } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 type Field = {
   key: string
@@ -54,7 +55,7 @@ export default function PageEditor({
       {fields.map(field => (
         <div key={field.key}>
           <label className="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             {field.label}
           </label>
 
@@ -69,17 +70,17 @@ export default function PageEditor({
                     onClick={() => handleChange(field.key, '')}
                     className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
                     style={{ background: 'rgba(0,0,0,0.7)' }}>
-                    <X size={13} style={{ color: '#F6F3EB' }} />
+                    <X size={13} style={{ color: INK }} />
                   </button>
                 </div>
               )}
-              <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
-                style={{ borderColor: '#0D3352', opacity: uploadingKey === field.key ? 0.6 : 1 }}>
-                <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
-                <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#D9A62A]"
+                style={{ borderColor: BORDER, opacity: uploadingKey === field.key ? 0.6 : 1 }}>
+                <ImageIcon size={20} style={{ color: MUTED }} />
+                <span className="text-[12px]" style={{ color: MUTED }}>
                   {uploadingKey === field.key ? 'Subiendo…' : values[field.key] ? 'Cambiar imagen' : 'Subir imagen'}
                 </span>
-                <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>JPG, PNG o WebP</span>
+                <span className="text-[11px]" style={{ color: MUTED }}>JPG, PNG o WebP</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -98,7 +99,7 @@ export default function PageEditor({
               onChange={e => handleChange(field.key, e.target.value)}
               rows={3}
               className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none resize-none"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+              style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
             />
           ) : (
             <input
@@ -106,12 +107,12 @@ export default function PageEditor({
               value={values[field.key] ?? ''}
               onChange={e => handleChange(field.key, e.target.value)}
               className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}
+              style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}
             />
           )}
 
           {field.hint && (
-            <p className="text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.25)' }}>{field.hint}</p>
+            <p className="text-[11px] mt-1" style={{ color: MUTED }}>{field.hint}</p>
           )}
         </div>
       ))}
@@ -121,14 +122,14 @@ export default function PageEditor({
           onClick={handleSave}
           disabled={isPending || uploadingKey !== null}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[12px] font-bold transition disabled:opacity-50"
-          style={{ background: '#F6F3EB', color: '#061E30' }}
+          style={{ background: GOLD, color: GOLD_INK }}
         >
           <Save size={13} />
           {isPending ? 'Guardando…' : 'Guardar cambios'}
         </button>
 
         {status === 'ok' && (
-          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#76ABAE' }}>
+          <span className="flex items-center gap-1.5 text-[12px]" style={{ color: GOLD }}>
             <CheckCircle2 size={14} /> Guardado — los cambios ya son visibles en el sitio
           </span>
         )}

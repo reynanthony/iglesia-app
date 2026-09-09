@@ -21,6 +21,7 @@ import type { Block, BlockType } from '@/lib/blocks'
 import { BLOCK_META, BLOCK_GROUPS, createBlock } from '@/lib/blocks'
 import { savePageBlocks, uploadPageImage, fixPagesBucketLimit, getCloudinarySignature } from '@/app/actions/admin'
 import { createClient as createBrowserClient } from '@/lib/supabase/client'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 /* ── block icon map ─────────────────────────────────────────── */
 const ICONS: Record<BlockType, React.ComponentType<any>> = {
@@ -45,7 +46,7 @@ function BlockPreview({ block, interactive }: { block: Block; interactive?: bool
   const p = block.props
   const bg = blockBg(block.type, p)
   const dark = bg !== '#fff'
-  const ink = dark ? '#F6F3EB' : '#0B2D47'
+  const ink = dark ? INK : CARD
   const muted = dark ? 'rgba(245,245,245,0.45)' : 'rgba(17,17,17,0.4)'
 
   switch (block.type) {
@@ -113,9 +114,9 @@ function BlockPreview({ block, interactive }: { block: Block; interactive?: bool
     case 'announcement':
       return (
         <div style={{ padding: '16px 40px' }}>
-          <div style={{ background: p.style === 'dark' ? '#111' : '#F4F4F4', border: `1px solid ${p.style === 'dark' ? '#0D3352' : '#E8E8E8'}`, borderRadius: 16, padding: '32px 36px' }}>
+          <div style={{ background: p.style === 'dark' ? '#111' : '#F4F4F4', border: `1px solid ${p.style === 'dark' ? BORDER : '#E8E8E8'}`, borderRadius: 16, padding: '32px 36px' }}>
             {p.eyebrow && <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.4em', textTransform: 'uppercase', color: p.style === 'dark' ? 'rgba(245,245,245,0.4)' : 'rgba(17,17,17,0.4)', marginBottom: 12 }}>{p.eyebrow}</p>}
-            <p style={{ fontSize: 24, fontWeight: 900, color: p.style === 'dark' ? '#F6F3EB' : '#111', marginBottom: 8 }}>{p.title}</p>
+            <p style={{ fontSize: 24, fontWeight: 900, color: p.style === 'dark' ? INK : '#111', marginBottom: 8 }}>{p.title}</p>
             <p style={{ fontSize: 14, color: p.style === 'dark' ? 'rgba(245,245,245,0.55)' : 'rgba(17,17,17,0.55)', lineHeight: 1.6 }}>{p.body}</p>
           </div>
         </div>
@@ -347,7 +348,7 @@ function VisualBlock({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-[10px] font-bold uppercase tracking-[0.2em] mb-1.5" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</label>
+      <label className="block text-[10px] font-bold uppercase tracking-[0.2em] mb-1.5" style={{ color: MUTED }}>{label}</label>
       {children}
     </div>
   )
@@ -356,21 +357,21 @@ function Input({ value, onChange, placeholder }: { value: string; onChange: (v: 
   return (
     <input value={value || ''} onChange={e => onChange(e.target.value)} placeholder={placeholder}
       className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none"
-      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }} />
+      style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }} />
   )
 }
 function Textarea({ value, onChange, rows = 3 }: { value: string; onChange: (v: string) => void; rows?: number }) {
   return (
     <textarea value={value || ''} onChange={e => onChange(e.target.value)} rows={rows}
       className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none resize-none"
-      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }} />
+      style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }} />
   )
 }
 function Sel({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
     <select value={value || ''} onChange={e => onChange(e.target.value)}
       className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none"
-      style={{ background: '#0B2D47', border: '1px solid #0D3352', color: '#F6F3EB' }}>
+      style={{ background: CARD, border: `1px solid ${BORDER}`, color: INK }}>
       {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
     </select>
   )
@@ -378,12 +379,12 @@ function Sel({ value, onChange, options }: { value: string; onChange: (v: string
 function Tog({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex items-center justify-between cursor-pointer">
-      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>{label}</span>
+      <span className="text-xs" style={{ color: MUTED }}>{label}</span>
       <button type="button" onClick={() => onChange(!value)}
         className="w-10 h-5 rounded-full relative transition-colors"
-        style={{ background: value ? '#F6F3EB' : '#0D3352' }}>
+        style={{ background: value ? INK : BORDER }}>
         <span className="absolute top-0.5 w-4 h-4 rounded-full transition-transform"
-          style={{ background: value ? '#061E30' : 'rgba(246,243,235,0.68)', transform: `translateX(${value ? '22px' : '2px'})` }} />
+          style={{ background: value ? BG : MUTED, transform: `translateX(${value ? '22px' : '2px'})` }} />
       </button>
     </label>
   )
@@ -405,7 +406,7 @@ function ImgField({ value, onChange, label }: { value: string; onChange: (v: str
       {value && <img src={value} alt="" className="w-full rounded-lg object-cover" style={{ maxHeight: 80 }} />}
       <button type="button" onClick={() => ref.current?.click()} disabled={up}
         className="w-full text-xs py-1.5 rounded-lg border"
-        style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)', background: '#0B2D47' }}>
+        style={{ borderColor: BORDER, color: MUTED, background: CARD }}>
         {up ? 'Subiendo…' : `Subir ${label}`}
       </button>
       <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handle} />
@@ -484,7 +485,7 @@ function VideoField({ value, onChange }: { value: string; onChange: (v: string) 
       )}
       <button type="button" onClick={() => ref.current?.click()} disabled={up}
         className="w-full text-xs py-1.5 rounded-lg border transition"
-        style={{ borderColor: '#0D3352', color: up ? '#4D9EFF' : 'rgba(246,243,235,0.68)', background: '#0B2D47' }}>
+        style={{ borderColor: BORDER, color: up ? '#4D9EFF' : MUTED, background: CARD }}>
         {up
           ? <span className="flex items-center justify-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full border-2 animate-spin"
@@ -494,13 +495,13 @@ function VideoField({ value, onChange }: { value: string; onChange: (v: string) 
           : 'Subir video'}
       </button>
       {up && progress > 0 && (
-        <div className="w-full rounded-full overflow-hidden" style={{ background: '#0B2D47', height: 4 }}>
+        <div className="w-full rounded-full overflow-hidden" style={{ background: CARD, height: 4 }}>
           <div className="h-full rounded-full transition-all duration-300"
             style={{ width: `${progress}%`, background: '#4D9EFF' }} />
         </div>
       )}
       {err && <p className="text-[11px] leading-relaxed" style={{ color: '#F87171' }}>{err}</p>}
-      <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
+      <p className="text-[10px]" style={{ color: MUTED }}>
         Para prédicas completas usa YouTube o Vimeo y pega el enlace arriba.
       </p>
       <input ref={ref} type="file" accept="video/*" className="hidden" onChange={handle} />
@@ -511,8 +512,8 @@ function VideoField({ value, onChange }: { value: string; onChange: (v: string) 
 /* ── universal background section (all blocks) ──────────────── */
 function BgSection({ p, set }: { p: Record<string, any>; set: (k: string, v: any) => void }) {
   return (
-    <div className="space-y-3 pt-4 mt-2" style={{ borderTop: '1px solid #0D3352' }}>
-      <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.25)' }}>— Fondo del bloque</p>
+    <div className="space-y-3 pt-4 mt-2" style={{ borderTop: `1px solid ${BORDER}` }}>
+      <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: MUTED }}>— Fondo del bloque</p>
       <Field label="Imagen de fondo">
         <ImgField value={p._bgImage || ''} onChange={v => set('_bgImage', v)} label="fondo" />
       </Field>
@@ -522,8 +523,8 @@ function BgSection({ p, set }: { p: Record<string, any>; set: (k: string, v: any
             <input type="range" min="0" max="0.95" step="0.05"
               value={p._bgOverlay ?? 0.4}
               onChange={e => set('_bgOverlay', parseFloat(e.target.value))}
-              style={{ flex: 1, accentColor: '#F6F3EB' }} />
-            <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)', minWidth: 32 }}>
+              style={{ flex: 1, accentColor: INK }} />
+            <span className="text-xs" style={{ color: MUTED, minWidth: 32 }}>
               {Math.round((p._bgOverlay ?? 0.4) * 100)}%
             </span>
           </div>
@@ -607,7 +608,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { value: '0', label: 'Nuevo' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: BORDER, color: MUTED }}>+ Añadir</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -617,9 +618,9 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
         <Field label="Título"><Input value={p.heading} onChange={v => set('heading', v)} /></Field>
         <Field label="Columnas"><Sel value={String(p.columns||3)} onChange={v => set('columns', Number(v))} options={[{ value: '2', label: '2 columnas' }, { value: '3', label: '3 columnas' }]} /></Field>
         {(p.items||[]).map((it: any, i: number) => (
-          <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.68)' }}>Tarjeta {i+1}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: MUTED }}>Tarjeta {i+1}</span>
               <button onClick={() => set('items', (p.items||[]).filter((_: any, idx: number) => idx !== i))} style={{ color: '#F87171' }}><X size={13} /></button>
             </div>
             <Field label="Imagen"><ImgField value={it.image || ''} onChange={v => set('items', setItem(p.items, i, 'image', v))} label="imagen" /></Field>
@@ -629,7 +630,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { image: '', title: 'Tarjeta', body: '', link: '' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir tarjeta</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: BORDER, color: MUTED }}>+ Añadir tarjeta</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -658,9 +659,9 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
       <div className="space-y-4">
         <Field label="Título"><Input value={p.heading} onChange={v => set('heading', v)} /></Field>
         {(p.items||[]).map((it: any, i: number) => (
-          <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div key={i} className="space-y-2 p-3 rounded-lg" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <div className="flex justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(246,243,235,0.68)' }}>Horario {i+1}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: MUTED }}>Horario {i+1}</span>
               <button onClick={() => set('items', (p.items||[]).filter((_: any, idx: number) => idx !== i))} style={{ color: '#F87171' }}><X size={13} /></button>
             </div>
             <Field label="Día"><Input value={it.day} onChange={v => set('items', setItem(p.items, i, 'day', v))} /></Field>
@@ -672,7 +673,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
           </div>
         ))}
         <button onClick={() => set('items', [...(p.items||[]), { day: 'Domingo', time: '10:00', unit: 'AM', label: 'Servicio' }])}
-          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>+ Añadir horario</button>
+          className="w-full py-1.5 rounded-lg text-xs border" style={{ borderColor: BORDER, color: MUTED }}>+ Añadir horario</button>
         <BgSection p={p} set={set} />
       </div>
     )
@@ -697,7 +698,7 @@ function PropsPanel({ block, onChange }: { block: Block; onChange: (p: Record<st
         <Field label="Altura"><Sel value={p.size} onChange={v => set('size', v)} options={[{ value: 'xs', label: 'XS' }, { value: 'sm', label: 'S' }, { value: 'md', label: 'M (defecto)' }, { value: 'lg', label: 'L' }, { value: 'xl', label: 'XL' }]} /></Field>
       </div>
     )
-    default: return <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>Sin propiedades.</p>
+    default: return <p className="text-xs" style={{ color: MUTED }}>Sin propiedades.</p>
   }
 }
 
@@ -707,25 +708,25 @@ function BlockPicker({ onAdd, onClose }: { onAdd: (t: BlockType) => void; onClos
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
       style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
       <div className="w-full sm:w-auto sm:max-w-lg rounded-t-3xl sm:rounded-2xl p-6 overflow-y-auto"
-        style={{ background: '#0B2D47', border: '1px solid #0D3352', maxHeight: '85vh' }}>
+        style={{ background: CARD, border: `1px solid ${BORDER}`, maxHeight: '85vh' }}>
         <div className="flex items-center justify-between mb-5">
-          <p className="text-[11px] font-black uppercase tracking-[0.3em]" style={{ color: 'rgba(246,243,235,0.68)' }}>Añadir bloque</p>
-          <button onClick={onClose} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={18} /></button>
+          <p className="text-[11px] font-black uppercase tracking-[0.3em]" style={{ color: MUTED }}>Añadir bloque</p>
+          <button onClick={onClose} style={{ color: MUTED }}><X size={18} /></button>
         </div>
         {BLOCK_GROUPS.map(group => (
           <div key={group.name} className="mb-5">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-2 px-1" style={{ color: 'rgba(246,243,235,0.25)' }}>{group.name}</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-2 px-1" style={{ color: MUTED }}>{group.name}</p>
             <div className="grid grid-cols-3 gap-2">
               {group.types.map(type => {
                 const Icon = ICONS[type]
                 const meta = BLOCK_META[type]
                 return (
                   <button key={type} onClick={() => { onAdd(type); onClose() }}
-                    className="flex flex-col items-center gap-2 p-3 rounded-xl transition hover:bg-[#0B2D47] text-center">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#0B2D47' }}>
-                      <Icon size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
+                    className="flex flex-col items-center gap-2 p-3 rounded-xl transition hover:bg-[#181A22] text-center">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: CARD }}>
+                      <Icon size={16} style={{ color: MUTED }} />
                     </div>
-                    <span className="text-[11px] font-bold leading-tight" style={{ color: 'rgba(246,243,235,0.68)' }}>{meta.label}</span>
+                    <span className="text-[11px] font-bold leading-tight" style={{ color: MUTED }}>{meta.label}</span>
                   </button>
                 )
               })}
@@ -926,16 +927,16 @@ export default function PageBuilder({
   }
 
   return (
-    <div className="flex flex-col" style={{ height: '100vh', background: '#061E30' }}>
+    <div className="flex flex-col" style={{ height: '100vh', background: BG }}>
 
       {/* TOP BAR */}
       <div className="flex-shrink-0 flex items-center justify-between px-4 py-2.5 border-b"
-        style={{ borderColor: '#0D3352', background: '#061E30', minHeight: 52 }}>
+        style={{ borderColor: BORDER, background: BG, minHeight: 52 }}>
         <div className="flex items-center gap-3">
-          <a href="/admin/paginas" className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'rgba(246,243,235,0.68)' }}>← Páginas</a>
-          <span style={{ color: '#0D3352' }}>/</span>
+          <a href="/admin/paginas" className="text-[11px] font-bold uppercase tracking-widest" style={{ color: MUTED }}>← Páginas</a>
+          <span style={{ color: BORDER }}>/</span>
           <span className="text-sm font-bold text-white">{pageLabel}</span>
-          <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+          <span className="text-[11px] px-2 py-0.5 rounded-full" style={{ background: CARD, color: MUTED }}>
             {blocks.length} bloque{blocks.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -943,43 +944,43 @@ export default function PageBuilder({
           {blocks.length > 0 && (
             <button onClick={clearAll}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ background: '#0B2D47', color: '#F87171', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, color: '#F87171', border: `1px solid ${BORDER}` }}>
               <Trash2 size={12} /> Vaciar
             </button>
           )}
           <button onClick={() => setShowPicker(true)}
             className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-            style={{ background: '#0B2D47', color: '#F6F3EB', border: '1px solid #0D3352' }}>
+            style={{ background: CARD, color: INK, border: `1px solid ${BORDER}` }}>
             <Plus size={12} /> Añadir bloque
           </button>
           {blocks.length > 0 && (
             <button onClick={() => { setPreviewMode(v => !v); setSelectedId(null) }}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ background: previewMode ? '#4D9EFF' : '#0B2D47', color: previewMode ? '#fff' : 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}>
+              style={{ background: previewMode ? '#4D9EFF' : CARD, color: previewMode ? '#fff' : MUTED, border: `1px solid ${BORDER}` }}>
               <Eye size={12} /> {previewMode ? 'Editar' : 'Vista previa'}
             </button>
           )}
           {previewPath && blocks.length > 0 && !previewMode && (
             <button onClick={() => setSplitView(v => !v)}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ background: splitView ? '#F6F3EB' : '#0B2D47', color: splitView ? '#061E30' : 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}>
+              style={{ background: splitView ? GOLD : CARD, color: splitView ? GOLD_INK : MUTED, border: `1px solid ${BORDER}` }}>
               <Eye size={12} /> {splitView ? 'Cerrar referencia' : 'Ver publicado'}
             </button>
           )}
           {previewPath && (
             <a href={previewPath} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition"
-              style={{ color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352', background: '#051828' }}
+              style={{ color: MUTED, border: `1px solid ${BORDER}`, background: '#051828' }}
               title="Abrir en nueva pestaña">
               <Eye size={12} />
             </a>
           )}
           <button onClick={handleSave} disabled={isPending}
             className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-lg transition disabled:opacity-40"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Save size={12} /> {isPending ? 'Guardando…' : 'Publicar'}
           </button>
-          {status === 'ok' && <span className="flex items-center gap-1 text-xs" style={{ color: '#76ABAE' }}><CheckCircle2 size={13} /> Publicado</span>}
+          {status === 'ok' && <span className="flex items-center gap-1 text-xs" style={{ color: GOLD }}><CheckCircle2 size={13} /> Publicado</span>}
           {status === 'error' && <span className="flex items-center gap-1 text-xs text-red-400"><AlertCircle size={13} /> Error</span>}
         </div>
       </div>
@@ -989,13 +990,13 @@ export default function PageBuilder({
 
         {/* split reference drawer (only when blocks exist) */}
         {splitView && previewPath && blocks.length > 0 && (
-          <div className="flex-shrink-0 border-b flex flex-col" style={{ height: 380, borderColor: '#0D3352' }}>
+          <div className="flex-shrink-0 border-b flex flex-col" style={{ height: 380, borderColor: BORDER }}>
             <div className="flex-shrink-0 flex items-center justify-between px-4 py-2"
-              style={{ background: '#061E30', borderBottom: '1px solid #0D3352' }}>
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              style={{ background: BG, borderBottom: `1px solid ${BORDER}` }}>
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em]" style={{ color: MUTED }}>
                 Página publicada — referencia (scroll activo)
               </span>
-              <button onClick={() => setSplitView(false)} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={13} /></button>
+              <button onClick={() => setSplitView(false)} style={{ color: MUTED }}><X size={13} /></button>
             </div>
             <iframe
               ref={splitIframeRef}
@@ -1014,14 +1015,14 @@ export default function PageBuilder({
           {previewMode && (
             <div className="flex-1 overflow-y-auto" style={{ background: '#FFFFFF' }}>
               <div className="flex items-center gap-3 px-5 py-2.5 sticky top-0 z-10"
-                style={{ background: '#0B2D47', borderBottom: '1px solid #222' }}>
+                style={{ background: CARD, borderBottom: '1px solid #222' }}>
                 <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#4D9EFF' }} />
-                <p className="text-[11px] flex-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
-                  <strong style={{ color: '#F6F3EB' }}>Vista previa</strong> — así se verá la página al publicar
+                <p className="text-[11px] flex-1" style={{ color: MUTED }}>
+                  <strong style={{ color: INK }}>Vista previa</strong> — así se verá la página al publicar
                 </p>
                 <button onClick={() => setPreviewMode(false)}
                   className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-4 py-2 rounded-xl"
-                  style={{ background: '#F6F3EB', color: '#061E30' }}>
+                  style={{ background: GOLD, color: GOLD_INK }}>
                   ← Editar
                 </button>
               </div>
@@ -1047,16 +1048,16 @@ export default function PageBuilder({
                 /* No blocks: show the live page in interactive iframe */
                 <div className="flex flex-col" style={{ height: '100%' }}>
                   <div className="flex-shrink-0 flex items-center justify-between px-5 py-3"
-                    style={{ background: '#0B2D47', borderBottom: '1px solid #222' }}>
+                    style={{ background: CARD, borderBottom: '1px solid #222' }}>
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#4D9EFF' }} />
-                      <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
-                        <strong style={{ color: '#F6F3EB' }}>Haz clic en una sección</strong> para cargar todas en el editor y editarla
+                      <p className="text-[11px] truncate" style={{ color: MUTED }}>
+                        <strong style={{ color: INK }}>Haz clic en una sección</strong> para cargar todas en el editor y editarla
                       </p>
                     </div>
                     <button onClick={() => setShowPicker(true)}
                       className="flex-shrink-0 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider px-4 py-2 rounded-xl ml-4"
-                      style={{ background: '#F6F3EB', color: '#061E30' }}>
+                      style={{ background: GOLD, color: GOLD_INK }}>
                       <Plus size={11} /> Bloque nuevo
                     </button>
                   </div>
@@ -1076,12 +1077,12 @@ export default function PageBuilder({
                     <Layers size={24} style={{ color: '#AAAAAA' }} />
                   </div>
                   <div>
-                    <p className="font-black text-lg text-[#061E30]">Página en blanco</p>
+                    <p className="font-black text-lg text-[#101217]">Página en blanco</p>
                     <p className="text-sm mt-1 text-[#888888]">Añade bloques para construir la página</p>
                   </div>
                   <button onClick={() => setShowPicker(true)}
                     className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wider transition"
-                    style={{ background: '#0B2D47', color: '#FFFFFF' }}>
+                    style={{ background: CARD, color: '#FFFFFF' }}>
                     <Plus size={14} /> Añadir primer bloque
                   </button>
                 </div>
@@ -1139,45 +1140,45 @@ export default function PageBuilder({
 
           {/* RIGHT PANEL — hidden in preview mode */}
           <aside className={`flex-shrink-0 border-l overflow-y-auto ${previewMode ? 'hidden' : ''}`}
-            style={{ width: 300, borderColor: '#0D3352', background: '#051828' }}>
+            style={{ width: 300, borderColor: BORDER, background: '#051828' }}>
             {selectedBlock ? (
               <div className="p-4">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
-                    {React.createElement(ICONS[selectedBlock.type], { size: 14, style: { color: 'rgba(246,243,235,0.68)' } })}
+                    {React.createElement(ICONS[selectedBlock.type], { size: 14, style: { color: MUTED } })}
                     <span className="text-[11px] font-black uppercase tracking-wider text-white">
                       {BLOCK_META[selectedBlock.type].label}
                     </span>
                   </div>
-                  <button onClick={() => setSelectedId(null)} style={{ color: 'rgba(246,243,235,0.68)' }}><X size={14} /></button>
+                  <button onClick={() => setSelectedId(null)} style={{ color: MUTED }}><X size={14} /></button>
                 </div>
                 <PropsPanel block={selectedBlock} onChange={props => updateBlock(selectedBlock.id, props)} />
               </div>
             ) : blocks.length === 0 && previewPath ? (
               /* Guidance panel when viewing the iframe */
               <div className="p-4 space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.25em]" style={{ color: 'rgba(246,243,235,0.25)' }}>— Cómo editar</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.25em]" style={{ color: MUTED }}>— Cómo editar</p>
                 <div className="space-y-3">
                   {(PAGE_SECTION_TYPES[page] ?? []).map((type, i) => {
                     const Icon = ICONS[type]
                     return (
                       <button key={i} onClick={() => addBlockRef.current(type)}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition hover:bg-[#0B2D47]"
-                        style={{ border: '1px solid #0D3352' }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition hover:bg-[#181A22]"
+                        style={{ border: `1px solid ${BORDER}` }}
                         title="Añade todas las secciones de la página y selecciona esta">
                         <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                          style={{ background: '#0B2D47' }}>
-                          <Icon size={13} style={{ color: '#76ABAE' }} />
+                          style={{ background: CARD }}>
+                          <Icon size={13} style={{ color: GOLD }} />
                         </div>
                         <div>
                           <p className="text-[11px] font-bold text-white">{SECTION_LABELS[type]}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.68)' }}>Sección {i + 1}</p>
+                          <p className="text-[10px]" style={{ color: MUTED }}>Sección {i + 1}</p>
                         </div>
                       </button>
                     )
                   })}
                 </div>
-                <p className="text-[10px] leading-relaxed pt-2" style={{ color: 'rgba(246,243,235,0.25)', borderTop: '1px solid #0D3352' }}>
+                <p className="text-[10px] leading-relaxed pt-2" style={{ color: MUTED, borderTop: `1px solid ${BORDER}` }}>
                   Al seleccionar una sección se agregan todas las secciones de la página al editor para que puedas editarlas sin perder el resto del diseño.
                 </p>
                 {HYBRID_PAGES.has(page) && (
@@ -1193,10 +1194,10 @@ export default function PageBuilder({
             ) : (
               <div className="flex flex-col items-center justify-center h-full gap-3 px-6 text-center">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: '#061E30', border: '1px solid #0D3352' }}>
-                  <MousePointerClick size={16} style={{ color: 'rgba(246,243,235,0.25)' }} />
+                  style={{ background: BG, border: `1px solid ${BORDER}` }}>
+                  <MousePointerClick size={16} style={{ color: MUTED }} />
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
                   Haz clic sobre cualquier bloque para editarlo
                 </p>
               </div>
