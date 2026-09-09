@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { LayoutDashboard, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { logout } from '@/app/actions/auth'
+import { CARD, MUTED, INK } from '@/lib/gold-theme'
 
 export function PublicAuthNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -31,7 +32,7 @@ export function PublicAuthNav() {
       <Link
         href="/login"
         className="hidden md:inline-flex items-center font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl transition"
-        style={{ background: '#F6F3EB', color: '#093C5D' }}
+        style={{ background: INK, color: CARD }}
       >
         Entrar
       </Link>
@@ -43,7 +44,7 @@ export function PublicAuthNav() {
       <Link
         href="/app/feed"
         className="inline-flex items-center gap-2 font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-xl transition"
-        style={{ background: '#F6F3EB', color: '#093C5D' }}
+        style={{ background: INK, color: CARD }}
       >
         <LayoutDashboard size={13} /> Mi comunidad
       </Link>
@@ -51,7 +52,7 @@ export function PublicAuthNav() {
         <button
           type="submit"
           className="w-10 h-10 flex items-center justify-center rounded-xl transition hover:bg-white/10"
-          style={{ color: 'rgba(246,243,235,0.88)' }}
+          style={{ color: MUTED }}
           title="Cerrar sesión"
         >
           <LogOut size={16} />

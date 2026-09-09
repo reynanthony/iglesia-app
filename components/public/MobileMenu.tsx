@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Menu, X, ArrowRight, Cross, LogOut, LayoutDashboard } from 'lucide-react'
 import { logout } from '@/app/actions/auth'
 import { createClient } from '@/lib/supabase/client'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const SECTIONS = [
   {
@@ -99,7 +100,7 @@ export default function MobileMenu() {
         aria-controls="mobile-menu-drawer"
         aria-label="Abrir menú"
         className="p-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-        style={{ color: 'rgba(246,243,235,0.88)' }}
+        style={{ color: MUTED }}
       >
         <Menu size={22} aria-hidden="true" />
       </button>
@@ -128,8 +129,8 @@ export default function MobileMenu() {
             aria-label="Menú de navegación"
             style={{
               position: 'fixed', top: 0, right: 0, height: '100dvh', width: '20rem',
-              zIndex: 50, background: '#051828',
-              borderLeft: '1px solid rgba(118,171,174,0.12)',
+              zIndex: 50, background: BG,
+              borderLeft: '1px solid rgba(199,154,42,0.12)',
               display: 'flex', flexDirection: 'column',
               paddingTop: 'env(safe-area-inset-top, 0px)',
               paddingRight: 'env(safe-area-inset-right, 0px)',
@@ -140,18 +141,18 @@ export default function MobileMenu() {
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '0 1.5rem', height: '4rem',
-              borderBottom: '1px solid rgba(118,171,174,0.12)', flexShrink: 0,
+              borderBottom: '1px solid rgba(199,154,42,0.12)', flexShrink: 0,
             }}>
               <div style={{
-                width: '1.75rem', height: '1.75rem', background: '#0D3352',
+                width: '1.75rem', height: '1.75rem', background: BORDER,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.5rem',
               }}>
-                <Cross size={12} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
+                <Cross size={12} strokeWidth={2.5} style={{ color: INK }} />
               </div>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Cerrar menú"
-                style={{ padding: '0.375rem', color: 'rgba(246,243,235,0.86)', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ padding: '0.375rem', color: MUTED, background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 <X size={18} />
               </button>
@@ -164,7 +165,7 @@ export default function MobileMenu() {
                 <div key={label} style={{ marginBottom: '0.5rem' }}>
                   <p style={{
                     fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase',
-                    letterSpacing: '0.35em', color: 'rgba(118,171,174,0.45)',
+                    letterSpacing: '0.35em', color: `${GOLD}73`,
                     padding: '0.75rem 0.75rem 0.35rem',
                   }}>
                     {label}
@@ -181,11 +182,11 @@ export default function MobileMenu() {
                           padding: '0.875rem 0.875rem',
                           fontSize: '0.75rem', fontWeight: active ? 700 : 600,
                           textTransform: 'uppercase', letterSpacing: '0.14em',
-                          color: active ? '#F6F3EB' : 'rgba(246,243,235,0.76)',
-                          background: active ? 'rgba(118,171,174,0.10)' : 'transparent',
+                          color: active ? INK : MUTED,
+                          background: active ? `${GOLD}1A` : 'transparent',
                           borderRadius: '0.625rem',
                           textDecoration: 'none',
-                          borderLeft: active ? '2px solid #76ABAE' : '2px solid transparent',
+                          borderLeft: active ? `2px solid ${GOLD}` : '2px solid transparent',
                           minHeight: '2.75rem',
                         }}
                       >
@@ -198,7 +199,7 @@ export default function MobileMenu() {
             </nav>
 
             {/* CTA */}
-            <div style={{ padding: '1rem 0.75rem', borderTop: '1px solid rgba(118,171,174,0.12)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ padding: '1rem 0.75rem', borderTop: '1px solid rgba(199,154,42,0.12)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {isLoggedIn ? (
                 <>
                   <Link
@@ -207,7 +208,7 @@ export default function MobileMenu() {
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       fontWeight: 900, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
-                      padding: '1rem', borderRadius: '0.75rem', background: '#F6F3EB', color: '#093C5D', textDecoration: 'none',
+                      padding: '1rem', borderRadius: '0.75rem', background: INK, color: CARD, textDecoration: 'none',
                       minHeight: '3.25rem',
                     }}
                   >
@@ -220,7 +221,7 @@ export default function MobileMenu() {
                         width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                         fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
                         padding: '0.875rem', borderRadius: '0.75rem', cursor: 'pointer', background: 'none',
-                        border: '1px solid rgba(246,243,235,0.12)', color: 'rgba(246,243,235,0.76)',
+                        border: '1px solid rgba(139,146,162,0.12)', color: MUTED,
                         minHeight: '3rem',
                       }}
                     >
@@ -236,7 +237,7 @@ export default function MobileMenu() {
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       fontWeight: 900, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
-                      padding: '1rem', borderRadius: '0.75rem', background: '#F6F3EB', color: '#093C5D', textDecoration: 'none',
+                      padding: '1rem', borderRadius: '0.75rem', background: INK, color: CARD, textDecoration: 'none',
                       minHeight: '3.25rem',
                     }}
                   >
@@ -249,7 +250,7 @@ export default function MobileMenu() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em',
                       padding: '0.875rem', borderRadius: '0.75rem',
-                      border: '1px solid rgba(118,171,174,0.20)', color: 'rgba(246,243,235,0.84)', textDecoration: 'none',
+                      border: '1px solid rgba(199,154,42,0.20)', color: MUTED, textDecoration: 'none',
                       minHeight: '3rem',
                     }}
                   >

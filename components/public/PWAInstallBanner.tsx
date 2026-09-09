@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { Download, Smartphone, Bell, Zap, Share } from 'lucide-react'
+import { BG, CARD, GOLD, INK } from '@/lib/gold-theme'
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const FEATURES = [
@@ -44,7 +45,7 @@ export default function PWAInstallBanner() {
   }
 
   return (
-    <section style={{ background: NAVY, borderTop: '1px solid rgba(118,171,174,0.12)' }}>
+    <section style={{ background: NAVY, borderTop: '1px solid rgba(199,154,42,0.12)' }}>
       <div className="max-w-6xl mx-auto px-6 py-16 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
@@ -93,7 +94,7 @@ export default function PWAInstallBanner() {
             {/* iOS */}
             {isIOS && !deferredPrompt && (
               <div className="rounded-2xl p-5 max-w-xs"
-                style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid rgba(118,171,174,0.18)' }}>
+                style={{ background: `${GOLD}14`, border: '1px solid rgba(199,154,42,0.18)' }}>
                 <p className="text-[11px] font-bold mb-3" style={{ color: CREAM }}>
                   Cómo instalar en iPhone:
                 </p>

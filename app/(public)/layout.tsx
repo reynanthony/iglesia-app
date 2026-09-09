@@ -7,6 +7,7 @@ import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 import { PublicAuthNav } from '@/components/public/PublicAuthNav'
 import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
 import PublicAnnouncementGate from '@/components/public/PublicAnnouncementGate'
+import { BG, CARD, BORDER, GOLD, INK } from '@/lib/gold-theme'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -21,10 +22,8 @@ const navLinks = [
   { href: '/contacto',    label: 'Contacto' },
 ]
 
-// El sitio publico mantiene su marca navy original; /app y /admin usan
-// el nuevo carbon+dorado (ver app/layout.tsx para el default).
 export const viewport: Viewport = {
-  themeColor: '#093C5D',
+  themeColor: BG,
 }
 
 // Sync Server Component — no auth check here.
@@ -42,17 +41,17 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <header
         className="sticky top-0 z-50 backdrop-blur-md"
         style={{
-          background: '#051828',
+          background: BG,
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: '#0D3352' }}>
-              <Cross size={14} strokeWidth={2.5} style={{ color: '#76ABAE' }} />
+            <div className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: BORDER }}>
+              <Cross size={14} strokeWidth={2.5} style={{ color: INK }} />
             </div>
-            <span className="font-display font-black text-[16px] tracking-tight" style={{ color: '#F6F3EB' }}>
+            <span className="font-display font-black text-[16px] tracking-tight" style={{ color: INK }}>
               El Manantial
             </span>
           </Link>
@@ -69,7 +68,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <main className="flex-1">{children}</main>
 
       {/* ── FOOTER ─────────────────────────────────────── */}
-      <footer className="text-[#F6F3EB] border-t" style={{ background: '#051828', borderColor: 'rgba(118,171,174,0.12)' }}>
+      <footer className="text-[#FFFFFF] border-t" style={{ background: BG, borderColor: `${GOLD}1F` }}>
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-10">
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
@@ -77,8 +76,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             {/* Brand */}
             <div className="md:col-span-5">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: '#0D3352' }}>
-                  <Cross size={13} strokeWidth={2.5} style={{ color: '#F6F3EB' }} />
+                <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: BORDER }}>
+                  <Cross size={13} strokeWidth={2.5} style={{ color: INK }} />
                 </div>
                 <span className="font-display font-black text-base tracking-tight">El Manantial</span>
               </div>
@@ -88,7 +87,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <Link
                 href="/login"
                 className="inline-flex items-center font-black text-[11px] uppercase tracking-[0.2em] px-6 py-3 rounded-lg transition"
-                style={{ background: '#F6F3EB', color: '#093C5D' }}
+                style={{ background: INK, color: CARD }}
               >
                 Unirse a la comunidad
               </Link>

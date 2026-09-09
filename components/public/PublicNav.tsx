@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { CARD, MUTED, GOLD } from '@/lib/gold-theme'
 
 const PRIMARY_LINKS = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -73,13 +74,13 @@ export default function PublicNav() {
         </button>
         {open && (
           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 rounded-xl overflow-hidden z-50"
-            style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.15)', minWidth: 160 }}>
+            style={{ background: CARD, border: '1px solid rgba(199,154,42,0.15)', minWidth: 160 }}>
             {MORE_LINKS.map(({ href, label }) => {
               const active = pathname === href || pathname.startsWith(href + '/')
               return (
                 <Link key={href} href={href} onClick={() => setOpen(false)}
                   className="block px-5 py-3 text-[11px] font-bold uppercase tracking-[0.15em] transition hover:bg-white/5"
-                  style={{ color: active ? '#76ABAE' : 'rgba(246,243,235,0.84)' }}>
+                  style={{ color: active ? GOLD : MUTED }}>
                   {label}
                 </Link>
               )
