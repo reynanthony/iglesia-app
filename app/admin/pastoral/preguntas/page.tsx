@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { HelpCircle, CheckCircle, Clock } from 'lucide-react'
 import AnswerPastoralQuestionForm from '@/components/admin/AnswerPastoralQuestionForm'
+import { BG, CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 const CAT_LABELS: Record<string, string> = {
   doctrinal: 'Doctrinal', consejo: 'Consejo', orientacion: 'Orientación', general: 'General',
@@ -19,20 +20,20 @@ export default async function AdminPastoralPreguntasPage() {
 
   return (
     <div>
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5">
           <div className="flex items-center gap-2 mb-0.5">
-            <Link href="/admin/pastoral" className="text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <Link href="/admin/pastoral" className="text-[13px]" style={{ color: MUTED }}>
               Pastoral
             </Link>
-            <span style={{ color: 'rgba(246,243,235,0.20)' }}>/</span>
+            <span style={{ color: MUTED }}>/</span>
             <span className="text-[13px] text-white">Preguntas</span>
           </div>
           <div className="flex items-center gap-4 mt-1">
             <span className="flex items-center gap-1.5 text-[12px]" style={{ color: '#F59E0B' }}>
               <Clock size={12} /> {pending.length} pendientes
             </span>
-            <span className="flex items-center gap-1.5 text-[12px]" style={{ color: 'rgba(118,171,174,0.60)' }}>
+            <span className="flex items-center gap-1.5 text-[12px]" style={{ color: `${GOLD}99` }}>
               <CheckCircle size={12} /> {answered.length} respondidas
             </span>
           </div>
@@ -49,21 +50,21 @@ export default async function AdminPastoralPreguntasPage() {
             <div className="space-y-4">
               {pending.map(item => (
                 <div key={item.id} className="rounded-2xl border overflow-hidden"
-                  style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                  style={{ borderColor: BORDER, background: CARD }}>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full"
-                        style={{ background: '#061E30', color: 'rgba(118,171,174,0.60)' }}>
+                        style={{ background: BG, color: `${GOLD}99` }}>
                         {CAT_LABELS[item.category] ?? item.category}
                       </span>
-                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                      <span className="text-[11px]" style={{ color: MUTED }}>
                         {(item as any).profiles?.full_name ?? 'Anónimo'} ·{' '}
                         {new Date(item.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' })}
                       </span>
                     </div>
                     <p className="text-sm text-white leading-relaxed">{item.question}</p>
                   </div>
-                  <div className="border-t px-4 py-4" style={{ borderColor: '#0D3352', background: '#061E30' }}>
+                  <div className="border-t px-4 py-4" style={{ borderColor: BORDER, background: BG }}>
                     <AnswerPastoralQuestionForm id={item.id} />
                   </div>
                 </div>
@@ -73,9 +74,9 @@ export default async function AdminPastoralPreguntasPage() {
         )}
 
         {pending.length === 0 && (
-          <div className="py-16 text-center rounded-2xl border" style={{ borderColor: '#0D3352' }}>
-            <CheckCircle size={28} style={{ color: 'rgba(118,171,174,0.30)', margin: '0 auto 12px' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <div className="py-16 text-center rounded-2xl border" style={{ borderColor: BORDER }}>
+            <CheckCircle size={28} style={{ color: `${GOLD}4C`, margin: '0 auto 12px' }} />
+            <p className="text-sm" style={{ color: MUTED }}>
               No hay preguntas pendientes.
             </p>
           </div>
@@ -85,16 +86,16 @@ export default async function AdminPastoralPreguntasPage() {
         {answered.length > 0 && (
           <section>
             <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-4"
-              style={{ color: 'rgba(118,171,174,0.50)' }}>— Respondidas</p>
+              style={{ color: `${GOLD}80` }}>— Respondidas</p>
             <div className="space-y-3">
               {answered.map(item => (
                 <div key={item.id} className="rounded-2xl border p-4"
-                  style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                  style={{ borderColor: BORDER, background: CARD }}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-white leading-relaxed">{item.question}</p>
                       {item.answer_body && (
-                        <p className="text-[12px] mt-2 line-clamp-2" style={{ color: 'rgba(246,243,235,0.50)' }}>
+                        <p className="text-[12px] mt-2 line-clamp-2" style={{ color: MUTED }}>
                           R: {item.answer_body}
                         </p>
                       )}
@@ -106,7 +107,7 @@ export default async function AdminPastoralPreguntasPage() {
                           Pública
                         </span>
                       )}
-                      <CheckCircle size={14} style={{ color: 'rgba(118,171,174,0.50)' }} />
+                      <CheckCircle size={14} style={{ color: `${GOLD}80` }} />
                     </div>
                   </div>
                 </div>

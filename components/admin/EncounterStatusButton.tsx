@@ -1,11 +1,12 @@
 'use client'
 
 import { updateEncounterStatus } from '@/app/actions/pastoral-admin'
+import { MUTED, GOLD } from '@/lib/gold-theme'
 
 const TRANSITIONS: Record<string, { next: string; label: string; color: string }> = {
   scheduled: { next: 'live',      label: 'Iniciar',   color: '#F87171' },
-  live:      { next: 'finished',  label: 'Finalizar', color: '#76ABAE' },
-  finished:  { next: 'finished',  label: 'Finalizado', color: 'rgba(246,243,235,0.25)' },
+  live:      { next: 'finished',  label: 'Finalizar', color: GOLD },
+  finished:  { next: 'finished',  label: 'Finalizado', color: MUTED },
 }
 
 export default function EncounterStatusButton({ id, status }: { id: string; status: string }) {
