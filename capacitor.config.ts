@@ -21,12 +21,12 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       launchShowDuration: 1800,
-      backgroundColor: '#093C5D',
+      backgroundColor: '#101217',
       showSpinner: false,
     },
     StatusBar: {
       style: 'DARK',
-      backgroundColor: '#093C5D',
+      backgroundColor: '#101217',
       overlaysWebView: false,
     },
     PushNotifications: {

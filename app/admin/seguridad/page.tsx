@@ -1,6 +1,7 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import { Shield, UserCheck, UserX, Clock } from 'lucide-react'
 import RoleSelector from '@/components/admin/RoleSelector'
+import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 const ROLE_LABEL: Record<string, string> = {
   admin: 'Admin', pastor: 'Pastor', moderador: 'Moderador',
@@ -9,7 +10,7 @@ const ROLE_LABEL: Record<string, string> = {
 
 const ROLE_COLOR: Record<string, string> = {
   admin: '#F87171', pastor: '#C084FC', moderador: '#F59E0B',
-  lider: '#60A5FA', miembro: 'rgba(246,243,235,0.68)',
+  lider: '#60A5FA', miembro: MUTED,
 }
 
 export default async function SeguridadPage() {
@@ -42,12 +43,12 @@ export default async function SeguridadPage() {
 
   return (
     <div>
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-5 flex items-center gap-2.5">
-          <Shield size={18} style={{ color: '#76ABAE' }} />
+          <Shield size={18} style={{ color: GOLD }} />
           <div>
             <h1 className="font-bold text-base md:text-lg text-white">Seguridad</h1>
-            <p className="text-[11px] md:text-[13px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[11px] md:text-[13px]" style={{ color: MUTED }}>
               Control de acceso y actividad
             </p>
           </div>
@@ -59,21 +60,21 @@ export default async function SeguridadPage() {
         {/* Usuarios con roles privilegiados */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             Accesos privilegiados ({privileged.length})
           </h2>
           <div className="space-y-2">
             {privileged.map(user => (
               <div key={user.id}
                 className="flex flex-wrap items-center gap-2.5 p-3 md:p-3.5 rounded-xl md:rounded-2xl border"
-                style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                style={{ borderColor: BORDER, background: CARD }}>
                 <div className="w-8 h-8 md:w-9 md:h-9 rounded-lg md:rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0"
-                  style={{ background: '#0D3352', color: 'rgba(246,243,235,0.70)' }}>
+                  style={{ background: BORDER, color: MUTED }}>
                   {user.full_name?.[0]?.toUpperCase() ?? 'U'}
                 </div>
                 <div className="flex-1 min-w-[100px]">
                   <p className="font-bold text-white text-sm truncate">{user.full_name}</p>
-                  <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <p className="text-[11px] truncate" style={{ color: MUTED }}>
                     @{user.username}
                   </p>
                 </div>
@@ -92,16 +93,16 @@ export default async function SeguridadPage() {
         {/* Log de actividad reciente */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             Actividad reciente
           </h2>
           {!logs || logs.length === 0 ? (
             <div className="rounded-xl md:rounded-2xl border p-4 md:p-6 text-center"
-              style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              style={{ borderColor: BORDER, background: CARD }}>
+              <p className="text-sm" style={{ color: MUTED }}>
                 El log de actividad está vacío.
               </p>
-              <p className="text-[11px] mt-1.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
+              <p className="text-[11px] mt-1.5" style={{ color: MUTED }}>
                 Requiere correr: supabase/v2_ecosystem.sql
               </p>
             </div>
@@ -110,20 +111,20 @@ export default async function SeguridadPage() {
               {logs.map((log: any) => (
                 <div key={log.id}
                   className="flex items-center gap-3 p-2.5 md:p-3 rounded-xl border"
-                  style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
+                  style={{ borderColor: BORDER, background: CARD }}>
                   <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#0D3352' }}>
-                    <Clock size={12} style={{ color: 'rgba(246,243,235,0.68)' }} />
+                    style={{ background: BORDER }}>
+                    <Clock size={12} style={{ color: MUTED }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] font-bold text-white">
                       {(log.profiles as any)?.full_name ?? 'Sistema'}
                     </p>
-                    <p className="text-[11px] truncate" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                    <p className="text-[11px] truncate" style={{ color: MUTED }}>
                       {log.action}
                     </p>
                   </div>
-                  <span className="text-[11px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                  <span className="text-[11px] flex-shrink-0" style={{ color: MUTED }}>
                     {timeAgo(log.created_at)}
                   </span>
                 </div>
@@ -135,7 +136,7 @@ export default async function SeguridadPage() {
         {/* Resumen de miembros */}
         <section>
           <h2 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] mb-2.5 md:mb-3"
-            style={{ color: 'rgba(246,243,235,0.68)' }}>
+            style={{ color: MUTED }}>
             Resumen de miembros
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
@@ -146,10 +147,10 @@ export default async function SeguridadPage() {
               { label: 'Inactivos',    value: users?.filter(u => u.is_active === false).length ?? 0, icon: UserX     },
             ].map(stat => (
               <div key={stat.label} className="p-3 md:p-4 rounded-xl md:rounded-2xl border"
-                style={{ borderColor: '#0D3352', background: '#0B2D47' }}>
-                <stat.icon size={14} style={{ color: '#76ABAE', marginBottom: 6 }} />
+                style={{ borderColor: BORDER, background: CARD }}>
+                <stat.icon size={14} style={{ color: GOLD, marginBottom: 6 }} />
                 <p className="font-black text-xl md:text-2xl text-white leading-none">{stat.value}</p>
-                <p className="text-[10px] md:text-[11px] mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-[10px] md:text-[11px] mt-1" style={{ color: MUTED }}>
                   {stat.label}
                 </p>
               </div>

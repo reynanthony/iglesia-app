@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { sendPushNotification } from '@/app/actions/native'
 import { Bell, Users, CheckCircle2, XCircle, Eye } from 'lucide-react'
 import DeletePushLogButton from '@/components/admin/DeletePushLogButton'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function NotificacionesAdminPage() {
   const supabase = await createClient()
@@ -46,7 +47,7 @@ export default async function NotificacionesAdminPage() {
   }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
 
   return (
     <div className="p-4 md:p-8">
@@ -54,21 +55,21 @@ export default async function NotificacionesAdminPage() {
 
         <div className="mb-4 md:mb-6">
           <h1 className="text-xl md:text-2xl font-bold">Notificaciones Push</h1>
-          <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-xs md:text-sm mt-0.5" style={{ color: MUTED }}>
             {webPushCount ?? 0} suscripcion{webPushCount !== 1 ? 'es' : ''} web push activa{webPushCount !== 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Send form */}
-        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
           <div className="flex items-center gap-3 mb-4 md:mb-5">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
-              <Bell size={17} style={{ color: '#76ABAE' }} />
+              style={{ background: `${GOLD}1F`, border: '1px solid rgba(217,166,42,0.20)' }}>
+              <Bell size={17} style={{ color: GOLD }} />
             </div>
             <div>
-              <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Nueva notificación</p>
-              <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="font-bold text-sm" style={{ color: INK }}>Nueva notificación</p>
+              <p className="text-xs" style={{ color: MUTED }}>
                 Se enviará a todos los dispositivos registrados
               </p>
             </div>
@@ -77,7 +78,7 @@ export default async function NotificacionesAdminPage() {
             <input type="hidden" name="target" value="all" />
             <div>
               <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-                style={{ color: 'rgba(246,243,235,0.68)' }}>
+                style={{ color: MUTED }}>
                 Título *
               </label>
               <input name="title" required placeholder="Ej: Servicio esta domingo 10am"
@@ -85,7 +86,7 @@ export default async function NotificacionesAdminPage() {
             </div>
             <div>
               <label className="text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-                style={{ color: 'rgba(246,243,235,0.68)' }}>
+                style={{ color: MUTED }}>
                 Mensaje *
               </label>
               <textarea name="body" required rows={3} placeholder="Escribe el mensaje de la notificación..."
@@ -93,17 +94,17 @@ export default async function NotificacionesAdminPage() {
             </div>
             <button type="submit"
               className="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
-              style={{ background: '#76ABAE', color: '#061E30' }}>
+              style={{ background: GOLD, color: BG }}>
               <Bell size={15} /> Enviar a todos
             </button>
           </form>
         </div>
 
         {/* Devices summary */}
-        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+        <div className="rounded-xl md:rounded-2xl p-4 md:p-5 mb-4 md:mb-6" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
           <div className="flex items-center gap-3">
-            <Users size={16} style={{ color: 'rgba(118,171,174,0.55)' }} />
-            <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>
+            <Users size={16} style={{ color: `${GOLD}8C` }} />
+            <p className="text-sm font-bold" style={{ color: INK }}>
               {webPushCount ?? 0} suscripcion{webPushCount !== 1 ? 'es' : ''} web push
             </p>
           </div>
@@ -112,7 +113,7 @@ export default async function NotificacionesAdminPage() {
               ⚠ Ningún usuario ha activado notificaciones aún. Los usuarios deben ir a /app/notificaciones → "Activar".
             </p>
           ) : (
-            <p className="text-xs mt-2" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <p className="text-xs mt-2" style={{ color: MUTED }}>
               Estos usuarios recibirán la notificación al enviarla.
             </p>
           )}
@@ -122,10 +123,10 @@ export default async function NotificacionesAdminPage() {
         {logs && logs.length > 0 && (
           <div>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3"
-              style={{ color: 'rgba(246,243,235,0.55)' }}>
+              style={{ color: MUTED }}>
               Historial de envíos
             </p>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {logs.map((log: any) => {
                 const sender  = (log.profiles as any)?.full_name ?? 'Sistema'
                 const date    = new Date(log.sent_at).toLocaleDateString('es-ES', {
@@ -134,19 +135,19 @@ export default async function NotificacionesAdminPage() {
                 const viewed  = readMap[log.id] ?? titleMap[log.title] ?? 0
                 return (
                   <div key={log.id} className="px-4 md:px-5 py-4 border-b last:border-0"
-                    style={{ borderColor: '#0D3352' }}>
+                    style={{ borderColor: BORDER }}>
                     <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-sm truncate" style={{ color: '#F6F3EB' }}>{log.title}</p>
-                        <p className="text-xs mt-0.5 line-clamp-1" style={{ color: 'rgba(246,243,235,0.72)' }}>{log.body}</p>
-                        <p className="text-[10px] mt-1.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                        <p className="font-bold text-sm truncate" style={{ color: INK }}>{log.title}</p>
+                        <p className="text-xs mt-0.5 line-clamp-1" style={{ color: MUTED }}>{log.body}</p>
+                        <p className="text-[10px] mt-1.5" style={{ color: MUTED }}>
                           {sender} · {date}
                         </p>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="flex items-center gap-2 text-xs">
                           {log.success > 0 && (
-                            <span className="flex items-center gap-1" style={{ color: '#76ABAE' }}
+                            <span className="flex items-center gap-1" style={{ color: GOLD }}
                               title="Enviados">
                               <CheckCircle2 size={12} /> {log.success}
                             </span>
@@ -157,7 +158,7 @@ export default async function NotificacionesAdminPage() {
                               <XCircle size={12} /> {log.failed}
                             </span>
                           )}
-                          <span className="flex items-center gap-1" style={{ color: 'rgba(246,243,235,0.62)' }}
+                          <span className="flex items-center gap-1" style={{ color: MUTED }}
                             title="Visualizados">
                             <Eye size={12} /> {viewed}
                           </span>

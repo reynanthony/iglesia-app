@@ -1,3 +1,4 @@
+import type { Viewport } from 'next'
 import Link from 'next/link'
 import { Cross } from 'lucide-react'
 import MobileMenu from '@/components/public/MobileMenu'
@@ -19,6 +20,12 @@ const navLinks = [
   { href: '/donaciones',  label: 'Donaciones' },
   { href: '/contacto',    label: 'Contacto' },
 ]
+
+// El sitio publico mantiene su marca navy original; /app y /admin usan
+// el nuevo carbon+dorado (ver app/layout.tsx para el default).
+export const viewport: Viewport = {
+  themeColor: '#093C5D',
+}
 
 // Sync Server Component — no auth check here.
 // Auth state is detected client-side by PublicAuthNav and MobileMenu,

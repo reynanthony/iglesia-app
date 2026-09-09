@@ -2,6 +2,7 @@
 import { Mail, MailOpen, Clock, User } from 'lucide-react'
 import { markMessageRead } from '@/app/actions/admin'
 import DeleteContactMessageButton from '@/components/admin/DeleteContactMessageButton'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK } from '@/lib/gold-theme'
 
 export default async function AdminMensajesPage() {
   const supabase = await createClient()
@@ -25,7 +26,7 @@ export default async function AdminMensajesPage() {
 
   return (
     <div>
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex items-center justify-between">
           <div>
             <h1 className="font-bold text-lg text-white flex items-center gap-2">
@@ -33,13 +34,13 @@ export default async function AdminMensajesPage() {
               {unreadCount > 0 && (
                 <span
                   className="text-[11px] font-black px-2 py-0.5 rounded-full"
-                  style={{ background: '#76ABAE', color: '#061E30' }}
+                  style={{ background: GOLD, color: GOLD_INK }}
                 >
                   {unreadCount} nuevo{unreadCount !== 1 ? 's' : ''}
                 </span>
               )}
             </h1>
-            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[13px] mt-0.5" style={{ color: MUTED }}>
               Formulario de contacto del sitio web
             </p>
           </div>
@@ -49,8 +50,8 @@ export default async function AdminMensajesPage() {
       <div className="max-w-4xl mx-auto px-4 md:px-8 py-6">
         {!messages || messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Mail size={40} style={{ color: 'rgba(118,171,174,0.30)' }} />
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <Mail size={40} style={{ color: `${GOLD}4C` }} />
+            <p className="text-sm" style={{ color: MUTED }}>
               No hay mensajes aún
             </p>
           </div>
@@ -70,7 +71,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
   return (
     <details
       className="rounded-2xl border overflow-hidden group"
-      style={{ borderColor: msg.read ? '#0D3352' : '#76ABAE', background: '#0B2D47' }}
+      style={{ borderColor: msg.read ? BORDER : GOLD, background: CARD }}
     >
       <summary
         className="flex items-center gap-3 p-4 cursor-pointer list-none select-none"
@@ -81,25 +82,25 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
         </form>
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: '#0D3352' }}
+          style={{ background: BORDER }}
         >
           {msg.read
-            ? <MailOpen size={16} style={{ color: 'rgba(246,243,235,0.68)' }} />
-            : <Mail size={16} style={{ color: '#76ABAE' }} />
+            ? <MailOpen size={16} style={{ color: MUTED }} />
+            : <Mail size={16} style={{ color: GOLD }} />
           }
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <p className="font-bold text-white text-sm truncate">{msg.nombre}</p>
             {!msg.read && (
-              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#76ABAE' }} />
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: GOLD }} />
             )}
           </div>
-          <p className="text-[12px] truncate" style={{ color: 'rgba(246,243,235,0.60)' }}>
+          <p className="text-[12px] truncate" style={{ color: MUTED }}>
             {msg.asunto}
           </p>
         </div>
-        <div className="flex items-center gap-1 flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
+        <div className="flex items-center gap-1 flex-shrink-0" style={{ color: MUTED }}>
           <Clock size={12} />
           <span className="text-[11px]">{timeAgo(msg.created_at)}</span>
         </div>
@@ -110,22 +111,22 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
         <input type="hidden" name="id" value={msg.id} />
         <button type="submit" className="sr-only">Marcar leído</button>
       </form>
-      <div className="px-4 pb-4 pt-2 space-y-3" style={{ borderTop: '1px solid #0D3352' }}>
-        <div className="flex items-center gap-2" style={{ color: 'rgba(246,243,235,0.50)' }}>
+      <div className="px-4 pb-4 pt-2 space-y-3" style={{ borderTop: `1px solid ${BORDER}` }}>
+        <div className="flex items-center gap-2" style={{ color: MUTED }}>
           <User size={13} />
           <span className="text-[12px]">{msg.nombre}</span>
           <span className="text-[12px]">·</span>
           <a
             href={`mailto:${msg.email}`}
             className="text-[12px] underline underline-offset-2 transition"
-            style={{ color: '#76ABAE' }}
+            style={{ color: GOLD }}
           >
             {msg.email}
           </a>
         </div>
         <p
           className="text-sm leading-relaxed whitespace-pre-wrap"
-          style={{ color: 'rgba(246,243,235,0.80)' }}
+          style={{ color: MUTED }}
         >
           {msg.mensaje}
         </p>
@@ -133,7 +134,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
           <a
             href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.asunto ?? '')}`}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] font-bold transition"
-            style={{ background: '#F6F3EB', color: '#061E30' }}
+            style={{ background: GOLD, color: GOLD_INK }}
           >
             <Mail size={13} /> Responder
           </a>
@@ -142,7 +143,7 @@ function MessageRow({ msg, timeAgo }: { msg: any; timeAgo: (d: string) => string
               <button
                 type="submit"
                 className="px-4 py-2 rounded-xl text-[12px] font-bold transition"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.60)' }}
+                style={{ background: BORDER, color: MUTED }}
               >
                 Marcar como leído
               </button>
