@@ -1,29 +1,30 @@
 ﻿import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { createSeries } from '@/app/actions/bible-study'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
 const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-const labelStyle = { color: 'rgba(246,243,235,0.68)' }
+const labelStyle = { color: MUTED }
 
 export default function NuevaSeriesPage() {
   return (
     <div>
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-3xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
           <Link href="/admin/estudio-biblico"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div>
-            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: MUTED }}>
               <Link href="/admin/estudio-biblico" className="hover:underline">Estudio Bíblico</Link>
               <span>/</span>
               <span>Nueva serie</span>
             </div>
-            <h1 className="font-bold text-lg" style={{ color: '#F6F3EB' }}>Nueva serie</h1>
+            <h1 className="font-bold text-lg" style={{ color: INK }}>Nueva serie</h1>
           </div>
         </div>
       </div>
@@ -80,9 +81,9 @@ export default function NuevaSeriesPage() {
             </div>
             <div>
               <label className={label} style={labelStyle}>Color</label>
-              <input name="cover_color" type="color" defaultValue="#76ABAE"
+              <input name="cover_color" type="color" defaultValue={GOLD}
                 className="w-full h-11 rounded-xl border px-2 cursor-pointer"
-                style={{ background: '#061E30', borderColor: '#0D3352' }} />
+                style={{ background: BG, borderColor: BORDER }} />
             </div>
           </div>
 
@@ -97,12 +98,12 @@ export default function NuevaSeriesPage() {
           <div className="flex gap-3 pt-2">
             <button type="submit"
               className="flex-1 py-3 rounded-xl text-sm font-bold"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               Crear serie
             </button>
             <Link href="/admin/estudio-biblico"
               className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+              style={{ background: CARD, color: MUTED }}>
               Cancelar
             </Link>
           </div>
