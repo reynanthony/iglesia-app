@@ -6,15 +6,16 @@ import { HeroVideo } from '@/components/public/HeroVideo'
 import { createClient } from '@/lib/supabase/server'
 import { heroStyle } from '@/lib/hero-style'
 import { HeroTitle, type TitleAnimation } from '@/components/public/HeroTitle'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
 const SAGE  = '#869B7E'
-const CREAM = '#F6F3EB'
+const CREAM = INK
 
 const MESES_LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
 const MESES_CORTO = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
@@ -63,7 +64,7 @@ export default async function HomePage() {
   const heroTitleAnimation: TitleAnimation = 'none'
   const heroLayout: string = 'default'
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'xl',
   })
 
@@ -145,7 +146,7 @@ export default async function HomePage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
 
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `linear-gradient(160deg, rgba(5,24,40,${heroOverlayOpacity}) 0%, rgba(9,60,93,${Math.max(0, heroOverlayOpacity - 0.10)}) 60%, rgba(118,171,174,0.15) 100%)` }} />
+          style={{ background: `linear-gradient(160deg, rgba(16,18,23,${heroOverlayOpacity}) 0%, rgba(24,26,34,${Math.max(0, heroOverlayOpacity - 0.10)}) 60%, rgba(199,154,42,0.15) 100%)` }} />
 
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0"
@@ -449,7 +450,7 @@ export default async function HomePage() {
                   {sermonsBadge}
                 </div>
                 <div className="relative w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ border: `1px solid rgba(246,243,235,0.84)`, background: 'rgba(255,255,255,0.08)' }}>
+                  style={{ border: `1px solid rgba(139,146,162,0.84)`, background: 'rgba(255,255,255,0.08)' }}>
                   <Play size={20} className="text-white ml-1" />
                 </div>
               </div>
@@ -507,7 +508,7 @@ export default async function HomePage() {
       <section style={{ background: DARK }}>
         <div className="max-w-6xl mx-auto px-6 py-16 sm:py-20 md:py-32">
           <div className="flex items-end justify-between mb-10 sm:mb-14 pb-7"
-            style={{ borderBottom: `1px solid rgba(118,171,174,0.2)` }}>
+            style={{ borderBottom: `1px solid rgba(199,154,42,0.2)` }}>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4" style={{ color: `${TEAL}80` }}>
                 {ministriesEyebrow}
@@ -553,10 +554,10 @@ export default async function HomePage() {
                 <div className="relative">
                   <h3 className="font-black text-base sm:text-lg leading-tight mb-1" style={{ color: img ? CREAM : fg }}>{nombre}</h3>
                   <p className="text-[11px] leading-relaxed"
-                    style={{ color: img ? 'rgba(246,243,235,0.86)' : fg === CREAM ? `${CREAM}CC` : `${NAVY}CC` }}>{desc}</p>
+                    style={{ color: img ? MUTED : fg === CREAM ? `${CREAM}CC` : `${NAVY}CC` }}>{desc}</p>
                 </div>
                 <ArrowRight size={13} className="relative group-hover:translate-x-1 transition-all mt-auto"
-                  style={{ color: img ? 'rgba(246,243,235,0.88)' : fg === CREAM ? `${CREAM}40` : `${NAVY}80` }} />
+                  style={{ color: img ? MUTED : fg === CREAM ? `${CREAM}40` : `${NAVY}80` }} />
               </Link>
             ))}
           </div>

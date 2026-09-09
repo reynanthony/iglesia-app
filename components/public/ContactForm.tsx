@@ -19,7 +19,7 @@ export default function ContactForm() {
     })
   }
 
-  const inputClass = "w-full border border-edge focus:border-ink bg-surface px-5 py-4 text-sm text-ink placeholder:text-ink-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50 rounded-xl transition"
+  const inputClass = "w-full border border-edge focus:border-ink bg-surface px-5 py-4 text-sm text-ink placeholder:text-ink-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50 rounded-xl transition"
   const labelClass = "text-[10px] font-bold uppercase tracking-[0.2em] text-ink-3 block mb-2.5"
 
   return (
@@ -83,7 +83,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex items-center gap-3 bg-[#093C5D] hover:bg-[#0D4A72] disabled:opacity-60 text-white text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition"
+        className="inline-flex items-center gap-3 bg-[#181A22] hover:bg-[#292E3B] disabled:opacity-60 text-white text-[11px] font-black uppercase tracking-[0.2em] px-8 py-4 rounded-xl transition"
       >
         {isPending ? 'Enviando…' : <>Enviar mensaje <ArrowRight size={13} /></>}
       </button>

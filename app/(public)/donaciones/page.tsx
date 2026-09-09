@@ -4,12 +4,13 @@ import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { HeroTitle } from '@/components/public/HeroTitle'
 import { heroStyle } from '@/lib/hero-style'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 export default async function DonacionesPage() {
@@ -29,7 +30,7 @@ export default async function DonacionesPage() {
   const heroLayout: string = 'default'
 
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'xl',
   })
 
@@ -82,7 +83,7 @@ export default async function DonacionesPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.25) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.45) 0%, rgba(24,26,34,0.25) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -116,7 +117,7 @@ export default async function DonacionesPage() {
             </HeroTitle>
             {heroLayout !== 'centered' && (
               <div>
-                <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.82)' }}>
+                <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: MUTED }}>
                   {heroVerse}
                 </p>
                 <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: `${TEAL}70` }}>
@@ -126,7 +127,7 @@ export default async function DonacionesPage() {
             )}
           </div>
           {heroLayout === 'centered' && (
-            <p className="text-base leading-relaxed max-w-md mx-auto mt-8" style={{ color: 'rgba(246,243,235,0.82)' }}>
+            <p className="text-base leading-relaxed max-w-md mx-auto mt-8" style={{ color: MUTED }}>
               {heroVerse}
             </p>
           )}
@@ -167,7 +168,7 @@ export default async function DonacionesPage() {
                   </div>
                 ))}
               </div>
-              <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(246,243,235,0.86)' }}>{bankNote}</p>
+              <p className="text-[11px] leading-relaxed" style={{ color: MUTED }}>{bankNote}</p>
             </div>
 
             {/* Zelle */}
@@ -274,7 +275,7 @@ export default async function DonacionesPage() {
                 </div>
                 <div>
                   <h3 className="font-black text-base tracking-tight text-white mb-2">{title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.76)' }}>{desc}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
                 </div>
               </div>
             ))}
@@ -284,7 +285,7 @@ export default async function DonacionesPage() {
 
       {/* VERSÍCULO + CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-28 md:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
@@ -293,12 +294,12 @@ export default async function DonacionesPage() {
                 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: 0.95 }}>
                 {ctaVerse}
               </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: 'rgba(118,171,174,0.60)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: `${GOLD}99` }}>
                 {ctaVerseRef}
               </p>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: MUTED }}>
                 {ctaBody}
               </p>
               <Link href="/contacto"
@@ -308,7 +309,7 @@ export default async function DonacionesPage() {
               </Link>
               <Link href="/nosotros"
                 className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
+                style={{ border: '1px solid rgba(199,154,42,0.30)', color: MUTED }}>
                 Conocer nuestra visión <ArrowRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

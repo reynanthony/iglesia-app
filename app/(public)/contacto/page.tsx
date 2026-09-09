@@ -4,6 +4,7 @@ import { HeroVideo } from '@/components/public/HeroVideo'
 import { createClient } from '@/lib/supabase/server'
 import { heroStyle } from '@/lib/hero-style'
 import { HeroTitle } from '@/components/public/HeroTitle'
+import { BG, GOLD } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +32,7 @@ export default async function ContactoPage() {
   const heroTitleAnimation = 'none'
   const heroLayout: string = 'default'
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'lg',
   })
 
@@ -54,7 +55,7 @@ export default async function ContactoPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.30) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(16,18,23,0.45) 0%, rgba(16,18,23,0.30) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -67,7 +68,7 @@ export default async function ContactoPage() {
           </span>
         </div>
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(118,171,174,0.10), transparent 65%)' }} />
+          style={{ background: 'radial-gradient(ellipse 50% 70% at 90% 40%, rgba(199,154,42,0.10), transparent 65%)' }} />
         <div className={`relative max-w-6xl mx-auto w-full px-6 py-12 sm:py-16 md:py-32${heroLayout === 'centered' ? ' text-center' : ''}`}>
           <div className={`flex items-center gap-5 mb-10 sm:mb-14${heroLayout === 'centered' ? ' justify-center' : ''}`}>
             {heroLayout !== 'centered' && <div className="w-12 h-px" style={{ background: hs.eyebrowLine }} />}
@@ -117,8 +118,8 @@ export default async function ContactoPage() {
 
               {/* Primera visita */}
               <div className="mt-6 p-6 rounded-xl"
-                style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.22)' }}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: '#76ABAE' }}>{firstVisitTitle}</p>
+                style={{ background: `${GOLD}1A`, border: '1px solid rgba(199,154,42,0.22)' }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: GOLD }}>{firstVisitTitle}</p>
                 <p className="text-sm font-black text-ink mb-2">{firstVisitSubtitle}</p>
                 <p className="text-sm text-ink-2 leading-relaxed">
                   {firstVisitBody}

@@ -6,16 +6,17 @@ import { HeroVideo } from '@/components/public/HeroVideo'
 import { LeaderCards } from '@/components/public/LeaderCards'
 import { heroStyle } from '@/lib/hero-style'
 import { HeroTitle } from '@/components/public/HeroTitle'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
 type Leader = { id: string; name: string; title: string; bio: string | null; avatar_url: string | null; category: string; user_id?: string | null }
 
-const DARK  = '#051828'
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
+const DARK  = BG
+const NAVY  = CARD
+const TEAL  = GOLD
 const SAGE  = '#869B7E'
-const CREAM = '#F6F3EB'
+const CREAM = INK
 
 const defaultBeliefs = [
   { n: '01', title: 'La Biblia',    desc: 'La Palabra inspirada de Dios, autoridad final para la fe y la práctica cristiana.' },
@@ -89,7 +90,7 @@ export default async function NosotrosPage() {
   const heroTitleAnimation = 'none'
   const heroLayout: string = 'default'
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'lg',
   })
 
@@ -127,7 +128,7 @@ export default async function NosotrosPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: `linear-gradient(160deg, rgba(5,24,40,0.75) 0%, rgba(9,60,93,0.40) 70%, transparent 100%)` }} />
+            style={{ background: `linear-gradient(160deg, rgba(16,18,23,0.75) 0%, rgba(16,18,23,0.40) 70%, transparent 100%)` }} />
         )}
 
         {heroShowGrid && (
@@ -169,19 +170,19 @@ export default async function NosotrosPage() {
         </div>
 
         {/* Stats strip */}
-        <div className="relative" style={{ borderTop: `1px solid rgba(118,171,174,0.18)` }}>
+        <div className="relative" style={{ borderTop: `1px solid rgba(199,154,42,0.18)` }}>
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4">
               {stats.map(({ value, label }, i) => (
                 <div key={label} className="px-3 py-5 sm:px-6 sm:py-7 md:px-8"
                   style={{
                     paddingLeft: i === 0 ? 0 : undefined,
-                    borderRight: i < stats.length - 1 ? `1px solid rgba(118,171,174,0.12)` : undefined,
+                    borderRight: i < stats.length - 1 ? `1px solid rgba(199,154,42,0.12)` : undefined,
                   }}>
                   <p className="font-black tracking-tighter leading-none mb-1"
                     style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: TEAL }}>{value}</p>
                   <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em]"
-                    style={{ color: 'rgba(246,243,235,0.86)' }}>{label}</p>
+                    style={{ color: MUTED }}>{label}</p>
                 </div>
               ))}
             </div>
@@ -224,11 +225,11 @@ export default async function NosotrosPage() {
       {/* ══════════════════════════════════════════
           3. VISIÓN + MISIÓN — dark, tipografía grande
       ══════════════════════════════════════════ */}
-      <section style={{ background: DARK, borderBottom: `1px solid rgba(118,171,174,0.12)` }}>
+      <section style={{ background: DARK, borderBottom: `1px solid rgba(199,154,42,0.12)` }}>
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-28">
 
           <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-16"
-            style={{ color: `rgba(118,171,174,0.50)` }}>— Lo que nos mueve</p>
+            style={{ color: `rgba(199,154,42,0.50)` }}>— Lo que nos mueve</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-2xl overflow-hidden">
             <div className="p-8 sm:p-12 md:p-16"
@@ -256,7 +257,7 @@ export default async function NosotrosPage() {
             {valores.map((v: string, i: number) => (
               <div key={v} className="flex items-baseline gap-3">
                 <span className="font-bold"
-                  style={{ fontSize: '0.6rem', letterSpacing: '0.22em', color: 'rgba(118,171,174,0.35)' }}>
+                  style={{ fontSize: '0.6rem', letterSpacing: '0.22em', color: `${GOLD}59` }}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span className="font-black tracking-tighter leading-none"
@@ -304,14 +305,14 @@ export default async function NosotrosPage() {
           5. EQUIPO — dark profundo, fotos como protagonistas
       ══════════════════════════════════════════ */}
       {leaders.length > 0 && (
-        <section style={{ background: DARK, borderBottom: `1px solid rgba(118,171,174,0.10)` }}>
+        <section style={{ background: DARK, borderBottom: `1px solid rgba(199,154,42,0.10)` }}>
           <div className="max-w-6xl mx-auto px-6 py-16 md:py-28">
 
             <div className="flex items-end justify-between mb-14 pb-7"
-              style={{ borderBottom: `1px solid rgba(118,171,174,0.12)` }}>
+              style={{ borderBottom: `1px solid rgba(199,154,42,0.12)` }}>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-4"
-                  style={{ color: `rgba(118,171,174,0.50)` }}>— Nuestro equipo</p>
+                  style={{ color: `rgba(199,154,42,0.50)` }}>— Nuestro equipo</p>
                 <h2 className="font-display font-black tracking-tighter"
                   style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: CREAM }}>
                   Quienes te<br /><em style={{ color: TEAL }}>acompañan.</em>

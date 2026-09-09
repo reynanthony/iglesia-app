@@ -1,4 +1,5 @@
 // Shared hero style helpers — used by public page heroes
+import { BG, CARD, MUTED, GOLD } from '@/lib/gold-theme'
 
 export type HeroTextColor = 'light' | 'dark'
 export type HeroTitleSize = 'sm' | 'md' | 'lg' | 'xl'
@@ -22,7 +23,7 @@ export function heroStyle(opts: {
   eyebrowColorHex?: string | null
 }) {
   const isLight = (opts.textColor ?? 'light') !== 'dark'
-  const bg = opts.bgColor || opts.defaultBg || '#051828'
+  const bg = opts.bgColor || opts.defaultBg || BG
   const sizeKey = (opts.titleSize as HeroTitleSize) ?? opts.defaultTitleSize ?? 'lg'
   const titleFontSize = TITLE_SIZES[sizeKey] ?? TITLE_SIZES.lg
 
@@ -30,11 +31,11 @@ export function heroStyle(opts: {
     bg,
     titleFontSize,
     isLight,
-    titleColor:    opts.titleColorHex    || (isLight ? '#FFFFFF'                    : '#093C5D'),
-    accentColor:   opts.accentColorHex   || (isLight ? '#76ABAE'                    : '#0D4A72'),
-    subtitleColor: opts.subtitleColorHex || (isLight ? 'rgba(246,243,235,0.58)'     : 'rgba(9,60,93,0.62)'),
-    eyebrowColor:  opts.eyebrowColorHex  || (isLight ? 'rgba(118,171,174,0.75)'     : 'rgba(9,60,93,0.55)'),
-    eyebrowLine:   opts.eyebrowColorHex  || (isLight ? '#76ABAE'                    : '#093C5D'),
-    gridColor:     isLight ? '#76ABAE' : '#093C5D',
+    titleColor:    opts.titleColorHex    || (isLight ? '#FFFFFF'                    : CARD),
+    accentColor:   opts.accentColorHex   || (isLight ? GOLD                    : CARD),
+    subtitleColor: opts.subtitleColorHex || (isLight ? MUTED     : 'rgba(16,18,23,0.62)'),
+    eyebrowColor:  opts.eyebrowColorHex  || (isLight ? `${GOLD}BF`     : 'rgba(16,18,23,0.55)'),
+    eyebrowLine:   opts.eyebrowColorHex  || (isLight ? GOLD                    : CARD),
+    gridColor:     isLight ? GOLD : CARD,
   }
 }

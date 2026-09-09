@@ -32,7 +32,7 @@ export function HeroTitle({ children, animation, color, accentColor, style, clas
 
   if (anim === 'gradient') {
     const c1 = color ?? '#FFFFFF'
-    const c2 = accentColor ?? '#76ABAE'
+    const c2 = accentColor ?? '#C79A2A'
     finalStyle = {
       ...style,
       backgroundImage: `linear-gradient(90deg, ${c1} 0%, ${c2} 35%, ${c1} 60%, ${c2} 100%)`,
