@@ -18,14 +18,14 @@ export async function GET(req: NextRequest) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#093C5D',
+          background: '#101217',
         },
       },
       React.createElement(
         'svg',
         { width: cross, height: cross, viewBox: '0 0 48 48', fill: 'none' },
-        React.createElement('rect', { x: '21.5', y: '9', width: '5', height: '30', rx: '2.5', fill: '#F6F3EB' }),
-        React.createElement('rect', { x: '9', y: '18', width: '30', height: '5', rx: '2.5', fill: '#F6F3EB' })
+        React.createElement('rect', { x: '21.5', y: '9', width: '5', height: '30', rx: '2.5', fill: '#FFFFFF' }),
+        React.createElement('rect', { x: '9', y: '18', width: '30', height: '5', rx: '2.5', fill: '#FFFFFF' })
       )
     ),
     { width: s, height: s }
