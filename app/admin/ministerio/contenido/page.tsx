@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Plus, FileText, Video, ArrowLeft, Pencil } from 'lucide-react'
 import { deleteContent } from '@/app/actions/admin'
 import DeleteContentButton from '@/components/admin/DeleteContentButton'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const TYPE_LABELS: Record<string, string> = {
   articulo: 'Artículo', video: 'Video', recurso: 'Recurso', anuncio: 'Anuncio',
@@ -42,18 +43,18 @@ export default async function LiderContenidoPage() {
         <div className="flex items-center gap-3 mb-6">
           <Link href="/admin/ministerio"
             className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#0D3352', color: '#76ABAE' }}>
+            style={{ background: BORDER, color: GOLD }}>
             <ArrowLeft size={15} />
           </Link>
           <div className="flex-1">
             <h1 className="text-xl font-bold">Contenido</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               {items?.length ?? 0} publicaciones en tu ministerio
             </p>
           </div>
           <Link href="/admin/contenido/nuevo"
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold flex-shrink-0"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Plus size={13} /><span className="hidden sm:inline">Nuevo</span>
           </Link>
         </div>
@@ -62,25 +63,25 @@ export default async function LiderContenidoPage() {
           {items?.map((item: any) => (
             <div key={item.id}
               className="flex items-center gap-3 p-3.5 rounded-xl"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: '#0D3352' }}>
+                style={{ background: BORDER }}>
                 {item.type === 'video'
-                  ? <Video size={15} style={{ color: '#76ABAE' }} />
-                  : <FileText size={15} style={{ color: '#76ABAE' }} />
+                  ? <Video size={15} style={{ color: GOLD }} />
+                  : <FileText size={15} style={{ color: GOLD }} />
                 }
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm truncate" style={{ color: '#F6F3EB' }}>{item.title}</p>
+                <p className="font-semibold text-sm truncate" style={{ color: INK }}>{item.title}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-[10px] px-1.5 py-0.5 rounded"
-                    style={{ background: 'rgba(118,171,174,0.12)', color: '#76ABAE' }}>
+                    style={{ background: `${GOLD}1F`, color: GOLD }}>
                     {TYPE_LABELS[item.type] ?? item.type}
                   </span>
-                  <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.45)' }}>
+                  <span className="text-[10px]" style={{ color: MUTED }}>
                     {ministryMap[item.ministry_id] ?? ''}
                   </span>
-                  <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.35)' }}>
+                  <span className="text-[10px]" style={{ color: MUTED }}>
                     {new Date(item.created_at).toLocaleDateString('es-DO')}
                   </span>
                 </div>
@@ -88,7 +89,7 @@ export default async function LiderContenidoPage() {
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 <Link href={`/admin/contenido/${item.id}/editar`}
                   className="w-8 h-8 flex items-center justify-center rounded-lg"
-                  style={{ background: '#0D3352', color: 'rgba(246,243,235,0.55)' }}>
+                  style={{ background: BORDER, color: MUTED }}>
                   <Pencil size={13} />
                 </Link>
                 <DeleteContentButton contentId={item.id} />
@@ -97,12 +98,12 @@ export default async function LiderContenidoPage() {
           ))}
 
           {(!items || items.length === 0) && (
-            <div className="text-center py-16 space-y-3" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <div className="text-center py-16 space-y-3" style={{ color: MUTED }}>
               <FileText size={32} className="mx-auto opacity-30" />
               <p className="text-sm">No hay contenido publicado aún</p>
               <Link href="/admin/contenido/nuevo"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold"
-                style={{ background: '#76ABAE', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 <Plus size={14} /> Crear contenido
               </Link>
             </div>

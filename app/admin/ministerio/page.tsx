@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { FileText, UsersRound, Megaphone, ArrowRight, Building2 } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function MinisterioAdminPage() {
   const supabase = await createClient()
@@ -51,7 +52,7 @@ export default async function MinisterioAdminPage() {
         {/* Header */}
         <div>
           <h1 className="text-xl md:text-2xl font-bold">Mi Ministerio</h1>
-          <p className="text-xs md:text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-xs md:text-sm mt-0.5" style={{ color: MUTED }}>
             Administra tu espacio en la app y el sitio web
           </p>
         </div>
@@ -62,28 +63,28 @@ export default async function MinisterioAdminPage() {
             const s = stats.find(st => st.ministryId === m.id)
             return (
               <div key={m.id} className="rounded-2xl p-4"
-                style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
-                    style={{ background: '#0D3352' }}>
+                    style={{ background: BORDER }}>
                     {m.image_url
                       ? <img src={m.image_url} alt={m.name} className="w-full h-full object-cover" />
-                      : <Building2 size={18} style={{ color: '#76ABAE' }} />
+                      : <Building2 size={18} style={{ color: GOLD }} />
                     }
                   </div>
                   <div>
-                    <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>{m.name}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Ministerio asignado</p>
+                    <p className="font-bold text-sm" style={{ color: INK }}>{m.name}</p>
+                    <p className="text-[11px]" style={{ color: MUTED }}>Ministerio asignado</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-xl px-3 py-2 text-center" style={{ background: '#0D3352' }}>
-                    <p className="text-lg font-black" style={{ color: '#F6F3EB' }}>{s?.contentCount ?? 0}</p>
-                    <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Contenidos</p>
+                  <div className="rounded-xl px-3 py-2 text-center" style={{ background: BORDER }}>
+                    <p className="text-lg font-black" style={{ color: INK }}>{s?.contentCount ?? 0}</p>
+                    <p className="text-[10px]" style={{ color: MUTED }}>Contenidos</p>
                   </div>
-                  <div className="rounded-xl px-3 py-2 text-center" style={{ background: '#0D3352' }}>
-                    <p className="text-lg font-black" style={{ color: '#F6F3EB' }}>{s?.groupCount ?? 0}</p>
-                    <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Grupos</p>
+                  <div className="rounded-xl px-3 py-2 text-center" style={{ background: BORDER }}>
+                    <p className="text-lg font-black" style={{ color: INK }}>{s?.groupCount ?? 0}</p>
+                    <p className="text-[10px]" style={{ color: MUTED }}>Grupos</p>
                   </div>
                 </div>
               </div>
@@ -94,23 +95,23 @@ export default async function MinisterioAdminPage() {
         {/* Accesos rápidos */}
         <div>
           <p className="text-[11px] font-black uppercase tracking-widest mb-3"
-            style={{ color: 'rgba(246,243,235,0.35)' }}>
+            style={{ color: MUTED }}>
             Gestionar
           </p>
           <div className="space-y-2">
             {quickLinks.map(({ href, icon: Icon, label, desc }) => (
               <Link key={href} href={href}
                 className="flex items-center gap-4 p-4 rounded-2xl transition group"
-                style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: '#0D3352' }}>
-                  <Icon size={18} style={{ color: '#76ABAE' }} />
+                  style={{ background: BORDER }}>
+                  <Icon size={18} style={{ color: GOLD }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm" style={{ color: '#F6F3EB' }}>{label}</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>{desc}</p>
+                  <p className="font-semibold text-sm" style={{ color: INK }}>{label}</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>{desc}</p>
                 </div>
-                <ArrowRight size={16} style={{ color: 'rgba(246,243,235,0.30)' }} />
+                <ArrowRight size={16} style={{ color: MUTED }} />
               </Link>
             ))}
           </div>

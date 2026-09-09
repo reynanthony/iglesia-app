@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus, UsersRound, ArrowLeft, Pencil } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const TYPE_LABELS: Record<string, string> = {
   jovenes: 'Jóvenes', caballeros: 'Caballeros', damas: 'Damas',
@@ -39,18 +40,18 @@ export default async function LiderGruposPage() {
         <div className="flex items-center gap-3 mb-6">
           <Link href="/admin/ministerio"
             className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0"
-            style={{ background: '#0D3352', color: '#76ABAE' }}>
+            style={{ background: BORDER, color: GOLD }}>
             <ArrowLeft size={15} />
           </Link>
           <div className="flex-1">
             <h1 className="text-xl font-bold">Grupos</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               {groups?.length ?? 0} grupos en tu ministerio
             </p>
           </div>
           <Link href="/admin/grupos/nuevo"
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold flex-shrink-0"
-            style={{ background: '#F6F3EB', color: '#061E30' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Plus size={13} /><span className="hidden sm:inline">Nuevo grupo</span>
           </Link>
         </div>
@@ -62,24 +63,24 @@ export default async function LiderGruposPage() {
               <div key={group.id}
                 className="flex items-center gap-3 p-3.5 rounded-xl"
                 style={{
-                  background: '#0B2D47',
-                  border: '1px solid #0D3352',
+                  background: CARD,
+                  border: `1px solid ${BORDER}`,
                   opacity: group.is_active ? 1 : 0.55,
                 }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: '#0D3352' }}>
-                  <UsersRound size={15} style={{ color: '#76ABAE' }} />
+                  style={{ background: BORDER }}>
+                  <UsersRound size={15} style={{ color: GOLD }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm" style={{ color: '#F6F3EB' }}>{group.name}</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                  <p className="font-semibold text-sm" style={{ color: INK }}>{group.name}</p>
+                  <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                     {TYPE_LABELS[group.type] ?? group.type} · {count} miembro{count !== 1 ? 's' : ''}
                     {!group.is_active && <span className="ml-2 text-red-400">· Inactivo</span>}
                   </p>
                 </div>
                 <Link href={`/admin/grupos/${group.id}/editar`}
                   className="w-8 h-8 flex items-center justify-center rounded-lg flex-shrink-0"
-                  style={{ background: '#0D3352', color: 'rgba(246,243,235,0.55)' }}>
+                  style={{ background: BORDER, color: MUTED }}>
                   <Pencil size={13} />
                 </Link>
               </div>
@@ -87,12 +88,12 @@ export default async function LiderGruposPage() {
           })}
 
           {(!groups || groups.length === 0) && (
-            <div className="text-center py-16 space-y-3" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <div className="text-center py-16 space-y-3" style={{ color: MUTED }}>
               <UsersRound size={32} className="mx-auto opacity-30" />
               <p className="text-sm">No hay grupos creados aún</p>
               <Link href="/admin/grupos/nuevo"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold"
-                style={{ background: '#76ABAE', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 <Plus size={14} /> Crear grupo
               </Link>
             </div>
