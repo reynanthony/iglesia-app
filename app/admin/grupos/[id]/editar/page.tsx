@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { updateGroup } from '@/app/actions/groups'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const TYPES = [
   { value: 'jovenes',     label: 'Jóvenes' },
@@ -15,9 +16,9 @@ const TYPES = [
   { value: 'general',     label: 'General' },
 ]
 
-const FIELD_STYLE = { background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, color: '#F6F3EB' }
+const FIELD_STYLE = { background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, color: INK }
 const LABEL_CLS   = 'block text-xs font-bold uppercase tracking-wider mb-2'
-const LABEL_STYLE = { color: 'rgba(246,243,235,0.50)' }
+const LABEL_STYLE = { color: MUTED }
 
 export default async function EditarGrupoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -31,7 +32,7 @@ export default async function EditarGrupoPage({ params }: { params: Promise<{ id
     <div className="p-4 md:p-8">
       <div className="max-w-xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <Link href="/admin/grupos" className="p-2 rounded-xl" style={{ background: '#0D3352', color: '#76ABAE' }}>
+          <Link href="/admin/grupos" className="p-2 rounded-xl" style={{ background: BORDER, color: GOLD }}>
             <ArrowLeft size={16} />
           </Link>
           <h1 className="text-xl font-bold">Editar grupo</h1>
@@ -63,7 +64,7 @@ export default async function EditarGrupoPage({ params }: { params: Promise<{ id
 
           <label className="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" name="is_private" defaultChecked={group.is_private} className="w-4 h-4 rounded" />
-            <span className="text-sm" style={{ color: 'rgba(246,243,235,0.70)' }}>
+            <span className="text-sm" style={{ color: MUTED }}>
               Grupo privado
             </span>
           </label>
@@ -71,12 +72,12 @@ export default async function EditarGrupoPage({ params }: { params: Promise<{ id
           <div className="flex gap-3 pt-2">
             <Link href="/admin/grupos"
               className="flex-1 py-3 rounded-xl text-sm font-bold text-center"
-              style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.50)', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, color: MUTED, border: `1px solid ${BORDER}` }}>
               Cancelar
             </Link>
             <button type="submit"
               className="flex-1 py-3 rounded-xl text-sm font-bold"
-              style={{ background: '#F6F3EB', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               Guardar cambios
             </button>
           </div>

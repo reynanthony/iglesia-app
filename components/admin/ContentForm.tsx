@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createAdminContent, updateAdminContent } from '@/app/actions/admin'
 import { AlertCircle, ImageIcon, X } from 'lucide-react'
-import { BG, CARD, BORDER, MUTED, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 type Ministry = { id: string; name: string }
 
@@ -81,9 +81,9 @@ export default function ContentForm({
           {TYPES.map(t => (
             <label key={t.value}
               className={`flex-1 text-center py-2 rounded-xl text-xs font-bold cursor-pointer transition ${
-                type === t.value ? 'text-black' : 'text-[rgba(139,146,162,0.72)]'
+                type === t.value ? '' : 'text-[rgba(139,146,162,0.72)]'
               }`}
-              style={{ background: type === t.value ? INK : CARD, border: `1px solid ${BORDER}` }}>
+              style={{ background: type === t.value ? GOLD : CARD, color: type === t.value ? GOLD_INK : undefined, border: `1px solid ${BORDER}` }}>
               <input type="radio" name="type" value={t.value}
                 checked={type === t.value}
                 onChange={() => setType(t.value)}
@@ -178,7 +178,7 @@ export default function ContentForm({
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={isPending}
           className="flex-1 py-3 rounded-xl text-sm font-bold transition disabled:opacity-50"
-          style={{ background: INK, color: BG }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           {isPending ? 'Guardando…' : submitLabel}
         </button>
         <a href={backHref} className="px-5 py-3 rounded-xl text-sm font-medium text-center"

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Play, FileText, Megaphone, ImageOff, Plus, Pencil, Pin } from 'lucide-react'
 import PinContentButton from '@/components/admin/PinContentButton'
 import DeleteContentButton from '@/components/admin/DeleteContentButton'
-import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const typeLabels: Record<string, { label: string; Icon: any; color: string }> = {
   articulo:  { label: 'Artículo',  Icon: FileText,   color: 'text-blue-400 bg-blue-400/10' },
@@ -47,7 +47,7 @@ export default async function AdminContenidoPage({
         </div>
         <Link href="/admin/contenido/nuevo"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black self-start"
-          style={{ background: INK }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           <Plus size={14} /> Nuevo contenido
         </Link>
       </div>
@@ -66,10 +66,10 @@ export default async function AdminContenidoPage({
               <a key={m.id} href={href}
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
                   isActive
-                    ? 'text-black font-bold'
+                    ? 'font-bold'
                     : 'text-[rgba(139,146,162,0.72)] hover:text-slate-200'
                 }`}
-                style={{ background: isActive ? INK : CARD, border: `1px solid ${BORDER}` }}>
+                style={{ background: isActive ? GOLD : CARD, color: isActive ? GOLD_INK : undefined, border: `1px solid ${BORDER}` }}>
                 {m.name}
               </a>
             )
@@ -88,9 +88,9 @@ export default async function AdminContenidoPage({
           return (
             <a key={t.id} href={href}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${
-                isActive ? 'text-black' : 'text-[rgba(139,146,162,0.72)] hover:text-slate-200'
+                isActive ? '' : 'text-[rgba(139,146,162,0.72)] hover:text-slate-200'
               }`}
-              style={{ background: isActive ? INK : CARD, border: `1px solid ${BORDER}` }}>
+              style={{ background: isActive ? GOLD : CARD, color: isActive ? GOLD_INK : undefined, border: `1px solid ${BORDER}` }}>
               {t.label}
             </a>
           )

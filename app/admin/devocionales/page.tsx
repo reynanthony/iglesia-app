@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Pencil, Quote } from 'lucide-react'
 import DeleteDevocionalButton from '@/components/admin/DeleteDevocionalButton'
-import { BG, CARD, BORDER, MUTED, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminDevocionalesPage() {
   const supabase = await createClient()
@@ -22,7 +22,7 @@ export default async function AdminDevocionalesPage() {
           </div>
           <Link href="/admin/devocionales/nuevo"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black self-start"
-            style={{ background: INK }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Plus size={14} /> Nuevo devocional
           </Link>
         </div>

@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, UserPlus, X, UsersRound } from 'lucide-react'
 import { inviteUserToGroup, cancelGroupInvite, removeGroupMember } from '@/app/actions/groups'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function GrupoMiembrosPage({
   params,
@@ -53,7 +54,7 @@ export default async function GrupoMiembrosPage({
     searchResults = (found ?? []).filter((u: any) => !memberIds.has(u.id) && !inviteeIds.has(u.id))
   }
 
-  const FIELD  = { background: '#0B2D47', border: '1px solid #0D3352', borderRadius: 12, color: '#F6F3EB' }
+  const FIELD  = { background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, color: INK }
 
   return (
     <div className="p-4 md:p-8">
@@ -61,19 +62,19 @@ export default async function GrupoMiembrosPage({
 
         {/* Header */}
         <div className="flex items-center gap-3">
-          <Link href="/admin/grupos" className="p-2 rounded-xl" style={{ background: '#0D3352', color: '#76ABAE' }}>
+          <Link href="/admin/grupos" className="p-2 rounded-xl" style={{ background: BORDER, color: GOLD }}>
             <ArrowLeft size={16} />
           </Link>
           <div>
             <h1 className="text-xl font-bold">{group.name}</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>Gestión de miembros</p>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>Gestión de miembros</p>
           </div>
         </div>
 
         {/* Buscar e invitar */}
         <section>
           <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-            style={{ color: 'rgba(118,171,174,0.60)' }}>
+            style={{ color: `${GOLD}99` }}>
             <UserPlus size={12} className="inline mr-1.5" />
             Invitar miembro
           </p>
@@ -88,13 +89,13 @@ export default async function GrupoMiembrosPage({
             />
             <button type="submit"
               className="px-4 py-2.5 rounded-xl text-sm font-bold"
-              style={{ background: '#76ABAE', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               Buscar
             </button>
           </form>
 
           {q && searchResults.length === 0 && (
-            <p className="text-sm text-center py-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <p className="text-sm text-center py-4" style={{ color: MUTED }}>
               Sin resultados para "{q}"
             </p>
           )}
@@ -103,21 +104,21 @@ export default async function GrupoMiembrosPage({
             <div className="space-y-2">
               {searchResults.map((u: any) => (
                 <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                   <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                    style={{ background: '#0D3352', color: '#76ABAE' }}>
+                    style={{ background: BORDER, color: GOLD }}>
                     {u.avatar_url
                       ? <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
                       : u.full_name?.[0]?.toUpperCase() ?? 'U'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
+                    <p className="text-sm font-bold truncate" style={{ color: INK }}>{u.full_name}</p>
+                    <p className="text-[11px]" style={{ color: MUTED }}>@{u.username}</p>
                   </div>
                   <form action={inviteUserToGroup.bind(null, id, u.id)}>
                     <button type="submit"
                       className="text-[11px] font-bold px-3 py-1.5 rounded-xl"
-                      style={{ background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.25)' }}>
+                      style={{ background: `${GOLD}26`, color: GOLD, border: '1px solid rgba(217,166,42,0.25)' }}>
                       Invitar
                     </button>
                   </form>
@@ -131,7 +132,7 @@ export default async function GrupoMiembrosPage({
         {(pending ?? []).length > 0 && (
           <section>
             <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>
+              style={{ color: `${GOLD}99` }}>
               Invitaciones pendientes — {pending!.length}
             </p>
             <div className="space-y-2">
@@ -139,16 +140,16 @@ export default async function GrupoMiembrosPage({
                 const p = inv.profiles
                 return (
                   <div key={inv.id} className="flex items-center gap-3 p-3 rounded-xl"
-                    style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.15)' }}>
+                    style={{ background: CARD, border: '1px solid rgba(217,166,42,0.15)' }}>
                     <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       {p?.avatar_url
                         ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" />
                         : p?.full_name?.[0]?.toUpperCase() ?? 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{p?.username} · Pendiente</p>
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{p?.full_name}</p>
+                      <p className="text-[11px]" style={{ color: MUTED }}>@{p?.username} · Pendiente</p>
                     </div>
                     <form action={cancelGroupInvite.bind(null, inv.id, id)}>
                       <button type="submit"
@@ -168,12 +169,12 @@ export default async function GrupoMiembrosPage({
         {/* Miembros actuales */}
         <section>
           <p className="text-[11px] font-black uppercase tracking-[0.25em] mb-3"
-            style={{ color: 'rgba(118,171,174,0.60)' }}>
+            style={{ color: `${GOLD}99` }}>
             <UsersRound size={12} className="inline mr-1.5" />
             Miembros — {(members ?? []).length}
           </p>
           {(members ?? []).length === 0 ? (
-            <p className="text-sm text-center py-6" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <p className="text-sm text-center py-6" style={{ color: MUTED }}>
               Este grupo no tiene miembros aún
             </p>
           ) : (
@@ -182,16 +183,16 @@ export default async function GrupoMiembrosPage({
                 const p = m.profiles
                 return (
                   <div key={m.user_id} className="flex items-center gap-3 p-3 rounded-xl"
-                    style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                    style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                     <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       {p?.avatar_url
                         ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" />
                         : p?.full_name?.[0]?.toUpperCase() ?? 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{p?.full_name}</p>
+                      <p className="text-[11px]" style={{ color: MUTED }}>
                         @{p?.username}
                         {m.role === 'leader' && ' · Líder'}
                       </p>

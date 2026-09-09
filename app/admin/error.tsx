@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { BG, MUTED, INK } from '@/lib/gold-theme'
+import { BG, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default function AdminError({
   error,
@@ -31,7 +31,7 @@ export default function AdminError({
         <button
           onClick={() => reset()}
           className="px-5 py-2.5 rounded-xl text-sm font-bold"
-          style={{ background: INK, color: BG }}
+          style={{ background: GOLD, color: GOLD_INK }}
         >
           Reintentar
         </button>

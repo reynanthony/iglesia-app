@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Heart, Users2, BookOpen, ChevronRight } from 'lucide-react'
-import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
+import { BG, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const SLIDES = [
   {
@@ -153,7 +153,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
           <button
             onClick={next}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-[12px] uppercase tracking-[0.14em] transition-transform active:scale-[0.97]"
-            style={{ background: INK, color: BG }}
+            style={{ background: GOLD, color: GOLD_INK }}
           >
             {isLast ? 'Comenzar' : 'Siguiente'}
             <ChevronRight size={14} />

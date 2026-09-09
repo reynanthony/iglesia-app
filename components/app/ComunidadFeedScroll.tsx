@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Plus, Loader2 } from 'lucide-react'
 import { fetchMorePosts } from '@/app/actions/posts'
 import { createClient } from '@/lib/supabase/client'
-import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
+import { BG, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const PAGE_SIZE = 20
 const MAX_POSTS  = 60
@@ -99,7 +99,7 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
         <Link
           href="/app/nuevo-post"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black"
-          style={{ background: INK, color: BG }}
+          style={{ background: GOLD, color: GOLD_INK }}
         >
           <Plus size={16} /> Publicar
         </Link>

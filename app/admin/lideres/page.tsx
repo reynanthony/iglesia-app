@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Plus, Pencil, Users } from 'lucide-react'
 import ToggleLiderButton from '@/components/admin/ToggleLiderButton'
 import DeleteLiderButton from '@/components/admin/DeleteLiderButton'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK } from '@/lib/gold-theme'
 
 export default async function AdminLideresPage() {
   const supabase = await createClient()
@@ -26,22 +27,22 @@ export default async function AdminLideresPage() {
     a.profiles?.role === 'lider' || a.profiles?.role === 'pastor'
   )
 
-  const cardStyle = { borderColor: '#0D3352', background: '#0B2D47' }
+  const cardStyle = { borderColor: BORDER, background: CARD }
 
   return (
     <div>
       {/* Header */}
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
           <div>
             <h1 className="font-bold text-lg text-white">Líderes</h1>
-            <p className="text-[13px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-[13px] mt-0.5" style={{ color: MUTED }}>
               Pastores y líderes de ministerio
             </p>
           </div>
           <Link href="/admin/lideres/nuevo"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold text-black self-start"
-            style={{ background: '#F6F3EB' }}>
+            style={{ background: GOLD, color: GOLD_INK }}>
             <Plus size={14} /> Nuevo líder pastoral
           </Link>
         </div>
@@ -52,17 +53,17 @@ export default async function AdminLideresPage() {
         {/* ── Liderazgo pastoral ── */}
         <div>
           <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-4"
-            style={{ color: 'rgba(246,243,235,0.62)' }}>
+            style={{ color: MUTED }}>
             Liderazgo pastoral
           </p>
           {(pastoral ?? []).length === 0 ? (
             <div className="rounded-xl border p-6 text-center" style={cardStyle}>
-              <p className="text-sm mb-3" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm mb-3" style={{ color: MUTED }}>
                 Sin pastores registrados
               </p>
               <Link href="/admin/lideres/nuevo"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-bold text-black"
-                style={{ background: '#F6F3EB' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 <Plus size={13} /> Agregar pastor
               </Link>
             </div>
@@ -73,10 +74,10 @@ export default async function AdminLideresPage() {
                   className="flex items-center gap-4 p-4 rounded-2xl border"
                   style={cardStyle}>
                   <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
-                    style={{ background: '#093C5D', border: '1px solid #0D3352' }}>
+                    style={{ background: BG, border: `1px solid ${BORDER}` }}>
                     {l.avatar_url
                       ? <img src={l.avatar_url} alt={l.name} className="w-full h-full object-cover object-top" />
-                      : <span className="font-black text-base" style={{ color: '#76ABAE' }}>
+                      : <span className="font-black text-base" style={{ color: GOLD }}>
                           {l.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                         </span>
                     }
@@ -86,28 +87,28 @@ export default async function AdminLideresPage() {
                       <p className="font-bold text-white text-sm">{l.name}</p>
                       {!l.is_public && (
                         <span className="text-[9px] font-black px-2 py-0.5 rounded-full"
-                          style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
+                          style={{ background: BORDER, color: MUTED }}>
                           Oculto
                         </span>
                       )}
                     </div>
-                    <p className="text-[12px] mt-0.5" style={{ color: '#76ABAE' }}>{l.title}</p>
+                    <p className="text-[12px] mt-0.5" style={{ color: GOLD }}>{l.title}</p>
                     {l.bio && (
-                      <p className="text-[11px] mt-1 line-clamp-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                      <p className="text-[11px] mt-1 line-clamp-1" style={{ color: MUTED }}>
                         {l.bio}
                       </p>
                     )}
                   </div>
                   <span className="text-[11px] font-black tabular-nums hidden sm:block"
-                    style={{ color: 'rgba(246,243,235,0.25)' }}>
+                    style={{ color: MUTED }}>
                     #{l.order_index}
                   </span>
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     <ToggleLiderButton id={l.id} isPublic={l.is_public} />
                     <Link href={`/admin/lideres/${l.id}/editar`}
                       className="w-9 h-9 rounded-xl flex items-center justify-center"
-                      style={{ background: '#061E30' }}>
-                      <Pencil size={13} style={{ color: 'rgba(246,243,235,0.68)' }} />
+                      style={{ background: BG }}>
+                      <Pencil size={13} style={{ color: MUTED }} />
                     </Link>
                     <DeleteLiderButton id={l.id} name={l.name} />
                   </div>
@@ -121,27 +122,27 @@ export default async function AdminLideresPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <p className="text-[9px] font-black uppercase tracking-[0.3em]"
-              style={{ color: 'rgba(246,243,235,0.62)' }}>
+              style={{ color: MUTED }}>
               Líderes de ministerio
             </p>
             <Link href="/admin/usuarios"
               className="text-[11px] font-bold flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
-              style={{ color: '#76ABAE', background: 'rgba(118,171,174,0.10)' }}>
+              style={{ color: GOLD, background: `${GOLD}1A` }}>
               <Users size={12} /> Administrar desde Usuarios
             </Link>
           </div>
 
           {ministerioLideres.length === 0 ? (
             <div className="rounded-xl border p-6 text-center" style={cardStyle}>
-              <p className="text-sm mb-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
+              <p className="text-sm mb-1" style={{ color: MUTED }}>
                 Sin líderes de ministerio designados
               </p>
-              <p className="text-[12px] mb-3" style={{ color: 'rgba(246,243,235,0.45)' }}>
+              <p className="text-[12px] mb-3" style={{ color: MUTED }}>
                 Ve a Usuarios, asigna un ministerio y cambia el rol del perfil a "Líder"
               </p>
               <Link href="/admin/usuarios"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-bold"
-                style={{ background: 'rgba(118,171,174,0.15)', color: '#76ABAE' }}>
+                style={{ background: `${GOLD}26`, color: GOLD }}>
                 Ir a Usuarios
               </Link>
             </div>
@@ -157,20 +158,20 @@ export default async function AdminLideresPage() {
                     className="flex items-center gap-4 p-4 rounded-2xl border"
                     style={cardStyle}>
                     <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
-                      style={{ background: '#093C5D', border: '1px solid #0D3352' }}>
+                      style={{ background: BG, border: `1px solid ${BORDER}` }}>
                       {profile?.avatar_url
                         ? <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover object-top" />
-                        : <span className="font-black text-base" style={{ color: '#76ABAE' }}>{initials}</span>
+                        : <span className="font-black text-base" style={{ color: GOLD }}>{initials}</span>
                       }
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-white text-sm">{profile?.full_name ?? 'Sin nombre'}</p>
-                      <p className="text-[12px] mt-0.5" style={{ color: '#76ABAE' }}>
+                      <p className="text-[12px] mt-0.5" style={{ color: GOLD }}>
                         {ministry?.name ?? 'Ministerio sin nombre'}
                       </p>
                     </div>
                     <span className="text-[10px] font-black px-2.5 py-1 rounded-full flex-shrink-0"
-                      style={{ background: 'rgba(118,171,174,0.12)', color: 'rgba(118,171,174,0.80)' }}>
+                      style={{ background: `${GOLD}1F`, color: `${GOLD}CC` }}>
                       Líder
                     </span>
                   </div>

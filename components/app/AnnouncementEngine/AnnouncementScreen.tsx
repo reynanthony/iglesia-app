@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Smartphone, Volume2, VolumeX } from 'lucide-react'
-import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
+import { BG, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const NEXT_CAMPAIGN = '__next__'
 
@@ -256,7 +256,7 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
                 <button
                   onClick={handleCta}
                   className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-transform active:scale-[0.97]"
-                  style={{ background: INK, color: BG }}
+                  style={{ background: GOLD, color: GOLD_INK }}
                 >
                   {ctaLabel}
                 </button>
