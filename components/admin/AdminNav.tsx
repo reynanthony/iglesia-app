@@ -110,7 +110,7 @@ export default function AdminNav({
         {sections.map(section => (
           <div key={section.label}>
             <p className="text-[9px] font-black uppercase tracking-[0.25em] px-3 mb-1.5"
-              style={{ color: 'rgba(246,243,235,0.25)' }}>
+              style={{ color: MUTED }}>
               {section.label}
             </p>
             <div className="space-y-0.5">
@@ -148,7 +148,7 @@ export default function AdminNav({
         {isLider && liderMinistries.length > 0 && (
           <div>
             <p className="text-[9px] font-black uppercase tracking-[0.25em] px-3 mb-1.5"
-              style={{ color: 'rgba(246,243,235,0.25)' }}>
+              style={{ color: MUTED }}>
               Ministerios a cargo
             </p>
             {liderMinistries.map(m => (
