@@ -3,14 +3,15 @@
 import { useState, useTransition } from 'react'
 import { X, Plus, ChevronDown } from 'lucide-react'
 import { assignUserToMinistry, removeUserFromMinistry, updateMinistryAssignmentRole } from '@/app/actions/admin'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type Ministry   = { id: string; name: string }
 type Assignment = { ministry_id: string; role?: string; ministries: { id: string; name: string } | null }
 
 const ROLE_LABELS: Record<string, string> = { lider: 'Líder', colaborador: 'Colab.' }
 const ROLE_STYLE: Record<string, React.CSSProperties> = {
-  lider:       { background: 'rgba(201,162,39,0.15)', color: '#C9A227', border: '1px solid rgba(201,162,39,0.30)' },
-  colaborador: { background: 'rgba(118,171,174,0.10)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.20)' },
+  lider:       { background: `${GOLD}26`, color: GOLD, border: `1px solid ${GOLD}4D` },
+  colaborador: { background: 'rgba(111,191,139,0.12)', color: '#6FBF8B', border: '1px solid rgba(111,191,139,0.28)' },
 }
 
 export default function MinistryAssignment({
@@ -51,7 +52,7 @@ export default function MinistryAssignment({
         const role = (a.role ?? 'colaborador') as 'lider' | 'colaborador'
         return (
           <span key={a.ministry_id} className="flex items-center gap-1 text-[11px] px-2 py-1 rounded-lg"
-            style={{ background: '#0D3352', border: '1px solid #1A4A6E' }}>
+            style={{ background: BORDER, border: `1px solid ${BORDER}` }}>
             {/* Role badge — click to toggle */}
             <button
               onClick={() => changeRole(a.ministry_id, role === 'lider' ? 'colaborador' : 'lider')}
@@ -62,10 +63,10 @@ export default function MinistryAssignment({
             >
               {ROLE_LABELS[role]}
             </button>
-            <span style={{ color: '#76ABAE' }}>{a.ministries?.name ?? '—'}</span>
+            <span style={{ color: GOLD }}>{a.ministries?.name ?? '—'}</span>
             <button onClick={() => remove(a.ministry_id)} disabled={pending}
               className="ml-0.5 opacity-50 hover:opacity-100 transition">
-              <X size={10} style={{ color: 'rgba(246,243,235,0.60)' }} />
+              <X size={10} style={{ color: MUTED }} />
             </button>
           </span>
         )
@@ -78,20 +79,20 @@ export default function MinistryAssignment({
             onClick={() => { setShowAdd(v => !v); setPendingMinistry(null) }}
             disabled={pending}
             className="w-6 h-6 rounded-md flex items-center justify-center transition"
-            style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }}
+            style={{ background: CARD, color: MUTED, border: `1px solid ${BORDER}` }}
           >
             <Plus size={11} />
           </button>
 
           {showAdd && !pendingMinistry && (
             <div className="absolute left-0 top-8 z-50 rounded-xl shadow-xl min-w-[170px] py-1 overflow-hidden"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {available.map(m => (
                 <button key={m.id} onClick={() => setPendingMinistry(m.id)}
-                  className="w-full text-left px-3 py-2 text-[12px] flex items-center justify-between hover:bg-[#0D3352] transition"
-                  style={{ color: '#F6F3EB' }}>
+                  className="w-full text-left px-3 py-2 text-[12px] flex items-center justify-between hover:bg-[#292E3B] transition"
+                  style={{ color: INK }}>
                   {m.name}
-                  <ChevronDown size={10} style={{ color: 'rgba(246,243,235,0.55)' }} />
+                  <ChevronDown size={10} style={{ color: MUTED }} />
                 </button>
               ))}
             </div>
@@ -100,23 +101,23 @@ export default function MinistryAssignment({
           {/* Role picker */}
           {pendingMinistry && (
             <div className="absolute left-0 top-8 z-50 rounded-xl shadow-xl min-w-[150px] overflow-hidden"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <p className="px-3 pt-2.5 pb-1 text-[9px] font-black uppercase tracking-wider"
-                style={{ color: 'rgba(246,243,235,0.55)' }}>
+                style={{ color: MUTED }}>
                 Rol en el ministerio
               </p>
               {(['lider', 'colaborador'] as const).map(role => (
                 <button key={role} onClick={() => assign(pendingMinistry, role)}
-                  className="w-full text-left px-3 py-2 text-[12px] flex items-center gap-2 hover:bg-[#0D3352] transition">
+                  className="w-full text-left px-3 py-2 text-[12px] flex items-center gap-2 hover:bg-[#292E3B] transition">
                   <span className="text-[9px] font-black px-1.5 py-0.5 rounded" style={ROLE_STYLE[role]}>
                     {ROLE_LABELS[role]}
                   </span>
-                  <span style={{ color: '#F6F3EB' }}>{role === 'lider' ? 'Responsable' : 'Colaborador'}</span>
+                  <span style={{ color: INK }}>{role === 'lider' ? 'Responsable' : 'Colaborador'}</span>
                 </button>
               ))}
               <button onClick={() => setPendingMinistry(null)}
                 className="w-full text-left px-3 py-2 text-[11px] transition"
-                style={{ color: 'rgba(246,243,235,0.55)' }}>
+                style={{ color: MUTED }}>
                 ← Volver
               </button>
             </div>
@@ -125,7 +126,7 @@ export default function MinistryAssignment({
       )}
 
       {assignments.length === 0 && !showAdd && (
-        <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>Sin ministerio</span>
+        <span className="text-[11px]" style={{ color: MUTED }}>Sin ministerio</span>
       )}
     </div>
   )

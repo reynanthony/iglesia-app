@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createAdminPost, updateAdminPost } from '@/app/actions/admin'
 import { AlertCircle, ImageIcon, X } from 'lucide-react'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 type Props = {
   postId?: string
@@ -40,9 +41,9 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
   }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: 'rgba(246,243,235,0.68)' }
+  const lblStyle = { color: MUTED }
 
   return (
     <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-5">
@@ -63,14 +64,14 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
             <button type="button" onClick={() => setPreview('')}
               className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(0,0,0,0.7)' }}>
-              <X size={13} style={{ color: '#F6F3EB' }} />
+              <X size={13} style={{ color: INK }} />
             </button>
           </div>
         )}
-        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#76ABAE]"
-          style={{ borderColor: '#0D3352' }}>
-          <ImageIcon size={20} style={{ color: 'rgba(246,243,235,0.25)' }} />
-          <span className="text-[12px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#D9A62A]"
+          style={{ borderColor: BORDER }}>
+          <ImageIcon size={20} style={{ color: MUTED }} />
+          <span className="text-[12px]" style={{ color: MUTED }}>
             {preview ? 'Cambiar imagen' : 'Agregar imagen (opcional)'}
           </span>
           <input type="file" name="image" accept="image/*" className="sr-only" onChange={handleFile} />
@@ -80,7 +81,7 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
       <label className="flex items-center gap-3 cursor-pointer">
         <input type="checkbox" name="pinned" defaultChecked={initialValues?.pinned ?? false}
           className="w-4 h-4 accent-white rounded" />
-        <span className="text-[13px] font-medium" style={{ color: 'rgba(246,243,235,0.68)' }}>
+        <span className="text-[13px] font-medium" style={{ color: MUTED }}>
           Fijar en el feed (aparece primero)
         </span>
       </label>
@@ -96,11 +97,11 @@ export default function PostForm({ postId, initialValues, backHref, submitLabel 
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={isPending}
           className="flex-1 py-3 rounded-xl text-sm font-bold transition disabled:opacity-50"
-          style={{ background: '#F6F3EB', color: '#061E30' }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           {isPending ? 'Guardando…' : submitLabel}
         </button>
         <a href={backHref} className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+          style={{ background: CARD, color: MUTED }}>
           Cancelar
         </a>
       </div>

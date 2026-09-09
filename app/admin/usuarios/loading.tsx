@@ -1,4 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { CARD, BORDER } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
@@ -10,7 +11,7 @@ export default function Loading() {
         </div>
         <div className="space-y-2.5">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-xl p-3.5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div key={i} className="flex items-center gap-3 rounded-xl p-3.5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <Skeleton className="w-9 h-9 rounded-full flex-shrink-0" />
               <div className="flex-1 space-y-1.5">
                 <Skeleton className="h-3 w-40" />

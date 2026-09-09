@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { pinPost } from '@/app/actions/admin'
 import { Pin } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 export default function PinPostButton({ postId, pinned }: { postId: string; pinned: boolean }) {
   const [active, setActive] = useState(pinned)
@@ -25,8 +26,8 @@ export default function PinPostButton({ postId, pinned }: { postId: string; pinn
       className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition"
       style={
         active
-          ? { background: '#0D3352', color: '#76ABAE', border: '1px solid #2A3A2A' }
-          : { background: '#0B2D47', color: 'rgba(246,243,235,0.68)', border: '1px solid #0D3352' }
+          ? { background: `${GOLD}22`, color: GOLD, border: `1px solid ${GOLD}40` }
+          : { background: CARD, color: MUTED, border: `1px solid ${BORDER}` }
       }
     >
       <Pin size={12} />

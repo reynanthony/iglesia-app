@@ -6,6 +6,7 @@ import ConsejoToggle from '@/components/admin/ConsejoToggle'
 import AdminToggle from '@/components/admin/AdminToggle'
 import { Search, Plus } from 'lucide-react'
 import Link from 'next/link'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminUsuariosPage({
   searchParams,
@@ -59,23 +60,23 @@ export default async function AdminUsuariosPage({
       <div className="mb-4 md:mb-6 flex items-center justify-between gap-3">
         <div>
           <h1 className="text-xl md:text-2xl font-bold">Usuarios</h1>
-          <p className="text-[rgba(246,243,235,0.68)] text-xs md:text-sm mt-0.5">{users?.length ?? 0} miembros</p>
+          <p className="text-[rgba(139,146,162,0.68)] text-xs md:text-sm mt-0.5">{users?.length ?? 0} miembros</p>
         </div>
         <Link href="/admin/usuarios/nuevo"
           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-bold transition flex-shrink-0"
-          style={{ background: '#F6F3EB', color: '#061E30' }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           <Plus size={13} /><span className="hidden sm:inline">Nuevo usuario</span><span className="sm:hidden">Nuevo</span>
         </Link>
       </div>
 
       <div className="flex flex-col gap-2.5 mb-4 md:mb-6">
-        <form method="GET" className="flex items-center gap-3 bg-[#0B2D47] border border-[#0D3352] rounded-xl px-3.5 py-2.5">
-          <Search size={15} className="text-[rgba(246,243,235,0.68)] flex-shrink-0" />
+        <form method="GET" className="flex items-center gap-3 bg-[#181A22] border border-[#292E3B] rounded-xl px-3.5 py-2.5">
+          <Search size={15} className="text-[rgba(139,146,162,0.68)] flex-shrink-0" />
           <input
             name="q"
             defaultValue={q ?? ''}
             placeholder="Buscar por nombre o usuario..."
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-[rgba(246,243,235,0.55)] focus:outline-none"
+            className="flex-1 bg-transparent text-white text-sm placeholder:text-[rgba(139,146,162,0.55)] focus:outline-none"
           />
           {role && <input type="hidden" name="role" value={role} />}
         </form>
@@ -92,8 +93,8 @@ export default async function AdminUsuariosPage({
               <a key={r} href={href}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition ${
                   isActive
-                    ? 'bg-white text-[#061E30]'
-                    : 'bg-[#0B2D47] border border-[#0D3352] text-[rgba(246,243,235,0.72)]'
+                    ? 'bg-[#D9A62A] text-[#14140F]'
+                    : 'bg-[#181A22] border border-[#292E3B] text-[rgba(139,146,162,0.72)]'
                 }`}>
                 {r}
               </a>
@@ -105,7 +106,7 @@ export default async function AdminUsuariosPage({
       {/* ── MÓVIL: tarjetas ── */}
       <div className="md:hidden space-y-2">
         {users && users.length === 0 && (
-          <p className="py-10 text-center text-sm" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="py-10 text-center text-sm" style={{ color: MUTED }}>
             No se encontraron usuarios
           </p>
         )}
@@ -114,21 +115,21 @@ export default async function AdminUsuariosPage({
           const showAssign = ['lider', 'pastor', 'moderador'].includes(user.role)
           return (
             <div key={user.id} className="rounded-xl p-3.5"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
-                  style={{ background: '#0D3352' }}>
+                  style={{ background: BORDER }}>
                   {user.avatar_url
                     ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-xs font-bold"
-                        style={{ color: 'rgba(246,243,235,0.70)' }}>
+                        style={{ color: MUTED }}>
                         {user.full_name?.[0]?.toUpperCase() ?? 'U'}
                       </div>
                   }
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate" style={{ color: '#F6F3EB' }}>{user.full_name}</p>
-                  <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{user.username}</p>
+                  <p className="text-sm font-semibold truncate" style={{ color: INK }}>{user.full_name}</p>
+                  <p className="text-[11px]" style={{ color: MUTED }}>@{user.username}</p>
                 </div>
                 <DeleteUserButton userId={user.id} username={user.username ?? user.full_name ?? ''} />
               </div>
@@ -139,9 +140,9 @@ export default async function AdminUsuariosPage({
                 )}
               </div>
               {showAssign && (
-                <div className="pt-2 border-t" style={{ borderColor: '#0D3352' }}>
+                <div className="pt-2 border-t" style={{ borderColor: BORDER }}>
                   <p className="text-[9px] font-black uppercase tracking-wider mb-1.5"
-                    style={{ color: 'rgba(246,243,235,0.30)' }}>Ministerios</p>
+                    style={{ color: MUTED }}>Ministerios</p>
                   <MinistryAssignment
                     userId={user.id}
                     assignments={userAssignments as any}
@@ -150,7 +151,7 @@ export default async function AdminUsuariosPage({
                   {userAssignments.length > 0 && user.role === 'lider' && (
                     <div className="mt-2">
                       <p className="text-[9px] font-black uppercase tracking-wider mb-1.5"
-                        style={{ color: 'rgba(246,243,235,0.30)' }}>Acceso admin</p>
+                        style={{ color: MUTED }}>Acceso admin</p>
                       <AdminToggle userId={user.id} assignments={userAssignments as any} />
                     </div>
                   )}
@@ -162,14 +163,14 @@ export default async function AdminUsuariosPage({
       </div>
 
       {/* ── DESKTOP: tabla ── */}
-      <div className="hidden md:block bg-[#0B2D47] border border-[#0D3352] rounded-2xl overflow-hidden">
+      <div className="hidden md:block bg-[#181A22] border border-[#292E3B] rounded-2xl overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#0D3352]">
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Usuario</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Registrado</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium">Rol</th>
-              <th className="text-left px-5 py-3 text-xs text-[rgba(246,243,235,0.68)] font-medium hidden lg:table-cell">Ministerios</th>
+            <tr className="border-b border-[#292E3B]">
+              <th className="text-left px-5 py-3 text-xs text-[rgba(139,146,162,0.68)] font-medium">Usuario</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(139,146,162,0.68)] font-medium">Registrado</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(139,146,162,0.68)] font-medium">Rol</th>
+              <th className="text-left px-5 py-3 text-xs text-[rgba(139,146,162,0.68)] font-medium hidden lg:table-cell">Ministerios</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
@@ -178,26 +179,26 @@ export default async function AdminUsuariosPage({
               const userAssignments = (allAssignments ?? []).filter(a => a.user_id === user.id)
               const showAssign = ['lider', 'pastor', 'moderador'].includes(user.role)
               return (
-                <tr key={user.id} className="border-b border-[#0D3352]/50 hover:bg-[#0D3352]/30 transition">
+                <tr key={user.id} className="border-b border-[#292E3B]/50 hover:bg-[#292E3B]/30 transition">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full overflow-hidden bg-[#0D3352] flex-shrink-0">
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-[#292E3B] flex-shrink-0">
                         {user.avatar_url ? (
                           <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[rgba(246,243,235,0.70)]">
+                          <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[rgba(139,146,162,0.70)]">
                             {user.full_name?.[0]?.toUpperCase() ?? 'U'}
                           </div>
                         )}
                       </div>
                       <div>
                         <p className="text-sm font-medium">{user.full_name}</p>
-                        <p className="text-xs text-[rgba(246,243,235,0.68)]">@{user.username}</p>
+                        <p className="text-xs text-[rgba(139,146,162,0.68)]">@{user.username}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
-                    <p className="text-xs text-[rgba(246,243,235,0.68)]">
+                    <p className="text-xs text-[rgba(139,146,162,0.68)]">
                       {new Date(user.created_at).toLocaleDateString('es-DO')}
                     </p>
                   </td>
@@ -222,7 +223,7 @@ export default async function AdminUsuariosPage({
                         )}
                       </div>
                     ) : (
-                      <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                      <span className="text-[11px]" style={{ color: MUTED }}>
                         {user.role === 'admin' ? 'Acceso total' : '—'}
                       </span>
                     )}
@@ -236,7 +237,7 @@ export default async function AdminUsuariosPage({
           </tbody>
         </table>
         {(!users || users.length === 0) && (
-          <div className="py-16 text-center text-[rgba(246,243,235,0.68)] text-sm">
+          <div className="py-16 text-center text-[rgba(139,146,162,0.68)] text-sm">
             No se encontraron usuarios
           </div>
         )}

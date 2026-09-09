@@ -41,33 +41,33 @@ export default function RoleSelector({ userId, username, currentRole }: { userId
         value={role}
         onChange={handleChange}
         disabled={saving}
-        className={`w-full md:w-auto bg-[#0D3352] border border-[#1a4a70] text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE] transition capitalize ${
+        className={`w-full md:w-auto bg-[#292E3B] border border-[#292E3B] text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A] transition capitalize ${
           role === 'admin' ? 'text-red-400' :
           role === 'pastor' ? 'text-purple-400' :
           role === 'moderador' ? 'text-blue-400' :
-          'text-[rgba(246,243,235,0.70)]'
+          'text-[rgba(139,146,162,0.70)]'
         }`}
       >
         {roles.map(r => (
-          <option key={r} value={r} className="bg-[#0B2D47] capitalize">{r}</option>
+          <option key={r} value={r} className="bg-[#181A22] capitalize">{r}</option>
         ))}
       </select>
       {error && <p className="text-xs text-red-400">{error}</p>}
 
       {pendingRole && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="alertdialog" aria-modal="true">
-          <div className="w-full max-w-sm rounded-2xl bg-[#0B2D47] border border-[#1a4a70] p-5 space-y-4">
-            <p className="text-sm text-[rgba(246,243,235,0.90)]">
+          <div className="w-full max-w-sm rounded-2xl bg-[#181A22] border border-[#292E3B] p-5 space-y-4">
+            <p className="text-sm text-[rgba(139,146,162,0.90)]">
               ¿Otorgar rol <span className="font-semibold capitalize">{pendingRole}</span>
               {username ? <> a <span className="font-semibold">@{username}</span></> : null}?
             </p>
-            <p className="text-xs text-[rgba(246,243,235,0.55)]">
+            <p className="text-xs text-[rgba(139,146,162,0.55)]">
               Este rol otorga acceso {pendingRole === 'admin' ? 'administrativo completo al sistema' : 'pastoral privilegiado'}. Esta acción es reversible, pero toma efecto de inmediato.
             </p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setPendingRole(null)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-[rgba(246,243,235,0.70)] hover:text-white transition"
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-[rgba(139,146,162,0.70)] hover:text-white transition"
               >
                 Cancelar
               </button>

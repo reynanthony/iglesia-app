@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import PostForm from '@/components/admin/PostForm'
+import { CARD, BORDER, MUTED } from '@/lib/gold-theme'
 
 export default async function EditarPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -12,9 +13,9 @@ export default async function EditarPostPage({ params }: { params: Promise<{ id:
 
   return (
     <div>
-      <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4" style={{ borderColor: '#0D3352' }}>
-        <Link href="/admin/posts" className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#0B2D47' }}>
-          <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+      <div className="border-b px-4 md:px-8 py-5 flex items-center gap-4" style={{ borderColor: BORDER }}>
+        <Link href="/admin/posts" className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: CARD }}>
+          <ArrowLeft size={14} style={{ color: MUTED }} />
         </Link>
         <div>
           <h1 className="font-bold text-lg text-white">Editar publicación</h1>

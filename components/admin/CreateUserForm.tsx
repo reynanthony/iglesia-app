@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createAdminUser } from '@/app/actions/admin'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const ROLES = ['miembro', 'visitante', 'lider', 'moderador', 'pastor', 'admin']
 
@@ -30,9 +31,9 @@ export default function CreateUserForm() {
   }
 
   const field = "w-full px-4 py-3 rounded-xl text-sm border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const lbl = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const lblStyle = { color: 'rgba(246,243,235,0.68)' }
+  const lblStyle = { color: MUTED }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -61,7 +62,7 @@ export default function CreateUserForm() {
       <div>
         <label className={lbl} style={lblStyle}>Rol inicial</label>
         <select name="role" className={field} style={fieldStyle}>
-          {ROLES.map(r => <option key={r} value={r} className="bg-[#0B2D47] capitalize">{r}</option>)}
+          {ROLES.map(r => <option key={r} value={r} className="bg-[#181A22] capitalize">{r}</option>)}
         </select>
       </div>
 
@@ -76,19 +77,19 @@ export default function CreateUserForm() {
       {success && (
         <div className="flex items-center gap-3 rounded-xl px-4 py-3"
           style={{ background: 'rgba(100,200,100,0.08)', border: '1px solid rgba(100,200,100,0.15)' }}>
-          <CheckCircle2 size={14} style={{ color: '#76ABAE', flexShrink: 0 }} />
-          <p className="text-sm" style={{ color: '#76ABAE' }}>{success}</p>
+          <CheckCircle2 size={14} style={{ color: GOLD, flexShrink: 0 }} />
+          <p className="text-sm" style={{ color: GOLD }}>{success}</p>
         </div>
       )}
 
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={isPending}
           className="flex-1 py-3 rounded-xl text-sm font-bold transition disabled:opacity-50"
-          style={{ background: '#F6F3EB', color: '#061E30' }}>
+          style={{ background: GOLD, color: GOLD_INK }}>
           {isPending ? 'Creando…' : 'Crear usuario'}
         </button>
         <a href="/admin/usuarios" className="px-5 py-3 rounded-xl text-sm font-medium text-center"
-          style={{ background: '#0B2D47', color: 'rgba(246,243,235,0.68)' }}>
+          style={{ background: CARD, color: MUTED }}>
           Cancelar
         </a>
       </div>
