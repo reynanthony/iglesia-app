@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Plus, GraduationCap, Trash2, ChevronRight, Award, CheckCircle2 } from 'lucide-react'
 import { updateProgram, deleteProgram, createCourse, issueCertificate, revokeCertificate } from '@/app/actions/discipleship-lms'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function EditProgramaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -64,31 +65,31 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
   const newCourseAction = createCourse.bind(null, id)
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
+  const labelStyle = { color: MUTED }
 
   const LEVELS: Record<string, string> = { basico: 'Básico', intermedio: 'Intermedio', avanzado: 'Avanzado' }
 
   return (
     <div>
       {/* Header */}
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
           <Link href="/admin/discipulado/programas"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5" style={{ color: MUTED }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
               <span>/</span>
               <span className="truncate">{program.title}</span>
             </div>
-            <h1 className="font-bold text-lg truncate" style={{ color: '#F6F3EB' }}>{program.title}</h1>
+            <h1 className="font-bold text-lg truncate" style={{ color: INK }}>{program.title}</h1>
           </div>
         </div>
       </div>
@@ -97,10 +98,10 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Editar programa ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Datos del programa
           </p>
-          <div className="rounded-2xl p-5 space-y-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl p-5 space-y-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <form action={saveAction} className="space-y-4">
 
               <div>
@@ -143,7 +144,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-bold"
-                style={{ background: '#F6F3EB', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 Guardar cambios
               </button>
             </form>
@@ -159,7 +160,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Cursos ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Cursos ({courses?.length ?? 0})
           </p>
 
@@ -172,22 +173,22 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                     key={c.id}
                     href={`/admin/discipulado/cursos/${c.id}`}
                     className="flex items-center gap-4 px-5 py-3.5 rounded-xl transition hover:brightness-110"
-                    style={{ background: '#061E30', border: '1px solid #0D3352' }}
+                    style={{ background: BG, border: `1px solid ${BORDER}` }}
                   >
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}
+                      style={{ background: BORDER, color: GOLD }}
                     >
                       {c.order_index}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{c.title}</p>
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{c.title}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                        <span className="text-[10px]" style={{ color: MUTED }}>
                           {lessonCount} lección{lessonCount !== 1 ? 'es' : ''}
                         </span>
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-                          style={{ background: '#0D3352', color: 'rgba(246,243,235,0.50)' }}>
+                          style={{ background: BORDER, color: MUTED }}>
                           {LEVELS[c.level] ?? c.level}
                         </span>
                         {!c.is_active && (
@@ -198,7 +199,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                         )}
                       </div>
                     </div>
-                    <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0 }} />
+                    <ChevronRight size={14} style={{ color: MUTED, flexShrink: 0 }} />
                   </Link>
                 )
               })}
@@ -206,8 +207,8 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
           )}
 
           {/* Nuevo curso */}
-          <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <div className="rounded-2xl p-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
               <Plus size={10} className="inline mr-1" />
               Nuevo curso
             </p>
@@ -245,7 +246,7 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
               </div>
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
-                style={{ background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.25)' }}>
+                style={{ background: `${GOLD}26`, color: GOLD, border: '1px solid rgba(217,166,42,0.25)' }}>
                 <GraduationCap size={14} /> Crear curso
               </button>
             </form>
@@ -254,15 +255,15 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
         {/* ── Certificaciones ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Certificaciones
           </p>
 
           {/* Pending issuance */}
           {eligibleUsers.length > 0 && (
-            <div className="rounded-2xl overflow-hidden mb-4" style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)' }}>
-              <div className="px-5 py-3 border-b" style={{ borderColor: 'rgba(118,171,174,0.15)' }}>
-                <p className="text-xs font-bold" style={{ color: '#76ABAE' }}>
+            <div className="rounded-2xl overflow-hidden mb-4" style={{ background: CARD, border: '1px solid rgba(217,166,42,0.25)' }}>
+              <div className="px-5 py-3 border-b" style={{ borderColor: `${GOLD}26` }}>
+                <p className="text-xs font-bold" style={{ color: GOLD }}>
                   {eligibleUsers.length} pendiente{eligibleUsers.length !== 1 ? 's' : ''} de certificar
                 </p>
               </div>
@@ -270,21 +271,21 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                 const issueAction = issueCertificate.bind(null, u.id, id)
                 return (
                   <div key={u.id} className="flex items-center gap-3 px-5 py-3 border-b last:border-0"
-                    style={{ borderColor: '#0D3352' }}>
+                    style={{ borderColor: BORDER }}>
                     <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       {u.avatar_url
                         ? <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
                         : u.full_name?.[0]?.toUpperCase() ?? 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{u.full_name}</p>
+                      <p className="text-[11px]" style={{ color: MUTED }}>@{u.username}</p>
                     </div>
                     <form action={issueAction}>
                       <button type="submit"
                         className="flex items-center gap-1.5 text-[11px] font-black px-3 py-1.5 rounded-lg"
-                        style={{ background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.25)' }}>
+                        style={{ background: `${GOLD}26`, color: GOLD, border: '1px solid rgba(217,166,42,0.25)' }}>
                         <Award size={12} /> Emitir
                       </button>
                     </form>
@@ -296,9 +297,9 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
 
           {/* Existing certificates */}
           {certificates && certificates.length > 0 ? (
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <div className="px-5 py-3 border-b" style={{ borderColor: '#0D3352' }}>
-                <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <div className="px-5 py-3 border-b" style={{ borderColor: BORDER }}>
+                <p className="text-xs font-bold" style={{ color: MUTED }}>
                   {certificates.length} certificado{certificates.length !== 1 ? 's' : ''} emitido{certificates.length !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -310,17 +311,17 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
                 })
                 return (
                   <div key={cert.id} className="flex items-center gap-3 px-5 py-3 border-b last:border-0"
-                    style={{ borderColor: '#0D3352' }}>
+                    style={{ borderColor: BORDER }}>
                     <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-xs"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       {profile?.avatar_url
                         ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                         : profile?.full_name?.[0]?.toUpperCase() ?? 'U'}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{profile?.full_name}</p>
-                      <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
-                        <CheckCircle2 size={10} className="inline mr-1" style={{ color: '#76ABAE' }} />
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{profile?.full_name}</p>
+                      <p className="text-[11px]" style={{ color: MUTED }}>
+                        <CheckCircle2 size={10} className="inline mr-1" style={{ color: GOLD }} />
                         {issuedDate}
                       </p>
                     </div>
@@ -336,9 +337,9 @@ export default async function EditProgramaPage({ params }: { params: Promise<{ i
               })}
             </div>
           ) : eligibleUsers.length === 0 ? (
-            <div className="rounded-2xl p-8 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <Award size={24} className="mx-auto mb-3" style={{ color: 'rgba(118,171,174,0.25)' }} />
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="rounded-2xl p-8 text-center" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <Award size={24} className="mx-auto mb-3" style={{ color: `${GOLD}40` }} />
+              <p className="text-sm" style={{ color: MUTED }}>
                 Ningún certificado emitido aún
               </p>
             </div>

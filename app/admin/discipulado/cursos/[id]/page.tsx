@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Plus, BookOpen, Trash2, ChevronRight, Video, FileText } from 'lucide-react'
 import { updateCourse, deleteCourse, createLesson } from '@/app/actions/discipleship-lms'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function EditCursoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -28,22 +29,22 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
   const newLessonAction = createLesson.bind(null, id)
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
+  const labelStyle = { color: MUTED }
 
   return (
     <div>
       {/* Header */}
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
           <Link href={`/admin/discipulado/programas/${program?.id}`}
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="flex items-center gap-2 text-xs mb-0.5 flex-wrap" style={{ color: MUTED }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
@@ -54,7 +55,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
               <span>/</span>
               <span className="truncate">{course.title}</span>
             </div>
-            <h1 className="font-bold text-lg truncate" style={{ color: '#F6F3EB' }}>{course.title}</h1>
+            <h1 className="font-bold text-lg truncate" style={{ color: INK }}>{course.title}</h1>
           </div>
         </div>
       </div>
@@ -63,10 +64,10 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
         {/* ── Editar curso ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Datos del curso
           </p>
-          <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl p-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <form action={saveAction} className="space-y-4">
 
               <div>
@@ -120,7 +121,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-bold"
-                style={{ background: '#F6F3EB', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 Guardar cambios
               </button>
             </form>
@@ -136,7 +137,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
 
         {/* ── Lecciones ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Lecciones ({lessons?.length ?? 0})
           </p>
 
@@ -147,24 +148,24 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
                   key={l.id}
                   href={`/admin/discipulado/lecciones/${l.id}`}
                   className="flex items-center gap-4 px-5 py-3.5 rounded-xl transition hover:brightness-110"
-                  style={{ background: '#061E30', border: '1px solid #0D3352' }}
+                  style={{ background: BG, border: `1px solid ${BORDER}` }}
                 >
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black"
-                    style={{ background: '#0D3352', color: '#76ABAE' }}
+                    style={{ background: BORDER, color: GOLD }}
                   >
                     {l.order_index}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{l.title}</p>
+                    <p className="text-sm font-bold truncate" style={{ color: INK }}>{l.title}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       {l.video_url && (
-                        <span className="flex items-center gap-1 text-[10px]" style={{ color: 'rgba(118,171,174,0.70)' }}>
+                        <span className="flex items-center gap-1 text-[10px]" style={{ color: `${GOLD}B2` }}>
                           <Video size={10} /> Video
                         </span>
                       )}
                       {l.pdf_url && (
-                        <span className="flex items-center gap-1 text-[10px]" style={{ color: 'rgba(118,171,174,0.70)' }}>
+                        <span className="flex items-center gap-1 text-[10px]" style={{ color: `${GOLD}B2` }}>
                           <FileText size={10} /> PDF
                         </span>
                       )}
@@ -176,15 +177,15 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
                       )}
                     </div>
                   </div>
-                  <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0 }} />
+                  <ChevronRight size={14} style={{ color: MUTED, flexShrink: 0 }} />
                 </Link>
               ))}
             </div>
           )}
 
           {/* Nueva lección */}
-          <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <div className="rounded-2xl p-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
               <Plus size={10} className="inline mr-1" />
               Nueva lección
             </p>
@@ -219,7 +220,7 @@ export default async function EditCursoPage({ params }: { params: Promise<{ id: 
               </div>
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
-                style={{ background: 'rgba(118,171,174,0.15)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.25)' }}>
+                style={{ background: `${GOLD}26`, color: GOLD, border: '1px solid rgba(217,166,42,0.25)' }}>
                 <BookOpen size={14} /> Crear lección
               </button>
             </form>

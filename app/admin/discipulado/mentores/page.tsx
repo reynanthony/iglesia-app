@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { assignMentor, removeMentorPair, updateMentorPairStatus } from '@/app/actions/discipleship-lms'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminMentoresPage() {
   const supabase = await createClient()
@@ -27,7 +28,7 @@ export default async function AdminMentoresPage() {
   ])
 
   const STATUS_COLOR: Record<string, string> = {
-    active:    '#76ABAE',
+    active:    GOLD,
     paused:    '#869B7E',
     completed: '#94A3B8',
   }
@@ -48,29 +49,29 @@ export default async function AdminMentoresPage() {
         <div className="flex items-center gap-3 mb-6">
           <Link href="/admin/discipulado"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div>
             <h1 className="text-xl font-bold">Asignaciones de Mentoría</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               {pairs?.length ?? 0} par{pairs?.length !== 1 ? 'es' : ''} registrados
             </p>
           </div>
         </div>
 
         {/* ── Nuevo par ── */}
-        <div className="rounded-2xl p-5 mb-6" style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)' }}>
-          <p className="text-sm font-black mb-4" style={{ color: '#F6F3EB' }}>Nueva asignación</p>
+        <div className="rounded-2xl p-5 mb-6" style={{ background: CARD, border: '1px solid rgba(217,166,42,0.25)' }}>
+          <p className="text-sm font-black mb-4" style={{ color: INK }}>Nueva asignación</p>
           <form action={assignMentor} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.68)' }}>
+                style={{ color: MUTED }}>
                 Mentor
               </label>
               <select name="mentor_id" required
                 className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none"
-                style={{ background: '#061E30', border: '1px solid #0D3352', color: '#F6F3EB' }}>
+                style={{ background: BG, border: `1px solid ${BORDER}`, color: INK }}>
                 <option value="">Seleccionar mentor...</option>
                 {allUsers?.map((u: any) => (
                   <option key={u.id} value={u.id}>{u.full_name} (@{u.username})</option>
@@ -79,12 +80,12 @@ export default async function AdminMentoresPage() {
             </div>
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider mb-1.5"
-                style={{ color: 'rgba(246,243,235,0.68)' }}>
+                style={{ color: MUTED }}>
                 Discípulo
               </label>
               <select name="student_id" required
                 className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none"
-                style={{ background: '#061E30', border: '1px solid #0D3352', color: '#F6F3EB' }}>
+                style={{ background: BG, border: `1px solid ${BORDER}`, color: INK }}>
                 <option value="">Seleccionar discípulo...</option>
                 {allUsers?.map((u: any) => (
                   <option key={u.id} value={u.id}>{u.full_name} (@{u.username})</option>
@@ -94,7 +95,7 @@ export default async function AdminMentoresPage() {
             <div className="flex items-end">
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-black transition hover:brightness-110"
-                style={{ background: '#76ABAE', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 Asignar
               </button>
             </div>
@@ -102,26 +103,26 @@ export default async function AdminMentoresPage() {
         </div>
 
         {/* ── Lista de pares ── */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <div className="px-5 py-3 border-b" style={{ borderColor: '#0D3352' }}>
+        <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+          <div className="px-5 py-3 border-b" style={{ borderColor: BORDER }}>
             <p className="text-[10px] font-black uppercase tracking-[0.2em]"
-              style={{ color: 'rgba(118,171,174,0.55)' }}>
+              style={{ color: `${GOLD}8C` }}>
               Todos los pares
             </p>
           </div>
 
           {!pairs || pairs.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
+              <p className="text-sm" style={{ color: MUTED }}>
                 Aún no hay pares de mentoría registrados
               </p>
             </div>
           ) : (
-            <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+            <div className="divide-y" style={{ borderColor: BORDER }}>
               {pairs.map((pair: any) => {
                 const mentor  = pair.mentor
                 const student = pair.student
-                const color   = STATUS_COLOR[pair.status] ?? '#76ABAE'
+                const color   = STATUS_COLOR[pair.status] ?? GOLD
 
                 return (
                   <div key={pair.id} className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4">
@@ -130,29 +131,29 @@ export default async function AdminMentoresPage() {
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                          style={{ background: '#0D3352', color: '#76ABAE' }}>
+                          style={{ background: BORDER, color: GOLD }}>
                           {mentor?.avatar_url
                             ? <img src={mentor.avatar_url} alt="" className="w-full h-full object-cover" />
                             : mentor?.full_name?.[0]?.toUpperCase() ?? 'M'}
                         </div>
                         <div>
-                          <p className="text-xs font-bold" style={{ color: '#F6F3EB' }}>{mentor?.full_name}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>mentor</p>
+                          <p className="text-xs font-bold" style={{ color: INK }}>{mentor?.full_name}</p>
+                          <p className="text-[10px]" style={{ color: MUTED }}>mentor</p>
                         </div>
                       </div>
 
-                      <span className="text-xs px-2" style={{ color: 'rgba(246,243,235,0.25)' }}>→</span>
+                      <span className="text-xs px-2" style={{ color: MUTED }}>→</span>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                          style={{ background: '#0D3352', color: '#76ABAE' }}>
+                          style={{ background: BORDER, color: GOLD }}>
                           {student?.avatar_url
                             ? <img src={student.avatar_url} alt="" className="w-full h-full object-cover" />
                             : student?.full_name?.[0]?.toUpperCase() ?? 'D'}
                         </div>
                         <div>
-                          <p className="text-xs font-bold" style={{ color: '#F6F3EB' }}>{student?.full_name}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>discípulo</p>
+                          <p className="text-xs font-bold" style={{ color: INK }}>{student?.full_name}</p>
+                          <p className="text-[10px]" style={{ color: MUTED }}>discípulo</p>
                         </div>
                       </div>
                     </div>
@@ -167,14 +168,14 @@ export default async function AdminMentoresPage() {
                         </button>
                       </form>
 
-                      <p className="text-[10px] hidden sm:block" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                      <p className="text-[10px] hidden sm:block" style={{ color: MUTED }}>
                         {fmtDate(pair.assigned_at)}
                       </p>
 
                       <form action={removeMentorPair.bind(null, pair.id)}>
                         <button type="submit"
                           className="w-8 h-8 flex items-center justify-center rounded-lg transition hover:bg-red-900/20"
-                          style={{ color: 'rgba(246,243,235,0.55)' }}
+                          style={{ color: MUTED }}
                           title="Eliminar par">
                           <Trash2 size={13} />
                         </button>

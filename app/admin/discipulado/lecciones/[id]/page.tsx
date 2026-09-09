@@ -7,6 +7,7 @@ import {
   addBibleVerse, deleteBibleVerse,
   addChallenge, deleteChallenge,
 } from '@/app/actions/discipleship-lms'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function EditLeccionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -34,22 +35,22 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
   const addChallengeAction = addChallenge.bind(null, id)
 
   const field = "w-full px-4 py-3 rounded-xl text-sm font-medium border focus:outline-none transition"
-  const fieldStyle = { background: '#061E30', borderColor: '#0D3352', color: '#F6F3EB' }
+  const fieldStyle = { background: BG, borderColor: BORDER, color: INK }
   const label = "text-[10px] font-black uppercase tracking-[0.2em] block mb-2"
-  const labelStyle = { color: 'rgba(246,243,235,0.68)' }
+  const labelStyle = { color: MUTED }
 
   return (
     <div>
       {/* Header */}
-      <div className="border-b" style={{ borderColor: '#0D3352' }}>
+      <div className="border-b" style={{ borderColor: BORDER }}>
         <div className="max-w-4xl mx-auto px-4 md:px-8 py-5 flex items-center gap-4">
           <Link href={`/admin/discipulado/cursos/${course?.id}`}
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 text-xs mb-0.5 flex-wrap" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="flex items-center gap-1.5 text-xs mb-0.5 flex-wrap" style={{ color: MUTED }}>
               <Link href="/admin/discipulado/programas" className="hover:underline">Programas</Link>
               <span>/</span>
               <Link href={`/admin/discipulado/programas/${program?.id}`} className="hover:underline truncate max-w-[80px]">
@@ -62,7 +63,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
               <span>/</span>
               <span className="truncate max-w-[100px]">{lesson.title}</span>
             </div>
-            <h1 className="font-bold text-lg truncate" style={{ color: '#F6F3EB' }}>{lesson.title}</h1>
+            <h1 className="font-bold text-lg truncate" style={{ color: INK }}>{lesson.title}</h1>
           </div>
         </div>
       </div>
@@ -71,10 +72,10 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Contenido de la lección ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             Contenido
           </p>
-          <div className="rounded-2xl p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl p-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             <form action={saveAction} className="space-y-4">
 
               <div>
@@ -128,7 +129,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
               <button type="submit"
                 className="w-full py-2.5 rounded-xl text-sm font-bold"
-                style={{ background: '#F6F3EB', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 Guardar lección
               </button>
             </form>
@@ -144,20 +145,20 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Versículos base ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             <BookMarked size={10} className="inline mr-1.5" />
             Versículos base ({verses?.length ?? 0})
           </p>
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             {verses && verses.length > 0 && (
-              <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+              <div className="divide-y" style={{ borderColor: BORDER }}>
                 {verses.map((v: any) => {
                   const delVerseAction = deleteBibleVerse.bind(null, v.id, id)
                   return (
                     <div key={v.id} className="flex items-start gap-4 px-5 py-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-black mb-1" style={{ color: '#76ABAE' }}>{v.reference}</p>
-                        <p className="text-sm leading-relaxed italic" style={{ color: 'rgba(246,243,235,0.70)' }}>
+                        <p className="text-xs font-black mb-1" style={{ color: GOLD }}>{v.reference}</p>
+                        <p className="text-sm leading-relaxed italic" style={{ color: MUTED }}>
                           "{v.verse_text}"
                         </p>
                       </div>
@@ -174,9 +175,9 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
                 })}
               </div>
             )}
-            <div className="px-5 py-4" style={{ borderTop: verses && verses.length > 0 ? '1px solid #0D3352' : 'none' }}>
+            <div className="px-5 py-4" style={{ borderTop: verses && verses.length > 0 ? `1px solid ${BORDER}` : 'none' }}>
               <p className="text-[10px] font-black uppercase tracking-[0.15em] mb-3"
-                style={{ color: 'rgba(246,243,235,0.55)' }}>
+                style={{ color: MUTED }}>
                 <Plus size={9} className="inline mr-1" /> Agregar versículo
               </p>
               <form action={addVerseAction} className="space-y-3">
@@ -194,7 +195,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
                 </div>
                 <button type="submit"
                   className="w-full py-2 rounded-xl text-xs font-bold"
-                  style={{ background: 'rgba(118,171,174,0.10)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.20)' }}>
+                  style={{ background: `${GOLD}1A`, color: GOLD, border: '1px solid rgba(217,166,42,0.20)' }}>
                   Agregar versículo
                 </button>
               </form>
@@ -204,24 +205,24 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
 
         {/* ── Desafíos prácticos ── */}
         <section>
-          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.62)' }}>
+          <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
             <Zap size={10} className="inline mr-1.5" />
             Desafíos prácticos ({challenges?.length ?? 0})
           </p>
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             {challenges && challenges.length > 0 && (
-              <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+              <div className="divide-y" style={{ borderColor: BORDER }}>
                 {challenges.map((c: any) => {
                   const delChallengeAction = deleteChallenge.bind(null, c.id, id)
                   return (
                     <div key={c.id} className="flex items-start gap-4 px-5 py-4">
                       <div
                         className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-[10px] font-black mt-0.5"
-                        style={{ background: 'rgba(118,171,174,0.12)', color: '#76ABAE' }}
+                        style={{ background: `${GOLD}1F`, color: GOLD }}
                       >
                         S{c.week_number}
                       </div>
-                      <p className="flex-1 text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.80)' }}>
+                      <p className="flex-1 text-sm leading-relaxed" style={{ color: MUTED }}>
                         {c.description}
                       </p>
                       <form action={delChallengeAction} className="flex-shrink-0">
@@ -237,9 +238,9 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
                 })}
               </div>
             )}
-            <div className="px-5 py-4" style={{ borderTop: challenges && challenges.length > 0 ? '1px solid #0D3352' : 'none' }}>
+            <div className="px-5 py-4" style={{ borderTop: challenges && challenges.length > 0 ? `1px solid ${BORDER}` : 'none' }}>
               <p className="text-[10px] font-black uppercase tracking-[0.15em] mb-3"
-                style={{ color: 'rgba(246,243,235,0.55)' }}>
+                style={{ color: MUTED }}>
                 <Plus size={9} className="inline mr-1" /> Agregar desafío
               </p>
               <form action={addChallengeAction} className="space-y-3">
@@ -258,7 +259,7 @@ export default async function EditLeccionPage({ params }: { params: Promise<{ id
                 </div>
                 <button type="submit"
                   className="w-full py-2 rounded-xl text-xs font-bold"
-                  style={{ background: 'rgba(118,171,174,0.10)', color: '#76ABAE', border: '1px solid rgba(118,171,174,0.20)' }}>
+                  style={{ background: `${GOLD}1A`, color: GOLD, border: '1px solid rgba(217,166,42,0.20)' }}>
                   Agregar desafío
                 </button>
               </form>

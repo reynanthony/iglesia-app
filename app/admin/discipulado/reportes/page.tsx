@@ -5,6 +5,7 @@ import {
   ArrowLeft, Users, AlertTriangle, TrendingUp,
   BookOpen, CheckCircle2, Clock, UserX,
 } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function ReportesDiscipuladoPage() {
   const supabase = await createClient()
@@ -145,12 +146,12 @@ export default async function ReportesDiscipuladoPage() {
         <div className="flex items-center gap-3">
           <Link href="/admin/discipulado"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.68)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div>
             <h1 className="text-xl font-bold">Dashboard Pastoral</h1>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               Métricas de discipulado · Actualizado ahora
             </p>
           </div>
@@ -159,16 +160,16 @@ export default async function ReportesDiscipuladoPage() {
         {/* ── RESUMEN GENERAL ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { label: 'Total miembros', value: totalUsers, icon: Users, color: '#76ABAE' },
-            { label: 'Con etapa asignada', value: withStage, icon: TrendingUp, color: '#76ABAE' },
-            { label: 'Sin etapa', value: withoutStage, icon: AlertTriangle, color: withoutStage > 0 ? '#F59E0B' : '#76ABAE' },
-            { label: 'Pares de mentoría', value: activeMentorPairs?.length ?? 0, icon: BookOpen, color: '#76ABAE' },
+            { label: 'Total miembros', value: totalUsers, icon: Users, color: GOLD },
+            { label: 'Con etapa asignada', value: withStage, icon: TrendingUp, color: GOLD },
+            { label: 'Sin etapa', value: withoutStage, icon: AlertTriangle, color: withoutStage > 0 ? '#F59E0B' : GOLD },
+            { label: 'Pares de mentoría', value: activeMentorPairs?.length ?? 0, icon: BookOpen, color: GOLD },
           ].map(({ label, value, icon: Icon, color }) => (
             <div key={label} className="p-4 rounded-2xl"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <div className="flex items-center justify-between mb-3">
                 <p className="text-[10px] font-black uppercase tracking-wider"
-                  style={{ color: 'rgba(246,243,235,0.62)' }}>{label}</p>
+                  style={{ color: MUTED }}>{label}</p>
                 <Icon size={14} style={{ color }} />
               </div>
               <p className="font-black text-3xl leading-none" style={{ color }}>{value}</p>
@@ -179,11 +180,11 @@ export default async function ReportesDiscipuladoPage() {
         {/* ── DISTRIBUCIÓN POR ETAPA ── */}
         <section>
           <p className="text-xs font-black uppercase tracking-[0.2em] mb-4"
-            style={{ color: 'rgba(246,243,235,0.62)' }}>
+            style={{ color: MUTED }}>
             Distribución por etapa
           </p>
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <div className="divide-y" style={{ borderColor: BORDER }}>
               {(stages ?? []).map((stage: any) => {
                 const count = stageCounts.get(stage.id) ?? 0
                 const pct   = Math.round((count / Math.max(totalUsers, 1)) * 100)
@@ -194,16 +195,16 @@ export default async function ReportesDiscipuladoPage() {
                       style={{ background: `${stage.color}20`, color: stage.color }}>
                       {stage.order_index}
                     </div>
-                    <p className="text-sm font-bold w-40 flex-shrink-0 truncate" style={{ color: '#F6F3EB' }}>
+                    <p className="text-sm font-bold w-40 flex-shrink-0 truncate" style={{ color: INK }}>
                       {stage.name}
                     </p>
-                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: '#0D3352' }}>
+                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: BORDER }}>
                       <div className="h-full rounded-full transition-all"
                         style={{ width: `${barPct}%`, background: stage.color, opacity: 0.7 }} />
                     </div>
                     <div className="flex items-center gap-2 w-20 flex-shrink-0 text-right justify-end">
                       <span className="font-black text-sm" style={{ color: stage.color }}>{count}</span>
-                      <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>{pct}%</span>
+                      <span className="text-[10px]" style={{ color: MUTED }}>{pct}%</span>
                     </div>
                   </div>
                 )
@@ -219,43 +220,43 @@ export default async function ReportesDiscipuladoPage() {
           <section>
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-1.5"
-                style={{ color: withoutStage > 0 ? '#F59E0B' : 'rgba(246,243,235,0.62)' }}>
+                style={{ color: withoutStage > 0 ? '#F59E0B' : MUTED }}>
                 <AlertTriangle size={10} /> Sin etapa ({withoutStage})
               </p>
               {withoutStage > 0 && (
                 <Link href="/admin/discipulado"
                   className="text-[10px] font-bold"
-                  style={{ color: 'rgba(118,171,174,0.60)' }}>
+                  style={{ color: `${GOLD}99` }}>
                   Asignar →
                 </Link>
               )}
             </div>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {unassignedUsers.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <CheckCircle2 size={18} style={{ color: '#76ABAE', margin: '0 auto 8px' }} />
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <CheckCircle2 size={18} style={{ color: GOLD, margin: '0 auto 8px' }} />
+                  <p className="text-xs" style={{ color: MUTED }}>
                     Todos los miembros tienen etapa asignada
                   </p>
                 </div>
               ) : (
-                <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+                <div className="divide-y" style={{ borderColor: BORDER }}>
                   {unassignedUsers.map((p: any) => (
                     <div key={p.id} className="flex items-center gap-3 px-4 py-3">
                       <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center font-bold text-xs flex-shrink-0"
-                        style={{ background: '#0D3352', color: '#76ABAE' }}>
+                        style={{ background: BORDER, color: GOLD }}>
                         {p.avatar_url ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" /> : p.full_name?.[0]?.toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p.full_name}</p>
-                        <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.62)' }}>@{p.username}</p>
+                        <p className="text-sm font-bold truncate" style={{ color: INK }}>{p.full_name}</p>
+                        <p className="text-[10px]" style={{ color: MUTED }}>@{p.username}</p>
                       </div>
                     </div>
                   ))}
                   {withoutStage > 8 && (
                     <div className="px-4 py-2.5 text-center">
                       <Link href="/admin/discipulado" className="text-[10px] font-bold"
-                        style={{ color: 'rgba(118,171,174,0.55)' }}>
+                        style={{ color: `${GOLD}8C` }}>
                         +{withoutStage - 8} más →
                       </Link>
                     </div>
@@ -269,20 +270,20 @@ export default async function ReportesDiscipuladoPage() {
           <section>
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-1.5"
-                style={{ color: stagnant.length > 0 ? '#F59E0B' : 'rgba(246,243,235,0.62)' }}>
+                style={{ color: stagnant.length > 0 ? '#F59E0B' : MUTED }}>
                 <Clock size={10} /> Estancados +14 días ({stagnant.length})
               </p>
             </div>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {stagnant.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <CheckCircle2 size={18} style={{ color: '#76ABAE', margin: '0 auto 8px' }} />
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                  <CheckCircle2 size={18} style={{ color: GOLD, margin: '0 auto 8px' }} />
+                  <p className="text-xs" style={{ color: MUTED }}>
                     No hay alumnos estancados
                   </p>
                 </div>
               ) : (
-                <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+                <div className="divide-y" style={{ borderColor: BORDER }}>
                   {stagnant.map((e: any, i: number) => {
                     const course  = (e as any).discipleship_courses
                     const program = course?.discipleship_programs
@@ -290,17 +291,17 @@ export default async function ReportesDiscipuladoPage() {
                       <div key={i} className="px-4 py-3">
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center text-[9px] font-black flex-shrink-0"
-                            style={{ background: '#0D3352', color: '#76ABAE' }}>
+                            style={{ background: BORDER, color: GOLD }}>
                             {e.profile?.full_name?.[0]?.toUpperCase()}
                           </div>
-                          <p className="text-xs font-bold truncate" style={{ color: '#F6F3EB' }}>{e.profile?.full_name}</p>
+                          <p className="text-xs font-bold truncate" style={{ color: INK }}>{e.profile?.full_name}</p>
                           <span className="text-[10px] font-black ml-auto flex-shrink-0"
                             style={{ color: '#F59E0B' }}>{e.progress_pct}%</span>
                         </div>
-                        <p className="text-[10px] truncate pl-7" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                        <p className="text-[10px] truncate pl-7" style={{ color: MUTED }}>
                           {program?.title} · {course?.title}
                         </p>
-                        <p className="text-[10px] pl-7 mt-0.5" style={{ color: 'rgba(246,243,235,0.25)' }}>
+                        <p className="text-[10px] pl-7 mt-0.5" style={{ color: MUTED }}>
                           Inscripto el {fmtDate(e.enrolled_at)}
                         </p>
                       </div>
@@ -317,28 +318,28 @@ export default async function ReportesDiscipuladoPage() {
         {leadersWithoutStudents.length > 0 && (
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.62)' }}>
+              style={{ color: MUTED }}>
               <UserX size={10} /> Líderes disponibles para mentorear ({leadersWithoutStudents.length})
             </p>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x" style={{ borderColor: '#0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x" style={{ borderColor: BORDER }}>
                 {leadersWithoutStudents.map((p: any) => (
                   <div key={p.id} className="flex items-center gap-3 px-4 py-3">
                     <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm flex-shrink-0"
-                      style={{ background: '#0D3352', color: '#76ABAE' }}>
+                      style={{ background: BORDER, color: GOLD }}>
                       {p.avatar_url ? <img src={p.avatar_url} alt="" className="w-full h-full object-cover" /> : p.full_name?.[0]?.toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{p.full_name}</p>
-                      <p className="text-[10px] capitalize" style={{ color: 'rgba(246,243,235,0.62)' }}>{p.role}</p>
+                      <p className="text-sm font-bold truncate" style={{ color: INK }}>{p.full_name}</p>
+                      <p className="text-[10px] capitalize" style={{ color: MUTED }}>{p.role}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div style={{ borderTop: '1px solid #0D3352' }} className="px-4 py-2.5">
+              <div style={{ borderTop: `1px solid ${BORDER}` }} className="px-4 py-2.5">
                 <Link href="/admin/discipulado/mentores"
                   className="text-[10px] font-bold"
-                  style={{ color: 'rgba(118,171,174,0.60)' }}>
+                  style={{ color: `${GOLD}99` }}>
                   Asignar discípulos →
                 </Link>
               </div>
@@ -349,40 +350,40 @@ export default async function ReportesDiscipuladoPage() {
         {/* ── ACTIVIDAD RECIENTE ── */}
         <section>
           <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-            style={{ color: 'rgba(246,243,235,0.62)' }}>
+            style={{ color: MUTED }}>
             <TrendingUp size={10} /> Lecciones completadas esta semana ({recentActivity.length})
           </p>
-          <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+          <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
             {recentActivity.length === 0 ? (
               <div className="px-5 py-6 text-center">
-                <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                <p className="text-xs" style={{ color: MUTED }}>
                   Sin actividad en los últimos 7 días
                 </p>
               </div>
             ) : (
-              <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+              <div className="divide-y" style={{ borderColor: BORDER }}>
                 {recentActivity.map((r: any, i: number) => {
                   const lesson = r.discipleship_lessons
                   const course = lesson?.discipleship_courses
                   return (
                     <div key={i} className="flex items-center gap-3 px-4 py-3">
                       <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center font-bold text-xs flex-shrink-0"
-                        style={{ background: '#0D3352', color: '#76ABAE' }}>
+                        style={{ background: BORDER, color: GOLD }}>
                         {r.profile?.avatar_url
                           ? <img src={r.profile.avatar_url} alt="" className="w-full h-full object-cover" />
                           : r.profile?.full_name?.[0]?.toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold truncate" style={{ color: '#F6F3EB' }}>
+                        <p className="text-xs font-bold truncate" style={{ color: INK }}>
                           {r.profile?.full_name}
-                          <span className="font-normal" style={{ color: 'rgba(246,243,235,0.68)' }}> completó </span>
+                          <span className="font-normal" style={{ color: MUTED }}> completó </span>
                           {lesson?.title}
                         </p>
-                        <p className="text-[10px] truncate mt-0.5" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                        <p className="text-[10px] truncate mt-0.5" style={{ color: MUTED }}>
                           {course?.title}
                         </p>
                       </div>
-                      <p className="text-[10px] flex-shrink-0" style={{ color: 'rgba(246,243,235,0.55)' }}>
+                      <p className="text-[10px] flex-shrink-0" style={{ color: MUTED }}>
                         {fmtDate(r.completed_at)}
                       </p>
                     </div>
@@ -398,27 +399,27 @@ export default async function ReportesDiscipuladoPage() {
 
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.62)' }}>
+              style={{ color: MUTED }}>
               <CheckCircle2 size={10} /> Más completados
             </p>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {topCompleted.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>Sin completaciones aún</p>
+                  <p className="text-xs" style={{ color: MUTED }}>Sin completaciones aún</p>
                 </div>
               ) : (
-                <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+                <div className="divide-y" style={{ borderColor: BORDER }}>
                   {topCompleted.map(({ course, count }: any, i: number) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-3">
                       <span className="text-[10px] font-black w-4 flex-shrink-0"
-                        style={{ color: '#76ABAE' }}>{i + 1}</span>
+                        style={{ color: GOLD }}>{i + 1}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{course.title}</p>
-                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                        <p className="text-sm font-bold truncate" style={{ color: INK }}>{course.title}</p>
+                        <p className="text-[10px] truncate" style={{ color: MUTED }}>
                           {course.discipleship_programs?.title}
                         </p>
                       </div>
-                      <span className="font-black text-sm flex-shrink-0" style={{ color: '#76ABAE' }}>{count}</span>
+                      <span className="font-black text-sm flex-shrink-0" style={{ color: GOLD }}>{count}</span>
                     </div>
                   ))}
                 </div>
@@ -428,23 +429,23 @@ export default async function ReportesDiscipuladoPage() {
 
           <section>
             <p className="text-xs font-black uppercase tracking-[0.2em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(246,243,235,0.62)' }}>
+              style={{ color: MUTED }}>
               <AlertTriangle size={10} /> Sin iniciar (posible abandono)
             </p>
-            <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               {topAbandoned.length === 0 ? (
                 <div className="px-5 py-6 text-center">
-                  <p className="text-xs" style={{ color: 'rgba(246,243,235,0.62)' }}>Sin datos aún</p>
+                  <p className="text-xs" style={{ color: MUTED }}>Sin datos aún</p>
                 </div>
               ) : (
-                <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+                <div className="divide-y" style={{ borderColor: BORDER }}>
                   {topAbandoned.map(({ course, count }: any, i: number) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-3">
                       <span className="text-[10px] font-black w-4 flex-shrink-0"
                         style={{ color: '#F59E0B' }}>{i + 1}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{course.title}</p>
-                        <p className="text-[10px] truncate" style={{ color: 'rgba(246,243,235,0.62)' }}>
+                        <p className="text-sm font-bold truncate" style={{ color: INK }}>{course.title}</p>
+                        <p className="text-[10px] truncate" style={{ color: MUTED }}>
                           {course.discipleship_programs?.title}
                         </p>
                       </div>

@@ -2,6 +2,7 @@
 import { setUserStage, advanceUserStage } from '@/app/actions/discipleship'
 import { ChevronRight, BookOpen, GraduationCap, Users, BarChart2 } from 'lucide-react'
 import Link from 'next/link'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminDiscipuladoPage({
   searchParams,
@@ -48,7 +49,7 @@ export default async function AdminDiscipuladoPage({
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Discipulado</h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-sm mt-1" style={{ color: MUTED }}>
             {users.length} usuarios · {unassigned} sin etapa asignada
           </p>
         </div>
@@ -57,62 +58,62 @@ export default async function AdminDiscipuladoPage({
         <Link
           href="/admin/discipulado/programas"
           className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-6 transition hover:brightness-110"
-          style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.25)' }}
+          style={{ background: CARD, border: '1px solid rgba(217,166,42,0.25)' }}
         >
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
-            <GraduationCap size={18} style={{ color: '#76ABAE' }} />
+            style={{ background: `${GOLD}1F`, border: '1px solid rgba(217,166,42,0.20)' }}>
+            <GraduationCap size={18} style={{ color: GOLD }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Contenido del LMS</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="font-bold text-sm" style={{ color: INK }}>Contenido del LMS</p>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               {programs?.length ?? 0} programa{programs?.length !== 1 ? 's' : ''} ·{' '}
               {programs?.reduce((n: number, p: any) => n + (p.discipleship_courses?.length ?? 0), 0)} cursos
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
+          <ChevronRight size={16} style={{ color: MUTED }} />
         </Link>
 
         {/* Acceso rápido a Reportes */}
         <Link
           href="/admin/discipulado/reportes"
           className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-4 transition hover:brightness-110"
-          style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}
+          style={{ background: CARD, border: '1px solid rgba(217,166,42,0.20)' }}
         >
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}>
-            <BarChart2 size={18} style={{ color: '#76ABAE' }} />
+            style={{ background: `${GOLD}1F`, border: '1px solid rgba(217,166,42,0.20)' }}>
+            <BarChart2 size={18} style={{ color: GOLD }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Dashboard Pastoral</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="font-bold text-sm" style={{ color: INK }}>Dashboard Pastoral</p>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               Métricas, alertas y actividad reciente
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
+          <ChevronRight size={16} style={{ color: MUTED }} />
         </Link>
 
         {/* Acceso rápido a Mentoría */}
         <Link
           href="/admin/discipulado/mentores"
           className="flex items-center gap-4 px-5 py-4 rounded-2xl mb-4 transition hover:brightness-110"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
+          style={{ background: CARD, border: `1px solid ${BORDER}` }}
         >
           <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid #0D3352' }}>
-            <Users size={18} style={{ color: 'rgba(118,171,174,0.70)' }} />
+            style={{ background: `${GOLD}14`, border: `1px solid ${BORDER}` }}>
+            <Users size={18} style={{ color: `${GOLD}B2` }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Asignaciones de Mentoría</p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <p className="font-bold text-sm" style={{ color: INK }}>Asignaciones de Mentoría</p>
+            <p className="text-xs mt-0.5" style={{ color: MUTED }}>
               Asignar mentores a discípulos y gestionar pares
             </p>
           </div>
-          <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
+          <ChevronRight size={16} style={{ color: MUTED }} />
         </Link>
 
         {/* Separador seguimiento */}
-        <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(246,243,235,0.55)' }}>
+        <p className="text-xs font-black uppercase tracking-[0.2em] mb-4" style={{ color: MUTED }}>
           Seguimiento de etapas
         </p>
 
@@ -121,33 +122,33 @@ export default async function AdminDiscipuladoPage({
           <a href="/admin/discipulado"
             className="p-3 rounded-xl text-center transition"
             style={{
-              background: !stageFilter ? '#0D3352' : '#0B2D47',
-              border: `1px solid ${!stageFilter ? '#1A4A6E' : '#0D3352'}`,
+              background: !stageFilter ? BORDER : CARD,
+              border: `1px solid ${!stageFilter ? BORDER : BORDER}`,
             }}>
-            <p className="font-black text-lg" style={{ color: '#F6F3EB' }}>{unassigned}</p>
+            <p className="font-black text-lg" style={{ color: INK }}>{unassigned}</p>
             <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5"
-              style={{ color: 'rgba(246,243,235,0.68)' }}>Sin etapa</p>
+              style={{ color: MUTED }}>Sin etapa</p>
           </a>
           {stages?.map((s: any) => (
             <a key={s.id} href={`/admin/discipulado?stage=${s.id}`}
               className="p-3 rounded-xl text-center transition"
               style={{
-                background: stageFilter === s.id ? '#0D3352' : '#0B2D47',
-                border: `1px solid ${stageFilter === s.id ? s.color + '60' : '#0D3352'}`,
+                background: stageFilter === s.id ? BORDER : CARD,
+                border: `1px solid ${stageFilter === s.id ? s.color + '60' : BORDER}`,
               }}>
-              <p className="font-black text-lg" style={{ color: stageFilter === s.id ? s.color : '#F6F3EB' }}>
+              <p className="font-black text-lg" style={{ color: stageFilter === s.id ? s.color : INK }}>
                 {stageCounts.get(s.id) ?? 0}
               </p>
               <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5 truncate"
-                style={{ color: 'rgba(246,243,235,0.68)' }}>{s.name}</p>
+                style={{ color: MUTED }}>{s.name}</p>
             </a>
           ))}
         </div>
 
         {/* Users table */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-          <div className="px-5 py-3 border-b" style={{ borderColor: '#0D3352' }}>
-            <p className="text-xs font-bold" style={{ color: 'rgba(246,243,235,0.68)' }}>
+        <div className="rounded-2xl overflow-hidden" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+          <div className="px-5 py-3 border-b" style={{ borderColor: BORDER }}>
+            <p className="text-xs font-bold" style={{ color: MUTED }}>
               {filtered.length} usuarios
             </p>
           </div>
@@ -163,19 +164,19 @@ export default async function AdminDiscipuladoPage({
 
             return (
               <div key={u.id} className="flex flex-col md:flex-row md:items-center gap-3 px-5 py-4 border-b"
-                style={{ borderColor: '#0D3352' }}>
+                style={{ borderColor: BORDER }}>
 
                 {/* User info */}
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-                    style={{ background: '#0D3352', color: '#76ABAE' }}>
+                    style={{ background: BORDER, color: GOLD }}>
                     {u.avatar_url
                       ? <img src={u.avatar_url} alt="" className="w-full h-full object-cover" />
                       : u.full_name?.[0]?.toUpperCase() ?? 'U'}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{u.full_name}</p>
-                    <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>@{u.username}</p>
+                    <p className="text-sm font-bold truncate" style={{ color: INK }}>{u.full_name}</p>
+                    <p className="text-[11px]" style={{ color: MUTED }}>@{u.username}</p>
                   </div>
                 </div>
 
@@ -188,7 +189,7 @@ export default async function AdminDiscipuladoPage({
                     </span>
                   ) : (
                     <span className="text-[11px] px-3 py-1.5 rounded-lg"
-                      style={{ background: '#0D3352', color: 'rgba(246,243,235,0.62)' }}>
+                      style={{ background: BORDER, color: MUTED }}>
                       Sin etapa
                     </span>
                   )}
@@ -209,7 +210,7 @@ export default async function AdminDiscipuladoPage({
                   <form action={setAction} className="flex items-center gap-2">
                     <select name="stage_id" defaultValue={disc?.stage_id ?? ''}
                       className="text-[11px] px-2 py-1.5 rounded-lg focus:outline-none"
-                      style={{ background: '#0D3352', color: '#F6F3EB', border: '1px solid #1A4A6E' }}>
+                      style={{ background: BORDER, color: INK, border: `1px solid ${BORDER}` }}>
                       <option value="">Sin etapa</option>
                       {stages?.map((s: any) => (
                         <option key={s.id} value={s.id}>{s.order_index}. {s.name}</option>
@@ -217,7 +218,7 @@ export default async function AdminDiscipuladoPage({
                     </select>
                     <button type="submit"
                       className="text-[11px] font-bold px-3 py-1.5 rounded-lg"
-                      style={{ background: '#F6F3EB', color: '#061E30' }}>
+                      style={{ background: GOLD, color: GOLD_INK }}>
                       Asignar
                     </button>
                   </form>
@@ -227,7 +228,7 @@ export default async function AdminDiscipuladoPage({
           })}
 
           {filtered.length === 0 && (
-            <div className="py-12 text-center" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <div className="py-12 text-center" style={{ color: MUTED }}>
               <p className="text-sm">No hay usuarios en esta etapa</p>
             </div>
           )}

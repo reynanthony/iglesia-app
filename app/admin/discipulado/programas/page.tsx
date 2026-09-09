@@ -1,6 +1,7 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, BookOpen, ChevronRight } from 'lucide-react'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function ProgramasAdminPage() {
   const supabase = await createClient()
@@ -20,20 +21,20 @@ export default async function ProgramasAdminPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <div className="flex items-center gap-2 text-xs mb-1" style={{ color: MUTED }}>
               <Link href="/admin/discipulado" className="hover:underline">Discipulado</Link>
               <span>/</span>
               <span>Programas</span>
             </div>
-            <h1 className="text-2xl font-bold" style={{ color: '#F6F3EB' }}>Programas</h1>
-            <p className="text-sm mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+            <h1 className="text-2xl font-bold" style={{ color: INK }}>Programas</h1>
+            <p className="text-sm mt-0.5" style={{ color: MUTED }}>
               {programs?.length ?? 0} programa{programs?.length !== 1 ? 's' : ''}
             </p>
           </div>
           <Link
             href="/admin/discipulado/programas/nuevo"
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition"
-            style={{ background: '#F6F3EB', color: '#061E30' }}
+            style={{ background: GOLD, color: GOLD_INK }}
           >
             <Plus size={15} />
             Nuevo programa
@@ -42,16 +43,16 @@ export default async function ProgramasAdminPage() {
 
         {/* Lista */}
         {!programs || programs.length === 0 ? (
-          <div className="rounded-2xl py-16 text-center" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <BookOpen size={32} style={{ color: 'rgba(118,171,174,0.40)', margin: '0 auto 12px' }} />
-            <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Sin programas todavía</p>
-            <p className="text-xs mt-1 mb-4" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <div className="rounded-2xl py-16 text-center" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <BookOpen size={32} style={{ color: `${GOLD}66`, margin: '0 auto 12px' }} />
+            <p className="font-bold text-sm" style={{ color: INK }}>Sin programas todavía</p>
+            <p className="text-xs mt-1 mb-4" style={{ color: MUTED }}>
               Crea el primer programa de formación
             </p>
             <Link
               href="/admin/discipulado/programas/nuevo"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold"
-              style={{ background: '#F6F3EB', color: '#061E30' }}
+              style={{ background: GOLD, color: GOLD_INK }}
             >
               <Plus size={14} /> Crear programa
             </Link>
@@ -66,18 +67,18 @@ export default async function ProgramasAdminPage() {
                   key={p.id}
                   href={`/admin/discipulado/programas/${p.id}`}
                   className="flex items-center gap-4 px-5 py-4 rounded-2xl transition hover:brightness-110"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'rgba(118,171,174,0.12)', border: '1px solid rgba(118,171,174,0.20)' }}
+                    style={{ background: `${GOLD}1F`, border: '1px solid rgba(217,166,42,0.20)' }}
                   >
-                    <BookOpen size={18} style={{ color: '#76ABAE' }} />
+                    <BookOpen size={18} style={{ color: GOLD }} />
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-bold text-sm truncate" style={{ color: '#F6F3EB' }}>{p.title}</p>
+                      <p className="font-bold text-sm truncate" style={{ color: INK }}>{p.title}</p>
                       {!p.is_active && (
                         <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded"
                           style={{ background: 'rgba(248,113,113,0.12)', color: '#F87171' }}>
@@ -86,7 +87,7 @@ export default async function ProgramasAdminPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-xs" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                      <span className="text-xs" style={{ color: MUTED }}>
                         {courseCount} curso{courseCount !== 1 ? 's' : ''}
                       </span>
                       {stage && (
@@ -98,7 +99,7 @@ export default async function ProgramasAdminPage() {
                     </div>
                   </div>
 
-                  <ChevronRight size={16} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0 }} />
+                  <ChevronRight size={16} style={{ color: MUTED, flexShrink: 0 }} />
                 </Link>
               )
             })}
