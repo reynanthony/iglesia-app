@@ -1,17 +1,35 @@
-﻿'use client'
+'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, BookOpen, Loader2, Search, Check } from 'lucide-react'
+import { ChevronLeft, BookOpen, Loader2, Search, Check, Sun, Moon } from 'lucide-react'
 import { OT_BOOKS, NT_BOOKS, type BibleBook } from '@/lib/bible'
 import { fetchVerseCount } from '@/app/actions/bible'
 
 type ReadingLog = Record<string, Record<number, { readUpTo: number; read: boolean }>>
+type SelTheme = 'light' | 'dark'
+
+interface SelPalette {
+  bg: string; border: string; cardBg: string; cardBorder: string
+  text: string; textDim: string; textDim2: string; breadcrumbBg: string
+}
+
+const SEL: Record<SelTheme, SelPalette> = {
+  light: {
+    bg: '#F6F3EB', border: '#D2CDB8', cardBg: '#FFFFFF', cardBorder: '#E3DDD2',
+    text: '#093C5D', textDim: 'rgba(9,60,93,0.5)', textDim2: 'rgba(9,60,93,0.6)',
+    breadcrumbBg: 'rgba(246,243,235,0.97)',
+  },
+  dark: {
+    bg: '#101217', border: '#292E3B', cardBg: '#181A22', cardBorder: '#292E3B',
+    text: '#FFFFFF', textDim: 'rgba(255,255,255,0.5)', textDim2: 'rgba(255,255,255,0.62)',
+    breadcrumbBg: 'rgba(16,18,23,0.95)',
+  },
+}
 
 const GOLD  = '#C9A227'
 const TEAL  = '#76ABAE'
-const NAVY  = '#093C5D'
 
 const OT_CATS = [
   { label: 'Pentateuco',        books: OT_BOOKS.slice(0, 5)   },
@@ -41,8 +59,23 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
   const [verseCount, setVerseCount]   = useState(0)
   const [loadingVerses, setLoading]   = useState(false)
   const [fading, setFading]           = useState(false)
+  const [theme, setTheme]             = useState<SelTheme>('light')
 
   const accent = isOT ? GOLD : TEAL
+  const s = SEL[theme]
+
+  // Comparte preferencia con el tema oscuro/claro del lector (bible-theme):
+  // 'dark' allá equivale a 'dark' acá, cualquier otro valor es 'light'.
+  useEffect(() => {
+    const saved = localStorage.getItem('bible-theme')
+    setTheme(saved === 'dark' ? 'dark' : 'light')
+  }, [])
+
+  function toggleTheme() {
+    const next: SelTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('bible-theme', next === 'dark' ? 'dark' : 'cream')
+  }
 
   function transition(fn: () => void) {
     setFading(true)
@@ -86,53 +119,64 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
   }
 
   return (
-    <section id="selector" ref={sectionRef} style={{ background: '#F6F3EB', borderBottom: '1px solid #D2CDB8' }}>
+    <section id="selector" ref={sectionRef} style={{ background: s.bg, borderBottom: `1px solid ${s.border}`, transition: 'background 0.2s' }}>
 
       {/* ── Sticky breadcrumb ── */}
       <div
         className="sticky top-0 z-20 w-full flex items-center gap-2.5 px-6 py-2.5 overflow-x-auto no-scrollbar"
-        style={{ background: 'rgba(246,243,235,0.97)', backdropFilter: 'blur(16px)', borderBottom: '1px solid #D2CDB8' }}
+        style={{ background: s.breadcrumbBg, backdropFilter: 'blur(16px)', borderBottom: `1px solid ${s.border}` }}
       >
-        <BookOpen size={10} style={{ color: `${NAVY}45`, flexShrink: 0 }} />
+        <BookOpen size={10} style={{ color: s.textDim, flexShrink: 0 }} />
 
         {step === 'books' && (
           <>
-            <Crumb label="La Biblia" dim />
-            <Sep />
-            <Crumb label="RVR1960" color={TEAL} bold />
-            <Sep />
-            <Crumb label="Elige un libro" dim />
+            <Crumb label="La Biblia" dim s={s} />
+            <Sep s={s} />
+            <Crumb label="RVR1960" color={TEAL} bold s={s} />
+            <Sep s={s} />
+            <Crumb label="Elige un libro" dim s={s} />
           </>
         )}
 
         {step === 'chapters' && (
           <>
-            <CrumbBtn label="Libros" onClick={goToBooks} />
-            <Sep />
-            <Crumb label={book?.name ?? ''} color={accent} bold />
-            <Sep />
-            <Crumb label="Elige un capítulo" dim />
+            <CrumbBtn label="Libros" onClick={goToBooks} s={s} />
+            <Sep s={s} />
+            <Crumb label={book?.name ?? ''} color={accent} bold s={s} />
+            <Sep s={s} />
+            <Crumb label="Elige un capítulo" dim s={s} />
           </>
         )}
 
         {step === 'verses' && (
           <>
-            <CrumbBtn label="Libros" onClick={goToBooks} />
-            <Sep />
-            <CrumbBtn label={book?.name ?? ''} onClick={goToChapters} color={accent} />
-            <Sep />
-            <Crumb label={`Capítulo ${chapter}`} color={accent} bold />
-            <Sep />
-            <Crumb label="Elige un versículo" dim />
+            <CrumbBtn label="Libros" onClick={goToBooks} s={s} />
+            <Sep s={s} />
+            <CrumbBtn label={book?.name ?? ''} onClick={goToChapters} color={accent} s={s} />
+            <Sep s={s} />
+            <Crumb label={`Capítulo ${chapter}`} color={accent} bold s={s} />
+            <Sep s={s} />
+            <Crumb label="Elige un versículo" dim s={s} />
           </>
         )}
 
-        <Link href="/biblia/buscar"
-          className="ml-auto flex-shrink-0 flex items-center gap-1.5 transition-opacity hover:opacity-60"
-          style={{ color: `${NAVY}B0` }}>
-          <Search size={11} />
-          <span className="text-[9px] font-bold uppercase tracking-[0.32em]">Buscar</span>
-        </Link>
+        <div className="ml-auto flex-shrink-0 flex items-center gap-4">
+          <button onClick={toggleTheme}
+            className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
+            style={{ color: s.textDim2 }}
+            aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}>
+            {theme === 'dark' ? <Sun size={11} /> : <Moon size={11} />}
+            <span className="text-[9px] font-bold uppercase tracking-[0.32em]">
+              {theme === 'dark' ? 'Claro' : 'Oscuro'}
+            </span>
+          </button>
+          <Link href="/biblia/buscar"
+            className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
+            style={{ color: s.textDim2 }}>
+            <Search size={11} />
+            <span className="text-[9px] font-bold uppercase tracking-[0.32em]">Buscar</span>
+          </Link>
+        </div>
       </div>
 
       {/* ── Content ── */}
@@ -148,8 +192,8 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
         {/* STEP 1: Books */}
         {step === 'books' && (
           <div className="space-y-20">
-            <Testament label="Antiguo Testamento" accent={GOLD} cats={OT_CATS} onSelect={(b) => selectBook(b, true)} readingLog={readingLog} />
-            <Testament label="Nuevo Testamento"   accent={TEAL} cats={NT_CATS} onSelect={(b) => selectBook(b, false)} readingLog={readingLog} />
+            <Testament label="Antiguo Testamento" accent={GOLD} cats={OT_CATS} onSelect={(b) => selectBook(b, true)} readingLog={readingLog} s={s} />
+            <Testament label="Nuevo Testamento"   accent={TEAL} cats={NT_CATS} onSelect={(b) => selectBook(b, false)} readingLog={readingLog} s={s} />
           </div>
         )}
 
@@ -161,13 +205,14 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
               title={book.name}
               sub={`${book.chapters} capítulos · RVR1960`}
               accent={accent}
+              s={s}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))', gap: 8 }}>
               {Array.from({ length: book.chapters }, (_, i) => i + 1).map(n => {
                 const progress = readingLog?.[book.id]?.[n]
                 return (
                   <ChapterCard
-                    key={n} n={n} accent={accent}
+                    key={n} n={n} accent={accent} s={s}
                     loading={loadingVerses && chapter === n}
                     read={!!progress?.read}
                     inProgress={!progress?.read && !!progress && progress.readUpTo > 0}
@@ -187,12 +232,13 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
               title="¿Desde qué versículo?"
               sub={`${verseCount} versículos en este capítulo`}
               accent={accent}
+              s={s}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))', gap: 7 }}>
               {(() => {
                 const readUpTo = readingLog?.[book.id]?.[chapter]?.readUpTo ?? 0
                 return Array.from({ length: verseCount }, (_, i) => i + 1).map(n => (
-                  <VerseCard key={n} n={n} accent={accent} read={n <= readUpTo} onClick={() => selectVerse(n)} />
+                  <VerseCard key={n} n={n} accent={accent} s={s} read={n <= readUpTo} onClick={() => selectVerse(n)} />
                 ))
               })()}
             </div>
@@ -206,27 +252,28 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
 
 /* ─── Testament section ─── */
 function Testament({
-  label, accent, cats, onSelect, readingLog,
+  label, accent, cats, onSelect, readingLog, s,
 }: {
   label: string
   accent: string
   cats: { label: string; books: BibleBook[] }[]
   onSelect: (b: BibleBook) => void
   readingLog?: ReadingLog
+  s: SelPalette
 }) {
   return (
     <div>
       <div className="flex items-center gap-4 mb-12">
-        <div className="h-px flex-1" style={{ background: '#D2CDB8' }} />
+        <div className="h-px flex-1" style={{ background: s.border }} />
         <p className="font-black uppercase" style={{ fontSize: 11, letterSpacing: '0.40em', color: accent }}>
           {label}
         </p>
-        <div className="h-px flex-1" style={{ background: '#D2CDB8' }} />
+        <div className="h-px flex-1" style={{ background: s.border }} />
       </div>
       <div className="space-y-10">
         {cats.map(cat => (
           <div key={cat.label}>
-            <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: `${NAVY}D9` }}>
+            <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: s.textDim2 }}>
               {cat.label}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 10 }}>
@@ -234,7 +281,7 @@ function Testament({
                 const bookLog = readingLog?.[b.id]
                 const chaptersRead = bookLog ? Object.keys(bookLog).length : 0
                 return (
-                  <BookCard key={b.id} book={b} accent={accent} chaptersRead={chaptersRead} onClick={() => onSelect(b)} />
+                  <BookCard key={b.id} book={b} accent={accent} chaptersRead={chaptersRead} s={s} onClick={() => onSelect(b)} />
                 )
               })}
             </div>
@@ -247,8 +294,8 @@ function Testament({
 
 /* ─── Book card — flat, modern, accent stripe ─── */
 function BookCard({
-  book, accent, chaptersRead, onClick,
-}: { book: BibleBook; accent: string; chaptersRead: number; onClick: () => void }) {
+  book, accent, chaptersRead, s, onClick,
+}: { book: BibleBook; accent: string; chaptersRead: number; s: SelPalette; onClick: () => void }) {
   const pct = Math.min(100, Math.round((chaptersRead / book.chapters) * 100))
   return (
     <button
@@ -257,15 +304,15 @@ function BookCard({
       style={{
         height: 92,
         padding: '13px 14px 12px',
-        background: '#FFFFFF',
-        border: '1px solid #E3DDD2',
+        background: s.cardBg,
+        border: `1px solid ${s.cardBorder}`,
         borderTop: `3px solid ${accent}`,
         cursor: 'pointer',
       }}
     >
       <span
         className="relative font-black leading-tight"
-        style={{ fontSize: 13, color: NAVY, lineHeight: 1.28, zIndex: 1 }}
+        style={{ fontSize: 13, color: s.text, lineHeight: 1.28, zIndex: 1 }}
       >
         {book.name}
       </span>
@@ -294,8 +341,8 @@ function BookCard({
 
 /* ─── Chapter card ─── */
 function ChapterCard({
-  n, accent, loading, read, inProgress, onClick,
-}: { n: number; accent: string; loading?: boolean; read?: boolean; inProgress?: boolean; onClick: () => void }) {
+  n, accent, loading, read, inProgress, s, onClick,
+}: { n: number; accent: string; loading?: boolean; read?: boolean; inProgress?: boolean; s: SelPalette; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -303,8 +350,8 @@ function ChapterCard({
       className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
         height: 58,
-        background: read ? accent : '#FFFFFF',
-        border: `1px solid ${read ? accent : inProgress ? `${accent}80` : '#E3DDD2'}`,
+        background: read ? accent : s.cardBg,
+        border: `1px solid ${read ? accent : inProgress ? `${accent}80` : s.cardBorder}`,
         cursor: loading ? 'default' : 'pointer',
       }}
     >
@@ -313,7 +360,7 @@ function ChapterCard({
       ) : read ? (
         <Check size={16} strokeWidth={3} style={{ color: '#FFFFFF' }} />
       ) : (
-        <span className="font-black" style={{ fontSize: 16, color: NAVY }}>{n}</span>
+        <span className="font-black" style={{ fontSize: 16, color: s.text }}>{n}</span>
       )}
       {inProgress && !read && (
         <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
@@ -327,19 +374,21 @@ function ChapterCard({
 }
 
 /* ─── Verse card ─── */
-function VerseCard({ n, accent, read, onClick }: { n: number; accent: string; read?: boolean; onClick: () => void }) {
+function VerseCard({
+  n, accent, read, s, onClick,
+}: { n: number; accent: string; read?: boolean; s: SelPalette; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
         height: 48,
-        background: read ? `${accent}14` : '#FFFFFF',
-        border: `1px solid ${read ? `${accent}60` : '#E3DDD2'}`,
+        background: read ? `${accent}14` : s.cardBg,
+        border: `1px solid ${read ? `${accent}60` : s.cardBorder}`,
         cursor: 'pointer',
       }}
     >
-      <span className="font-bold" style={{ fontSize: 13, color: read ? accent : NAVY }}>{n}</span>
+      <span className="font-bold" style={{ fontSize: 13, color: read ? accent : s.text }}>{n}</span>
       <div
         className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
         style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}
@@ -349,39 +398,45 @@ function VerseCard({ n, accent, read, onClick }: { n: number; accent: string; re
 }
 
 /* ─── Step heading ─── */
-function StepHeading({ eyebrow, title, sub, accent }: { eyebrow: string; title: string; sub: string; accent: string }) {
+function StepHeading({
+  eyebrow, title, sub, accent, s,
+}: { eyebrow: string; title: string; sub: string; accent: string; s: SelPalette }) {
   return (
     <div className="mb-12">
       <p className="font-bold uppercase mb-2" style={{ fontSize: 9, letterSpacing: '0.42em', color: `${accent}90` }}>
         {eyebrow}
       </p>
       <h2 className="font-black tracking-tighter leading-none mb-2"
-        style={{ fontSize: 'clamp(2.8rem, 9vw, 6rem)', color: NAVY }}>
+        style={{ fontSize: 'clamp(2.8rem, 9vw, 6rem)', color: s.text }}>
         {title}
       </h2>
-      <p style={{ fontSize: 13, color: `${NAVY}99` }}>{sub}</p>
+      <p style={{ fontSize: 13, color: s.textDim2 }}>{sub}</p>
     </div>
   )
 }
 
 /* ─── Breadcrumb helpers ─── */
-function Crumb({ label, color, bold, dim }: { label: string; color?: string; bold?: boolean; dim?: boolean }) {
+function Crumb({
+  label, color, bold, dim, s,
+}: { label: string; color?: string; bold?: boolean; dim?: boolean; s: SelPalette }) {
   return (
     <span
       className="text-[9px] uppercase tracking-[0.34em] whitespace-nowrap flex-shrink-0"
-      style={{ color: color ?? (dim ? `${NAVY}80` : `${NAVY}E0`), fontWeight: bold ? 900 : 700 }}
+      style={{ color: color ?? (dim ? s.textDim : s.text), fontWeight: bold ? 900 : 700 }}
     >
       {label}
     </span>
   )
 }
 
-function CrumbBtn({ label, onClick, color }: { label: string; onClick: () => void; color?: string }) {
+function CrumbBtn({
+  label, onClick, color, s,
+}: { label: string; onClick: () => void; color?: string; s: SelPalette }) {
   return (
     <button
       onClick={onClick}
       className="flex items-center gap-1 flex-shrink-0 transition-opacity hover:opacity-60"
-      style={{ color: color ?? `${NAVY}B0` }}
+      style={{ color: color ?? s.textDim2 }}
     >
       <ChevronLeft size={10} />
       <span className="text-[9px] font-bold uppercase tracking-[0.32em]">{label}</span>
@@ -389,6 +444,6 @@ function CrumbBtn({ label, onClick, color }: { label: string; onClick: () => voi
   )
 }
 
-function Sep() {
-  return <span className="flex-shrink-0 select-none" style={{ color: '#D2CDB8', fontSize: 9 }}>·</span>
+function Sep({ s }: { s: SelPalette }) {
+  return <span className="flex-shrink-0 select-none" style={{ color: s.border, fontSize: 9 }}>·</span>
 }

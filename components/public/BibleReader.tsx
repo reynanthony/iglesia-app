@@ -3,6 +3,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Literata, Merriweather, Lora, Atkinson_Hyperlegible } from 'next/font/google'
 import {
   ArrowLeft, Copy, Share2, ChevronLeft, ChevronRight,
   BookOpen, Check, Bookmark, FileText, Image, ScrollText,
@@ -17,10 +18,17 @@ import {
 } from '@/app/actions/bible'
 import { hapticLight } from '@/lib/haptics'
 
+// ── Tipografías de lectura adicionales (solo se cargan aquí, no en el
+// layout global) — sus variables CSS se aplican en el wrapper raíz.
+const literata     = Literata({ variable: '--font-literata', subsets: ['latin'], weight: ['400', '600'] })
+const merriweather = Merriweather({ variable: '--font-merriweather', subsets: ['latin'], weight: ['400', '700'] })
+const lora         = Lora({ variable: '--font-lora', subsets: ['latin'], weight: ['400', '600'] })
+const atkinson     = Atkinson_Hyperlegible({ variable: '--font-atkinson', subsets: ['latin'], weight: ['400', '700'] })
+
 // ── Types ──────────────────────────────────────────────────────
 type Theme      = 'cream' | 'sepia' | 'dark'
 type FontSize   = 'sm' | 'md' | 'lg'
-type FontFamily = 'sans' | 'serif'
+type FontFamily = 'sans' | 'serif' | 'literata' | 'merriweather' | 'lora' | 'atkinson'
 type Highlights = Record<string, number>   // verse number → color index
 type Notes      = Record<string, string>   // verse number → note text
 
@@ -86,8 +94,12 @@ const T = {
 
 const FS: Record<FontSize, number> = { sm: 17, md: 20, lg: 24 }
 const FF: Record<FontFamily, { css: string; label: string }> = {
-  sans:  { css: "var(--font-plus-jakarta), var(--font-geist-sans), system-ui, sans-serif", label: 'Sans' },
-  serif: { css: "Georgia, 'Times New Roman', serif", label: 'Serif' },
+  sans:         { css: "var(--font-plus-jakarta), var(--font-geist-sans), system-ui, sans-serif", label: 'Sans' },
+  serif:        { css: "Georgia, 'Times New Roman', serif", label: 'Georgia' },
+  literata:     { css: "var(--font-literata), Georgia, serif", label: 'Literata' },
+  merriweather: { css: "var(--font-merriweather), Georgia, serif", label: 'Merriweather' },
+  lora:         { css: "var(--font-lora), Georgia, serif", label: 'Lora' },
+  atkinson:     { css: "var(--font-atkinson), system-ui, sans-serif", label: 'Atkinson' },
 }
 
 const HL = [
@@ -670,6 +682,7 @@ export function BibleReader({
   // ── Render ─────────────────────────────────────────────────
   return (
     <div
+      className={`${literata.variable} ${merriweather.variable} ${lora.variable} ${atkinson.variable}`}
       style={{ background: t.bg, minHeight: '100vh', transition: 'background 0.25s' }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -867,19 +880,19 @@ export function BibleReader({
         }}>
         {showPanel && (
           <div className="px-5 pt-3.5 pb-3" style={{ borderBottom: `1px solid ${t.toolbarBorder}` }}>
-            <div className="max-w-xs mx-auto flex items-center justify-center gap-2 mb-3" role="group" aria-label="Tipografía">
-              {(['sans', 'serif'] as FontFamily[]).map(f => (
+            <div className="max-w-sm mx-auto grid grid-cols-3 gap-2 mb-3" role="group" aria-label="Tipografía">
+              {(Object.keys(FF) as FontFamily[]).map(f => (
                 <button key={f} onClick={() => setFontFamily(f)}
                   aria-label={FF[f].label}
                   aria-pressed={fontFamily === f}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-[13px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+                  className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                   style={{
                     background: fontFamily === f ? `${TEAL}18` : t.surface,
                     color: fontFamily === f ? TEAL : t.text,
                     border: `1px solid ${fontFamily === f ? `${TEAL}50` : t.border}`,
-                    fontFamily: FF[f].css,
                   }}>
-                  Aa <span className="text-[10px] font-bold uppercase tracking-[0.1em]" style={{ fontFamily: FF.sans.css }}>{FF[f].label}</span>
+                  <span style={{ fontFamily: FF[f].css, fontSize: 16, fontWeight: 700 }}>Aa</span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.06em]" style={{ fontFamily: FF.sans.css }}>{FF[f].label}</span>
                 </button>
               ))}
             </div>
