@@ -32,7 +32,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const initial = profile?.full_name?.[0]?.toUpperCase() ?? 'U'
 
   return (
-    <div className="min-h-screen font-app" style={{ background: BG, color: '#F6F3EB' }}>
+    <div className="min-h-screen font-app" style={{ background: BG, color: INK }}>
       <CapacitorBridge />
       <AnnouncementGate
         onboardingCompleted={profile?.onboarding_completed ?? false}

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Plus, Loader2 } from 'lucide-react'
 import { fetchMorePosts } from '@/app/actions/posts'
 import { createClient } from '@/lib/supabase/client'
+import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const PAGE_SIZE = 20
 const MAX_POSTS  = 60
@@ -80,25 +81,25 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
             <line key={i} x1="40" y1="40"
               x2={40 + 36 * Math.cos((deg * Math.PI) / 180)}
               y2={40 + 36 * Math.sin((deg * Math.PI) / 180)}
-              stroke="rgba(118,171,174,0.55)" strokeWidth="0.8" strokeOpacity="0.3"
+              stroke="rgba(217,166,42,0.55)" strokeWidth="0.8" strokeOpacity="0.3"
             />
           ))}
-          <circle cx="40" cy="40" r="28" stroke="rgba(118,171,174,0.55)" strokeWidth="0.6" strokeOpacity="0.15" fill="none" />
-          <rect x="37" y="18" width="6" height="44" rx="3" fill="rgba(118,171,174,0.55)" fillOpacity="0.9" />
-          <rect x="18" y="33" width="44" height="6" rx="3" fill="rgba(118,171,174,0.55)" fillOpacity="0.9" />
+          <circle cx="40" cy="40" r="28" stroke="rgba(217,166,42,0.55)" strokeWidth="0.6" strokeOpacity="0.15" fill="none" />
+          <rect x="37" y="18" width="6" height="44" rx="3" fill="rgba(217,166,42,0.55)" fillOpacity="0.9" />
+          <rect x="18" y="33" width="44" height="6" rx="3" fill="rgba(217,166,42,0.55)" fillOpacity="0.9" />
         </svg>
         <div>
-          <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+          <p className="font-black text-lg tracking-tight mb-2" style={{ color: INK }}>
             Sé el primero en publicar
           </p>
-          <p className="text-sm leading-relaxed max-w-[220px] mx-auto" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-sm leading-relaxed max-w-[220px] mx-auto" style={{ color: MUTED }}>
             Comparte lo que Dios puso en tu corazón
           </p>
         </div>
         <Link
           href="/app/nuevo-post"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black"
-          style={{ background: '#F6F3EB', color: '#061E30' }}
+          style={{ background: INK, color: BG }}
         >
           <Plus size={16} /> Publicar
         </Link>
@@ -130,7 +131,7 @@ export default function ComunidadFeedScroll({ initialPosts, currentUserId }: Pro
           className="w-full flex-shrink-0 flex items-center justify-center"
           style={{ height: 80, scrollSnapAlign: 'start' }}
         >
-          {loading && <Loader2 size={20} className="animate-spin" style={{ color: 'rgba(118,171,174,0.50)' }} />}
+          {loading && <Loader2 size={20} className="animate-spin" style={{ color: `${GOLD}80` }} />}
         </div>
       )}
     </>

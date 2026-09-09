@@ -1,3 +1,4 @@
+import { BG, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 ﻿import Link from 'next/link'
 
 interface Stage {
@@ -19,16 +20,16 @@ export default function DiscipleshipProgress({ stages, currentStage, isOwner }: 
   const sorted = [...stages].sort((a, b) => a.order_index - b.order_index)
 
   return (
-    <div className="mt-6 pt-6" style={{ borderTop: '1px solid #0D3352' }}>
+    <div className="mt-6 pt-6" style={{ borderTop: `1px solid ${BORDER}` }}>
       <div className="flex items-center justify-between mb-4">
         <p className="text-[11px] font-black uppercase tracking-[0.25em]"
-          style={{ color: 'rgba(118,171,174,0.60)' }}>
+          style={{ color: `${GOLD}99` }}>
           Camino de discipulado
         </p>
         {isOwner && (
           <Link href="/app/discipulado"
             className="text-[11px] font-bold"
-            style={{ color: '#76ABAE' }}>
+            style={{ color: GOLD }}>
             Ver detalles →
           </Link>
         )}
@@ -50,20 +51,20 @@ export default function DiscipleshipProgress({ stages, currentStage, isOwner }: 
                     style={{
                       background: isCurrent ? stage.color
                                 : isDone    ? `${stage.color}50`
-                                :             '#0D3352',
+                                :             BORDER,
                       border: isCurrent ? `2px solid ${stage.color}`
                             : isDone    ? `1px solid ${stage.color}50`
-                            :             '1px solid #1A4A6E',
-                      color: isCurrent ? '#061E30'
+                            :             `1px solid ${BORDER}`,
+                      color: isCurrent ? BG
                            : isDone    ? stage.color
-                           :             'rgba(246,243,235,0.20)',
+                           :             MUTED,
                     }}
                   >
                     {stage.order_index}
                   </div>
                   {!isLast && (
                     <div className="h-px flex-1 mx-0.5"
-                      style={{ background: isDone ? `${stage.color}40` : '#0D3352' }} />
+                      style={{ background: isDone ? `${stage.color}40` : BORDER }} />
                   )}
                 </div>
               )
@@ -77,13 +78,13 @@ export default function DiscipleshipProgress({ stages, currentStage, isOwner }: 
             <p className="text-sm font-bold" style={{ color: currentStage.color }}>
               {currentStage.name}
             </p>
-            <span className="text-[11px]" style={{ color: 'rgba(246,243,235,0.55)' }}>
+            <span className="text-[11px]" style={{ color: MUTED }}>
               Etapa {currentStage.order_index} de {sorted.length}
             </span>
           </div>
         </>
       ) : (
-        <p className="text-[12px]" style={{ color: 'rgba(246,243,235,0.62)' }}>
+        <p className="text-[12px]" style={{ color: MUTED }}>
           Sin etapa asignada — un líder puede asignarte una desde el panel.
         </p>
       )}

@@ -4,6 +4,7 @@ import AudioRoom from '@/components/AudioRoom'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { closeRoom } from '@/app/actions/rooms'
+import { BORDER, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function SalaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -24,17 +25,17 @@ export default async function SalaPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="room-height flex flex-col">
       <div className="flex-shrink-0 px-5 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid #0D3352' }}>
+        style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="flex items-center gap-3">
           <Link href="/app/oracion/salas"
-            className="p-2.5 hover:bg-[#0D3352] rounded-xl transition"
-            style={{ color: '#76ABAE' }}>
+            className="p-2.5 hover:bg-[#292E3B] rounded-xl transition"
+            style={{ color: GOLD }}>
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="font-bold" style={{ color: '#F6F3EB' }}>{room.name}</h1>
+            <h1 className="font-bold" style={{ color: INK }}>{room.name}</h1>
             {room.description && (
-              <p className="text-xs" style={{ color: 'rgba(118,171,174,0.60)' }}>{room.description}</p>
+              <p className="text-xs" style={{ color: `${GOLD}99` }}>{room.description}</p>
             )}
           </div>
         </div>

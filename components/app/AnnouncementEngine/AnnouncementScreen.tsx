@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Smartphone, Volume2, VolumeX } from 'lucide-react'
+import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const NEXT_CAMPAIGN = '__next__'
 
@@ -72,14 +73,14 @@ export interface AnnouncementData {
 const PRIORITY_CONFIG = {
   critical: { label: 'URGENTE',    color: '#F87171', bg: 'rgba(248,113,113,0.15)', border: 'rgba(248,113,113,0.30)' },
   high:     { label: 'IMPORTANTE', color: '#F59E0B', bg: 'rgba(245,158,11,0.15)',  border: 'rgba(245,158,11,0.30)'  },
-  normal:   { label: 'ANUNCIO',    color: '#76ABAE', bg: 'rgba(118,171,174,0.15)', border: 'rgba(118,171,174,0.30)' },
+  normal:   { label: 'ANUNCIO',    color: GOLD, bg: `${GOLD}26`, border: `${GOLD}4C` },
 }
 
 const GRADIENT_FALLBACK: Record<string, string> = {
   critical:         'linear-gradient(160deg, #1a0a0a 0%, #2d0f0f 40%, #1a0505 100%)',
   high:             'linear-gradient(160deg, #0f1000 0%, #1f1a00 40%, #0a0f00 100%)',
-  normal:           'linear-gradient(160deg, #061E30 0%, #0B2D47 50%, #061E30 100%)',
-  pastoral_message: 'linear-gradient(160deg, #061E30 0%, #0a2040 40%, #061E30 100%)',
+  normal:           'linear-gradient(160deg, #101217 0%, #181A22 50%, #101217 100%)',
+  pastoral_message: 'linear-gradient(160deg, #101217 0%, #0a2040 40%, #101217 100%)',
   event:            'linear-gradient(160deg, #0a0a1a 0%, #101030 40%, #06061E 100%)',
   live_invitation:  'linear-gradient(160deg, #1a0606 0%, #2d1010 40%, #1a0505 100%)',
 }
@@ -188,13 +189,13 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
           style={{
             background: 'rgba(6,30,48,0.70)',
             backdropFilter: 'blur(6px)',
-            border: `1px solid ${isMuted ? 'rgba(246,243,235,0.12)' : 'rgba(118,171,174,0.40)'}`,
+            border: `1px solid ${isMuted ? MUTED : `${GOLD}66`}`,
             WebkitTapHighlightColor: 'transparent',
           }}
         >
           {isMuted
-            ? <VolumeX size={16} style={{ color: 'rgba(246,243,235,0.55)' }} />
-            : <Volume2 size={16} style={{ color: '#76ABAE' }} />
+            ? <VolumeX size={16} style={{ color: MUTED }} />
+            : <Volume2 size={16} style={{ color: GOLD }} />
           }
         </button>
       )}
@@ -203,12 +204,12 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
       {showRotateHint && (
         <div
           className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-2 rounded-full"
-          style={{ background: 'rgba(6,30,48,0.70)', backdropFilter: 'blur(6px)', border: '1px solid rgba(246,243,235,0.12)' }}
+          style={{ background: 'rgba(6,30,48,0.70)', backdropFilter: 'blur(6px)', border: '1px solid rgba(139,146,162,0.12)' }}
         >
           <div className="elm-phone-tilt">
-            <Smartphone size={13} style={{ color: '#76ABAE' }} strokeWidth={1.5} />
+            <Smartphone size={13} style={{ color: GOLD }} strokeWidth={1.5} />
           </div>
-          <span className="text-[10px] font-bold" style={{ color: 'rgba(246,243,235,0.75)' }}>
+          <span className="text-[10px] font-bold" style={{ color: MUTED }}>
             Gira para pantalla completa
           </span>
         </div>
@@ -235,7 +236,7 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
             {announcement.title?.trim() && (
               <h1
                 className="elm-slide-up elm-delay-1 font-black tracking-tight leading-[0.92] mb-4"
-                style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', color: '#F6F3EB' }}
+                style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', color: INK }}
               >
                 {announcement.title}
               </h1>
@@ -244,7 +245,7 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
             {announcement.description?.trim() && (
               <p
                 className="elm-slide-up elm-delay-2 leading-relaxed mb-8 md:max-w-lg"
-                style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.0625rem)', color: 'rgba(246,243,235,0.65)' }}
+                style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.0625rem)', color: MUTED }}
               >
                 {announcement.description}
               </p>
@@ -255,7 +256,7 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
                 <button
                   onClick={handleCta}
                   className="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition-transform active:scale-[0.97]"
-                  style={{ background: '#F6F3EB', color: '#061E30' }}
+                  style={{ background: INK, color: BG }}
                 >
                   {ctaLabel}
                 </button>
@@ -269,7 +270,7 @@ export default function AnnouncementScreen({ announcement, onContinue }: Props) 
           <button
             onClick={onContinue}
             className="w-full py-3.5 rounded-2xl font-bold text-sm transition-transform active:scale-[0.97]"
-            style={{ background: 'rgba(246,243,235,0.08)', color: 'rgba(246,243,235,0.60)', border: '1px solid rgba(246,243,235,0.12)' }}
+            style={{ background: 'rgba(255,255,255,0.08)', color: MUTED, border: '1px solid rgba(139,146,162,0.12)' }}
           >
             Continuar →
           </button>

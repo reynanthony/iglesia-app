@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import { Heart, Users2, BookOpen, ChevronRight } from 'lucide-react'
+import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const SLIDES = [
   {
     icon: Heart,
-    accent: '#76ABAE',
+    accent: GOLD,
     eyebrow: 'Bienvenido',
     title: 'El Manantial',
     subtitle: 'Un espacio donde la fe se vive, comparte y crece cada día.',
@@ -55,7 +56,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
   return (
     <div
       className="fixed inset-0 z-[9999] flex flex-col sm:items-center sm:justify-center"
-      style={{ background: '#061E30' }}
+      style={{ background: BG }}
     >
       {/* Desktop backdrop */}
       <div className="pointer-events-none absolute inset-0 hidden sm:block" style={{ background: 'rgba(0,0,0,0.38)' }} />
@@ -72,7 +73,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
       {/* Card */}
       <div
         className="relative z-10 flex w-full flex-1 flex-col sm:flex-initial sm:h-[560px] sm:w-[400px] sm:rounded-3xl sm:overflow-hidden sm:border sm:border-white/[0.06]"
-        style={{ background: '#061E30' }}
+        style={{ background: BG }}
       >
         {/* Skip */}
         <div
@@ -82,7 +83,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
           <button
             onClick={() => onComplete()}
             className="text-[10px] font-bold uppercase tracking-[0.22em] px-3 py-2 rounded-lg transition hover:opacity-60"
-            style={{ color: 'rgba(246,243,235,0.28)' }}
+            style={{ color: MUTED }}
           >
             Saltar
           </button>
@@ -114,14 +115,14 @@ export default function OnboardingFlow({ onComplete }: Props) {
 
           <h1
             className="elm-slide-up elm-delay-2 font-black tracking-tight leading-none mb-4"
-            style={{ fontSize: 'clamp(2.2rem, 8vw, 3.2rem)', color: '#F6F3EB' }}
+            style={{ fontSize: 'clamp(2.2rem, 8vw, 3.2rem)', color: INK }}
           >
             {slide.title}
           </h1>
 
           <p
             className="elm-slide-up elm-delay-3 text-sm leading-relaxed"
-            style={{ color: 'rgba(246,243,235,0.46)', maxWidth: 240 }}
+            style={{ color: MUTED, maxWidth: 240 }}
           >
             {slide.subtitle}
           </p>
@@ -142,7 +143,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
                   width:      i === current ? 20 : 5,
                   height:     5,
                   borderRadius: 99,
-                  background: i === current ? '#76ABAE' : 'rgba(118,171,174,0.22)',
+                  background: i === current ? GOLD : `${GOLD}38`,
                 }}
               />
             ))}
@@ -152,7 +153,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
           <button
             onClick={next}
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-[12px] uppercase tracking-[0.14em] transition-transform active:scale-[0.97]"
-            style={{ background: '#F6F3EB', color: '#061E30' }}
+            style={{ background: INK, color: BG }}
           >
             {isLast ? 'Comenzar' : 'Siguiente'}
             <ChevronRight size={14} />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send } from 'lucide-react'
-import { GOLD, GOLD_INK, MUTED, BORDER, SURFACE, CARD } from '@/lib/gold-theme'
+import { CARD, SURFACE, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 type Msg = { id: string; text: string; name: string; avatar: string | null; ts: number }
 
@@ -82,7 +82,7 @@ export default function LiveChatBox({
                 <div className="px-3 py-2 rounded-2xl text-[13px] leading-snug"
                   style={isMe
                     ? { background: GOLD, color: GOLD_INK, borderBottomRightRadius: 4 }
-                    : { background: SURFACE, border: `1px solid ${BORDER}`, color: '#F6F3EB', borderBottomLeftRadius: 4 }}>
+                    : { background: SURFACE, border: `1px solid ${BORDER}`, color: INK, borderBottomLeftRadius: 4 }}>
                   {m.text}
                 </div>
               </div>
@@ -103,18 +103,18 @@ export default function LiveChatBox({
           onKeyDown={handleKey}
           placeholder="Escribe un mensaje…"
           maxLength={300}
-          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
           style={{
             background: SURFACE,
             border: `1px solid ${BORDER}`,
             borderRadius: 20,
             padding: '8px 14px',
-            color: '#F6F3EB',
+            color: INK,
           }}
         />
         <button onClick={send} disabled={!input.trim()}
           aria-label="Enviar mensaje"
-          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
           style={{ background: GOLD }}>
           <Send size={14} style={{ color: GOLD_INK }} aria-hidden="true" />
         </button>

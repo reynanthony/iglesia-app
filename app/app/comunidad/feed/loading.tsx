@@ -1,8 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { BG } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
-    <div className="app-content-height flex flex-col items-center justify-center gap-4 px-6" style={{ background: '#061E30' }}>
+    <div className="app-content-height flex flex-col items-center justify-center gap-4 px-6" style={{ background: BG }}>
       <div className="w-full max-w-sm space-y-4">
         <div className="flex items-center gap-3">
           <Skeleton className="w-10 h-10 rounded-full flex-shrink-0" />

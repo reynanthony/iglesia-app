@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send, ArrowDown } from 'lucide-react'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 type Message = {
   id: string
@@ -107,7 +108,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
   })
 
   return (
-    <div className="flex flex-col h-full relative" style={{ background: '#061E30' }}>
+    <div className="flex flex-col h-full relative" style={{ background: BG }}>
 
       {/* Mensajes */}
       <div ref={scrollRef} onScroll={handleScroll}
@@ -116,7 +117,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
         {messages.length === 0 && (
           <div className="flex justify-center mt-10">
             <span className="text-[11px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
-              style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
+              style={{ background: BORDER, color: MUTED }}>
               Sé el primero en escribir
             </span>
           </div>
@@ -126,7 +127,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
           <div key={dateKey}>
             <div className="flex justify-center my-4">
               <span className="text-[11px] font-bold px-3 py-1 rounded-full"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.68)' }}>
+                style={{ background: BORDER, color: MUTED }}>
                 {fmtDate(msgs[0].created_at)}
               </span>
             </div>
@@ -153,7 +154,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
                     <div className="w-7 flex-shrink-0 self-end">
                       {isLast && (
                         <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold"
-                          style={{ background: '#0D3352', color: '#76ABAE' }}>
+                          style={{ background: BORDER, color: GOLD }}>
                           {msg.profiles?.avatar_url
                             ? <img src={msg.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                             : msg.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
@@ -165,22 +166,22 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
                   <div style={{ maxWidth: '70%' }}>
                     {!isMe && isFirst && (
                       <p className="text-[11px] font-bold mb-1"
-                        style={{ color: 'rgba(246,243,235,0.68)', paddingLeft: 12 }}>
+                        style={{ color: MUTED, paddingLeft: 12 }}>
                         {msg.profiles?.full_name}
                       </p>
                     )}
                     <div className="px-3 py-2"
                       style={{
-                        background: isMe ? 'linear-gradient(135deg, #093C5D, #76ABAE)' : '#0D3352',
+                        background: isMe ? 'linear-gradient(135deg, #101217, #D9A62A)' : BORDER,
                         borderRadius: radius,
                         border: isMe ? 'none' : '1px solid #1A3D5C',
                       }}>
                       <div className="flex items-end gap-3">
-                        <p className="text-sm leading-relaxed break-words flex-1" style={{ color: '#F6F3EB' }}>
+                        <p className="text-sm leading-relaxed break-words flex-1" style={{ color: INK }}>
                           {msg.content}
                         </p>
                         <span className="text-[10px] flex-shrink-0 self-end whitespace-nowrap"
-                          style={{ color: 'rgba(246,243,235,0.62)' }}>
+                          style={{ color: MUTED }}>
                           {fmt(msg.created_at)}
                         </span>
                       </div>
@@ -200,16 +201,16 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
         <button
           onClick={() => { setAtBottom(true); bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }}
           className="absolute right-4 flex items-center justify-center w-9 h-9 rounded-full"
-          style={{ bottom: 72, background: '#0D3352', border: '1px solid #1A3D5C', color: 'rgba(246,243,235,0.60)' }}>
+          style={{ bottom: 72, background: BORDER, border: '1px solid #1A3D5C', color: MUTED }}>
           <ArrowDown size={16} />
         </button>
       )}
 
       {/* Input */}
       <div className="flex-shrink-0 flex items-center gap-2 px-3 py-3"
-        style={{ borderTop: '1px solid #0D3352', background: '#061E30' }}>
+        style={{ borderTop: `1px solid ${BORDER}`, background: BG }}>
         <div className="flex-1 flex items-center px-4 rounded-2xl"
-          style={{ background: '#0B2D47', border: '1px solid #0D3352', minHeight: 48 }}>
+          style={{ background: CARD, border: `1px solid ${BORDER}`, minHeight: 48 }}>
           <input
             ref={inputRef}
             value={inputValue}
@@ -218,14 +219,14 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
             placeholder="Escribe un mensaje…"
             autoComplete="off"
             className="flex-1 bg-transparent text-sm focus:outline-none py-3"
-            style={{ color: '#F6F3EB' }}
+            style={{ color: INK }}
           />
         </div>
         <button
           onClick={send}
           disabled={sending || !inputValue.trim()}
           className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition active:scale-95 disabled:opacity-40"
-          style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)' }}>
+          style={{ background: 'linear-gradient(135deg, #101217, #D9A62A)' }}>
           <Send size={18} style={{ color: 'white' }} />
         </button>
       </div>

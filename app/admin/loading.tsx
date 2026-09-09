@@ -1,4 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { CARD, BORDER } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
@@ -11,7 +12,7 @@ export default function Loading() {
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4 mb-5 md:mb-8">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-xl md:rounded-2xl p-3 md:p-5" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+            <div key={i} className="rounded-xl md:rounded-2xl p-3 md:p-5" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <Skeleton className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl mb-3" />
               <Skeleton className="h-6 w-16 mb-1.5" />
               <Skeleton className="h-3 w-20" />

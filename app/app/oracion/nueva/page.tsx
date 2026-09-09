@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPrayerRequest } from '@/app/actions/prayer'
 import { ArrowLeft, Flame, Lock, AlertCircle, Heart, Headphones, Sparkles, Zap } from 'lucide-react'
 import Link from 'next/link'
+import { BG, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const ORANGE = '#E89563'
 const RED    = '#E37B85'
@@ -54,16 +55,16 @@ export default function NuevaPeticionPage() {
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
       <div className="max-w-2xl mx-auto px-4 py-6">
 
         <div className="flex items-center gap-3 mb-1">
           <Link href="/app/oracion"
             className="p-2.5 rounded-full transition"
-            style={{ background: 'rgba(255,255,255,0.06)', color: '#76ABAE' }}>
+            style={{ background: 'rgba(255,255,255,0.06)', color: GOLD }}>
             <ArrowLeft size={18} />
           </Link>
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(246,243,235,0.50)' }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: MUTED }}>
             Muro de oración
           </p>
         </div>
@@ -74,7 +75,7 @@ export default function NuevaPeticionPage() {
             className="inline-flex items-center gap-1.5 text-[10.5px] font-bold px-3 py-1.5 rounded-full mb-4"
             style={{
               background: `${AMBER}24`, backdropFilter: 'blur(12px) saturate(160%)',
-              border: `1px solid ${AMBER}45`, color: '#F6F3EB',
+              border: `1px solid ${AMBER}45`, color: INK,
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14)',
             }}
           >
@@ -125,10 +126,10 @@ export default function NuevaPeticionPage() {
           </div>
 
           <h1 className="font-black tracking-tighter text-center mt-1"
-            style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', lineHeight: 1.15, color: '#F6F3EB' }}>
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', lineHeight: 1.15, color: INK }}>
             ¿Qué necesitas<br />hoy?
           </h1>
-          <p className="text-sm text-center mt-2 max-w-xs" style={{ color: 'rgba(246,243,235,0.60)' }}>
+          <p className="text-sm text-center mt-2 max-w-xs" style={{ color: MUTED }}>
             Toca un tema para empezar, o escribe lo que llevas en el corazón.
           </p>
 
@@ -149,33 +150,33 @@ export default function NuevaPeticionPage() {
 
             <div>
               <label className="block text-sm font-bold mb-2"
-                style={{ color: 'rgba(246,243,235,0.70)' }}>
+                style={{ color: MUTED }}>
                 ¿Por qué necesitas oración? *
               </label>
               <input ref={titleRef} name="title" type="text" required maxLength={120}
                 value={titleValue} onChange={e => setTitleValue(e.target.value)}
                 placeholder="Ej: Sanidad para mi familia"
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition placeholder:opacity-40"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: '#F6F3EB' }} />
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: INK }} />
             </div>
 
             <div>
               <label className="block text-sm font-bold mb-2"
-                style={{ color: 'rgba(246,243,235,0.70)' }}>
-                Detalles <span style={{ color: 'rgba(246,243,235,0.62)' }}>(opcional)</span>
+                style={{ color: MUTED }}>
+                Detalles <span style={{ color: MUTED }}>(opcional)</span>
               </label>
               <textarea name="body" rows={5}
                 placeholder="Comparte más detalles sobre tu petición..."
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition resize-none placeholder:opacity-40"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: '#F6F3EB' }} />
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: INK }} />
             </div>
 
             <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
-              <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#76ABAE]" />
+              <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#D9A62A]" />
               <div>
-                <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Publicar como anónimo</p>
-                <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-sm font-bold" style={{ color: INK }}>Publicar como anónimo</p>
+                <p className="text-[11px]" style={{ color: MUTED }}>
                   Tu nombre no será visible para la comunidad
                 </p>
               </div>
@@ -183,13 +184,13 @@ export default function NuevaPeticionPage() {
 
             <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
-              <input name="is_private" type="checkbox" className="w-4 h-4 rounded accent-[#76ABAE]" />
+              <input name="is_private" type="checkbox" className="w-4 h-4 rounded accent-[#D9A62A]" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <Lock size={12} style={{ color: 'rgba(246,243,235,0.60)' }} />
-                  <p className="text-sm font-bold" style={{ color: '#F6F3EB' }}>Solo yo puedo verla</p>
+                  <Lock size={12} style={{ color: MUTED }} />
+                  <p className="text-sm font-bold" style={{ color: INK }}>Solo yo puedo verla</p>
                 </div>
-                <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                   No aparece en la lista pública de oraciones
                 </p>
               </div>
@@ -206,7 +207,7 @@ export default function NuevaPeticionPage() {
             <div className="flex gap-3 justify-end pt-1">
               <Link href="/app/oracion"
                 className="px-5 py-2.5 rounded-xl text-sm font-bold transition"
-                style={{ border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(246,243,235,0.55)' }}>
+                style={{ border: '1px solid rgba(255,255,255,0.10)', color: MUTED }}>
                 Cancelar
               </Link>
               <button type="submit" disabled={loading}

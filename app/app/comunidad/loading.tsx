@@ -1,8 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { BG } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
       <div className="max-w-2xl mx-auto px-4 pt-6 pb-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5">

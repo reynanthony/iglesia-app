@@ -10,7 +10,7 @@ import {
   Globe, ArrowLeft, LogOut, Newspaper, Building2,
   Layers, Church, Calendar, Video, Quote,
 } from 'lucide-react'
-import { BG, CARD as SURFACE, BORDER, MUTED as INACTIVE, GOLD as ACCENT, GOLD_INK } from '@/lib/gold-theme'
+import { BG, CARD as SURFACE, BORDER, MUTED as INACTIVE, GOLD as ACCENT, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const ADMIN_PRIMARY = [
   { href: '/admin',          icon: LayoutDashboard, label: 'Dashboard', exact: true  },
@@ -104,7 +104,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
 
           <div className="flex items-center justify-between px-4 py-4"
             style={{ borderBottom: `1px solid ${BORDER}`, paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
-            <p className="font-black text-sm" style={{ color: '#F6F3EB' }}>
+            <p className="font-black text-sm" style={{ color: INK }}>
               {isLider ? 'Mi Ministerio' : 'Panel Admin'}
             </p>
             <button onClick={() => setOpen(false)}
@@ -118,7 +118,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
             {isLider ? (
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] px-3 mb-2"
-                  style={{ color: 'rgba(246,243,235,0.25)' }}>
+                  style={{ color: INACTIVE }}>
                   Mi Ministerio
                 </p>
                 <div className="space-y-0.5">
@@ -127,7 +127,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
                     return (
                       <Link key={href} href={href} onClick={() => setOpen(false)}
                         className="flex items-center gap-3 px-3 py-3 rounded-xl text-[14px] font-medium transition"
-                        style={{ background: active ? SURFACE : 'transparent', color: active ? '#F6F3EB' : INACTIVE }}>
+                        style={{ background: active ? SURFACE : 'transparent', color: active ? INK : INACTIVE }}>
                         <Icon size={16} style={{ color: active ? ACCENT : INACTIVE, flexShrink: 0 }} />
                         <span className="flex-1">{label}</span>
                         {active && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: ACCENT }} />}
@@ -138,7 +138,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
                 {liderMinistries.length > 0 && (
                   <div className="mt-4 px-3 pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
                     <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-2"
-                      style={{ color: 'rgba(246,243,235,0.25)' }}>
+                      style={{ color: INACTIVE }}>
                       Ministerios a cargo
                     </p>
                     {liderMinistries.map(m => (
@@ -154,7 +154,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
               ADMIN_MENU_SECTIONS.map(section => (
                 <div key={section.label}>
                   <p className="text-[9px] font-black uppercase tracking-[0.3em] px-3 mb-2"
-                    style={{ color: 'rgba(246,243,235,0.25)' }}>
+                    style={{ color: INACTIVE }}>
                     {section.label}
                   </p>
                   <div className="space-y-0.5">
@@ -164,7 +164,7 @@ export default function AdminMobileNav({ unreadMessages = 0, logoutAction, isLid
                       return (
                         <Link key={href} href={href} onClick={() => setOpen(false)}
                           className="flex items-center gap-3 px-3 py-3 rounded-xl text-[14px] font-medium transition"
-                          style={{ background: active ? SURFACE : 'transparent', color: active ? '#F6F3EB' : INACTIVE }}>
+                          style={{ background: active ? SURFACE : 'transparent', color: active ? INK : INACTIVE }}>
                           <Icon size={16} style={{ color: active ? ACCENT : INACTIVE, flexShrink: 0 }} />
                           <span className="flex-1">{label}</span>
                           {isMensajes && unreadMessages > 0 && (

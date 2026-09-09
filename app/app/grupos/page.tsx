@@ -20,14 +20,14 @@ const TYPE_LABELS: Record<string, string> = {
 // Un acento de color por tipo de grupo — para que la lista se pueda escanear
 // por categoría de un vistazo, en vez de que cada fila sea idéntica.
 const TYPE_COLOR: Record<string, string> = {
-  jovenes:     '#76ABAE',
+  jovenes:     GOLD,
   caballeros:  '#60A5FA',
   damas:       '#F472B6',
   matrimonios: '#C084FC',
   evangelismo: '#F59E0B',
   intercesion: '#4ADE80',
   alabanza:    '#F87171',
-  general:     'rgba(246,243,235,0.45)',
+  general:     MUTED,
 }
 
 export default async function GruposPage() {
@@ -177,7 +177,7 @@ export default async function GruposPage() {
 function GroupRow({ group, joined }: { group: any; joined: boolean }) {
   const count = group.group_members?.[0]?.count ?? 0
   const type  = TYPE_LABELS[group.type] ?? group.type
-  const color = TYPE_COLOR[group.type] ?? '#76ABAE'
+  const color = TYPE_COLOR[group.type] ?? GOLD
 
   return (
     <div className="flex items-center gap-4 py-4 border-b" style={{ borderColor: BORDER }}>

@@ -7,7 +7,7 @@ import {
   Users2, Flame, User, Bell,
   UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross,
 } from 'lucide-react'
-import { GOLD, GOLD_INK, MUTED } from '@/lib/gold-theme'
+import { MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const INACTIVE = MUTED
 
@@ -34,9 +34,9 @@ export default function AppNav({ profileHref }: Props) {
         const active = isActive(href, exact)
         return (
           <Link key={href} href={href}
-            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
             style={active
-              ? { background: `${GOLD}1E`, border: `1px solid ${GOLD}55`, color: '#F6F3EB' }
+              ? { background: `${GOLD}1E`, border: `1px solid ${GOLD}55`, color: INK }
               : { border: '1px solid transparent', color: INACTIVE }}>
             <Icon size={18} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
             <span className={active ? 'font-bold' : ''}>{label}</span>
@@ -90,7 +90,7 @@ export function AppBottomNav({ profileHref }: Props) {
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
                 style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
               >
                 <Icon
@@ -120,7 +120,7 @@ export function AppBottomNav({ profileHref }: Props) {
               key={href}
               href={href}
               onClick={() => open && setOpen(false)}
-              className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+              className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
               style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
             >
               <span
@@ -151,7 +151,7 @@ export function AppBottomNav({ profileHref }: Props) {
           onClick={() => setOpen(v => !v)}
           aria-expanded={open}
           aria-label={open ? 'Cerrar más opciones' : 'Más opciones'}
-          className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFCC00]/50"
+          className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
           style={{
             WebkitTapHighlightColor: 'transparent',
             touchAction: 'manipulation',
