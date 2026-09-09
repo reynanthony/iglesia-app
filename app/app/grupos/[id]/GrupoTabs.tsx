@@ -6,8 +6,7 @@ import Link from 'next/link'
 import { UsersRound } from 'lucide-react'
 import PostCard from '@/components/PostCard'
 import GroupChat from '@/components/app/GroupChat'
-
-const TEAL = '#76ABAE'
+import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 interface Props {
   posts: any[]
@@ -29,12 +28,12 @@ export default function GrupoTabs({ posts, groupId, userId, userProfile, current
       gap: 6,
       paddingBottom: 10,
       paddingTop: 12,
-      color: active ? TEAL : 'rgba(246,243,235,0.35)',
+      color: active ? GOLD : MUTED,
       fontWeight: active ? 700 : 500,
       fontSize: 13,
       background: 'none',
       border: 'none',
-      borderBottom: `2px solid ${active ? TEAL : 'transparent'}`,
+      borderBottom: `2px solid ${active ? GOLD : 'transparent'}`,
       cursor: 'pointer',
       transition: 'color 0.2s, border-color 0.2s',
     }
@@ -43,7 +42,7 @@ export default function GrupoTabs({ posts, groupId, userId, userProfile, current
   return (
     <>
       {/* Tabs */}
-      <div className="flex" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="flex" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <button style={tabStyle(tab === 'posts')} onClick={() => setTab('posts')}>
           <FileText size={14} aria-hidden />
           Publicaciones
@@ -60,15 +59,15 @@ export default function GrupoTabs({ posts, groupId, userId, userProfile, current
           {posts.length === 0 ? (
             <div className="text-center py-24 px-8">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
-                style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-                <UsersRound size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                <UsersRound size={24} style={{ color: MUTED }} />
               </div>
-              <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+              <p className="font-black text-lg tracking-tight mb-2" style={{ color: INK }}>
                 Sin publicaciones aún
               </p>
               <Link href={`/app/nuevo-post?group=${groupId}`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black mt-4"
-                style={{ background: '#F6F3EB', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 <Plus size={14} /> Primera publicación
               </Link>
             </div>

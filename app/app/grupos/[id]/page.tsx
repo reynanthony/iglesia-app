@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft, Plus, UsersRound, Lock, GraduationCap, ChevronRight } from 'lucide-react'
 import { leaveGroup } from '@/app/actions/groups'
 import GrupoTabs from './GrupoTabs'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const TYPE_LABELS: Record<string, string> = {
   jovenes:     'Jóvenes',
@@ -42,21 +43,21 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
   const currentUserRole = currentProfile?.role ?? 'miembro'
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
 
       {/* Header sticky */}
       <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3"
-        style={{ background: 'rgba(6,30,48,0.97)', borderBottom: '1px solid #0D3352', backdropFilter: 'blur(12px)' }}>
+        style={{ background: 'rgba(16,18,23,0.92)', borderBottom: `1px solid ${BORDER}`, backdropFilter: 'blur(12px)' }}>
         <Link href="/app/grupos" className="p-2 rounded-xl flex-shrink-0"
-          style={{ background: '#0D3352', color: '#76ABAE' }}>
+          style={{ background: BORDER, color: GOLD }}>
           <ArrowLeft size={16} />
         </Link>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <p className="font-black text-sm truncate" style={{ color: '#F6F3EB' }}>{group.name}</p>
-            {group.is_private && <Lock size={11} style={{ color: 'rgba(246,243,235,0.35)', flexShrink: 0 }} />}
+            <p className="font-black text-sm truncate" style={{ color: INK }}>{group.name}</p>
+            {group.is_private && <Lock size={11} style={{ color: MUTED, flexShrink: 0 }} />}
           </div>
-          <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.40)' }}>
+          <p className="text-[11px]" style={{ color: MUTED }}>
             {TYPE_LABELS[group.type] ?? group.type} · {count} miembros
           </p>
         </div>
@@ -64,14 +65,14 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
           {isMember && (
             <Link href={`/app/nuevo-post?group=${group.id}`}
               className="w-9 h-9 flex items-center justify-center rounded-xl"
-              style={{ background: '#76ABAE', color: '#061E30' }}>
+              style={{ background: GOLD, color: GOLD_INK }}>
               <Plus size={16} />
             </Link>
           )}
           {isMember && (
             <form action={leaveGroup.bind(null, group.id)}>
               <button type="submit" className="text-[11px] font-bold px-3.5 py-2 rounded-xl"
-                style={{ background: '#0D3352', color: 'rgba(246,243,235,0.50)' }}>
+                style={{ background: BORDER, color: MUTED }}>
                 Salir
               </button>
             </form>
@@ -82,7 +83,7 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
       {/* Description */}
       {group.description && (
         <div className="px-4 py-4 max-w-2xl mx-auto">
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.50)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: MUTED }}>
             {group.description}
           </p>
         </div>
@@ -94,22 +95,22 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
           <Link
             href={`/educacion/discipulado/${program.slug}`}
             className="flex items-center gap-3 p-4 rounded-2xl transition hover:brightness-110"
-            style={{ background: '#0B2D47', border: '1px solid rgba(118,171,174,0.20)' }}>
+            style={{ background: CARD, border: `1px solid ${GOLD}33` }}>
             <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(118,171,174,0.12)' }}>
-              <GraduationCap size={17} style={{ color: '#76ABAE' }} />
+              style={{ background: `${GOLD}1F` }}>
+              <GraduationCap size={17} style={{ color: GOLD }} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-0.5"
-                style={{ color: 'rgba(118,171,174,0.55)' }}>
+                style={{ color: `${GOLD}8C` }}>
                 Programa de este grupo
               </p>
-              <p className="text-sm font-bold truncate" style={{ color: '#F6F3EB' }}>{program.title}</p>
-              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              <p className="text-sm font-bold truncate" style={{ color: INK }}>{program.title}</p>
+              <p className="text-[11px] mt-0.5" style={{ color: MUTED }}>
                 {program.discipleship_courses?.length ?? 0} curso{program.discipleship_courses?.length !== 1 ? 's' : ''}
               </p>
             </div>
-            <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)' }} />
+            <ChevronRight size={14} style={{ color: MUTED }} />
           </Link>
         </div>
       )}
@@ -118,13 +119,13 @@ export default async function GrupoPage({ params }: { params: Promise<{ id: stri
       {!isMember ? (
         <div className="max-w-2xl mx-auto text-center py-24 px-8">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <Lock size={22} style={{ color: 'rgba(118,171,174,0.40)' }} />
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <Lock size={22} style={{ color: `${GOLD}66` }} />
           </div>
-          <p className="font-black text-lg tracking-tight mb-2" style={{ color: '#F6F3EB' }}>
+          <p className="font-black text-lg tracking-tight mb-2" style={{ color: INK }}>
             Acceso por invitación
           </p>
-          <p className="text-sm leading-relaxed max-w-[240px] mx-auto" style={{ color: 'rgba(246,243,235,0.45)' }}>
+          <p className="text-sm leading-relaxed max-w-[240px] mx-auto" style={{ color: MUTED }}>
             Este grupo es privado. Un líder debe invitarte para que puedas acceder.
           </p>
         </div>
