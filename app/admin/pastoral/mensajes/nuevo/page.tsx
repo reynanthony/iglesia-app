@@ -65,7 +65,7 @@ export default function NuevoPastoralMensajePage() {
           </div>
 
           <label className="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" name="pinned" className="w-4 h-4 rounded accent-[#D9A62A]" />
+            <input type="checkbox" name="pinned" className="w-4 h-4 rounded accent-[#C79A2A]" />
             <span className="text-[13px]" style={{ color: MUTED }}>
               Fijar este mensaje arriba del canal
             </span>

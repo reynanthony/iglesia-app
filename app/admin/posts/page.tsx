@@ -60,7 +60,7 @@ export default async function AdminPostsPage({
             return (
               <a key={f.id} href={href}
                 className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-medium transition ${
-                  isActive ? 'bg-[#D9A62A] text-[#14140F]' : 'bg-[#181A22] border border-[#292E3B] text-[rgba(139,146,162,0.72)]'
+                  isActive ? 'bg-[#C79A2A] text-[#14140F]' : 'bg-[#181A22] border border-[#292E3B] text-[rgba(139,146,162,0.72)]'
                 }`}>
                 {f.id === 'pinned' && <Pin size={11} />}
                 {f.label}

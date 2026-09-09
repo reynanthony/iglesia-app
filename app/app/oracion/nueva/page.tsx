@@ -173,7 +173,7 @@ export default function NuevaPeticionPage() {
 
             <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
-              <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#D9A62A]" />
+              <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#C79A2A]" />
               <div>
                 <p className="text-sm font-bold" style={{ color: INK }}>Publicar como anónimo</p>
                 <p className="text-[11px]" style={{ color: MUTED }}>
@@ -184,7 +184,7 @@ export default function NuevaPeticionPage() {
 
             <label className="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
-              <input name="is_private" type="checkbox" className="w-4 h-4 rounded accent-[#D9A62A]" />
+              <input name="is_private" type="checkbox" className="w-4 h-4 rounded accent-[#C79A2A]" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <Lock size={12} style={{ color: MUTED }} />

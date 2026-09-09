@@ -104,7 +104,7 @@ export default function ReactionBar({
                 const isSelected = myReaction?.type === r.type
                 return (
                   <button key={r.type} onClick={() => handleSelect(r.type)}
-                    className="flex flex-col items-center gap-1 px-2.5 py-2 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
+                    className="flex flex-col items-center gap-1 px-2.5 py-2 rounded-xl transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                     style={{ background: isSelected ? `${GOLD}26` : 'transparent' }}>
                     <RIcon size={18} strokeWidth={isSelected ? 2.5 : 1.8}
                       style={{ color: isSelected ? r.activeColor : MUTED }} />

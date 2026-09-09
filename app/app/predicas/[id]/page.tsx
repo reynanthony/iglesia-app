@@ -118,7 +118,7 @@ export default async function AppPredicaPage({ params }: { params: Promise<{ id:
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate group-hover:text-[#D9A62A] transition"
+                    <p className="font-bold text-sm truncate group-hover:text-[#C79A2A] transition"
                       style={{ color: INK }}>{r.title}</p>
                   </div>
                   <Play size={13} style={{ color: MUTED, flexShrink: 0 }} />

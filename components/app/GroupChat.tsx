@@ -172,7 +172,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
                     )}
                     <div className="px-3 py-2"
                       style={{
-                        background: isMe ? 'linear-gradient(135deg, #101217, #D9A62A)' : BORDER,
+                        background: isMe ? 'linear-gradient(135deg, #101217, #C79A2A)' : BORDER,
                         borderRadius: radius,
                         border: isMe ? 'none' : '1px solid #1A3D5C',
                       }}>
@@ -226,7 +226,7 @@ export default function GroupChat({ groupId, currentUserId, currentProfile }: Pr
           onClick={send}
           disabled={sending || !inputValue.trim()}
           className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition active:scale-95 disabled:opacity-40"
-          style={{ background: 'linear-gradient(135deg, #101217, #D9A62A)' }}>
+          style={{ background: 'linear-gradient(135deg, #101217, #C79A2A)' }}>
           <Send size={18} style={{ color: 'white' }} />
         </button>
       </div>

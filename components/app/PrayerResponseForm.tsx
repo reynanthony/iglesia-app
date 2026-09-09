@@ -66,7 +66,7 @@ export default function PrayerResponseForm({ requestId }: { requestId: string })
         style={{ background: BORDER, border: `1px solid ${BORDER}`, color: INK }}
       />
       <label className="flex items-center gap-3 cursor-pointer select-none">
-        <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#D9A62A]" />
+        <input name="is_anonymous" type="checkbox" className="w-4 h-4 rounded accent-[#C79A2A]" />
         <span className="text-[12px] font-bold" style={{ color: MUTED }}>
           Enviar como anónimo
         </span>

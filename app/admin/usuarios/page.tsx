@@ -93,7 +93,7 @@ export default async function AdminUsuariosPage({
               <a key={r} href={href}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition ${
                   isActive
-                    ? 'bg-[#D9A62A] text-[#14140F]'
+                    ? 'bg-[#C79A2A] text-[#14140F]'
                     : 'bg-[#181A22] border border-[#292E3B] text-[rgba(139,146,162,0.72)]'
                 }`}>
                 {r}

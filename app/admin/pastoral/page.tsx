@@ -60,7 +60,7 @@ export default async function AdminPastoralPage() {
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-4 p-5 rounded-2xl border transition hover:border-[#D9A62A]/40"
+              className="flex items-center gap-4 p-5 rounded-2xl border transition hover:border-[#C79A2A]/40"
               style={{ background: CARD, borderColor: BORDER }}
             >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"

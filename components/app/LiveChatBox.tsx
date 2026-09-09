@@ -103,7 +103,7 @@ export default function LiveChatBox({
           onKeyDown={handleKey}
           placeholder="Escribe un mensaje…"
           maxLength={300}
-          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
+          className="flex-1 bg-transparent text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
           style={{
             background: SURFACE,
             border: `1px solid ${BORDER}`,
@@ -114,7 +114,7 @@ export default function LiveChatBox({
         />
         <button onClick={send} disabled={!input.trim()}
           aria-label="Enviar mensaje"
-          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A]/50"
+          className="w-9 h-9 flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
           style={{ background: GOLD }}>
           <Send size={14} style={{ color: GOLD_INK }} aria-hidden="true" />
         </button>

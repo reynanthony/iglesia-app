@@ -147,7 +147,7 @@ export default function ContentForm({
             )}
           </div>
         )}
-        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#D9A62A]"
+        <label className="rounded-xl border-2 border-dashed p-5 flex flex-col items-center gap-2 cursor-pointer transition hover:border-[#C79A2A]"
           style={{ borderColor: BORDER }}>
           <ImageIcon size={20} style={{ color: MUTED }} />
           <span className="text-[12px]" style={{ color: MUTED }}>

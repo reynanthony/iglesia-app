@@ -41,7 +41,7 @@ export default function RoleSelector({ userId, username, currentRole }: { userId
         value={role}
         onChange={handleChange}
         disabled={saving}
-        className={`w-full md:w-auto bg-[#292E3B] border border-[#292E3B] text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A62A] transition capitalize ${
+        className={`w-full md:w-auto bg-[#292E3B] border border-[#292E3B] text-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A] transition capitalize ${
           role === 'admin' ? 'text-red-400' :
           role === 'pastor' ? 'text-purple-400' :
           role === 'moderador' ? 'text-blue-400' :
