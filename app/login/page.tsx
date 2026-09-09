@@ -77,7 +77,7 @@ function LoginForm() {
               border: '1px solid #E8E8E8',
               boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
             }}
-            onFocus={e => (e.currentTarget.style.borderColor = '#76ABAE')}
+            onFocus={e => (e.currentTarget.style.borderColor = '#C79A2A')}
             onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
           />
         </div>
@@ -98,7 +98,7 @@ function LoginForm() {
               border: '1px solid #E8E8E8',
               boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
             }}
-            onFocus={e => (e.currentTarget.style.borderColor = '#76ABAE')}
+            onFocus={e => (e.currentTarget.style.borderColor = '#C79A2A')}
             onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
           />
         </div>
@@ -115,7 +115,7 @@ function LoginForm() {
           type="submit"
           disabled={loading}
           className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.22em] rounded-xl px-6 py-3.5 transition-all disabled:opacity-50 text-white active:scale-[0.98]"
-          style={{ background: '#093C5D' }}
+          style={{ background: '#101217' }}
         >
           {loading ? 'Entrando…' : (
             <>
@@ -129,12 +129,12 @@ function LoginForm() {
       <div className="mt-4 pt-4 space-y-2" style={{ borderTop: '1px solid #EBEBEB' }}>
         <p className="text-center text-sm text-[#111111]/50">
           ¿No tienes cuenta?{' '}
-          <Link href="/registro" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
+          <Link href="/registro" className="font-bold text-[#111111] hover:text-[#C79A2A] transition-colors">
             Regístrate
           </Link>
         </p>
         <p className="text-center text-sm text-[#111111]/50">
-          <Link href="/" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
+          <Link href="/" className="font-bold text-[#111111] hover:text-[#C79A2A] transition-colors">
             ← Volver al inicio
           </Link>
         </p>

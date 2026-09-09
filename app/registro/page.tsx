@@ -48,7 +48,7 @@ function RegistroForm() {
       <div className="w-full max-w-sm text-center">
         <div
           className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl"
-          style={{ background: '#F6F3EB', border: '1px solid #E8E8E8' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E8E8E8' }}
         >
           ✉️
         </div>
@@ -58,7 +58,7 @@ function RegistroForm() {
         <p className="text-sm leading-relaxed mb-8 text-[#111111]/50">
           Te enviamos un enlace de confirmación. Ábrelo para activar tu cuenta y acceder a la comunidad.
         </p>
-        <Link href="/login" className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#111111] hover:text-[#76ABAE] transition-colors">
+        <Link href="/login" className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#111111] hover:text-[#C79A2A] transition-colors">
           Ir al inicio de sesión <ArrowRight size={12} />
         </Link>
       </div>
@@ -98,7 +98,7 @@ function RegistroForm() {
                 border: '1px solid #E8E8E8',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
               }}
-              onFocus={e => (e.currentTarget.style.borderColor = '#76ABAE')}
+              onFocus={e => (e.currentTarget.style.borderColor = '#C79A2A')}
               onBlur={e => (e.currentTarget.style.borderColor = '#E8E8E8')}
             />
             {name === 'username' && (
@@ -121,7 +121,7 @@ function RegistroForm() {
           type="submit"
           disabled={loading}
           className="w-full flex items-center justify-between font-black text-[11px] uppercase tracking-[0.22em] rounded-xl px-6 py-3.5 transition-all disabled:opacity-50 text-white active:scale-[0.98]"
-          style={{ background: '#093C5D' }}
+          style={{ background: '#101217' }}
         >
           {loading ? 'Creando cuenta…' : (
             <>
@@ -135,12 +135,12 @@ function RegistroForm() {
       <div className="mt-4 pt-4 space-y-2" style={{ borderTop: '1px solid #EBEBEB' }}>
         <p className="text-center text-sm text-[#111111]/50">
           ¿Ya tienes cuenta?{' '}
-          <Link href="/login" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
+          <Link href="/login" className="font-bold text-[#111111] hover:text-[#C79A2A] transition-colors">
             Inicia sesión
           </Link>
         </p>
         <p className="text-center text-sm text-[#111111]/50">
-          <Link href="/" className="font-bold text-[#111111] hover:text-[#76ABAE] transition-colors">
+          <Link href="/" className="font-bold text-[#111111] hover:text-[#C79A2A] transition-colors">
             ← Volver al inicio
           </Link>
         </p>
