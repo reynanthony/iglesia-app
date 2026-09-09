@@ -59,3 +59,41 @@ export async function deleteBibleNote(
     .eq('chapter', chapter)
     .eq('verse', verse)
 }
+
+export async function upsertBibleBookmark(
+  bookId: string, chapter: number, verse: number, verseText: string,
+): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('bible_bookmarks').upsert(
+    { user_id: user.id, book_id: bookId, chapter, verse, verse_text: verseText },
+    { onConflict: 'user_id,book_id,chapter,verse' },
+  )
+}
+
+export async function deleteBibleBookmark(
+  bookId: string, chapter: number, verse: number,
+): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('bible_bookmarks')
+    .delete()
+    .eq('user_id', user.id)
+    .eq('book_id', bookId)
+    .eq('chapter', chapter)
+    .eq('verse', verse)
+}
+
+export async function upsertReadingPosition(
+  bookId: string, chapter: number,
+): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('bible_reading_position').upsert(
+    { user_id: user.id, book_id: bookId, chapter, updated_at: new Date().toISOString() },
+    { onConflict: 'user_id' },
+  )
+}

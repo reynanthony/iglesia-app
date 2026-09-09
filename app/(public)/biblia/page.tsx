@@ -3,6 +3,8 @@ import { ArrowRight, BookOpen } from 'lucide-react'
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
+import { findBook } from '@/lib/bible'
+import { createClient } from '@/lib/supabase/server'
 import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const NAVY  = CARD
@@ -10,6 +12,39 @@ const TEAL  = GOLD
 const CREAM = INK
 
 export default async function BibliaPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let initialLastRead: { bookId: string; chapterNum: number; bookName: string } | null = null
+  let initialBookmarks: Array<{
+    bookId: string; chapterNum: number; verseNum: string; ref: string; text: string; savedAt: string
+  }> | undefined
+
+  if (user) {
+    const [positionResult, bookmarksResult] = await Promise.all([
+      supabase.from('bible_reading_position').select('book_id, chapter').eq('user_id', user.id).maybeSingle(),
+      supabase.from('bible_bookmarks').select('book_id, chapter, verse, verse_text, created_at')
+        .eq('user_id', user.id).order('created_at', { ascending: false }).limit(6),
+    ])
+    if (positionResult.data) {
+      const book = findBook(positionResult.data.book_id)
+      if (book) {
+        initialLastRead = { bookId: book.id, chapterNum: positionResult.data.chapter, bookName: book.name }
+      }
+    }
+    initialBookmarks = (bookmarksResult.data ?? []).map(r => {
+      const book = findBook(r.book_id)
+      return {
+        bookId: r.book_id,
+        chapterNum: r.chapter,
+        verseNum: String(r.verse),
+        ref: `${book?.name ?? r.book_id} ${r.chapter}:${r.verse}`,
+        text: r.verse_text,
+        savedAt: r.created_at,
+      }
+    })
+  }
+
   return (
     <div>
 
@@ -63,7 +98,7 @@ export default async function BibliaPage() {
       <BibleVerseOfDay />
 
       {/* ══ CONTINUAR LEYENDO + MARCADORES ═════════════════ */}
-      <BibleContinue />
+      <BibleContinue initialLastRead={initialLastRead} initialBookmarks={initialBookmarks} />
 
       {/* ══ SELECTOR DE LIBROS ══════════════════════════════ */}
       <BibleSelector />

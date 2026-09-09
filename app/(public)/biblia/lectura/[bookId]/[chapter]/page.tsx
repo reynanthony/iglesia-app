@@ -3,7 +3,7 @@ import { findBook, prevChapter, nextChapter, ALL_BOOKS } from '@/lib/bible'
 import { getChapterContent } from '@/lib/bible-content'
 import { BibleReader } from '@/components/public/BibleReader'
 import { createClient } from '@/lib/supabase/server'
-import type { RelatedContent } from '@/components/public/BibleReader'
+import type { RelatedContent, BookmarkItem } from '@/components/public/BibleReader'
 
 function parseReferenceChapter(reference: string): { bookName: string; chapter: number } | null {
   const m = reference.match(/^(.+?)\s+(\d+)(?:[:\s,–—-]|$)/)
@@ -49,11 +49,12 @@ export default async function BibleChapterPage({
 
   let initialHighlights: Record<string, number> | undefined
   let initialNotes: Record<string, string> | undefined
+  let initialBookmarks: BookmarkItem[] | undefined
 
   // Name pattern for querying related content (Salmos -> Salmo%)
   const bookNamePattern = book.id === 'PSA' ? 'Salmo%' : `${book.name}%`
 
-  const [hlResult, noteResult, verseResult, sessionResult] = await Promise.all([
+  const [hlResult, noteResult, bookmarkResult, verseResult, sessionResult] = await Promise.all([
     user
       ? supabase.from('bible_highlights')
           .select('verse, color_index')
@@ -64,6 +65,13 @@ export default async function BibleChapterPage({
     user
       ? supabase.from('bible_notes')
           .select('verse, content')
+          .eq('user_id', user.id)
+          .eq('book_id', book.id)
+          .eq('chapter', chapterNum)
+      : Promise.resolve({ data: null }),
+    user
+      ? supabase.from('bible_bookmarks')
+          .select('verse, verse_text')
           .eq('user_id', user.id)
           .eq('book_id', book.id)
           .eq('chapter', chapterNum)
@@ -98,6 +106,16 @@ export default async function BibleChapterPage({
     initialNotes = Object.fromEntries(
       noteResult.data.map((r: any) => [String(r.verse), r.content]),
     )
+  }
+  if (bookmarkResult.data) {
+    initialBookmarks = bookmarkResult.data.map((r: any) => ({
+      bookId: book.id,
+      chapterNum,
+      verseNum: String(r.verse),
+      ref: `${book.name} ${chapterNum}:${r.verse}`,
+      text: r.verse_text,
+      savedAt: new Date().toISOString(),
+    }))
   }
 
   const relatedLessons = (verseResult.data ?? [])
@@ -150,6 +168,7 @@ export default async function BibleChapterPage({
       userId={user?.id}
       initialHighlights={initialHighlights}
       initialNotes={initialNotes}
+      initialBookmarks={initialBookmarks}
       relatedContent={relatedContent}
     />
   )

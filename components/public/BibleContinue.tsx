@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BookOpen, Bookmark, ArrowRight, X } from 'lucide-react'
 import type { BookmarkItem } from '@/components/public/BibleReader'
+import { deleteBibleBookmark } from '@/app/actions/bible'
 import { CARD, GOLD, INK } from '@/lib/gold-theme'
 
 interface LastRead {
@@ -17,12 +18,19 @@ const TEAL  = GOLD
 const CREAM = INK
 const SAGE  = '#869B7E'
 
-export default function BibleContinue() {
-  const [lastRead, setLastRead] = useState<LastRead | null>(null)
-  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([])
-  const [mounted, setMounted] = useState(false)
+interface BibleContinueProps {
+  initialLastRead?: LastRead | null
+  initialBookmarks?: BookmarkItem[]
+}
+
+export default function BibleContinue({ initialLastRead, initialBookmarks }: BibleContinueProps) {
+  const synced = initialBookmarks !== undefined
+  const [lastRead, setLastRead] = useState<LastRead | null>(initialLastRead ?? null)
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>(initialBookmarks ?? [])
+  const [mounted, setMounted] = useState(synced)
 
   useEffect(() => {
+    if (synced) return
     setMounted(true)
     try {
       const raw = localStorage.getItem('bible-last')
@@ -32,12 +40,16 @@ export default function BibleContinue() {
       const raw = localStorage.getItem('bible-bookmarks')
       if (raw) setBookmarks(JSON.parse(raw))
     } catch { /* noop */ }
-  }, [])
+  }, [synced])
 
-  function removeBookmark(ref: string) {
-    const updated = bookmarks.filter(b => b.ref !== ref)
+  function removeBookmark(bk: BookmarkItem) {
+    const updated = bookmarks.filter(b => b.ref !== bk.ref)
     setBookmarks(updated)
-    localStorage.setItem('bible-bookmarks', JSON.stringify(updated))
+    if (synced) {
+      deleteBibleBookmark(bk.bookId, bk.chapterNum, parseInt(bk.verseNum))
+    } else {
+      localStorage.setItem('bible-bookmarks', JSON.stringify(updated))
+    }
   }
 
   if (!mounted || (!lastRead && bookmarks.length === 0)) return null
@@ -101,7 +113,7 @@ export default function BibleContinue() {
                   >
                     {/* Remove button */}
                     <button
-                      onClick={() => removeBookmark(bk.ref)}
+                      onClick={() => removeBookmark(bk)}
                       className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       style={{ background: 'rgba(24,26,34,0.08)' }}
                       aria-label={`Eliminar marcador ${bk.ref}`}

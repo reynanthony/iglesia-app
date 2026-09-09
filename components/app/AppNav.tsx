@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Users2, Flame, User, Bell,
-  UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross,
+  UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross, Book,
 } from 'lucide-react'
 import { MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -17,6 +17,7 @@ const navItems = [
   { href: '/app/oracion',         icon: Flame,      label: 'Oración',        exact: false },
   { href: '/app/en-vivo',         icon: Radio,      label: 'En Vivo',        exact: false },
   { href: '/app/discipulado',     icon: BookOpen,   label: 'Discipulado',    exact: true  },
+  { href: '/biblia',              icon: Book,       label: 'Biblia',         exact: false },
   { href: '/app/pastoral',        icon: Cross,      label: 'Pastoral',       exact: false },
   { href: '/app/notificaciones',  icon: Bell,       label: 'Notificaciones', exact: true  },
 ]
@@ -63,6 +64,7 @@ const MORE_ITEMS = [
   { href: '/app/pastoral', icon: Cross,         label: 'Pastoral' },
   { href: '/app/grupos',   icon: UsersRound,    label: 'Grupos'   },
   { href: '/app/mentoria', icon: GraduationCap, label: 'Mentoría' },
+  { href: '/biblia',       icon: Book,          label: 'Biblia'   },
 ]
 
 export function AppBottomNav({ profileHref }: Props) {

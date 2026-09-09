@@ -12,6 +12,7 @@ import type { BibleBook } from '@/lib/bible'
 import {
   upsertBibleHighlight, deleteBibleHighlight,
   upsertBibleNote, deleteBibleNote,
+  upsertBibleBookmark, deleteBibleBookmark, upsertReadingPosition,
 } from '@/app/actions/bible'
 import { hapticLight } from '@/lib/haptics'
 
@@ -57,6 +58,7 @@ export interface BibleReaderProps {
   userId?: string
   initialHighlights?: Record<string, number>
   initialNotes?: Record<string, string>
+  initialBookmarks?: BookmarkItem[]
   relatedContent?: RelatedContent
 }
 
@@ -250,7 +252,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
   bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
-  userId, initialHighlights, initialNotes, relatedContent,
+  userId, initialHighlights, initialNotes, initialBookmarks, relatedContent,
 }: BibleReaderProps) {
   const router = useRouter()
 
@@ -264,6 +266,7 @@ export function BibleReader({
   const [highlights, setHighlights] = useState<Highlights>({})
   const [notes, setNotes]           = useState<Notes>({})
   const [bookmarks, setBookmarks]   = useState<BookmarkItem[]>(() => {
+    if (initialBookmarks !== undefined) return initialBookmarks
     if (typeof window === 'undefined') return []
     const s = localStorage.getItem('bible-bookmarks')
     return s ? JSON.parse(s) : []
@@ -372,7 +375,8 @@ export function BibleReader({
   // ── Save last reading position ──────────────────────────────
   useEffect(() => {
     localStorage.setItem('bible-last', JSON.stringify({ bookId, chapterNum, bookName }))
-  }, [bookId, chapterNum, bookName])
+    if (userId) upsertReadingPosition(bookId, chapterNum)
+  }, [bookId, chapterNum, bookName, userId])
 
   // ── Scroll progress ─────────────────────────────────────────
   useEffect(() => {
@@ -455,6 +459,7 @@ export function BibleReader({
   const toggleBookmark = useCallback(() => {
     if (!verse) return
     hapticLight()
+    const wasBookmarked = isBookmarked
     setBookmarks(prev => {
       const exists = prev.some(
         b => b.bookId === bookId && b.chapterNum === chapterNum && b.verseNum === verse.num
@@ -468,7 +473,11 @@ export function BibleReader({
         savedAt: new Date().toISOString(),
       }]
     })
-  }, [verse, bookId, chapterNum])
+    if (userId) {
+      if (wasBookmarked) deleteBibleBookmark(bookId, chapterNum, parseInt(verse.num))
+      else upsertBibleBookmark(bookId, chapterNum, parseInt(verse.num), verse.text)
+    }
+  }, [verse, bookId, chapterNum, userId, isBookmarked])
 
   // ── Note actions ───────────────────────────────────────────
   const openNote = useCallback(() => {
@@ -609,13 +618,13 @@ export function BibleReader({
       onTouchEnd={onTouchEnd}
     >
       {/* Progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[2px] pointer-events-none"
+      <div className="fixed top-16 left-0 right-0 z-50 h-[2px] pointer-events-none"
         style={{ background: t.border }}>
         <div className="h-full transition-all duration-150" style={{ width: `${progress}%`, background: TEAL }} />
       </div>
 
       {/* ── Top bar ── */}
-      <div className="sticky top-0 z-40"
+      <div className="sticky top-16 z-40"
         style={{ background: DARK_HEADER, borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <Link href="/biblia"
