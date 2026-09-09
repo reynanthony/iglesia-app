@@ -4,12 +4,13 @@ import { createClient } from '@/lib/supabase/server'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { HeroTitle } from '@/components/public/HeroTitle'
 import { heroStyle } from '@/lib/hero-style'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const dynamic = 'force-dynamic'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 export default async function EducacionPage() {
@@ -29,7 +30,7 @@ export default async function EducacionPage() {
   const heroLayout: string = 'default'
 
   const hs = heroStyle({
-    defaultBg: '#051828',
+    defaultBg: BG,
     defaultTitleSize: 'xl',
   })
 
@@ -78,7 +79,7 @@ export default async function EducacionPage() {
         {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={heroOverlayOpacity} fallbackUrl={heroImageUrl ?? undefined} />}
         {(heroImageUrl || heroVideoUrl) && (
           <div className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(160deg, rgba(9,60,93,0.45) 0%, rgba(9,60,93,0.25) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(24,26,34,0.45) 0%, rgba(24,26,34,0.25) 100%)' }} />
         )}
         {heroShowGrid && (
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
@@ -218,23 +219,23 @@ export default async function EducacionPage() {
       <section style={{ background: NAVY }}>
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 rounded-2xl p-8 md:p-10"
-            style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.20)' }}>
+            style={{ background: `${GOLD}1A`, border: '1px solid rgba(199,154,42,0.20)' }}>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-3" style={{ color: `${TEAL}80` }}>
                 También en la app
               </p>
               <h3 className="font-black text-xl text-white tracking-tight">{appTitle}</h3>
-              <p className="text-sm mt-2" style={{ color: 'rgba(246,243,235,0.76)' }}>{appBody}</p>
+              <p className="text-sm mt-2" style={{ color: MUTED }}>{appBody}</p>
             </div>
             <div className="flex flex-col gap-3 flex-shrink-0">
               <Link href="/registro"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition"
-                style={{ background: TEAL, color: NAVY }}>
+                style={{ background: CREAM, color: NAVY }}>
                 Crear cuenta <ChevronRight size={13} />
               </Link>
               <Link href="/login"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[11px] font-bold uppercase tracking-wider transition text-center justify-center"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
+                style={{ border: '1px solid rgba(199,154,42,0.30)', color: MUTED }}>
                 Ya tengo cuenta
               </Link>
             </div>

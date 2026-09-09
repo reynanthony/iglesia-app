@@ -2,10 +2,11 @@
 import { ArrowLeft, ArrowRight, BookOpen, Target, MessageCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 export default async function SessionPage({
@@ -56,7 +57,7 @@ export default async function SessionPage({
     <div style={{ background: '#EDEAE0' }}>
 
       {/* Header bar */}
-      <div style={{ background: '#051828', borderBottom: '1px solid rgba(118,171,174,0.12)' }}>
+      <div style={{ background: BG, borderBottom: '1px solid rgba(199,154,42,0.12)' }}>
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center gap-3 flex-wrap">
           <Link href="/educacion/estudio-biblico"
             className="text-[10px] font-bold uppercase tracking-[0.3em] transition hover:opacity-80"
@@ -78,7 +79,7 @@ export default async function SessionPage({
       </div>
 
       {/* Session header */}
-      <div style={{ background: '#051828' }}>
+      <div style={{ background: BG }}>
         <div className="max-w-4xl mx-auto px-6 pt-10 pb-14 md:pt-16 md:pb-20">
           {session.reference && (
             <span className="inline-block text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full mb-6"
@@ -92,7 +93,7 @@ export default async function SessionPage({
           </h1>
           {session.summary && (
             <p className="text-base leading-relaxed max-w-2xl mt-6"
-              style={{ color: 'rgba(246,243,235,0.82)' }}>
+              style={{ color: MUTED }}>
               {session.summary}
             </p>
           )}
@@ -137,7 +138,7 @@ export default async function SessionPage({
               {session.content.split('\n\n').map((para: string, i: number) => (
                 para.trim() ? (
                   <p key={i} className="text-base leading-[1.85] mb-6"
-                    style={{ color: '#1a2a38' }}>
+                    style={{ color: '#181A22' }}>
                     {para.trim()}
                   </p>
                 ) : null
@@ -166,11 +167,11 @@ export default async function SessionPage({
             <div className="space-y-5">
               {questions.map((q: any, i: number) => (
                 <div key={q.id} className="flex items-start gap-5 p-6 rounded-2xl"
-                  style={{ background: 'rgba(118,171,174,0.08)', border: '1px solid rgba(118,171,174,0.12)' }}>
+                  style={{ background: `${GOLD}14`, border: '1px solid rgba(199,154,42,0.12)' }}>
                   <span className="font-black text-2xl flex-shrink-0" style={{ color: `${TEAL}30` }}>
                     {i + 1}
                   </span>
-                  <p className="text-base leading-relaxed" style={{ color: 'rgba(246,243,235,0.80)' }}>
+                  <p className="text-base leading-relaxed" style={{ color: MUTED }}>
                     {q.question}
                   </p>
                 </div>
@@ -181,7 +182,7 @@ export default async function SessionPage({
       )}
 
       {/* Prev / Next navigation */}
-      <div style={{ background: '#051828', borderTop: '1px solid rgba(118,171,174,0.12)' }}>
+      <div style={{ background: BG, borderTop: '1px solid rgba(199,154,42,0.12)' }}>
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between gap-4">
             {prev ? (
@@ -193,7 +194,7 @@ export default async function SessionPage({
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-wider mb-0.5"
                     style={{ color: `${TEAL}50` }}>Anterior</p>
-                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.88)' }}>
+                  <p className="text-sm font-bold" style={{ color: MUTED }}>
                     {prev.title}
                   </p>
                 </div>
@@ -213,7 +214,7 @@ export default async function SessionPage({
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-wider mb-0.5"
                     style={{ color: `${TEAL}50` }}>Siguiente</p>
-                  <p className="text-sm font-bold" style={{ color: 'rgba(246,243,235,0.88)' }}>
+                  <p className="text-sm font-bold" style={{ color: MUTED }}>
                     {next.title}
                   </p>
                 </div>

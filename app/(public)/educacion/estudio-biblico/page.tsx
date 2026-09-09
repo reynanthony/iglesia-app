@@ -1,14 +1,15 @@
 ﻿import Link from 'next/link'
 import { ArrowRight, ArrowLeft, Clock, Users, ChevronRight, Calendar, BookOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const STATUS_LABEL: Record<string, string> = { active: 'En curso', upcoming: 'Próximamente', archived: 'Completada' }
-const STATUS_COLOR: Record<string, string> = { active: '#76ABAE', upcoming: SAGE, archived: '#94A3B8' }
+const STATUS_COLOR: Record<string, string> = { active: GOLD, upcoming: SAGE, archived: '#94A3B8' }
 
 const HOW = [
   { n: '01', title: 'Contexto histórico',   desc: 'Quién escribió el libro, cuándo, para quién y en qué situación. El texto habla más cuando conoces su mundo.' },
@@ -29,7 +30,7 @@ export default async function EstudioBiblicoPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '85vh' }}>
+      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '85vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
@@ -61,7 +62,7 @@ export default async function EstudioBiblicoPage() {
               </h1>
             </div>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-8" style={{ color: MUTED }}>
                 Cada miércoles nos reunimos para estudiar la Biblia con rigor, comunidad y aplicación práctica. No interpretamos la Escritura solos — la interpretamos juntos.
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -169,7 +170,7 @@ export default async function EstudioBiblicoPage() {
                   <span className="text-[9px] font-black tracking-widest mt-1 flex-shrink-0" style={{ color: `${TEAL}50` }}>{n}</span>
                   <div>
                     <h3 className="font-black text-base tracking-tight mb-3" style={{ color: CREAM }}>{title}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.82)' }}>{desc}</p>
+                    <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{desc}</p>
                   </div>
                 </div>
               </div>
@@ -180,7 +181,7 @@ export default async function EstudioBiblicoPage() {
 
       {/* VERSÍCULO + CTA */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(ellipse 50% 80% at 80% 50%, rgba(255,255,255,0.04), transparent 70%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-36">
@@ -191,12 +192,12 @@ export default async function EstudioBiblicoPage() {
                 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: 0.95 }}>
                 "Lámpara es a mis pies tu palabra, y lumbrera a mi camino."
               </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: 'rgba(118,171,174,0.60)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em]" style={{ color: `${GOLD}99` }}>
                 — Salmo 119:105
               </p>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: MUTED }}>
                 Únete al estudio bíblico este miércoles a las 7PM. No necesitas traer nada más que tu Biblia y un corazón abierto.
               </p>
               <Link href="/contacto"
@@ -206,7 +207,7 @@ export default async function EstudioBiblicoPage() {
               </Link>
               <Link href="/registro"
                 className="inline-flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] px-7 py-4 rounded-xl transition group"
-                style={{ border: '1px solid rgba(118,171,174,0.30)', color: 'rgba(246,243,235,0.84)' }}>
+                style={{ border: '1px solid rgba(199,154,42,0.30)', color: MUTED }}>
                 Unirme en línea <ChevronRight size={12} className="opacity-50 group-hover:opacity-100" />
               </Link>
             </div>

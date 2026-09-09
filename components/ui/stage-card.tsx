@@ -6,8 +6,9 @@ import {
   UserCheck, Crown, GraduationCap,
   ChevronLeft, ChevronRight, BookMarked, Info,
 } from 'lucide-react'
+import { MUTED, INK } from '@/lib/gold-theme'
 
-const CREAM = '#F6F3EB'
+const CREAM = INK
 
 const STAGE_META = [
   { icon: Users },
@@ -88,14 +89,14 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
   const navBtn = (disabled: boolean): React.CSSProperties => ({
     width: 26, height: 26, borderRadius: 7, border: 'none', padding: 0, cursor: disabled ? 'default' : 'pointer',
     background: disabled ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.08)',
-    color: disabled ? 'rgba(246,243,235,0.18)' : CREAM,
+    color: disabled ? MUTED : CREAM,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     flexShrink: 0,
   })
 
   return (
     <div style={{
-      background: '#1A3048',
+      background: '#181A22',
       border: '1px solid rgba(255,255,255,0.08)',
       borderLeft: `4px solid ${clr}`,
       borderRadius: 16,
@@ -132,7 +133,7 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
       {description && (
         <p style={{
           fontSize: 13.5, lineHeight: 1.68,
-          color: 'rgba(246,243,235,0.72)',
+          color: MUTED,
           fontStyle: 'italic',
           marginBottom: hasPrograms ? 18 : 0,
         }}>
@@ -168,12 +169,12 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
                     }}
                     title="Ver descripción del programa"
                   >
-                    <Info size={11} style={{ color: showProgDesc ? clr : 'rgba(246,243,235,0.30)' }} />
+                    <Info size={11} style={{ color: showProgDesc ? clr : MUTED }} />
                   </button>
                 )}
               </div>
               {programs.length > 1 && (
-                <p style={{ fontSize: 9, color: 'rgba(246,243,235,0.35)', marginTop: 2 }}>
+                <p style={{ fontSize: 9, color: MUTED, marginTop: 2 }}>
                   {progIdx + 1} de {programs.length} programas
                 </p>
               )}
@@ -196,7 +197,7 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
               >
                 <p style={{
                   fontSize: 12, lineHeight: 1.6,
-                  color: 'rgba(246,243,235,0.60)',
+                  color: MUTED,
                   padding: '8px 10px',
                   background: `${clr}0D`,
                   borderRadius: 8,
@@ -243,7 +244,7 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
                           </span>
                         )}
                       </div>
-                      <p style={{ fontSize: 10, color: 'rgba(246,243,235,0.38)' }}>
+                      <p style={{ fontSize: 10, color: MUTED }}>
                         Curso {courseIdx + 1} de {activeCourses.length}
                       </p>
                     </div>
@@ -289,7 +290,7 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
               )}
             </>
           ) : (
-            <p style={{ fontSize: 11, fontStyle: 'italic', color: 'rgba(246,243,235,0.28)', marginTop: 4 }}>
+            <p style={{ fontSize: 11, fontStyle: 'italic', color: MUTED, marginTop: 4 }}>
               Cursos próximamente.
             </p>
           )}
@@ -297,7 +298,7 @@ export function StageCard({ name, orderIndex, color, description, programs }: St
       )}
 
       {!hasPrograms && (
-        <p style={{ fontSize: 12, fontStyle: 'italic', color: 'rgba(246,243,235,0.22)', marginTop: 8 }}>
+        <p style={{ fontSize: 12, fontStyle: 'italic', color: MUTED, marginTop: 8 }}>
           Próximamente.
         </p>
       )}

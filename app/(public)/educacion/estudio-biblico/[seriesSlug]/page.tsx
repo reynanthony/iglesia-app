@@ -2,14 +2,15 @@
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const STATUS_LABEL: Record<string, string> = { active: 'En curso', upcoming: 'Próximamente', archived: 'Completada' }
-const STATUS_COLOR: Record<string, string> = { active: '#76ABAE', upcoming: SAGE, archived: '#94A3B8' }
+const STATUS_COLOR: Record<string, string> = { active: GOLD, upcoming: SAGE, archived: '#94A3B8' }
 
 export default async function SeriesPage({ params }: { params: Promise<{ seriesSlug: string }> }) {
   const { seriesSlug } = await params
@@ -37,7 +38,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: '#051828' }}>
+      <section className="relative overflow-hidden" style={{ background: BG }}>
         <div className="pointer-events-none absolute inset-0"
           style={{ background: `radial-gradient(ellipse 60% 80% at 70% 40%, ${color}18, transparent 70%)` }} />
         <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-16 md:pt-36 md:pb-20">
@@ -71,7 +72,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ seriesS
             </div>
             <div>
               {series.description && (
-                <p className="text-base leading-relaxed" style={{ color: 'rgba(246,243,235,0.82)' }}>
+                <p className="text-base leading-relaxed" style={{ color: MUTED }}>
                   {series.description}
                 </p>
               )}
