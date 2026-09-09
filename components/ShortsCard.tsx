@@ -61,8 +61,6 @@ export default function ShortsCard({
 }) {
   const cardRef    = useRef<HTMLDivElement>(null)
   const iframeRef    = useRef<HTMLIFrameElement>(null)
-  const touchStartY  = useRef(0)
-  const didSwipe     = useRef(false)
   const [isVisible,     setIsVisible]     = useState(false)
   const [showComments,  setShowComments]  = useState(false)
   const [commenting,    setCommenting]    = useState(false)
@@ -158,32 +156,11 @@ export default function ShortsCard({
   /* ── Fullscreen: body class hides header/nav; card stays in snap flow ─── */
   const fullscreenStyle: React.CSSProperties = {}
 
-  function handleCardTouchStart(e: React.TouchEvent) {
-    touchStartY.current = e.touches[0].clientY
-    didSwipe.current = false
-  }
-
-  function handleCardTouchEnd(e: React.TouchEvent) {
-    if (Math.abs(touchStartY.current - e.changedTouches[0].clientY) > 10) {
-      didSwipe.current = true
-    }
-  }
-
-  function handleCardClick(e: React.MouseEvent) {
-    if (didSwipe.current) { didSwipe.current = false; return }
-    const target = e.target as HTMLElement
-    if (target.closest('button, a, input, textarea')) return
-    if (hasIframe || post.image_url) setIsFullscreen(f => !f)
-  }
-
   return (
     <div
       ref={cardRef}
       className="relative w-full h-full overflow-hidden"
       style={{ background: BG, ...fullscreenStyle }}
-      onTouchStart={handleCardTouchStart}
-      onTouchEnd={handleCardTouchEnd}
-      onClick={handleCardClick}
     >
 
       {/* ══ FONDO / MEDIA ══ */}
