@@ -120,7 +120,7 @@ export default function ShortsCard({
 
   async function handleShare() {
     const text = post.content?.slice(0, 100) ?? ''
-    const url  = `${window.location.origin}/app/comunidad`
+    const url  = `${window.location.origin}/comunidad/${post.id}`
     if (navigator.share) {
       try { await navigator.share({ title: 'Publicación', text, url }); return }
       catch { /* cancelled */ }
