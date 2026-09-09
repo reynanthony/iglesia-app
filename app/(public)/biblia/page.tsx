@@ -1,5 +1,5 @@
 ﻿import Link from 'next/link'
-import { ArrowRight, BookOpen } from 'lucide-react'
+import { ArrowRight, BookOpen, CalendarDays } from 'lucide-react'
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
@@ -82,6 +82,11 @@ export default async function BibliaPage() {
                   className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
                   style={{ background: CREAM, color: NAVY }}>
                   <BookOpen size={12} /> Comenzar a leer
+                </Link>
+                <Link href="/biblia/planes"
+                  className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
+                  style={{ background: `${TEAL}14`, color: TEAL, border: `1px solid ${TEAL}30` }}>
+                  <CalendarDays size={12} /> Planes de lectura
                 </Link>
                 <Link href="/devocionales"
                   className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
