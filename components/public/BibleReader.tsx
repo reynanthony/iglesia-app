@@ -127,6 +127,17 @@ function walkVerseText(vSpan: HTMLElement): string {
   return text.replace(/\s+/g, ' ').trim()
 }
 
+// Texto del capítulo listo para leer en voz alta: cada versículo vive en su
+// propio <p>, así que un .textContent plano del contenedor pega el punto
+// final de un verso directo con el número del siguiente ("...tierra.2 Y la
+// tierra...") sin espacio de por medio — el sintetizador de voz deja de
+// reconocer esos puntos como fin de oración. Aquí se recorre verso por
+// verso (sin incluir el número) y se unen con un espacio real.
+function getReadableChapterText(container: HTMLElement): string {
+  const verses = Array.from(container.querySelectorAll<HTMLElement>('.v[data-number]'))
+  return verses.map(walkVerseText).join(' ')
+}
+
 function buildHighlightCSS(hl: Highlights): string {
   return Object.entries(hl)
     .filter(([, ci]) => HL[ci])
@@ -325,7 +336,7 @@ export function BibleReader({
       setAudioPlaying(false)
       return
     }
-    const text = contentRef.current?.textContent ?? ''
+    const text = contentRef.current ? getReadableChapterText(contentRef.current) : ''
     if (!text.trim()) return
     const speak = () => {
       const utter = new SpeechSynthesisUtterance(text)

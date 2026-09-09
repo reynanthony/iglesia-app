@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, BookOpen, Loader2, Search, Check, Sun, Moon } from 'lucide-react'
+import { ChevronLeft, BookOpen, Loader2, Search, Check, Sun, Moon, Quote } from 'lucide-react'
 import { OT_BOOKS, NT_BOOKS, type BibleBook } from '@/lib/bible'
 import { fetchVerseCount } from '@/app/actions/bible'
 
@@ -233,8 +233,9 @@ export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog 
               sub={`${verseCount} versículos en este capítulo`}
               accent={accent}
               s={s}
+              icon={Quote}
             />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))', gap: 7 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(52px, 1fr))', gap: 10 }}>
               {(() => {
                 const readUpTo = readingLog?.[book.id]?.[chapter]?.readUpTo ?? 0
                 return Array.from({ length: verseCount }, (_, i) => i + 1).map(n => (
@@ -373,25 +374,26 @@ function ChapterCard({
   )
 }
 
-/* ─── Verse card ─── */
+/* ─── Verse card — chip circular, no caja cuadrada ─── */
 function VerseCard({
   n, accent, read, s, onClick,
 }: { n: number; accent: string; read?: boolean; s: SelPalette; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
+      className="group relative flex items-center justify-center rounded-full transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
-        height: 48,
-        background: read ? `${accent}14` : s.cardBg,
-        border: `1px solid ${read ? `${accent}60` : s.cardBorder}`,
+        aspectRatio: '1 / 1',
+        width: '100%',
+        background: read ? accent : s.cardBg,
+        border: `1px solid ${read ? accent : s.cardBorder}`,
         cursor: 'pointer',
       }}
     >
-      <span className="font-bold" style={{ fontSize: 13, color: read ? accent : s.text }}>{n}</span>
+      <span className="font-bold" style={{ fontSize: 13, color: read ? '#FFFFFF' : s.text }}>{n}</span>
       <div
-        className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-        style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}
+        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+        style={{ boxShadow: `inset 0 0 0 1.5px ${read ? '#FFFFFF' : accent}` }}
       />
     </button>
   )
@@ -399,13 +401,20 @@ function VerseCard({
 
 /* ─── Step heading ─── */
 function StepHeading({
-  eyebrow, title, sub, accent, s,
-}: { eyebrow: string; title: string; sub: string; accent: string; s: SelPalette }) {
+  eyebrow, title, sub, accent, s, icon: Icon,
+}: { eyebrow: string; title: string; sub: string; accent: string; s: SelPalette; icon?: typeof Quote }) {
   return (
     <div className="mb-12">
-      <p className="font-bold uppercase mb-2" style={{ fontSize: 9, letterSpacing: '0.42em', color: `${accent}90` }}>
-        {eyebrow}
-      </p>
+      <div className="flex items-center gap-3 mb-2">
+        {Icon && (
+          <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${accent}18` }}>
+            <Icon size={12} style={{ color: accent }} />
+          </div>
+        )}
+        <p className="font-bold uppercase" style={{ fontSize: 9, letterSpacing: '0.42em', color: `${accent}90` }}>
+          {eyebrow}
+        </p>
+      </div>
       <h2 className="font-black tracking-tighter leading-none mb-2"
         style={{ fontSize: 'clamp(2.8rem, 9vw, 6rem)', color: s.text }}>
         {title}
