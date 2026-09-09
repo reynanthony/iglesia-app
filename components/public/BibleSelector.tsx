@@ -3,9 +3,11 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, BookOpen, Loader2, Search } from 'lucide-react'
+import { ChevronLeft, BookOpen, Loader2, Search, Check } from 'lucide-react'
 import { OT_BOOKS, NT_BOOKS, type BibleBook } from '@/lib/bible'
 import { fetchVerseCount } from '@/app/actions/bible'
+
+type ReadingLog = Record<string, Record<number, { readUpTo: number; read: boolean }>>
 
 const GOLD  = '#C9A227'
 const TEAL  = '#76ABAE'
@@ -29,7 +31,7 @@ const NT_CATS = [
 
 type Step = 'books' | 'chapters' | 'verses'
 
-export default function BibleSelector() {
+export default function BibleSelector({ readingLog }: { readingLog?: ReadingLog }) {
   const router                        = useRouter()
   const sectionRef                    = useRef<HTMLDivElement>(null)
   const [step, setStep]               = useState<Step>('books')
@@ -146,8 +148,8 @@ export default function BibleSelector() {
         {/* STEP 1: Books */}
         {step === 'books' && (
           <div className="space-y-20">
-            <Testament label="Antiguo Testamento" accent={GOLD} cats={OT_CATS} onSelect={(b) => selectBook(b, true)} />
-            <Testament label="Nuevo Testamento"   accent={TEAL} cats={NT_CATS} onSelect={(b) => selectBook(b, false)} />
+            <Testament label="Antiguo Testamento" accent={GOLD} cats={OT_CATS} onSelect={(b) => selectBook(b, true)} readingLog={readingLog} />
+            <Testament label="Nuevo Testamento"   accent={TEAL} cats={NT_CATS} onSelect={(b) => selectBook(b, false)} readingLog={readingLog} />
           </div>
         )}
 
@@ -161,13 +163,18 @@ export default function BibleSelector() {
               accent={accent}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))', gap: 8 }}>
-              {Array.from({ length: book.chapters }, (_, i) => i + 1).map(n => (
-                <ChapterCard
-                  key={n} n={n} accent={accent}
-                  loading={loadingVerses && chapter === n}
-                  onClick={() => selectChapter(n)}
-                />
-              ))}
+              {Array.from({ length: book.chapters }, (_, i) => i + 1).map(n => {
+                const progress = readingLog?.[book.id]?.[n]
+                return (
+                  <ChapterCard
+                    key={n} n={n} accent={accent}
+                    loading={loadingVerses && chapter === n}
+                    read={!!progress?.read}
+                    inProgress={!progress?.read && !!progress && progress.readUpTo > 0}
+                    onClick={() => selectChapter(n)}
+                  />
+                )
+              })}
             </div>
           </div>
         )}
@@ -182,9 +189,12 @@ export default function BibleSelector() {
               accent={accent}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))', gap: 7 }}>
-              {Array.from({ length: verseCount }, (_, i) => i + 1).map(n => (
-                <VerseCard key={n} n={n} accent={accent} onClick={() => selectVerse(n)} />
-              ))}
+              {(() => {
+                const readUpTo = readingLog?.[book.id]?.[chapter]?.readUpTo ?? 0
+                return Array.from({ length: verseCount }, (_, i) => i + 1).map(n => (
+                  <VerseCard key={n} n={n} accent={accent} read={n <= readUpTo} onClick={() => selectVerse(n)} />
+                ))
+              })()}
             </div>
           </div>
         )}
@@ -196,12 +206,13 @@ export default function BibleSelector() {
 
 /* ─── Testament section ─── */
 function Testament({
-  label, accent, cats, onSelect,
+  label, accent, cats, onSelect, readingLog,
 }: {
   label: string
   accent: string
   cats: { label: string; books: BibleBook[] }[]
   onSelect: (b: BibleBook) => void
+  readingLog?: ReadingLog
 }) {
   return (
     <div>
@@ -219,9 +230,13 @@ function Testament({
               {cat.label}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 10 }}>
-              {cat.books.map(b => (
-                <BookCard key={b.id} book={b} accent={accent} onClick={() => onSelect(b)} />
-              ))}
+              {cat.books.map(b => {
+                const bookLog = readingLog?.[b.id]
+                const chaptersRead = bookLog ? Object.keys(bookLog).length : 0
+                return (
+                  <BookCard key={b.id} book={b} accent={accent} chaptersRead={chaptersRead} onClick={() => onSelect(b)} />
+                )
+              })}
             </div>
           </div>
         ))}
@@ -231,7 +246,10 @@ function Testament({
 }
 
 /* ─── Book card — flat, modern, accent stripe ─── */
-function BookCard({ book, accent, onClick }: { book: BibleBook; accent: string; onClick: () => void }) {
+function BookCard({
+  book, accent, chaptersRead, onClick,
+}: { book: BibleBook; accent: string; chaptersRead: number; onClick: () => void }) {
+  const pct = Math.min(100, Math.round((chaptersRead / book.chapters) * 100))
   return (
     <button
       onClick={onClick}
@@ -255,7 +273,7 @@ function BookCard({ book, accent, onClick }: { book: BibleBook; accent: string; 
         className="relative inline-flex items-center self-start px-1.5 py-0.5 rounded-md font-bold"
         style={{ fontSize: 9, color: accent, background: `${accent}14`, zIndex: 1 }}
       >
-        {book.chapters} cap.
+        {pct > 0 ? `${chaptersRead}/${book.chapters} leídos` : `${book.chapters} cap.`}
       </span>
 
       {/* Hover tint */}
@@ -263,12 +281,21 @@ function BookCard({ book, accent, onClick }: { book: BibleBook; accent: string; 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         style={{ background: `${accent}08` }}
       />
+
+      {/* Progreso de lectura */}
+      {pct > 0 && (
+        <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ background: `${accent}20` }}>
+          <div className="h-full" style={{ width: `${pct}%`, background: accent }} />
+        </div>
+      )}
     </button>
   )
 }
 
 /* ─── Chapter card ─── */
-function ChapterCard({ n, accent, loading, onClick }: { n: number; accent: string; loading?: boolean; onClick: () => void }) {
+function ChapterCard({
+  n, accent, loading, read, inProgress, onClick,
+}: { n: number; accent: string; loading?: boolean; read?: boolean; inProgress?: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -276,38 +303,43 @@ function ChapterCard({ n, accent, loading, onClick }: { n: number; accent: strin
       className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
         height: 58,
-        background: '#FFFFFF',
-        border: '1px solid #E3DDD2',
+        background: read ? accent : '#FFFFFF',
+        border: `1px solid ${read ? accent : inProgress ? `${accent}80` : '#E3DDD2'}`,
         cursor: loading ? 'default' : 'pointer',
       }}
     >
       {loading ? (
         <Loader2 size={14} className="animate-spin" style={{ color: accent }} />
+      ) : read ? (
+        <Check size={16} strokeWidth={3} style={{ color: '#FFFFFF' }} />
       ) : (
         <span className="font-black" style={{ fontSize: 16, color: NAVY }}>{n}</span>
       )}
+      {inProgress && !read && (
+        <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
+      )}
       <div
         className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-        style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}
+        style={{ boxShadow: `inset 0 0 0 1.5px ${read ? '#FFFFFF' : accent}` }}
       />
     </button>
   )
 }
 
 /* ─── Verse card ─── */
-function VerseCard({ n, accent, onClick }: { n: number; accent: string; onClick: () => void }) {
+function VerseCard({ n, accent, read, onClick }: { n: number; accent: string; read?: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       className="group relative flex items-center justify-center rounded-lg transition-all duration-150 hover:-translate-y-0.5 active:scale-[0.95] focus-visible:outline-none"
       style={{
         height: 48,
-        background: '#FFFFFF',
-        border: '1px solid #E3DDD2',
+        background: read ? `${accent}14` : '#FFFFFF',
+        border: `1px solid ${read ? `${accent}60` : '#E3DDD2'}`,
         cursor: 'pointer',
       }}
     >
-      <span className="font-bold" style={{ fontSize: 13, color: NAVY }}>{n}</span>
+      <span className="font-bold" style={{ fontSize: 13, color: read ? accent : NAVY }}>{n}</span>
       <div
         className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150"
         style={{ boxShadow: `inset 0 0 0 1.5px ${accent}` }}

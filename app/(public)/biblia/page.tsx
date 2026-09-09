@@ -42,6 +42,7 @@ export default async function BibliaPage() {
   let activePlan: ActivePlan | null = null
   let streak = 0
   let readPercent = 0
+  let readingLog: Record<string, Record<number, { readUpTo: number; read: boolean }>> | undefined
 
   if (user) {
     const [positionResult, bookmarksResult, enrollmentResult, completionsResult, readLogResult] = await Promise.all([
@@ -53,7 +54,9 @@ export default async function BibliaPage() {
         .eq('user_id', user.id).is('completed_at', null)
         .order('started_at', { ascending: false }).limit(1).maybeSingle(),
       supabase.from('user_reading_plan_day_completions').select('completed_at').eq('user_id', user.id),
-      supabase.from('bible_reading_log').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
+      supabase.from('bible_reading_log')
+        .select('book_id, chapter, read_up_to_verse, marked_read_at')
+        .eq('user_id', user.id),
     ])
     if (positionResult.data) {
       const book = findBook(positionResult.data.book_id)
@@ -97,7 +100,16 @@ export default async function BibliaPage() {
     streak = computeStreak(dates)
 
     const totalChapters = ALL_BOOKS.reduce((sum, b) => sum + b.chapters, 0)
-    readPercent = Math.round(((readLogResult.count ?? 0) / totalChapters) * 100)
+    readPercent = Math.round(((readLogResult.data?.length ?? 0) / totalChapters) * 100)
+
+    readingLog = {}
+    for (const row of readLogResult.data ?? []) {
+      readingLog[row.book_id] ??= {}
+      readingLog[row.book_id][row.chapter] = {
+        readUpTo: row.read_up_to_verse ?? 0,
+        read: !!row.marked_read_at,
+      }
+    }
   }
 
   const showDashboard = !!user && (!!initialLastRead || !!activePlan)
@@ -226,7 +238,7 @@ export default async function BibliaPage() {
       <BibleContinue initialLastRead={initialLastRead} initialBookmarks={initialBookmarks} />
 
       {/* ══ SELECTOR DE LIBROS ══════════════════════════════ */}
-      <BibleSelector />
+      <BibleSelector readingLog={readingLog} />
 
       {/* ══ CTA — solo para visitantes sin cuenta ═══════════ */}
       {!showDashboard && (
