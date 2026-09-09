@@ -3,12 +3,13 @@ import { notFound } from 'next/navigation'
 import EditProfileModal from '@/components/EditProfileModal'
 import PostCard from '@/components/PostCard'
 import DiscipleshipProgress from '@/components/app/DiscipleshipProgress'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const roleMeta: Record<string, { label: string; color: string; bg: string }> = {
   admin:     { label: 'Administrador', color: '#F87171',                  bg: 'rgba(248,113,113,0.10)' },
-  pastor:    { label: 'Pastor',        color: '#76ABAE',                  bg: 'rgba(118,171,174,0.12)' },
+  pastor:    { label: 'Pastor',        color: GOLD,                  bg: `${GOLD}1F` },
   moderador: { label: 'Moderador',     color: '#869B7E',                  bg: 'rgba(134,155,126,0.12)' },
-  lider:     { label: 'Líder',         color: 'rgba(246,243,235,0.55)',   bg: 'rgba(246,243,235,0.06)' },
+  lider:     { label: 'Líder',         color: MUTED,   bg: 'rgba(255,255,255,0.06)' },
 }
 
 export default async function PerfilPage({ params }: { params: Promise<{ username: string }> }) {
@@ -56,13 +57,13 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
   const currentStage    = (discipleship?.discipleship_stages as any) ?? null
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
 
       {/* ── COVER AREA ── */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none"
           style={{
-            background: `radial-gradient(ellipse 60% 100% at 50% 0%, rgba(118,171,174,0.06), transparent 70%)`,
+            background: `radial-gradient(ellipse 60% 100% at 50% 0%, ${GOLD}0F, transparent 70%)`,
           }} />
 
         <div className="relative max-w-xl mx-auto px-4 pt-10 pb-8">
@@ -70,7 +71,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
             {/* Avatar */}
             <div
               className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center font-black text-2xl flex-shrink-0"
-              style={{ background: '#0D3352', color: '#76ABAE', border: '2px solid #0D3352' }}
+              style={{ background: CARD, color: GOLD, border: `2px solid ${BORDER}` }}
             >
               {profile.avatar_url
                 ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -83,7 +84,7 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
           {/* Identity */}
           <div className="mt-5">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="font-black text-2xl tracking-tight" style={{ color: '#F6F3EB' }}>
+              <h1 className="font-black text-2xl tracking-tight" style={{ color: INK }}>
                 {profile.full_name}
               </h1>
               {role && (
@@ -95,27 +96,27 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
                 </span>
               )}
             </div>
-            <p className="text-sm mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>@{profile.username}</p>
+            <p className="text-sm mt-1" style={{ color: MUTED }}>@{profile.username}</p>
 
             {profile.bio && (
-              <p className="text-sm mt-4 leading-relaxed max-w-sm" style={{ color: 'rgba(246,243,235,0.55)' }}>
+              <p className="text-sm mt-4 leading-relaxed max-w-sm" style={{ color: MUTED }}>
                 {profile.bio}
               </p>
             )}
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-6 mt-6 pt-6" style={{ borderTop: '1px solid #0D3352' }}>
+          <div className="flex items-center gap-6 mt-6 pt-6" style={{ borderTop: `1px solid ${BORDER}` }}>
             <div>
-              <p className="font-black text-xl leading-none" style={{ color: '#F6F3EB' }}>{postCount}</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+              <p className="font-black text-xl leading-none" style={{ color: INK }}>{postCount}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: MUTED }}>
                 {postCount === 1 ? 'Publicación' : 'Publicaciones'}
               </p>
             </div>
             {(isOwner || completedCourses > 0) && (
               <div>
-                <p className="font-black text-xl leading-none" style={{ color: '#76ABAE' }}>{completedCourses}</p>
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: 'rgba(246,243,235,0.40)' }}>
+                <p className="font-black text-xl leading-none" style={{ color: GOLD }}>{completedCourses}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] mt-1" style={{ color: MUTED }}>
                   {completedCourses === 1 ? 'Curso' : 'Cursos'}
                 </p>
               </div>
@@ -135,10 +136,10 @@ export default async function PerfilPage({ params }: { params: Promise<{ usernam
         {!posts || posts.length === 0 ? (
           <div className="text-center py-24">
             <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: '#0D3352', border: '1px solid #0D3352' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
               <span className="text-xl">📝</span>
             </div>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.40)' }}>Sin publicaciones aún</p>
+            <p className="text-sm" style={{ color: MUTED }}>Sin publicaciones aún</p>
           </div>
         ) : (
           <div>

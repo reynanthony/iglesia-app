@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Plus, Pin, Users, Music, Heart, Star, BookOpen, Mic, Baby, Flame, Home, Globe, Zap, Sparkles, type LucideIcon } from 'lucide-react'
 import MinistryContentCard from '@/components/MinistryContentCard'
+import { GOLD, INK } from '@/lib/gold-theme'
 
 /* ── icon mapping (shared logic with public page) ─────── */
 const EMOJI_ICON: Record<string, LucideIcon> = {
@@ -86,8 +87,8 @@ export default async function MinistryPage({
         <div className="flex items-start gap-3">
           <Link
             href="/app/ministerios"
-            className="p-2 rounded-xl transition mt-1 hover:bg-[#0D3352]"
-            style={{ color: '#76ABAE' }}
+            className="p-2 rounded-xl transition mt-1 hover:bg-[#292E3B]"
+            style={{ color: GOLD }}
           >
             <ArrowLeft size={18} />
           </Link>
@@ -96,7 +97,7 @@ export default async function MinistryPage({
               <Link
                 href={'/app/ministerios/' + ministry.parent.slug}
                 className="text-xs transition mb-1 block"
-                style={{ color: 'rgba(118,171,174,0.55)' }}
+                style={{ color: `${GOLD}8C` }}
               >
                 {ministry.parent.name} /
               </Link>
@@ -105,13 +106,13 @@ export default async function MinistryPage({
               {/* Lucide icon instead of emoji */}
               <div
                 className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(118,171,174,0.15)', border: '1px solid rgba(118,171,174,0.25)' }}
+                style={{ background: `${GOLD}26`, border: `1px solid ${GOLD}40` }}
               >
-                <IconComponent size={22} color="#76ABAE" strokeWidth={1.5} />
+                <IconComponent size={22} color={GOLD} strokeWidth={1.5} />
               </div>
               <div>
-                <h1 className="text-xl font-bold" style={{ color: '#F6F3EB' }}>{ministry.name}</h1>
-                <p className="text-sm" style={{ color: 'rgba(118,171,174,0.60)' }}>{ministry.description}</p>
+                <h1 className="text-xl font-bold" style={{ color: INK }}>{ministry.name}</h1>
+                <p className="text-sm" style={{ color: `${GOLD}99` }}>{ministry.description}</p>
               </div>
             </div>
           </div>
@@ -120,8 +121,8 @@ export default async function MinistryPage({
         {canPost && (
           <Link
             href={'/app/ministerios/' + slug + '/nuevo'}
-            className="flex items-center gap-2 text-white font-semibold px-4 py-2 rounded-xl text-sm transition flex-shrink-0 hover:opacity-90"
-            style={{ background: '#093C5D' }}
+            className="font-semibold px-4 py-2 rounded-xl text-sm transition flex-shrink-0 hover:opacity-90 flex items-center gap-2"
+            style={{ background: GOLD, color: '#14140F' }}
           >
             <Plus size={16} /> Publicar
           </Link>
@@ -132,8 +133,8 @@ export default async function MinistryPage({
       {pinnedContent.length > 0 && (
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <Pin size={14} style={{ color: '#76ABAE' }} />
-            <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#76ABAE' }}>Anclado</p>
+            <Pin size={14} style={{ color: GOLD }} />
+            <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: GOLD }}>Anclado</p>
           </div>
           <div className="space-y-3">
             {pinnedContent.map((item: any) => (
@@ -153,13 +154,13 @@ export default async function MinistryPage({
         <div className="text-center py-20">
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-            style={{ background: 'rgba(118,171,174,0.10)', border: '1px solid rgba(118,171,174,0.20)' }}
+            style={{ background: `${GOLD}1A`, border: `1px solid ${GOLD}33` }}
           >
-            <IconComponent size={32} color="#76ABAE" strokeWidth={1.5} />
+            <IconComponent size={32} color={GOLD} strokeWidth={1.5} />
           </div>
-          <p className="font-medium mb-1" style={{ color: '#F6F3EB' }}>Sin contenido aún</p>
+          <p className="font-medium mb-1" style={{ color: INK }}>Sin contenido aún</p>
           {canPost && (
-            <p className="text-sm" style={{ color: 'rgba(118,171,174,0.55)' }}>Sé el primero en publicar algo</p>
+            <p className="text-sm" style={{ color: `${GOLD}8C` }}>Sé el primero en publicar algo</p>
           )}
         </div>
       ) : (

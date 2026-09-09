@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createRoom } from '@/app/actions/rooms'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default function NuevaSalaPage() {
   const [error, setError] = useState('')
@@ -22,37 +23,37 @@ export default function NuevaSalaPage() {
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
           <Link href="/app/oracion/salas"
-            className="p-2.5 hover:bg-[#0D3352] rounded-xl transition"
-            style={{ color: '#76ABAE' }}>
+            className="p-2.5 hover:bg-[#292E3B] rounded-xl transition"
+            style={{ color: GOLD }}>
             <ArrowLeft size={18} />
           </Link>
-          <h1 className="font-black text-xl tracking-tight" style={{ color: '#F6F3EB' }}>
+          <h1 className="font-black text-xl tracking-tight" style={{ color: INK }}>
             Nueva sala de oración
           </h1>
         </div>
 
-        <div className="rounded-2xl p-6" style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+        <div className="rounded-2xl p-6" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-bold mb-2" style={{ color: 'rgba(246,243,235,0.7)' }}>
+              <label className="block text-sm font-bold mb-2" style={{ color: MUTED }}>
                 Nombre de la sala
               </label>
               <input name="name" type="text" required placeholder="Ej: Oración de intercesión"
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition"
-                style={{ background: '#0D3352', border: '1px solid #0D3352', color: '#F6F3EB' }} />
+                style={{ background: BORDER, border: `1px solid ${BORDER}`, color: INK }} />
             </div>
             <div>
-              <label className="block text-sm font-bold mb-2" style={{ color: 'rgba(246,243,235,0.7)' }}>
-                Descripción <span style={{ color: 'rgba(246,243,235,0.62)' }}>(opcional)</span>
+              <label className="block text-sm font-bold mb-2" style={{ color: MUTED }}>
+                Descripción <span style={{ color: MUTED }}>(opcional)</span>
               </label>
               <textarea name="description" rows={3}
                 placeholder="¿De qué se trata esta sesión de oración?"
                 className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition resize-none"
-                style={{ background: '#0D3352', border: '1px solid #0D3352', color: '#F6F3EB' }} />
+                style={{ background: BORDER, border: `1px solid ${BORDER}`, color: INK }} />
             </div>
 
             {error && (
@@ -65,12 +66,12 @@ export default function NuevaSalaPage() {
             <div className="flex gap-3 justify-end pt-2">
               <Link href="/app/oracion/salas"
                 className="px-5 py-2.5 rounded-xl text-sm font-bold transition"
-                style={{ border: '1px solid #0D3352', color: 'rgba(246,243,235,0.55)' }}>
+                style={{ border: `1px solid ${BORDER}`, color: MUTED }}>
                 Cancelar
               </Link>
               <button type="submit" disabled={loading}
                 className="px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wider transition disabled:opacity-50"
-                style={{ background: '#F6F3EB', color: '#061E30' }}>
+                style={{ background: GOLD, color: GOLD_INK }}>
                 {loading ? 'Creando...' : 'Crear sala'}
               </button>
             </div>
