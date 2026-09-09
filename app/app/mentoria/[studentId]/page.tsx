@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, CheckCircle2, BookHeart, MessageSquarePlus } from 'lucide-react'
 import { ObservationForm } from '@/components/lms/ObservationForm'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function StudentDetailPage({
   params,
@@ -80,25 +81,25 @@ export default async function StudentDetailPage({
   }
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
 
       {/* Header */}
-      <div style={{ borderBottom: '1px solid #0D3352' }}>
+      <div style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
           <Link href="/app/mentoria"
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: '#0B2D47' }}>
-            <ArrowLeft size={14} style={{ color: 'rgba(246,243,235,0.40)' }} />
+            style={{ background: CARD }}>
+            <ArrowLeft size={14} style={{ color: MUTED }} />
           </Link>
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-black"
-              style={{ background: '#0D3352', color: '#76ABAE' }}>
+              style={{ background: BORDER, color: GOLD }}>
               {student.avatar_url
                 ? <img src={student.avatar_url} alt="" className="w-full h-full object-cover" />
                 : initial}
             </div>
             <div className="min-w-0">
-              <p className="font-black text-base truncate" style={{ color: '#F6F3EB' }}>{student.full_name}</p>
+              <p className="font-black text-base truncate" style={{ color: INK }}>{student.full_name}</p>
               {stage && (
                 <span className="text-[10px] font-black"
                   style={{ color: stage.color }}>
@@ -116,7 +117,7 @@ export default async function StudentDetailPage({
         {enrollments && enrollments.length > 0 && (
           <section>
             <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3 flex items-center gap-1.5"
-              style={{ color: 'rgba(118,171,174,0.55)' }}>
+              style={{ color: `${GOLD}8C` }}>
               <BookOpen size={10} /> Progreso en cursos
             </p>
             <div className="space-y-2">
@@ -125,26 +126,26 @@ export default async function StudentDetailPage({
                 const isCompleted = !!e.completed_at
                 return (
                   <div key={i} className="p-4 rounded-2xl"
-                    style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                    style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                     <div className="flex items-center justify-between mb-2">
-                      <p className="font-bold text-sm truncate flex-1 mr-3" style={{ color: '#F6F3EB' }}>
+                      <p className="font-bold text-sm truncate flex-1 mr-3" style={{ color: INK }}>
                         {course?.title}
                       </p>
                       {isCompleted
-                        ? <CheckCircle2 size={15} style={{ color: '#76ABAE', flexShrink: 0 }} />
-                        : <span className="text-xs font-black flex-shrink-0" style={{ color: '#76ABAE' }}>{e.progress_pct}%</span>
+                        ? <CheckCircle2 size={15} style={{ color: GOLD, flexShrink: 0 }} />
+                        : <span className="text-xs font-black flex-shrink-0" style={{ color: GOLD }}>{e.progress_pct}%</span>
                       }
                     </div>
                     {!isCompleted && (
-                      <div className="w-full h-1 rounded-full" style={{ background: '#0D3352' }}>
+                      <div className="w-full h-1 rounded-full" style={{ background: BORDER }}>
                         <div className="h-full rounded-full" style={{
                           width: `${e.progress_pct}%`,
-                          background: 'linear-gradient(90deg, #093C5D, #76ABAE)',
+                          background: `linear-gradient(90deg, ${BORDER}, ${GOLD})`,
                         }} />
                       </div>
                     )}
                     {isCompleted && (
-                      <p className="text-[10px]" style={{ color: 'rgba(118,171,174,0.55)' }}>
+                      <p className="text-[10px]" style={{ color: `${GOLD}8C` }}>
                         Completado el {fmtDate(e.completed_at)}
                       </p>
                     )}
@@ -158,16 +159,16 @@ export default async function StudentDetailPage({
         {/* ── REFLEXIONES COMPARTIDAS ── */}
         <section>
           <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3 flex items-center gap-1.5"
-            style={{ color: 'rgba(118,171,174,0.55)' }}>
+            style={{ color: `${GOLD}8C` }}>
             <BookHeart size={10} /> Reflexiones compartidas
           </p>
           {!reflections || reflections.length === 0 ? (
             <div className="p-5 rounded-2xl text-center"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <p className="text-sm" style={{ color: 'rgba(246,243,235,0.35)' }}>
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <p className="text-sm" style={{ color: MUTED }}>
                 Aún no hay reflexiones compartidas contigo.
               </p>
-              <p className="text-xs mt-1" style={{ color: 'rgba(246,243,235,0.25)' }}>
+              <p className="text-xs mt-1" style={{ color: MUTED }}>
                 Tu discípulo puede elegir compartirlas desde la lección.
               </p>
             </div>
@@ -185,22 +186,22 @@ export default async function StudentDetailPage({
 
                 return (
                   <div key={i} className="rounded-2xl overflow-hidden"
-                    style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
+                    style={{ background: CARD, border: `1px solid ${BORDER}` }}>
                     <div className="px-4 py-3 flex items-center justify-between"
-                      style={{ borderBottom: '1px solid #0D3352' }}>
+                      style={{ borderBottom: `1px solid ${BORDER}` }}>
                       <div>
-                        <p className="text-xs font-black" style={{ color: '#F6F3EB' }}>{lesson?.title}</p>
-                        <p className="text-[10px] mt-0.5" style={{ color: 'rgba(246,243,235,0.35)' }}>{course?.title}</p>
+                        <p className="text-xs font-black" style={{ color: INK }}>{lesson?.title}</p>
+                        <p className="text-[10px] mt-0.5" style={{ color: MUTED }}>{course?.title}</p>
                       </div>
-                      <p className="text-[10px] flex-shrink-0 ml-3" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                      <p className="text-[10px] flex-shrink-0 ml-3" style={{ color: MUTED }}>
                         {fmtDate(r.updated_at)}
                       </p>
                     </div>
                     <div className="p-4 space-y-3">
                       {entries.map(({ label, value }) => (
                         <div key={label}>
-                          <p className="text-[10px] font-black mb-1" style={{ color: 'rgba(118,171,174,0.55)' }}>{label}</p>
-                          <p className="text-sm leading-relaxed" style={{ color: 'rgba(246,243,235,0.75)' }}>{value}</p>
+                          <p className="text-[10px] font-black mb-1" style={{ color: `${GOLD}8C` }}>{label}</p>
+                          <p className="text-sm leading-relaxed" style={{ color: MUTED }}>{value}</p>
                         </div>
                       ))}
                     </div>
@@ -214,22 +215,22 @@ export default async function StudentDetailPage({
         {/* ── OBSERVACIONES DEL MENTOR ── */}
         <section>
           <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3 flex items-center gap-1.5"
-            style={{ color: 'rgba(118,171,174,0.55)' }}>
+            style={{ color: `${GOLD}8C` }}>
             <MessageSquarePlus size={10} /> Mis observaciones
           </p>
           <div className="rounded-2xl overflow-hidden"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-            <div className="p-4" style={{ borderBottom: '1px solid #0D3352' }}>
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+            <div className="p-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
               <ObservationForm studentId={studentId} />
             </div>
             {observations && observations.length > 0 ? (
-              <div className="divide-y" style={{ borderColor: '#0D3352' }}>
+              <div className="divide-y" style={{ borderColor: BORDER }}>
                 {observations.map((obs: any) => (
                   <div key={obs.id} className="px-4 py-4">
-                    <p className="text-sm leading-relaxed mb-2" style={{ color: 'rgba(246,243,235,0.80)' }}>
+                    <p className="text-sm leading-relaxed mb-2" style={{ color: MUTED }}>
                       {obs.content}
                     </p>
-                    <p className="text-[10px]" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                    <p className="text-[10px]" style={{ color: MUTED }}>
                       {fmtDate(obs.created_at)}
                     </p>
                   </div>
@@ -237,7 +238,7 @@ export default async function StudentDetailPage({
               </div>
             ) : (
               <div className="px-4 py-6 text-center">
-                <p className="text-sm" style={{ color: 'rgba(246,243,235,0.30)' }}>
+                <p className="text-sm" style={{ color: MUTED }}>
                   Aún no tienes observaciones sobre este discípulo
                 </p>
               </div>

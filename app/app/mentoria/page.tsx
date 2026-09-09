@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Users, ChevronRight, BookOpen, CheckCircle2 } from 'lucide-react'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function MentoriaPage() {
   const supabase = await createClient()
@@ -44,18 +45,18 @@ export default async function MentoriaPage() {
   })
 
   return (
-    <div style={{ background: '#061E30', minHeight: '100%' }}>
+    <div style={{ background: BG, minHeight: '100%' }}>
 
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ borderBottom: '1px solid #0D3352' }}>
+      <div className="relative overflow-hidden" style={{ borderBottom: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 0%, rgba(118,171,174,0.07), transparent 70%)' }} />
+          style={{ background: `radial-gradient(ellipse 60% 80% at 50% 0%, ${GOLD}12, transparent 70%)` }} />
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <h1 className="font-black tracking-tighter mb-1"
-            style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: '#F6F3EB' }}>
+            style={{ fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', lineHeight: 0.95, color: INK }}>
             Mis discípulos.
           </h1>
-          <p className="text-sm mt-2" style={{ color: 'rgba(246,243,235,0.68)' }}>
+          <p className="text-sm mt-2" style={{ color: MUTED }}>
             {students.length === 0
               ? 'Aún no tienes discípulos asignados'
               : `${students.length} discípulo${students.length !== 1 ? 's' : ''} activo${students.length !== 1 ? 's' : ''}`}
@@ -68,10 +69,10 @@ export default async function MentoriaPage() {
         {students.length === 0 ? (
           <div className="py-16 flex flex-col items-center gap-3 text-center">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center"
-              style={{ background: '#0B2D47', border: '1px solid #0D3352' }}>
-              <Users size={24} style={{ color: 'rgba(118,171,174,0.40)' }} />
+              style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+              <Users size={24} style={{ color: `${GOLD}66` }} />
             </div>
-            <p className="text-sm" style={{ color: 'rgba(246,243,235,0.62)' }}>
+            <p className="text-sm" style={{ color: MUTED }}>
               Un pastor o líder te asignará discípulos cuando estés listo para acompañar a otros.
             </p>
           </div>
@@ -93,11 +94,11 @@ export default async function MentoriaPage() {
                   key={pair.id}
                   href={`/app/mentoria/${student.id}`}
                   className="flex items-center gap-4 p-4 rounded-2xl transition hover:brightness-110"
-                  style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}
                 >
                   {/* Avatar */}
                   <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-black text-lg"
-                    style={{ background: '#0D3352', color: '#76ABAE' }}>
+                    style={{ background: BORDER, color: GOLD }}>
                     {student.avatar_url
                       ? <img src={student.avatar_url} alt="" className="w-full h-full object-cover" />
                       : student.full_name?.[0]?.toUpperCase() ?? 'U'}
@@ -105,7 +106,7 @@ export default async function MentoriaPage() {
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm truncate" style={{ color: '#F6F3EB' }}>
+                    <p className="font-bold text-sm truncate" style={{ color: INK }}>
                       {student.full_name}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -115,22 +116,22 @@ export default async function MentoriaPage() {
                           {stage.order_index}. {stage.name}
                         </span>
                       ) : (
-                        <span className="text-[10px]" style={{ color: 'rgba(246,243,235,0.55)' }}>Sin etapa</span>
+                        <span className="text-[10px]" style={{ color: MUTED }}>Sin etapa</span>
                       )}
                       {active.length > 0 && (
-                        <span className="text-[10px] flex items-center gap-1" style={{ color: 'rgba(246,243,235,0.68)' }}>
+                        <span className="text-[10px] flex items-center gap-1" style={{ color: MUTED }}>
                           <BookOpen size={9} /> {active.length} en curso · {avgPct}%
                         </span>
                       )}
                       {done.length > 0 && (
-                        <span className="text-[10px] flex items-center gap-1" style={{ color: 'rgba(118,171,174,0.60)' }}>
+                        <span className="text-[10px] flex items-center gap-1" style={{ color: `${GOLD}99` }}>
                           <CheckCircle2 size={9} /> {done.length} completado{done.length !== 1 ? 's' : ''}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <ChevronRight size={14} style={{ color: 'rgba(246,243,235,0.25)', flexShrink: 0 }} />
+                  <ChevronRight size={14} style={{ color: MUTED, flexShrink: 0 }} />
                 </Link>
               )
             })}

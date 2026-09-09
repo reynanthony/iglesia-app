@@ -8,6 +8,7 @@ import Link from 'next/link'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import { hapticSuccess } from '@/lib/haptics'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const MAX_CHARS = 1500
 
@@ -75,26 +76,26 @@ export default function NuevoPostPage() {
   }
 
   return (
-    <div className="flex flex-col" style={{ background: '#061E30', minHeight: '100dvh' }}>
+    <div className="flex flex-col" style={{ background: BG, minHeight: '100dvh' }}>
 
       {/* Header fijo — no se mueve con el teclado */}
       <div
         className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 flex-shrink-0"
-        style={{ background: '#061E30', borderBottom: '1px solid #0D3352' }}
+        style={{ background: BG, borderBottom: `1px solid ${BORDER}` }}
       >
         <div className="flex items-center gap-3">
           <Link
             href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad/feed'}
             className="p-2.5 rounded-xl transition"
-            style={{ color: '#76ABAE', background: '#0B2D47', border: '1px solid #0D3352' }}
+            style={{ color: GOLD, background: CARD, border: `1px solid ${BORDER}` }}
           >
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="font-black text-lg tracking-tight" style={{ color: '#F6F3EB' }}>
+            <h1 className="font-black text-lg tracking-tight" style={{ color: INK }}>
               Nueva publicación
             </h1>
-            <p className="text-xs" style={{ color: 'rgba(118,171,174,0.55)' }}>
+            <p className="text-xs" style={{ color: `${GOLD}8C` }}>
               {groupId ? 'Para el grupo' : 'Comparte con la comunidad'}
             </p>
           </div>
@@ -105,7 +106,7 @@ export default function NuevoPostPage() {
           type="submit"
           disabled={loading || overLimit || !content.trim()}
           className="px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition disabled:opacity-40"
-          style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)', color: '#F6F3EB' }}
+          style={{ background: GOLD, color: '#14140F' }}
         >
           {loading ? 'Publicando…' : 'Publicar'}
         </button>
@@ -118,7 +119,7 @@ export default function NuevoPostPage() {
           {/* Textarea */}
           <div
             className="rounded-2xl overflow-hidden"
-            style={{ background: '#0B2D47', border: '1px solid #0D3352' }}
+            style={{ background: CARD, border: `1px solid ${BORDER}` }}
           >
             <textarea
               name="content"
@@ -128,7 +129,7 @@ export default function NuevoPostPage() {
               disabled={loading}
               placeholder="¿Qué quieres compartir hoy? Un versículo, reflexión, testimonio… o pega un enlace de YouTube, Facebook o Instagram."
               className="w-full bg-transparent text-sm focus:outline-none resize-none px-5 pt-5 pb-3"
-              style={{ color: '#F6F3EB' }}
+              style={{ color: INK }}
             />
 
             {/* Preview imagen */}
@@ -141,7 +142,7 @@ export default function NuevoPostPage() {
                   className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full transition"
                   style={{ background: 'rgba(0,0,0,0.7)' }}
                 >
-                  <X size={15} style={{ color: '#F6F3EB' }} />
+                  <X size={15} style={{ color: INK }} />
                 </button>
               </div>
             )}
@@ -149,13 +150,13 @@ export default function NuevoPostPage() {
             {/* Toolbar inferior */}
             <div
               className="flex items-center justify-between px-4 py-3"
-              style={{ borderTop: '1px solid #0D3352' }}
+              style={{ borderTop: `1px solid ${BORDER}` }}
             >
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 className="flex items-center gap-2 text-sm transition"
-                style={{ color: fileName ? '#F6F3EB' : '#4A7A8E' }}
+                style={{ color: fileName ? INK : '#4A7A8E' }}
               >
                 <ImageIcon size={16} />
                 <span className="text-xs">{fileName || 'Agregar foto'}</span>
@@ -164,7 +165,7 @@ export default function NuevoPostPage() {
               {/* Contador de caracteres */}
               <span
                 className="text-[11px] font-bold tabular-nums"
-                style={{ color: overLimit ? '#F87171' : charsLeft < 150 ? '#76ABAE' : 'rgba(118,171,174,0.40)' }}
+                style={{ color: overLimit ? '#F87171' : charsLeft < 150 ? GOLD : `${GOLD}66` }}
               >
                 {content.length}/{MAX_CHARS}
               </span>
@@ -174,8 +175,8 @@ export default function NuevoPostPage() {
           {/* Selector de categoría */}
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wider mb-2"
-              style={{ color: 'rgba(118,171,174,0.60)' }}>
-              Categoría <span style={{ color: 'rgba(118,171,174,0.35)' }}>(opcional)</span>
+              style={{ color: `${GOLD}99` }}>
+              Categoría <span style={{ color: `${GOLD}59` }}>(opcional)</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map(c => (
@@ -185,10 +186,10 @@ export default function NuevoPostPage() {
                   onClick={() => setCategory(cat => cat === c.key ? '' : c.key)}
                   className="px-3.5 py-1.5 rounded-full text-[12px] font-bold tracking-wide transition"
                   style={{
-                    background: category === c.key ? '#76ABAE' : '#0B2D47',
-                    color: category === c.key ? '#061E30' : 'rgba(246,243,235,0.55)',
+                    background: category === c.key ? GOLD : CARD,
+                    color: category === c.key ? BG : MUTED,
                     border: '1px solid',
-                    borderColor: category === c.key ? '#76ABAE' : '#0D3352',
+                    borderColor: category === c.key ? GOLD : BORDER,
                   }}
                 >
                   {c.label}
@@ -213,7 +214,7 @@ export default function NuevoPostPage() {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="w-full rounded-2xl py-8 flex flex-col items-center gap-2 transition"
-              style={{ border: '1px dashed rgba(118,171,174,0.35)', color: 'rgba(118,171,174,0.60)' }}
+              style={{ border: `1px dashed ${GOLD}59`, color: `${GOLD}99` }}
             >
               <ImageIcon size={22} />
               <span className="text-xs">JPG, PNG, WEBP · max 10 MB</span>
@@ -242,7 +243,7 @@ export default function NuevoPostPage() {
           <Link
             href={groupId ? `/app/grupos/${groupId}` : '/app/comunidad/feed'}
             className="block text-center py-3 text-sm transition"
-            style={{ color: 'rgba(118,171,174,0.50)' }}
+            style={{ color: `${GOLD}80` }}
           >
             Cancelar
           </Link>

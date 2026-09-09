@@ -4,6 +4,7 @@ import { ArrowLeft, Plus } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import CommunityAnnouncement from '@/components/app/CommunityAnnouncement'
 import ComunidadFeedScroll from '@/components/app/ComunidadFeedScroll'
+import { BG, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function ComunidadFeedPage() {
   const supabase = await createClient()
@@ -41,7 +42,7 @@ export default async function ComunidadFeedPage() {
   return (
     <div
       className="flex flex-col app-content-height"
-      style={{ background: '#061E30' }}
+      style={{ background: BG }}
     >
       {/* Volver a la pantalla de inicio de Comunidad */}
       <Link
@@ -58,7 +59,7 @@ export default async function ComunidadFeedPage() {
         }}
         aria-label="Volver a Comunidad"
       >
-        <ArrowLeft size={18} color="#F6F3EB" />
+        <ArrowLeft size={18} color={INK} />
       </Link>
 
       {/* Banner de anuncio comunitario */}
@@ -78,14 +79,14 @@ export default async function ComunidadFeedPage() {
         style={{
           bottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
           left: 16,
-          background: 'rgba(118,171,174,0.24)',
-          border: '1px solid rgba(118,171,174,0.4)',
+          background: `${GOLD}3D`,
+          border: `1px solid ${GOLD}66`,
           backdropFilter: 'blur(18px) saturate(160%)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 26px -8px rgba(9,60,93,0.5)',
         }}
         aria-label="Nueva publicación"
       >
-        <Plus size={22} color="#76ABAE" strokeWidth={2} />
+        <Plus size={22} color={GOLD} strokeWidth={2} />
       </Link>
 
       {/* Scroll con snap vertical + infinite scroll */}
