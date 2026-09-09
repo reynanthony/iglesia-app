@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BookOpen, Bookmark, ArrowRight, X } from 'lucide-react'
 import type { BookmarkItem } from '@/components/public/BibleReader'
+import { CARD, GOLD, INK } from '@/lib/gold-theme'
 
 interface LastRead {
   bookId: string
@@ -11,9 +12,9 @@ interface LastRead {
   bookName: string
 }
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 export default function BibleContinue() {
@@ -62,13 +63,13 @@ export default function BibleContinue() {
               className="group flex items-center justify-between rounded-2xl px-6 py-5 transition-all"
               style={{
                 background: CREAM,
-                border: `1px solid rgba(118,171,174,0.25)`,
+                border: `1px solid rgba(199,154,42,0.25)`,
               }}
             >
               <div className="flex items-center gap-4">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: `rgba(118,171,174,0.15)` }}
+                  style={{ background: `rgba(199,154,42,0.15)` }}
                 >
                   <BookOpen size={16} style={{ color: TEAL }} />
                 </div>
@@ -102,7 +103,7 @@ export default function BibleContinue() {
                     <button
                       onClick={() => removeBookmark(bk.ref)}
                       className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{ background: 'rgba(9,60,93,0.08)' }}
+                      style={{ background: 'rgba(24,26,34,0.08)' }}
                       aria-label={`Eliminar marcador ${bk.ref}`}
                     >
                       <X size={10} style={{ color: NAVY }} />

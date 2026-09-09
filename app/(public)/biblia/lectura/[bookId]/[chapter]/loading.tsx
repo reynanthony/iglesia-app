@@ -1,11 +1,12 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { BG, GOLD, INK } from '@/lib/gold-theme'
 
 export default function Loading() {
   return (
-    <div style={{ background: '#F6F3EB', minHeight: '100vh' }}>
-      <div className="sticky top-0 z-40" style={{ background: '#051828' }}>
+    <div style={{ background: INK, minHeight: '100vh' }}>
+      <div className="sticky top-0 z-40" style={{ background: BG }}>
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-center">
-          <Skeleton className="h-3 w-32" style={{ background: 'rgba(118,171,174,0.18)' }} />
+          <Skeleton className="h-3 w-32" style={{ background: `${GOLD}2E` }} />
         </div>
       </div>
       <div className="max-w-2xl mx-auto px-5 sm:px-8 pt-10 pb-36">

@@ -72,9 +72,9 @@ const T = {
     toolbar: 'rgba(245,237,216,0.94)', toolbarBorder: '#CDBB90',
   },
   dark: {
-    bg: '#0F1923', text: 'rgba(246,243,235,0.88)', muted: 'rgba(246,243,235,0.36)',
-    border: 'rgba(118,171,174,0.14)', verse: '#76ABAE', surface: '#0B2D47',
-    toolbar: 'rgba(11,20,29,0.97)', toolbarBorder: 'rgba(118,171,174,0.12)',
+    bg: '#101217', text: 'rgba(255,255,255,0.88)', muted: 'rgba(255,255,255,0.36)',
+    border: 'rgba(199,154,42,0.14)', verse: '#C79A2A', surface: '#181A22',
+    toolbar: 'rgba(16,18,23,0.97)', toolbarBorder: 'rgba(199,154,42,0.12)',
   },
 } as const
 
@@ -87,9 +87,9 @@ const HL = [
   { bg: 'rgba(134,155,126,0.38)', ring: 'rgba(95,125,85,0.55)',   dot: '#5F8060', label: 'Verde'    },
 ]
 
-const DARK_HEADER = '#051828'
-const TEAL        = '#76ABAE'
-const CREAM_TEXT  = '#093C5D'
+const DARK_HEADER = '#101217'
+const TEAL        = '#C79A2A'
+const CREAM_TEXT  = '#14140F'
 const SWIPE_MIN   = 52
 
 // ── DOM helpers ────────────────────────────────────────────────
@@ -127,7 +127,7 @@ function buildNoteCSS(notes: Notes): string {
     .map(v =>
       `.br-content .v[data-number="${v}"]::after {` +
       ` content:''; display:inline-block; width:4px; height:4px;` +
-      ` background:#76ABAE; border-radius:50%;` +
+      ` background:#C79A2A; border-radius:50%;` +
       ` margin-left:2px; vertical-align:super; }`
     )
     .join('\n')
@@ -139,7 +139,7 @@ function buildBookmarkCSS(nums: Set<string>): string {
       `.br-content p:has(.v[data-number="${v}"]),` +
       `.br-content .q1:has(.v[data-number="${v}"]),` +
       `.br-content .q2:has(.v[data-number="${v}"]) {` +
-      ` border-left:2.5px solid rgba(118,171,174,0.55); padding-left:7px; }`
+      ` border-left:2.5px solid rgba(199,154,42,0.55); padding-left:7px; }`
     )
     .join('\n')
 }
@@ -192,29 +192,29 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
     canvas.height = H
 
     // Background
-    ctx.fillStyle = '#051828'
+    ctx.fillStyle = '#101217'
     ctx.fillRect(0, 0, W, H)
 
     // Radial glow (top-right)
     const glow = ctx.createRadialGradient(W * 0.82, H * 0.15, 0, W * 0.82, H * 0.15, W * 0.65)
-    glow.addColorStop(0, 'rgba(118,171,174,0.09)')
+    glow.addColorStop(0, 'rgba(199,154,42,0.09)')
     glow.addColorStop(1, 'transparent')
     ctx.fillStyle = glow
     ctx.fillRect(0, 0, W, H)
 
     // Opening quote mark
     ctx.font      = `bold 180px Georgia, “Times New Roman”, serif`
-    ctx.fillStyle = 'rgba(118,171,174,0.16)'
+    ctx.fillStyle = 'rgba(199,154,42,0.16)'
     ctx.fillText('“', PAD - 12, 218)
 
     // Verse text
     ctx.font      = `${vFontSize}px Georgia, “Times New Roman”, serif`
-    ctx.fillStyle = '#F6F3EB'
+    ctx.fillStyle = '#FFFFFF'
     lines.forEach((line, i) => ctx.fillText(line, PAD, TEXT_START + i * LINE_H))
 
     // Separator
     const sepY = TEXT_START + textBlockH + SEP_OFFSET
-    ctx.strokeStyle = 'rgba(118,171,174,0.22)'
+    ctx.strokeStyle = 'rgba(199,154,42,0.22)'
     ctx.lineWidth   = 1
     ctx.beginPath()
     ctx.moveTo(PAD, sepY)
@@ -223,12 +223,12 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 
     // Reference
     ctx.font      = `bold 32px -apple-system, BlinkMacSystemFont, “Helvetica Neue”, sans-serif`
-    ctx.fillStyle = '#76ABAE'
+    ctx.fillStyle = '#C79A2A'
     ctx.fillText(`— ${verse.ref}  (NTV)`, PAD, sepY + REF_OFFSET)
 
     // Branding
     ctx.font      = `22px -apple-system, BlinkMacSystemFont, sans-serif`
-    ctx.fillStyle = 'rgba(246,243,235,0.22)'
+    ctx.fillStyle = 'rgba(255,255,255,0.22)'
     ctx.fillText('El Manantial', PAD, sepY + REF_OFFSET + BRAND_OFFSET)
 
     return await new Promise<string | null>(resolve => {
@@ -606,7 +606,7 @@ export function BibleReader({
 
       {/* ── Top bar ── */}
       <div className="sticky top-0 z-40"
-        style={{ background: DARK_HEADER, borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+        style={{ background: DARK_HEADER, borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <Link href="/biblia"
             className="flex-shrink-0 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.30em] transition hover:opacity-70"
@@ -615,9 +615,9 @@ export function BibleReader({
           </Link>
           <Link
             href="/biblia"
-            className="flex-1 flex items-center justify-center gap-2 text-[12px] font-black transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+            className="flex-1 flex items-center justify-center gap-2 text-[12px] font-black transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
             aria-label={`Cambiar libro o capítulo. Actualmente: ${bookName} ${chapterNum}`}>
-            <span style={{ color: 'rgba(246,243,235,0.88)' }}>{bookName}</span>
+            <span style={{ color: 'rgba(255,255,255,0.88)' }}>{bookName}</span>
             <span style={{ color: TEAL }}>{chapterNum}</span>
             <span className="text-[8px] font-bold uppercase tracking-[0.28em] px-2 py-0.5 rounded"
               style={{ background: `${TEAL}18`, color: TEAL }}>NTV</span>
@@ -626,16 +626,16 @@ export function BibleReader({
             {prev ? (
               <Link href={`/biblia/lectura/${prev.bookId}/${prev.chapter}`}
                 aria-label="Capítulo anterior"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-                style={{ border: '1px solid rgba(118,171,174,0.18)' }}>
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+                style={{ border: '1px solid rgba(199,154,42,0.18)' }}>
                 <ChevronLeft size={14} aria-hidden="true" style={{ color: `${TEAL}80` }} />
               </Link>
             ) : <div className="w-8" />}
             {next ? (
               <Link href={`/biblia/lectura/${next.bookId}/${next.chapter}`}
                 aria-label="Capítulo siguiente"
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
-                style={{ border: '1px solid rgba(118,171,174,0.18)' }}>
+                className="w-8 h-8 rounded-lg flex items-center justify-center transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+                style={{ border: '1px solid rgba(199,154,42,0.18)' }}>
                 <ChevronRight size={14} aria-hidden="true" style={{ color: `${TEAL}80` }} />
               </Link>
             ) : <div className="w-8" />}
@@ -753,7 +753,7 @@ export function BibleReader({
               href={`https://www.biblegateway.com/passage/?search=${encodeURIComponent(bookName + ' ' + chapterNum)}&version=NTV`}
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
-              style={{ background: TEAL, color: '#051828' }}>
+              style={{ background: TEAL, color: '#101217' }}>
               Leer en Bible Gateway
             </a>
           </div>
@@ -773,20 +773,20 @@ export function BibleReader({
               <div className="flex items-center gap-2.5">
                 <button onClick={() => setFontSize(s => s === 'lg' ? 'md' : s === 'md' ? 'sm' : 'sm')}
                   aria-label="Reducir tamaño de letra"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                   style={{ background: t.surface, color: t.text, fontSize: 15, opacity: fontSize === 'sm' ? 0.3 : 1 }}>A</button>
                 <div className="flex gap-1.5" role="group" aria-label="Tamaño de letra">
                   {(['sm', 'md', 'lg'] as FontSize[]).map(s => (
                     <button key={s} onClick={() => setFontSize(s)}
                       aria-label={s === 'sm' ? 'Pequeño' : s === 'md' ? 'Mediano' : 'Grande'}
                       aria-pressed={fontSize === s}
-                      className="w-2 h-2 rounded-full transition-[transform,background] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                      className="w-2 h-2 rounded-full transition-[transform,background] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                       style={{ background: fontSize === s ? TEAL : t.border, transform: fontSize === s ? 'scale(1.3)' : 'scale(1)' }} />
                   ))}
                 </div>
                 <button onClick={() => setFontSize(s => s === 'sm' ? 'md' : s === 'md' ? 'lg' : 'lg')}
                   aria-label="Aumentar tamaño de letra"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                   style={{ background: t.surface, color: t.text, fontSize: 22, opacity: fontSize === 'lg' ? 0.3 : 1 }}>A</button>
               </div>
               <div className="flex gap-2" role="group" aria-label="Tema de color">
@@ -794,7 +794,7 @@ export function BibleReader({
                   <button key={th} onClick={() => setTheme(th)}
                     aria-label={th === 'cream' ? 'Tema claro' : th === 'sepia' ? 'Tema sepia' : 'Tema oscuro'}
                     aria-pressed={theme === th}
-                    className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                    className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                     style={{
                       background: T[th].bg,
                       border: `2px solid ${theme === th ? TEAL : T[th].border}`,
@@ -823,7 +823,7 @@ export function BibleReader({
                 aria-label={audioPlaying ? 'Detener audio' : 'Escuchar capítulo'}
                 aria-pressed={audioPlaying}
                 onClick={handleAudio}
-                className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+                className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
                 style={{ background: audioPlaying ? TEAL : t.surface, color: audioPlaying ? CREAM_TEXT : t.text }}>
                 {audioPlaying
                   ? <VolumeX size={15} aria-hidden="true" />
@@ -833,7 +833,7 @@ export function BibleReader({
             <button onClick={() => setShowPanel(v => !v)}
               aria-label="Opciones de lectura"
               aria-expanded={showPanel}
-              className="flex-shrink-0 px-5 py-2.5 rounded-xl font-black text-[13px] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#76ABAE]/50"
+              className="flex-shrink-0 px-5 py-2.5 rounded-xl font-black text-[13px] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
               style={{ background: showPanel ? TEAL : t.surface, color: showPanel ? CREAM_TEXT : t.text }}>
               Aa
             </button>
@@ -853,11 +853,11 @@ export function BibleReader({
       {/* ── Verse action sheet ── */}
       {verse && !shareCardUrl && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end"
-          style={{ background: 'rgba(5,24,40,0.65)', backdropFilter: 'blur(8px)' }}
+          style={{ background: 'rgba(16,18,23,0.65)', backdropFilter: 'blur(8px)' }}
           onClick={() => { setVerse(null); setNoteMode(false) }}>
           <div className="rounded-t-3xl overflow-hidden"
             style={{
-              background: DARK_HEADER, border: '1px solid rgba(118,171,174,0.14)',
+              background: DARK_HEADER, border: '1px solid rgba(199,154,42,0.14)',
               paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
             onClick={e => e.stopPropagation()}>
@@ -881,10 +881,10 @@ export function BibleReader({
                     style={{
                       width: '100%', resize: 'none',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(118,171,174,0.22)',
+                      border: '1px solid rgba(199,154,42,0.22)',
                       borderRadius: '0.875rem', padding: '0.875rem 1rem',
                       fontSize: 15, lineHeight: 1.6,
-                      color: 'rgba(246,243,235,0.88)',
+                      color: 'rgba(255,255,255,0.88)',
                       outline: 'none',
                     }}
                   />
@@ -893,7 +893,7 @@ export function BibleReader({
                   <button
                     onClick={() => setNoteMode(false)}
                     className="py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.14em] transition active:scale-95"
-                    style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(246,243,235,0.82)' }}>
+                    style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.82)' }}>
                     Cancelar
                   </button>
                   <button
@@ -912,7 +912,7 @@ export function BibleReader({
                   <p className="text-[10px] font-black uppercase tracking-[0.35em] mb-2" style={{ color: TEAL }}>
                     {verse.ref}
                   </p>
-                  <p className="text-[15px] leading-relaxed line-clamp-3" style={{ color: 'rgba(246,243,235,0.84)' }}>
+                  <p className="text-[15px] leading-relaxed line-clamp-3" style={{ color: 'rgba(255,255,255,0.84)' }}>
                     {verse.text}
                   </p>
                   {/* Show note preview if exists */}
@@ -925,10 +925,10 @@ export function BibleReader({
                 </div>
 
                 {/* Highlight swatches */}
-                <div className="px-6 pb-3" style={{ borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+                <div className="px-6 pb-3" style={{ borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
                   <div className="flex items-center gap-3">
                     <p className="text-[9px] font-bold uppercase tracking-[0.3em] flex-shrink-0"
-                      style={{ color: 'rgba(246,243,235,0.52)' }}>Resaltar</p>
+                      style={{ color: 'rgba(255,255,255,0.52)' }}>Resaltar</p>
                     <div className="flex gap-2.5 flex-1">
                       {HL.map((c, i) => (
                         <button key={i}
@@ -947,7 +947,7 @@ export function BibleReader({
                       <button
                         onClick={() => { removeHighlight(verse.num); setVerse(null) }}
                         className="text-[10px] font-bold uppercase tracking-[0.18em] flex-shrink-0 transition hover:opacity-70"
-                        style={{ color: 'rgba(246,243,235,0.57)' }}>
+                        style={{ color: 'rgba(255,255,255,0.57)' }}>
                         Quitar
                       </button>
                     )}
@@ -963,8 +963,8 @@ export function BibleReader({
                     style={{ padding: '0.75rem 0.25rem', minHeight: 64, background: 'rgba(255,255,255,0.07)' }}>
                     {copied
                       ? <Check size={17} style={{ color: TEAL }} />
-                      : <Copy size={17} style={{ color: 'rgba(246,243,235,0.86)' }} />}
-                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: copied ? TEAL : 'rgba(246,243,235,0.82)' }}>
+                      : <Copy size={17} style={{ color: 'rgba(255,255,255,0.86)' }} />}
+                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: copied ? TEAL : 'rgba(255,255,255,0.82)' }}>
                       {copied ? 'Copiado' : 'Copiar'}
                     </span>
                   </button>
@@ -972,10 +972,10 @@ export function BibleReader({
                   {/* Guardar */}
                   <button onClick={toggleBookmark}
                     className="flex flex-col items-center gap-1.5 rounded-2xl transition active:scale-95"
-                    style={{ padding: '0.75rem 0.25rem', minHeight: 64, background: isBookmarked ? 'rgba(118,171,174,0.18)' : 'rgba(255,255,255,0.07)' }}>
+                    style={{ padding: '0.75rem 0.25rem', minHeight: 64, background: isBookmarked ? 'rgba(199,154,42,0.18)' : 'rgba(255,255,255,0.07)' }}>
                     <Bookmark size={17}
-                      style={{ color: isBookmarked ? TEAL : 'rgba(246,243,235,0.86)', fill: isBookmarked ? TEAL : 'none' }} />
-                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: isBookmarked ? TEAL : 'rgba(246,243,235,0.82)' }}>
+                      style={{ color: isBookmarked ? TEAL : 'rgba(255,255,255,0.86)', fill: isBookmarked ? TEAL : 'none' }} />
+                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: isBookmarked ? TEAL : 'rgba(255,255,255,0.82)' }}>
                       {isBookmarked ? 'Guardado' : 'Guardar'}
                     </span>
                   </button>
@@ -983,9 +983,9 @@ export function BibleReader({
                   {/* Nota */}
                   <button onClick={openNote}
                     className="flex flex-col items-center gap-1.5 rounded-2xl transition active:scale-95"
-                    style={{ padding: '0.75rem 0.25rem', minHeight: 64, background: notes[verse.num] ? 'rgba(118,171,174,0.10)' : 'rgba(255,255,255,0.07)' }}>
-                    <FileText size={17} style={{ color: notes[verse.num] ? TEAL : 'rgba(246,243,235,0.86)' }} />
-                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: notes[verse.num] ? TEAL : 'rgba(246,243,235,0.82)' }}>
+                    style={{ padding: '0.75rem 0.25rem', minHeight: 64, background: notes[verse.num] ? 'rgba(199,154,42,0.10)' : 'rgba(255,255,255,0.07)' }}>
+                    <FileText size={17} style={{ color: notes[verse.num] ? TEAL : 'rgba(255,255,255,0.86)' }} />
+                    <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: notes[verse.num] ? TEAL : 'rgba(255,255,255,0.82)' }}>
                       {notes[verse.num] ? 'Ver nota' : 'Nota'}
                     </span>
                   </button>
@@ -1011,11 +1011,11 @@ export function BibleReader({
       {/* ── Share card modal ── */}
       {shareCardUrl && verse && (
         <div className="fixed inset-0 z-[60] flex flex-col justify-end"
-          style={{ background: 'rgba(5,24,40,0.88)', backdropFilter: 'blur(12px)' }}
+          style={{ background: 'rgba(16,18,23,0.88)', backdropFilter: 'blur(12px)' }}
           onClick={closeShareCard}>
           <div className="rounded-t-3xl overflow-hidden"
             style={{
-              background: DARK_HEADER, border: '1px solid rgba(118,171,174,0.14)',
+              background: DARK_HEADER, border: '1px solid rgba(199,154,42,0.14)',
               paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
             onClick={e => e.stopPropagation()}>
@@ -1026,7 +1026,7 @@ export function BibleReader({
             {/* Card preview */}
             <div style={{ padding: '1rem 1.25rem 0.75rem' }}>
               <p className="text-[9px] font-bold uppercase tracking-[0.35em] mb-3 text-center"
-                style={{ color: 'rgba(246,243,235,0.84)' }}>Vista previa</p>
+                style={{ color: 'rgba(255,255,255,0.84)' }}>Vista previa</p>
               <img
                 src={shareCardUrl}
                 alt="Tarjeta del versículo"
@@ -1039,7 +1039,7 @@ export function BibleReader({
             <div className="grid grid-cols-2 gap-2 px-5 pt-2 pb-5">
               <button onClick={handleShareText}
                 className="flex items-center justify-center gap-2 py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.14em] transition active:scale-95"
-                style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(246,243,235,0.86)' }}>
+                style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.86)' }}>
                 <Copy size={13} /> Compartir texto
               </button>
               <button onClick={handleShareImage}

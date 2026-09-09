@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { hasBibleApi, getVerseOfDayText } from '@/lib/bible'
 import { pickVerseOfDay } from '@/lib/bible-verse-of-day'
+import { CARD, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY = '#093C5D'
-const TEAL = '#76ABAE'
+const NAVY = CARD
+const TEAL = GOLD
 
 // Visible para todo visitante desde el primer segundo — a diferencia de
 // "Continuar leyendo", que solo aparece cuando ya hay historial guardado.
@@ -33,7 +34,7 @@ export default async function BibleVerseOfDay() {
           <div className="min-w-0">
             <p
               className="font-display italic leading-snug"
-              style={{ fontSize: 'clamp(1.15rem, 2.6vw, 1.65rem)', color: '#F6F3EB' }}
+              style={{ fontSize: 'clamp(1.15rem, 2.6vw, 1.65rem)', color: INK }}
             >
               &ldquo;{text}&rdquo;
             </p>

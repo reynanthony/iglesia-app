@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, BookOpen, Quote } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 3600
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 const SAGE  = '#869B7E'
 
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
@@ -38,7 +39,7 @@ export default async function DevocionalDetailPage({
     <div>
 
       {/* NAV */}
-      <div style={{ background: '#051828', borderBottom: '1px solid rgba(118,171,174,0.10)' }}>
+      <div style={{ background: BG, borderBottom: '1px solid rgba(199,154,42,0.10)' }}>
         <div className="max-w-4xl mx-auto px-6 py-5">
           <Link href="/biblia"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] transition"
@@ -49,7 +50,7 @@ export default async function DevocionalDetailPage({
       </div>
 
       {/* VERSE HERO */}
-      <section style={{ background: '#051828' }}>
+      <section style={{ background: BG }}>
         <div className="max-w-4xl mx-auto px-6 pt-14 pb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-8 text-[9px] font-black uppercase tracking-[0.25em]"
             style={{ background: `${TEAL}18`, color: TEAL, border: `1px solid ${TEAL}30` }}>
@@ -76,12 +77,12 @@ export default async function DevocionalDetailPage({
             {devo.title}
           </h1>
 
-          <div className="flex items-center gap-4 pt-5" style={{ borderTop: `1px solid rgba(118,171,174,0.15)` }}>
+          <div className="flex items-center gap-4 pt-5" style={{ borderTop: `1px solid rgba(199,154,42,0.15)` }}>
             {devo.author && (
-              <p className="text-[11px] font-bold" style={{ color: 'rgba(246,243,235,0.82)' }}>{devo.author}</p>
+              <p className="text-[11px] font-bold" style={{ color: MUTED }}>{devo.author}</p>
             )}
-            <span style={{ color: 'rgba(118,171,174,0.25)' }}>·</span>
-            <p className="text-[11px]" style={{ color: 'rgba(246,243,235,0.84)' }}>
+            <span style={{ color: `${GOLD}40` }}>·</span>
+            <p className="text-[11px]" style={{ color: MUTED }}>
               {fmtDate(devo.created_at)}
             </p>
           </div>
@@ -143,12 +144,12 @@ export default async function DevocionalDetailPage({
         <div className="max-w-4xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <Link href="/biblia"
             className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: 'rgba(246,243,235,0.88)' }}>
+            style={{ color: MUTED }}>
             <ArrowLeft size={12} /> Volver a Biblia
           </Link>
           <Link href="/registro"
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
-            style={{ background: TEAL, color: NAVY }}>
+            style={{ background: CREAM, color: NAVY }}>
             Unirme a la comunidad <ArrowRight size={12} />
           </Link>
         </div>

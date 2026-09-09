@@ -4,10 +4,11 @@ import { hasBibleApi } from '@/lib/bible'
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
+import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
-const NAVY  = '#093C5D'
-const TEAL  = '#76ABAE'
-const CREAM = '#F6F3EB'
+const NAVY  = CARD
+const TEAL  = GOLD
+const CREAM = INK
 
 export default async function BibliaPage() {
   const bibleOn = hasBibleApi()
@@ -16,11 +17,11 @@ export default async function BibliaPage() {
     <div>
 
       {/* ══ HERO ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#051828', minHeight: '72vh' }}>
+      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '72vh' }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
-          style={{ background: `radial-gradient(ellipse 50% 70% at 85% 30%, rgba(118,171,174,0.10), transparent 65%)` }} />
+          style={{ background: `radial-gradient(ellipse 50% 70% at 85% 30%, rgba(199,154,42,0.10), transparent 65%)` }} />
         <div className="pointer-events-none absolute right-0 bottom-0 select-none">
           <span className="font-black leading-none" style={{ fontSize: 'clamp(12rem, 26vw, 24rem)', opacity: 0.04, color: TEAL }}>
             BIB
@@ -41,14 +42,14 @@ export default async function BibliaPage() {
               La Palabra<br /><em style={{ color: TEAL }}>que transforma.</em>
             </h1>
             <div>
-              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: 'rgba(246,243,235,0.76)' }}>
+              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: MUTED }}>
                 Lee la Biblia completa en Nueva Traducción Viviente con marcadores, notas y lectura continua.
               </p>
               <div className="flex flex-wrap gap-3">
                 {bibleOn && (
                   <Link href="/biblia/lectura/JHN/1"
                     className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
-                    style={{ background: TEAL, color: NAVY }}>
+                    style={{ background: CREAM, color: NAVY }}>
                     <BookOpen size={12} /> Comenzar a leer
                   </Link>
                 )}
@@ -94,11 +95,11 @@ export default async function BibliaPage() {
 
       {/* ══ CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden"
-        style={{ background: `linear-gradient(135deg, #051828 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
+        style={{ background: `linear-gradient(135deg, #101217 0%, ${NAVY} 60%, ${TEAL} 100%)` }}>
         <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: 'rgba(118,171,174,0.50)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.35em] mb-10" style={{ color: `${GOLD}80` }}>
                 — También en la comunidad
               </p>
               <h2 className="font-display font-black tracking-tighter text-white"
@@ -107,7 +108,7 @@ export default async function BibliaPage() {
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              <p className="text-base leading-relaxed mb-4" style={{ color: 'rgba(246,243,235,0.82)' }}>
+              <p className="text-base leading-relaxed mb-4" style={{ color: MUTED }}>
                 Únete para compartir reflexiones, pedir oración y crecer en la fe con nuestra comunidad en línea.
               </p>
               <Link href="/registro"
