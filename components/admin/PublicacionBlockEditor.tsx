@@ -448,7 +448,7 @@ export default function PublicacionBlockEditor({
   }
 
   return (
-    <div className="flex flex-col" style={{ minHeight: '100vh', background: '#051828', color: INK }}>
+    <div className="flex flex-col" style={{ minHeight: '100vh', background: BG, color: INK }}>
 
       {/* ── top bar ── */}
       <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0"

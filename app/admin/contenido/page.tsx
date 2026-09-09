@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Play, FileText, Megaphone, ImageOff, Plus, Pencil, Pin } from 'lucide-react'
 import PinContentButton from '@/components/admin/PinContentButton'
 import DeleteContentButton from '@/components/admin/DeleteContentButton'
-import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const typeLabels: Record<string, { label: string; Icon: any; color: string }> = {
   articulo:  { label: 'Artículo',  Icon: FileText,   color: 'text-blue-400 bg-blue-400/10' },
@@ -110,7 +110,7 @@ export default async function AdminContenidoPage({
           const Icon = meta.Icon
           return (
             <div key={item.id} className="rounded-2xl border overflow-hidden flex items-center gap-4 p-4"
-              style={{ borderColor: item.pinned ? `${GOLD}33` : BORDER, background: item.pinned ? '#051828' : CARD }}>
+              style={{ borderColor: item.pinned ? `${GOLD}33` : BORDER, background: item.pinned ? BG : CARD }}>
 
               {/* Thumbnail */}
               <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
