@@ -8,7 +8,7 @@ import {
   Menu, X, FileText, UsersRound, BookOpen, Radio, ScrollText,
   Bell, UserCheck, Cross, Mic, Megaphone, Zap,
   Globe, ArrowLeft, LogOut, Newspaper, Building2,
-  Layers, Church, Calendar, Video, Quote,
+  Layers, Church, Calendar, Video, Quote, CalendarDays,
 } from 'lucide-react'
 import { BG, CARD as SURFACE, BORDER, MUTED as INACTIVE, GOLD as ACCENT, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -56,8 +56,9 @@ const ADMIN_MENU_SECTIONS = [
   {
     label: 'Formación',
     items: [
-      { href: '/admin/discipulado',     icon: BookOpen,   label: 'Discipulado'     },
-      { href: '/admin/estudio-biblico', icon: ScrollText, label: 'Estudio Bíblico' },
+      { href: '/admin/discipulado',     icon: BookOpen,    label: 'Discipulado'     },
+      { href: '/admin/estudio-biblico', icon: ScrollText,  label: 'Estudio Bíblico' },
+      { href: '/admin/biblia/planes',   icon: CalendarDays, label: 'Planes de lectura' },
     ],
   },
   {

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, Shield, ShieldAlert,
   Globe, ArrowLeft, LogOut, Mail, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
-  Layers, Church, Calendar, Video, Quote,
+  Layers, Church, Calendar, Video, Quote, CalendarDays,
 } from 'lucide-react'
 import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -47,8 +47,9 @@ const FULL_ADMIN_SECTIONS: NavSection[] = [
   {
     label: 'Formación',
     items: [
-      { href: '/admin/discipulado',     icon: BookOpen,   label: 'Discipulado' },
-      { href: '/admin/estudio-biblico', icon: ScrollText, label: 'Estudio Bíblico' },
+      { href: '/admin/discipulado',     icon: BookOpen,    label: 'Discipulado' },
+      { href: '/admin/estudio-biblico', icon: ScrollText,  label: 'Estudio Bíblico' },
+      { href: '/admin/biblia/planes',   icon: CalendarDays, label: 'Planes de lectura' },
     ],
   },
   {
