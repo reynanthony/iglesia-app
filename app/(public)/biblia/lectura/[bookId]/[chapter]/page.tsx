@@ -51,6 +51,7 @@ export default async function BibleChapterPage({
   let initialNotes: Record<string, string> | undefined
   let initialBookmarks: BookmarkItem[] | undefined
   let initialRead = false
+  let initialReadUpTo = 0
 
   // Name pattern for querying related content (Salmos -> Salmo%)
   const bookNamePattern = book.id === 'PSA' ? 'Salmo%' : `${book.name}%`
@@ -79,7 +80,7 @@ export default async function BibleChapterPage({
       : Promise.resolve({ data: null }),
     user
       ? supabase.from('bible_reading_log')
-          .select('user_id')
+          .select('marked_read_at, read_up_to_verse')
           .eq('user_id', user.id)
           .eq('book_id', book.id)
           .eq('chapter', chapterNum)
@@ -126,7 +127,8 @@ export default async function BibleChapterPage({
       savedAt: new Date().toISOString(),
     }))
   }
-  initialRead = !!readResult.data
+  initialRead = !!readResult.data?.marked_read_at
+  initialReadUpTo = readResult.data?.read_up_to_verse ?? 0
 
   const relatedLessons = (verseResult.data ?? [])
     .filter((v: any) => {
@@ -180,6 +182,7 @@ export default async function BibleChapterPage({
       initialNotes={initialNotes}
       initialBookmarks={initialBookmarks}
       initialRead={initialRead}
+      initialReadUpTo={initialReadUpTo}
       relatedContent={relatedContent}
     />
   )

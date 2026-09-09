@@ -98,14 +98,36 @@ export async function upsertReadingPosition(
   )
 }
 
+// Marca explícita del botón "Marcar como leído" — distinta del progreso
+// pasivo de scroll (updateReadProgress). Al confirmarlo, también se
+// considera el capítulo recorrido de punta a punta.
 export async function logChapterRead(
-  bookId: string, chapter: number,
+  bookId: string, chapter: number, verseCount: number,
+): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  const now = new Date().toISOString()
+  await supabase.from('bible_reading_log').upsert(
+    {
+      user_id: user.id, book_id: bookId, chapter,
+      last_read_at: now, marked_read_at: now, read_up_to_verse: verseCount,
+    },
+    { onConflict: 'user_id,book_id,chapter' },
+  )
+}
+
+// Progreso pasivo: hasta qué verso ha llegado el scroll, para que la
+// atenuación de versos ya leídos persista entre visitas. No toca
+// marked_read_at — esa es una confirmación aparte, explícita.
+export async function updateReadProgress(
+  bookId: string, chapter: number, upToVerse: number,
 ): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
   await supabase.from('bible_reading_log').upsert(
-    { user_id: user.id, book_id: bookId, chapter, last_read_at: new Date().toISOString() },
+    { user_id: user.id, book_id: bookId, chapter, last_read_at: new Date().toISOString(), read_up_to_verse: upToVerse },
     { onConflict: 'user_id,book_id,chapter' },
   )
 }

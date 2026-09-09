@@ -12,7 +12,8 @@ import type { BibleBook } from '@/lib/bible'
 import {
   upsertBibleHighlight, deleteBibleHighlight,
   upsertBibleNote, deleteBibleNote,
-  upsertBibleBookmark, deleteBibleBookmark, upsertReadingPosition, logChapterRead,
+  upsertBibleBookmark, deleteBibleBookmark, upsertReadingPosition,
+  logChapterRead, updateReadProgress,
 } from '@/app/actions/bible'
 import { hapticLight } from '@/lib/haptics'
 
@@ -60,6 +61,7 @@ export interface BibleReaderProps {
   initialNotes?: Record<string, string>
   initialBookmarks?: BookmarkItem[]
   initialRead?: boolean
+  initialReadUpTo?: number
   relatedContent?: RelatedContent
 }
 
@@ -261,7 +263,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
   bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
-  userId, initialHighlights, initialNotes, initialBookmarks, initialRead, relatedContent,
+  userId, initialHighlights, initialNotes, initialBookmarks, initialRead, initialReadUpTo, relatedContent,
 }: BibleReaderProps) {
   const router = useRouter()
 
@@ -287,7 +289,9 @@ export function BibleReader({
   const [shareCardUrl, setShareCardUrl] = useState<string | null>(null)
   const [cardLoading, setCardLoading]   = useState(false)
   const [read, setRead]             = useState(initialRead ?? false)
-  const [readUpTo, setReadUpTo]     = useState(0)
+  const [readUpTo, setReadUpTo]     = useState(initialReadUpTo ?? 0)
+  const readUpToRef  = useRef(initialReadUpTo ?? 0)
+  const sentUpToRef  = useRef(initialReadUpTo ?? 0)
 
   const contentRef    = useRef<HTMLDivElement>(null)
   const highlightsRef = useRef(highlights)
@@ -368,20 +372,25 @@ export function BibleReader({
   useEffect(() => { localStorage.setItem('bible-fontsize', fontSize) }, [fontSize])
   useEffect(() => { localStorage.setItem('bible-fontfamily', fontFamily) }, [fontFamily])
 
-  // ── Scroll to start verse ──────────────────────────────────
-  useEffect(() => {
-    if (!startVerse) return
-    const id = setTimeout(() => {
-      const el = contentRef.current
-      if (!el) return
-      const vSpan = el.querySelector<HTMLElement>(`.v[data-number="${startVerse}"]`)
-      if (vSpan) {
-        const para = vSpan.closest<HTMLElement>('p, .q1, .q2, .q3') ?? vSpan
-        para.scrollIntoView({ block: 'center', behavior: 'smooth' })
-      }
-    }, 400)
-    return () => clearTimeout(id)
-  }, [startVerse, content])
+  // ── Scroll to start verse (o al tope si no hay verso específico) ──
+  // Forzar el tope evita arrastrar la posición de scroll del capítulo
+  // anterior, que hacía que el cálculo de "versos ya leídos" arrancara
+  // desincronizado (parecía funcionar "a veces sí, a veces no").
+  useLayoutEffect(() => {
+    if (startVerse) {
+      const id = setTimeout(() => {
+        const el = contentRef.current
+        if (!el) return
+        const vSpan = el.querySelector<HTMLElement>(`.v[data-number="${startVerse}"]`)
+        if (vSpan) {
+          const para = vSpan.closest<HTMLElement>('p, .q1, .q2, .q3') ?? vSpan
+          para.scrollIntoView({ block: 'center', behavior: 'smooth' })
+        }
+      }, 400)
+      return () => clearTimeout(id)
+    }
+    window.scrollTo(0, 0)
+  }, [bookId, chapterNum, startVerse, content])
 
   // ── Save last reading position ──────────────────────────────
   useEffect(() => {
@@ -389,30 +398,50 @@ export function BibleReader({
     if (userId) upsertReadingPosition(bookId, chapterNum)
   }, [bookId, chapterNum, bookName, userId])
 
-  // ── Marcar como leído (manual) ───────────────────────────────
+  // ── Marcar como leído (manual) + progreso pasivo de scroll ────
   useLayoutEffect(() => {
+    const upTo = initialReadUpTo ?? 0
     setRead(initialRead ?? false)
-    setReadUpTo(0)
-  }, [bookId, chapterNum, initialRead])
+    setReadUpTo(upTo)
+    readUpToRef.current = upTo
+    sentUpToRef.current = upTo
+  }, [bookId, chapterNum, initialRead, initialReadUpTo])
+
+  useEffect(() => { readUpToRef.current = readUpTo }, [readUpTo])
+
+  // Al salir de este capítulo (cambio de capítulo o desmontaje), guarda
+  // el progreso de scroll si no se había enviado todavía.
+  useEffect(() => {
+    return () => {
+      if (userId && readUpToRef.current > sentUpToRef.current) {
+        updateReadProgress(bookId, chapterNum, readUpToRef.current)
+      }
+    }
+  }, [bookId, chapterNum, userId])
 
   const markRead = useCallback(() => {
     if (read || !userId) return
     setRead(true)
-    logChapterRead(bookId, chapterNum)
-  }, [read, userId, bookId, chapterNum])
+    setReadUpTo(verseCount)
+    readUpToRef.current = verseCount
+    sentUpToRef.current = verseCount
+    logChapterRead(bookId, chapterNum, verseCount)
+  }, [read, userId, bookId, chapterNum, verseCount])
 
   // ── Scroll progress + versos ya leídos ───────────────────────
+  // window.scrollY/innerHeight es más confiable entre navegadores que
+  // document.documentElement.scrollTop/clientHeight (Safari en particular).
   useEffect(() => {
     const fn = () => {
-      const el = document.documentElement
-      const total = el.scrollHeight - el.clientHeight
-      const pct = total > 0 ? (el.scrollTop / total) * 100 : 0
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      const pct = total > 0 ? (window.scrollY / total) * 100 : 0
       setProgress(pct)
       if (verseCount > 0) {
         const upTo = Math.floor((pct / 100) * verseCount)
         setReadUpTo(prev => Math.max(prev, upTo))
       }
     }
+    fn()
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
   }, [verseCount])
