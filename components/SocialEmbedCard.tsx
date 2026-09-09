@@ -3,6 +3,7 @@
 import { ExternalLink } from 'lucide-react'
 import type { SocialEmbed } from '@/lib/social-embed'
 import { PLATFORM_LABEL } from '@/lib/social-embed'
+import { CARD, BORDER, MUTED } from '@/lib/gold-theme'
 
 const PLATFORM_ICON: Record<string, string> = {
   youtube: '▶',
@@ -13,7 +14,7 @@ const PLATFORM_ICON: Record<string, string> = {
 
 export default function SocialEmbedCard({ embed }: { embed: SocialEmbed }) {
   return (
-    <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #0D3352', background: '#0B2D47' }}>
+    <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${BORDER}`, background: CARD }}>
       {/* iframe player */}
       <div className="relative w-full overflow-hidden" style={{ paddingBottom: embed.aspectPadding, height: 0 }}>
         <iframe
@@ -27,9 +28,9 @@ export default function SocialEmbedCard({ embed }: { embed: SocialEmbed }) {
       </div>
 
       {/* footer bar */}
-      <div className="flex items-center gap-2 px-3 py-2" style={{ borderTop: '1px solid #0D3352' }}>
+      <div className="flex items-center gap-2 px-3 py-2" style={{ borderTop: `1px solid ${BORDER}` }}>
         <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md"
-          style={{ background: '#0D3352', color: 'rgba(246,243,235,0.50)' }}>
+          style={{ background: BORDER, color: MUTED }}>
           {PLATFORM_ICON[embed.platform]} {PLATFORM_LABEL[embed.platform]}
         </span>
         <a
@@ -37,7 +38,7 @@ export default function SocialEmbedCard({ embed }: { embed: SocialEmbed }) {
           target="_blank"
           rel="noopener noreferrer"
           className="ml-auto flex items-center gap-1 text-[10px] font-bold transition"
-          style={{ color: 'rgba(246,243,235,0.40)' }}
+          style={{ color: MUTED }}
           title="Abrir en la plataforma"
         >
           <ExternalLink size={11} />

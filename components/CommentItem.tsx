@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Heart, CornerDownRight } from 'lucide-react'
 import { toggleCommentLike, createReply } from '@/app/actions/posts'
+import { CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default function CommentItem({
   comment,
@@ -44,13 +45,13 @@ export default function CommentItem({
   }
 
   return (
-    <div className={depth > 0 ? 'ml-8 pl-3' : ''} style={depth > 0 ? { borderLeft: '1px solid #0D3352' } : {}}>
+    <div className={depth > 0 ? 'ml-8 pl-3' : ''} style={depth > 0 ? { borderLeft: `1px solid ${BORDER}` } : {}}>
       <div className="flex gap-2 items-start group">
 
         {/* Avatar */}
         <div
           className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5"
-          style={{ background: '#0D3352', color: '#76ABAE' }}
+          style={{ background: BORDER, color: GOLD }}
         >
           {comment.profiles?.avatar_url ? (
             <img src={comment.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -61,7 +62,7 @@ export default function CommentItem({
 
         {/* Contenido */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm" style={{ color: '#F6F3EB' }}>
+          <p className="text-sm" style={{ color: INK }}>
             <span className="font-semibold mr-1.5">{comment.profiles?.username}</span>
             {comment.content}
           </p>
@@ -71,7 +72,7 @@ export default function CommentItem({
             <button
               onClick={handleLike}
               className="flex items-center gap-1 text-xs transition active:scale-95"
-              style={{ color: liked ? '#F87171' : 'rgba(246,243,235,0.40)' }}
+              style={{ color: liked ? '#F87171' : MUTED }}
             >
               <Heart size={12} fill={liked ? 'currentColor' : 'none'} />
               {likesCount > 0 && <span>{likesCount}</span>}
@@ -81,7 +82,7 @@ export default function CommentItem({
               <button
                 onClick={() => setShowReply(!showReply)}
                 className="flex items-center gap-1 text-xs transition"
-                style={{ color: 'rgba(246,243,235,0.40)' }}
+                style={{ color: MUTED }}
               >
                 <CornerDownRight size={12} />
                 Responder
@@ -99,16 +100,16 @@ export default function CommentItem({
                 autoFocus
                 className="flex-1 rounded-xl px-3 py-1.5 text-xs focus:outline-none transition"
                 style={{
-                  background: '#0B2D47',
-                  border: '1px solid #0D3352',
-                  color: '#F6F3EB',
+                  background: CARD,
+                  border: `1px solid ${BORDER}`,
+                  color: INK,
                 }}
               />
               <button
                 type="submit"
                 disabled={replying}
                 className="font-semibold text-xs disabled:opacity-50"
-                style={{ color: '#76ABAE' }}
+                style={{ color: GOLD }}
               >
                 {replying ? '...' : 'Enviar'}
               </button>
@@ -116,7 +117,7 @@ export default function CommentItem({
                 type="button"
                 onClick={() => setShowReply(false)}
                 className="text-xs"
-                style={{ color: 'rgba(246,243,235,0.40)' }}
+                style={{ color: MUTED }}
               >
                 Cancelar
               </button>

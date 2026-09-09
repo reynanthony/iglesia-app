@@ -8,6 +8,7 @@ import CommentItem from '@/components/CommentItem'
 import SocialEmbedCard from '@/components/SocialEmbedCard'
 import { detectSocialEmbed } from '@/lib/social-embed'
 import ReactionBar from '@/components/app/ReactionBar'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 const PRIVILEGED_ROLES = ['admin', 'pastor', 'moderador', 'lider']
 
@@ -51,18 +52,18 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
   return (
     <div
       style={{
-        background: '#061E30',
-        borderBottom: '1px solid #0D3352',
+        background: BG,
+        borderBottom: `1px solid ${BORDER}`,
       }}
     >
       {/* Edit modal */}
       {editing && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-          style={{ background: 'rgba(6,30,48,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
-          <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ background: '#061E30', border: '1px solid #0D3352' }}>
-            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #0D3352' }}>
-              <p className="font-bold text-sm" style={{ color: '#F6F3EB' }}>Editar publicación</p>
-              <button onClick={() => setEditing(false)} style={{ color: 'rgba(246,243,235,0.40)' }}>✕</button>
+          style={{ background: 'rgba(16,18,23,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
+          <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ background: BG, border: `1px solid ${BORDER}` }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
+              <p className="font-bold text-sm" style={{ color: INK }}>Editar publicación</p>
+              <button onClick={() => setEditing(false)} style={{ color: MUTED }}>✕</button>
             </div>
             <div className="p-5">
               <textarea
@@ -70,12 +71,12 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
                 onChange={(e) => setEditContent(e.target.value)}
                 rows={5}
                 className="w-full bg-transparent text-sm focus:outline-none resize-none leading-relaxed"
-                style={{ color: '#F6F3EB' }}
+                style={{ color: INK }}
               />
               <div className="flex justify-end gap-3 mt-4">
                 <button onClick={() => setEditing(false)}
                   className="text-sm px-4 py-2 rounded-xl transition"
-                  style={{ color: 'rgba(246,243,235,0.40)' }}>
+                  style={{ color: MUTED }}>
                   Cancelar
                 </button>
                 <button
@@ -87,7 +88,7 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
                     setEditing(false)
                   }}
                   className="text-sm font-black px-5 py-2 rounded-xl transition disabled:opacity-50"
-                  style={{ background: 'linear-gradient(135deg, #093C5D, #76ABAE)', color: '#F6F3EB' }}
+                  style={{ background: INK, color: BG }}
                 >
                   {saving ? 'Guardando…' : 'Guardar'}
                 </button>
@@ -102,27 +103,27 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
           <Link href={`/app/perfil/${post.profiles.username}`} className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-              style={{ background: '#0D3352', color: '#76ABAE' }}
+              style={{ background: BORDER, color: GOLD }}
             >
               {post.profiles.avatar_url
                 ? <img src={post.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
                 : post.profiles.full_name?.[0]?.toUpperCase() ?? 'U'}
             </div>
             <div>
-              <p className="font-bold text-sm leading-tight" style={{ color: '#F6F3EB' }}>{post.profiles.full_name}</p>
-              <p className="text-xs" style={{ color: 'rgba(246,243,235,0.40)' }}>@{post.profiles.username}</p>
+              <p className="font-bold text-sm leading-tight" style={{ color: INK }}>{post.profiles.full_name}</p>
+              <p className="text-xs" style={{ color: MUTED }}>@{post.profiles.username}</p>
             </div>
           </Link>
         ) : (
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-sm"
-              style={{ background: '#0D3352', color: '#76ABAE' }}
+              style={{ background: BORDER, color: GOLD }}
             >
               {post.profiles?.full_name?.[0]?.toUpperCase() ?? 'U'}
             </div>
             <div>
-              <p className="font-bold text-sm leading-tight" style={{ color: '#F6F3EB' }}>{post.profiles?.full_name ?? 'Usuario'}</p>
+              <p className="font-bold text-sm leading-tight" style={{ color: INK }}>{post.profiles?.full_name ?? 'Usuario'}</p>
             </div>
           </div>
         )}
@@ -131,7 +132,7 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-1.5 rounded-lg transition"
-            style={{ color: 'rgba(246,243,235,0.40)' }}
+            style={{ color: MUTED }}
           >
             <svg width="18" height="4" viewBox="0 0 18 4" fill="currentColor">
               <circle cx="2" cy="2" r="2"/><circle cx="9" cy="2" r="2"/><circle cx="16" cy="2" r="2"/>
@@ -142,13 +143,13 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
               <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
               <div
                 className="absolute right-0 top-full mt-1 rounded-xl shadow-xl z-20 overflow-hidden w-44"
-                style={{ background: '#0B2D47', border: '1px solid #1A3D5C' }}
+                style={{ background: CARD, border: `1px solid ${BORDER}` }}
               >
                 {isOwn && (
                   <button
                     onClick={() => { setEditing(true); setShowMenu(false) }}
                     className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left transition"
-                    style={{ color: '#F6F3EB' }}
+                    style={{ color: INK }}
                   >
                     <Pencil size={14} />
                     Editar
@@ -182,7 +183,7 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
                     }}
                     disabled={reporting || reported}
                     className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-left disabled:opacity-50 transition"
-                    style={{ color: reported ? 'rgba(246,243,235,0.40)' : '#F87171' }}
+                    style={{ color: reported ? MUTED : '#F87171' }}
                   >
                     <Flag size={14} />
                     {reported ? 'Reportado' : 'Reportar'}
@@ -201,12 +202,12 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
 
       {/* Contenido */}
       <div className="px-4 pt-3 pb-1">
-        <p className="text-sm leading-relaxed" style={{ color: '#F6F3EB' }}>
+        <p className="text-sm leading-relaxed" style={{ color: INK }}>
           {post.profiles?.username ? (
             <Link
               href={`/app/perfil/${post.profiles.username}`}
               className="font-bold mr-1.5"
-              style={{ color: '#F6F3EB' }}
+              style={{ color: INK }}
             >
               {post.profiles.username}
             </Link>
@@ -239,7 +240,7 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
         <button
           onClick={() => setShowComments(!showComments)}
           className="flex items-center gap-1.5 transition active:scale-90"
-          style={{ color: 'rgba(246,243,235,0.40)' }}
+          style={{ color: MUTED }}
         >
           <MessageCircle size={20} strokeWidth={1.8} />
           {totalComments > 0 && (
@@ -249,12 +250,12 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
 
         {post.category && (
           <span className="text-[9px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-lg ml-auto"
-            style={{ background: 'rgba(118,171,174,0.12)', color: 'rgba(118,171,174,0.70)' }}>
+            style={{ background: `${GOLD}1F`, color: `${GOLD}B2` }}>
             {post.category}
           </span>
         )}
 
-        <span className="text-xs" style={{ color: 'rgba(246,243,235,0.30)', marginLeft: post.category ? 0 : 'auto' }}>
+        <span className="text-xs" style={{ color: MUTED, marginLeft: post.category ? 0 : 'auto' }}>
           {timeAgo(post.created_at)}
         </span>
       </div>
@@ -264,7 +265,7 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
         <button
           onClick={() => setShowComments(true)}
           className="px-4 pb-3 text-xs font-bold transition"
-          style={{ color: 'rgba(246,243,235,0.40)' }}
+          style={{ color: MUTED }}
         >
           Ver {totalComments} comentario{totalComments !== 1 ? 's' : ''}
         </button>
@@ -288,20 +289,20 @@ export default function PostCard({ post, currentUserId, currentUserRole }: { pos
         <form
           onSubmit={handleComment}
           className="flex items-center gap-3 px-4 py-3"
-          style={{ borderTop: '1px solid #0D3352' }}
+          style={{ borderTop: `1px solid ${BORDER}` }}
         >
           <input
             name="content"
             placeholder="Añade un comentario…"
             required
             className="flex-1 bg-transparent text-sm focus:outline-none"
-            style={{ color: '#F6F3EB' }}
+            style={{ color: INK }}
           />
           <button
             type="submit"
             disabled={commenting}
             className="text-xs font-black uppercase tracking-wider disabled:opacity-50 transition"
-            style={{ color: '#F6F3EB' }}
+            style={{ color: INK }}
           >
             Publicar
           </button>
