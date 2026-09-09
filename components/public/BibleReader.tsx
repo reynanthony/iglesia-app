@@ -6,13 +6,13 @@ import Link from 'next/link'
 import {
   ArrowLeft, Copy, Share2, ChevronLeft, ChevronRight,
   BookOpen, Check, Bookmark, FileText, Image, ScrollText,
-  Volume2, VolumeX, Search,
+  Volume2, VolumeX, Search, ListChecks,
 } from 'lucide-react'
 import type { BibleBook } from '@/lib/bible'
 import {
   upsertBibleHighlight, deleteBibleHighlight,
   upsertBibleNote, deleteBibleNote,
-  upsertBibleBookmark, deleteBibleBookmark, upsertReadingPosition,
+  upsertBibleBookmark, deleteBibleBookmark, upsertReadingPosition, logChapterRead,
 } from '@/app/actions/bible'
 import { hapticLight } from '@/lib/haptics'
 
@@ -372,10 +372,13 @@ export function BibleReader({
     return () => clearTimeout(id)
   }, [startVerse, content])
 
-  // ── Save last reading position ──────────────────────────────
+  // ── Save last reading position + registrar avance ───────────
   useEffect(() => {
     localStorage.setItem('bible-last', JSON.stringify({ bookId, chapterNum, bookName }))
-    if (userId) upsertReadingPosition(bookId, chapterNum)
+    if (userId) {
+      upsertReadingPosition(bookId, chapterNum)
+      logChapterRead(bookId, chapterNum)
+    }
   }, [bookId, chapterNum, bookName, userId])
 
   // ── Scroll progress ─────────────────────────────────────────
@@ -858,6 +861,12 @@ export function BibleReader({
               className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
               style={{ background: t.surface, color: t.text }}>
               <Search size={15} aria-hidden="true" />
+            </Link>
+            <Link href={`/biblia/lectura/${bookId}/${chapterNum}/cuestionario`}
+              aria-label="Cuestionario del capítulo"
+              className="w-9 h-9 rounded-xl flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+              style={{ background: t.surface, color: t.text }}>
+              <ListChecks size={15} aria-hidden="true" />
             </Link>
             {audioSupported && (
               <button

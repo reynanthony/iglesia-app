@@ -97,3 +97,15 @@ export async function upsertReadingPosition(
     { onConflict: 'user_id' },
   )
 }
+
+export async function logChapterRead(
+  bookId: string, chapter: number,
+): Promise<void> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('bible_reading_log').upsert(
+    { user_id: user.id, book_id: bookId, chapter, last_read_at: new Date().toISOString() },
+    { onConflict: 'user_id,book_id,chapter' },
+  )
+}

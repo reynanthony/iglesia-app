@@ -3,7 +3,7 @@ import { ArrowRight, BookOpen, CalendarDays, Flame, Search, Bookmark } from 'luc
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
-import { findBook } from '@/lib/bible'
+import { findBook, ALL_BOOKS } from '@/lib/bible'
 import { formatDayReference } from '@/lib/bible-reading-plans'
 import { createClient } from '@/lib/supabase/server'
 import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
@@ -41,9 +41,10 @@ export default async function BibliaPage() {
   }> | undefined
   let activePlan: ActivePlan | null = null
   let streak = 0
+  let readPercent = 0
 
   if (user) {
-    const [positionResult, bookmarksResult, enrollmentResult, completionsResult] = await Promise.all([
+    const [positionResult, bookmarksResult, enrollmentResult, completionsResult, readLogResult] = await Promise.all([
       supabase.from('bible_reading_position').select('book_id, chapter').eq('user_id', user.id).maybeSingle(),
       supabase.from('bible_bookmarks').select('book_id, chapter, verse, verse_text, created_at')
         .eq('user_id', user.id).order('created_at', { ascending: false }).limit(6),
@@ -52,6 +53,7 @@ export default async function BibliaPage() {
         .eq('user_id', user.id).is('completed_at', null)
         .order('started_at', { ascending: false }).limit(1).maybeSingle(),
       supabase.from('user_reading_plan_day_completions').select('completed_at').eq('user_id', user.id),
+      supabase.from('bible_reading_log').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     ])
     if (positionResult.data) {
       const book = findBook(positionResult.data.book_id)
@@ -93,6 +95,9 @@ export default async function BibliaPage() {
 
     const dates = new Set((completionsResult.data ?? []).map(c => c.completed_at.slice(0, 10)))
     streak = computeStreak(dates)
+
+    const totalChapters = ALL_BOOKS.reduce((sum, b) => sum + b.chapters, 0)
+    readPercent = Math.round(((readLogResult.count ?? 0) / totalChapters) * 100)
   }
 
   const showDashboard = !!user && (!!initialLastRead || !!activePlan)
@@ -111,6 +116,14 @@ export default async function BibliaPage() {
                   {streak > 0 ? `${streak} día${streak !== 1 ? 's' : ''} seguidos` : 'Empieza tu racha'}
                 </span>
               </div>
+              {readPercent > 0 && (
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <BookOpen size={14} style={{ color: TEAL }} />
+                  <span className="text-[12px] font-black" style={{ color: TEAL }}>
+                    {readPercent}% de la Biblia leída
+                  </span>
+                </div>
+              )}
               <Link href="/biblia/buscar"
                 className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
                 style={{ background: CARD, border: `1px solid ${BORDER}` }}>

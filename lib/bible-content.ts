@@ -93,6 +93,18 @@ export async function getVerseOfDayText(
   return extractVerseText(content.content, verse)
 }
 
+// Texto plano de un capítulo completo (sin HTML), para pasarlo como
+// contexto a un LLM sin gastar tokens en marcado que no aporta nada.
+export async function getChapterPlainText(bookId: string, chapter: number): Promise<string | null> {
+  const content = await getChapterContent(bookId, chapter)
+  if (!content?.content) return null
+  return content.content
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 // ── Búsqueda en toda la Biblia ──────────────────────────────────
 // Índice plano en memoria (~31k versículos de una sola traducción),
 // construido una vez y cacheado en variable de módulo junto al JSON.
