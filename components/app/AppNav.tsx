@@ -18,9 +18,9 @@ const navItems = [
   { href: '/app/inicio',      icon: Home,       label: 'Inicio',    exact: true,  activeMatch: ['/app/inicio'] },
   { href: '/biblia',          icon: Book,       label: 'Palabra',   exact: false, activeMatch: ['/biblia', '/app/predicas'] },
   { href: '/app/discipulado', icon: Sprout,     label: 'Crecer',    exact: false, activeMatch: ['/app/discipulado', '/app/mentoria', '/app/ministerios'] },
-  { href: '/app/oracion',     icon: Flame,      label: 'Orar',      exact: false, activeMatch: ['/app/oracion', '/app/en-vivo'] },
+  { href: '/app/oracion',     icon: Flame,      label: 'Orar',      exact: false, activeMatch: ['/app/oracion'] },
   { href: '/app/grupos',      icon: UsersRound, label: 'Caminar',   exact: false, activeMatch: ['/app/grupos'] },
-  { href: '/app/comunidad',   icon: Users2,     label: 'Comunidad', exact: false, activeMatch: ['/app/comunidad'] },
+  { href: '/app/comunidad',   icon: Users2,     label: 'Comunidad', exact: false, activeMatch: ['/app/comunidad', '/app/en-vivo'] },
 ]
 
 interface Props { profileHref: string }
@@ -52,20 +52,21 @@ export default function AppNav({ profileHref }: Props) {
 
 /* ── Bottom nav móvil ── */
 
-// 4 ítems primarios siempre visibles
-const MAIN_ITEMS = [
-  { href: '/app/inicio',      icon: Home,       label: 'Inicio',  exact: true  },
-  { href: '/biblia',          icon: Book,       label: 'Palabra', exact: false },
-  { href: '/app/oracion',     icon: Flame,      label: 'Orar',    exact: false },
-  { href: '/app/grupos',      icon: UsersRound, label: 'Caminar', exact: false },
+// 4 ítems estáticos + Perfil (dinámico, depende de profileHref) = 5 destinos máximo
+const MAIN_ITEMS_STATIC = [
+  { href: '/app/inicio',    icon: Home,   label: 'Inicio',    exact: true  },
+  { href: '/biblia',        icon: Book,   label: 'Palabra',   exact: false },
+  { href: '/app/oracion',   icon: Flame,  label: 'Orar',      exact: false },
+  { href: '/app/comunidad', icon: Users2, label: 'Comunidad', exact: false },
 ]
 
-// Ítems secundarios en la fila expandible
+// Ítems secundarios en la fila expandible — Crecer y Caminar viven aquí
+// (accesibles también desde Inicio) para no saturar la barra principal.
 const MORE_ITEMS = [
-  { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'    },
-  { href: '/app/comunidad',   icon: Users2,        label: 'Comunidad' },
-  { href: '/app/pastoral',    icon: Cross,         label: 'Pastoral'  },
-  { href: '/app/mentoria',    icon: GraduationCap, label: 'Mentoría'  },
+  { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'   },
+  { href: '/app/grupos',      icon: UsersRound,    label: 'Caminar'  },
+  { href: '/app/pastoral',    icon: Cross,         label: 'Pastoral' },
+  { href: '/app/mentoria',    icon: GraduationCap, label: 'Mentoría' },
 ]
 
 export function AppBottomNav({ profileHref }: Props) {
@@ -75,8 +76,8 @@ export function AppBottomNav({ profileHref }: Props) {
   const isActive = (href: string, exact = false) =>
     exact ? pathname === href : pathname.startsWith(href)
 
-  const allMore = [...MORE_ITEMS, { href: profileHref, icon: User, label: 'Perfil' }]
-  const anyMoreActive = allMore.some(i => isActive(i.href))
+  const allMain = [...MAIN_ITEMS_STATIC, { href: profileHref, icon: User, label: 'Perfil', exact: false }]
+  const anyMoreActive = MORE_ITEMS.some(i => isActive(i.href))
 
   return (
     <div>
@@ -86,7 +87,7 @@ export function AppBottomNav({ profileHref }: Props) {
           className="flex items-center"
           style={{ height: 56, borderBottom: '1px solid #292E3B', background: 'rgba(16,18,23,0.6)' }}
         >
-          {allMore.map(({ href, icon: Icon, label }) => {
+          {MORE_ITEMS.map(({ href, icon: Icon, label }) => {
             const active = isActive(href)
             return (
               <Link
@@ -116,7 +117,7 @@ export function AppBottomNav({ profileHref }: Props) {
 
       {/* Fila principal — siempre visible */}
       <div className="flex" style={{ height: 56 }}>
-        {MAIN_ITEMS.map(({ href, icon: Icon, label, exact }) => {
+        {allMain.map(({ href, icon: Icon, label, exact }) => {
           const active = isActive(href, exact)
           return (
             <Link
