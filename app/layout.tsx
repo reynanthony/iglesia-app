@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { PWARegister } from '@/components/app/PWARegister'
+import { getSiteSettings } from '@/lib/site-settings'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -21,19 +22,21 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '600', '700', '800'],
 })
 
-export const metadata: Metadata = {
-  title: 'El Manantial — Comunidad de Fe',
-  description: 'Una comunidad de fe viva donde encontrarás amor, propósito y familia.',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'El Manantial',
-  },
-  icons: {
-    apple: '/api/pwa-icon?size=180',
-    icon: '/api/pwa-icon?size=32',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const { siteName } = await getSiteSettings()
+  return {
+    title: `${siteName} — Comunidad de Fe`,
+    description: `Una comunidad de fe viva donde encontrarás amor, propósito y familia.`,
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'black-translucent',
+      title: siteName,
+    },
+    icons: {
+      apple: '/api/pwa-icon?size=180',
+      icon: '/api/pwa-icon?size=32',
+    },
+  }
 }
 
 export const viewport: Viewport = {

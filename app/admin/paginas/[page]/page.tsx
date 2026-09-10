@@ -4,6 +4,7 @@ import type { Block } from '@/lib/blocks'
 import PageEditorTabs from './PageEditorTabs'
 
 const pagesMeta: Record<string, { label: string; previewPath: string }> = {
+  site_settings:{ label: 'Nombre y marca',          previewPath: '/'            },
   home:         { label: 'Página de inicio',       previewPath: '/'            },
   nosotros:     { label: 'Quiénes somos',           previewPath: '/nosotros'    },
   contacto:     { label: 'Contacto',                previewPath: '/contacto'    },

@@ -70,6 +70,7 @@ export interface BibleReaderProps {
   initialBookmarks?: BookmarkItem[]
   initialRead?: boolean
   initialReadUpTo?: number
+  siteName?: string
   relatedContent?: RelatedContent
 }
 
@@ -203,7 +204,7 @@ function wrapCanvasText(ctx: CanvasRenderingContext2D, text: string, maxWidth: n
   return lines
 }
 
-async function generateVerseCard(verse: VerseSelection): Promise<string | null> {
+async function generateVerseCard(verse: VerseSelection, siteName: string): Promise<string | null> {
   try {
     const canvas = document.createElement('canvas')
     const W   = 1080
@@ -269,7 +270,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
     // Branding
     ctx.font      = `22px -apple-system, BlinkMacSystemFont, sans-serif`
     ctx.fillStyle = 'rgba(255,255,255,0.22)'
-    ctx.fillText('El Manantial', PAD, sepY + REF_OFFSET + BRAND_OFFSET)
+    ctx.fillText(siteName, PAD, sepY + REF_OFFSET + BRAND_OFFSET)
 
     return await new Promise<string | null>(resolve => {
       canvas.toBlob(
@@ -285,7 +286,7 @@ async function generateVerseCard(verse: VerseSelection): Promise<string | null> 
 // ── Component ─────────────────────────────────────────────────
 export function BibleReader({
   bookId, bookName, chapterNum, content, verseCount, prev, next, allBooks, startVerse,
-  userId, initialHighlights, initialNotes, initialBookmarks, initialRead, initialReadUpTo, relatedContent,
+  userId, initialHighlights, initialNotes, initialBookmarks, initialRead, initialReadUpTo, siteName, relatedContent,
 }: BibleReaderProps) {
   const router = useRouter()
 
@@ -674,7 +675,7 @@ export function BibleReader({
   const handleOpenShare = async () => {
     if (!verse) return
     setCardLoading(true)
-    const url = await generateVerseCard(verse)
+    const url = await generateVerseCard(verse, siteName || 'El Manantial')
     setCardLoading(false)
     if (url) {
       setShareCardUrl(url)

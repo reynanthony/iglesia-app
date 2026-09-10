@@ -1,10 +1,17 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers, HandHeart, Radio, GraduationCap, Newspaper, Quote, BookOpen } from 'lucide-react'
+import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers, HandHeart, Radio, GraduationCap, Newspaper, Quote, BookOpen, Sparkles } from 'lucide-react'
 import ResetPageButton from './ResetPageButton'
 import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
 const pagesMeta = [
+  {
+    key: 'site_settings',
+    label: 'Nombre y marca',
+    desc: 'Nombre de la iglesia/marca que aparece en el logo, título del sitio y notificaciones',
+    Icon: Sparkles,
+    group: 'Configuración general',
+  },
   {
     key: 'home',
     label: 'Página de inicio',

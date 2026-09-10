@@ -7,6 +7,7 @@ import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 import { PublicAuthNav } from '@/components/public/PublicAuthNav'
 import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
 import PublicAnnouncementGate from '@/components/public/PublicAnnouncementGate'
+import { getSiteSettings } from '@/lib/site-settings'
 import { BG, CARD, BORDER, GOLD, INK } from '@/lib/gold-theme'
 
 const navLinks = [
@@ -26,10 +27,11 @@ export const viewport: Viewport = {
   themeColor: BG,
 }
 
-// Sync Server Component — no auth check here.
-// Auth state is detected client-side by PublicAuthNav and MobileMenu,
-// which makes all public routes statically renderable.
-export default function PublicLayout({ children }: { children: React.ReactNode }) {
+// Auth state is detected client-side by PublicAuthNav and MobileMenu.
+// getSiteSettings() usa un cliente sin cookies para no forzar renderizado
+// dinámico en las rutas públicas solo por leer el nombre de marca.
+export default async function PublicLayout({ children }: { children: React.ReactNode }) {
+  const { siteName } = await getSiteSettings()
   return (
     <div className="min-h-screen flex flex-col">
 
@@ -52,7 +54,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <Cross size={14} strokeWidth={2.5} style={{ color: INK }} />
             </div>
             <span className="font-black text-[16px] tracking-tight" style={{ color: INK }}>
-              El Manantial
+              {siteName}
             </span>
           </Link>
 
@@ -79,7 +81,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: BORDER }}>
                   <Cross size={13} strokeWidth={2.5} style={{ color: INK }} />
                 </div>
-                <span className="font-black text-base tracking-tight">El Manantial</span>
+                <span className="font-black text-base tracking-tight">{siteName}</span>
               </div>
               <p className="text-[#FFFFFF]/68 text-sm leading-relaxed max-w-xs mb-8">
                 Una comunidad de fe comprometida con el crecimiento espiritual y el servicio a nuestra ciudad.
@@ -153,7 +155,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
           {/* Bottom bar */}
           <div className="border-t border-[#FFFFFF]/[0.06] pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <p className="text-[11px] text-[#FFFFFF]/40" suppressHydrationWarning>© {new Date().getFullYear()} Iglesia El Manantial. Todos los derechos reservados.</p>
+            <p className="text-[11px] text-[#FFFFFF]/40" suppressHydrationWarning>© {new Date().getFullYear()} Iglesia {siteName}. Todos los derechos reservados.</p>
             <p className="text-[11px] text-[#FFFFFF]/30 uppercase tracking-widest">Hecho con fe</p>
           </div>
         </div>

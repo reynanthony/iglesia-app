@@ -7,11 +7,13 @@ export default function AuthBrandPanel({
   cite,
   eyebrow = 'Comunidad de fe',
   watermark = 'FE',
+  siteName = 'El Manantial',
 }: {
   quote: string
   cite: string
   eyebrow?: string
   watermark?: string
+  siteName?: string
 }) {
   return (
     <div
@@ -66,7 +68,7 @@ export default function AuthBrandPanel({
           className="font-black tracking-tighter mt-2 mb-1 lg:mt-6 lg:mb-2"
           style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 0.9, color: '#FFFFFF' }}
         >
-          El Manantial
+          {siteName}
         </h2>
         <p className="text-[10px] font-bold uppercase tracking-[0.4em] mb-3 lg:mb-8" style={{ color: '#8B92A2' }}>
           {eyebrow}

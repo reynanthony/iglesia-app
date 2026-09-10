@@ -3,6 +3,7 @@ import { ArrowRight, Radio, Clock } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import LivePlayer from '@/components/LivePlayer'
 import { HeroVideo } from '@/components/public/HeroVideo'
+import { getSiteSettings } from '@/lib/site-settings'
 import { BG, CARD, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export const revalidate = 0
@@ -20,7 +21,10 @@ function getYoutubeId(url?: string | null) {
 
 export default async function EnVivoPage() {
   const supabase = await createClient()
-  const { data: pageData } = await supabase.from('page_content').select('content').eq('page', 'en-vivo').single()
+  const [{ data: pageData }, { siteName }] = await Promise.all([
+    supabase.from('page_content').select('content').eq('page', 'en-vivo').single(),
+    getSiteSettings(),
+  ])
   const c = (pageData?.content ?? {}) as Record<string, any>
 
   const offlineTitle    = c.offline_title    ?? 'Estamos en *camino.'
@@ -79,7 +83,7 @@ export default async function EnVivoPage() {
             <p className="text-sm font-bold text-white truncate">{liveTitle}</p>
             <div className="ml-auto flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em]"
               style={{ color: 'rgba(255,255,255,0.80)' }}>
-              <Radio size={11} /> El Manantial
+              <Radio size={11} /> {siteName}
             </div>
           </div>
 
@@ -93,7 +97,7 @@ export default async function EnVivoPage() {
             style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.3em] mb-1" style={{ color: 'rgba(255,255,255,0.80)' }}>
-                El Manantial · Culto en línea
+                {siteName} · Culto en línea
               </p>
               <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.80)' }}>
                 Comparte con alguien que necesite escuchar la Palabra hoy.
@@ -136,7 +140,7 @@ export default async function EnVivoPage() {
             <div className="flex items-center gap-5 mb-12">
               <div className="w-px h-10" style={{ background: MUTED }} />
               <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
-                El Manantial · Transmisiones en vivo
+                {siteName} · Transmisiones en vivo
               </p>
             </div>
 

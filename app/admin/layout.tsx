@@ -6,11 +6,15 @@ import { LogOut } from 'lucide-react'
 import AdminNav from '@/components/admin/AdminNav'
 import AdminMobileNav from '@/components/admin/AdminMobileNav'
 import { CapacitorBridge } from '@/components/app/CapacitorBridge'
+import { getSiteSettings } from '@/lib/site-settings'
 import { BG, BORDER, MUTED, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const [{ data: { user } }, { siteName }] = await Promise.all([
+    supabase.auth.getUser(),
+    getSiteSettings(),
+  ])
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
@@ -67,7 +71,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               {isLider ? 'M' : 'A'}
             </div>
             <div>
-              <p className="font-black text-[15px] text-white leading-tight tracking-tight">El Manantial</p>
+              <p className="font-black text-[15px] text-white leading-tight tracking-tight">{siteName}</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: GOLD }}>{panelLabel}</p>
             </div>
           </div>
@@ -89,7 +93,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})`, color: GOLD_INK }}>
             {isLider ? 'M' : 'A'}
           </div>
-          <span className="font-black text-sm text-white tracking-tight">El Manantial</span>
+          <span className="font-black text-sm text-white tracking-tight">{siteName}</span>
         </div>
         <div className="flex items-center gap-1">
           <Link href="/app/comunidad"

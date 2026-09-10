@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { type NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getSiteSettings } from '@/lib/site-settings'
 
 export const runtime = 'edge'
 
@@ -18,6 +19,7 @@ function excerpt(text: string, max: number) {
 
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get('id')
+  const { siteName } = await getSiteSettings()
 
   let authorName = 'Comunidad'
   let content = 'Una comunidad de fe viva donde encontrarás amor, propósito y familia.'
@@ -63,7 +65,7 @@ export async function GET(req: NextRequest) {
             </svg>
           </div>
           <span style={{ fontSize: 22, fontWeight: 900, color: INK, letterSpacing: -0.5 }}>
-            El Manantial
+            {siteName}
           </span>
         </div>
 

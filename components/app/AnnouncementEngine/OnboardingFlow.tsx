@@ -30,9 +30,10 @@ const SLIDES = [
 
 interface Props {
   onComplete: (bio?: string) => void
+  siteName?: string
 }
 
-export default function OnboardingFlow({ onComplete }: Props) {
+export default function OnboardingFlow({ onComplete, siteName }: Props) {
   const [current, setCurrent] = useState(0)
   const [exiting, setExiting] = useState(false)
 
@@ -40,6 +41,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
   const slide   = SLIDES[current]
   const Icon    = slide.icon
   const accent  = slide.accent
+  const title   = current === 0 ? (siteName || 'El Manantial') : slide.title
 
   function next() {
     if (!isLast) {
@@ -117,7 +119,7 @@ export default function OnboardingFlow({ onComplete }: Props) {
             className="elm-slide-up elm-delay-2 font-black tracking-tight leading-none mb-4"
             style={{ fontSize: 'clamp(2.2rem, 8vw, 3.2rem)', color: INK }}
           >
-            {slide.title}
+            {title}
           </h1>
 
           <p

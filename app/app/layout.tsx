@@ -8,13 +8,17 @@ import { CapacitorBridge } from '@/components/app/CapacitorBridge'
 import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import AnnouncementGate from '@/components/app/AnnouncementEngine/AnnouncementGate'
 import { createClient } from '@/lib/supabase/server'
+import { getSiteSettings } from '@/lib/site-settings'
 import { BG, CARD, BORDER, MUTED, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser()
   if (!user) redirect('/login')
 
-  const profile = await getProfile(user.id)
+  const [profile, { siteName }] = await Promise.all([
+    getProfile(user.id),
+    getSiteSettings(),
+  ])
 
   // Verificar si el líder tiene acceso admin delegado a algún ministerio
   let isLiderAdmin = false
@@ -38,6 +42,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         onboardingCompleted={profile?.onboarding_completed ?? false}
         userId={user.id}
         userRole={profile?.role ?? 'visitante'}
+        siteName={siteName}
         hasBottomNav
       />
 
@@ -53,7 +58,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Cross size={15} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
             <div>
-              <p className="font-black text-[14px] leading-tight tracking-tight" style={{ color: INK }}>El Manantial</p>
+              <p className="font-black text-[14px] leading-tight tracking-tight" style={{ color: INK }}>{siteName}</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: MUTED }}>Comunidad</p>
             </div>
           </Link>
@@ -117,7 +122,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             >
               <Cross size={14} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
-            <span className="font-black text-[16px] tracking-tight" style={{ color: INK }}>El Manantial</span>
+            <span className="font-black text-[16px] tracking-tight" style={{ color: INK }}>{siteName}</span>
           </Link>
 
           {/* Acciones */}

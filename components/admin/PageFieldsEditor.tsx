@@ -23,6 +23,15 @@ interface SectionDef {
 }
 
 const SCHEMAS: Record<string, SectionDef[]> = {
+  site_settings: [
+    {
+      title: 'Marca',
+      fields: [
+        { key: 'site_name', label: 'Nombre de la iglesia / marca', type: 'text', placeholder: 'El Manantial', hint: 'Aparece en el logo, el título de la pestaña del navegador, el manifest de la app instalable, y las marcas de agua al compartir contenido.' },
+      ],
+    },
+  ],
+
   home: [
     {
       title: 'Hero — sección principal',

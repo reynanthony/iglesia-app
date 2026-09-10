@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MessageCircle, Heart, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getSiteSettings } from '@/lib/site-settings'
 import { BG, CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 export const revalidate = 0
@@ -29,12 +30,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const post = await getPost(id)
   if (!post) return {}
 
+  const [{ siteName }, origin] = await Promise.all([getSiteSettings(), getOrigin()])
   const author = (post.profiles as unknown as { full_name?: string } | null)?.full_name ?? 'Comunidad'
   const description = post.content?.trim()
     ? post.content.trim().slice(0, 150)
-    : 'Una publicación de la comunidad de El Manantial.'
-  const title = `${author} · El Manantial`
-  const origin = await getOrigin()
+    : `Una publicación de la comunidad de ${siteName}.`
+  const title = `${author} · ${siteName}`
   const image = post.image_url ?? `${origin}/api/og/post?id=${id}`
 
   return {

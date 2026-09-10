@@ -13,6 +13,7 @@ interface Props {
   onboardingCompleted: boolean
   userId: string | null
   userRole: string
+  siteName?: string
   hasBottomNav?: boolean
 }
 
@@ -57,7 +58,7 @@ function recordLocal(ann: AnnouncementData) {
   sessionStorage.setItem(`elm_ann_session_${ann.id}`, '1')
 }
 
-export default function AnnouncementGate({ onboardingCompleted, userId, userRole, hasBottomNav }: Props) {
+export default function AnnouncementGate({ onboardingCompleted, userId, userRole, siteName, hasBottomNav }: Props) {
   const [phase, setPhase]               = useState<Phase>('checking')
   const [announcement, setAnnouncement] = useState<AnnouncementData | null>(null)
   const [floatAnn, setFloatAnn]         = useState<AnnouncementData | null>(null)
@@ -184,6 +185,7 @@ export default function AnnouncementGate({ onboardingCompleted, userId, userRole
   if (phase === 'onboarding') {
     return (
       <OnboardingFlow
+        siteName={siteName}
         onComplete={(bio?: string) => {
           localStorage.setItem(ONBOARDING_KEY, '1')
           if (userId) completeOnboarding(bio).catch(() => {})

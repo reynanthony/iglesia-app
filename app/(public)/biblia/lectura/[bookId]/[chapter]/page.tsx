@@ -3,6 +3,7 @@ import { findBook, prevChapter, nextChapter, ALL_BOOKS } from '@/lib/bible'
 import { getChapterContent } from '@/lib/bible-content'
 import { BibleReader } from '@/components/public/BibleReader'
 import { createClient } from '@/lib/supabase/server'
+import { getSiteSettings } from '@/lib/site-settings'
 import type { RelatedContent, BookmarkItem } from '@/components/public/BibleReader'
 
 function parseReferenceChapter(reference: string): { bookName: string; chapter: number } | null {
@@ -36,9 +37,10 @@ export default async function BibleChapterPage({
   const chapterNum = parseInt(chapter, 10)
   if (isNaN(chapterNum) || chapterNum < 1 || chapterNum > book.chapters) notFound()
 
-  const [content, supabase] = await Promise.all([
+  const [content, supabase, { siteName }] = await Promise.all([
     getChapterContent(book.id, chapterNum),
     createClient(),
+    getSiteSettings(),
   ])
 
   const prev = prevChapter(book.id, chapterNum)
@@ -183,6 +185,7 @@ export default async function BibleChapterPage({
       initialBookmarks={initialBookmarks}
       initialRead={initialRead}
       initialReadUpTo={initialReadUpTo}
+      siteName={siteName}
       relatedContent={relatedContent}
     />
   )
