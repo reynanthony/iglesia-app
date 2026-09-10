@@ -277,7 +277,7 @@ function Testament({
             <p className="font-bold uppercase mb-4" style={{ fontSize: 10, letterSpacing: '0.30em', color: s.textDim2 }}>
               {cat.label}
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(112px, 1fr))', gap: 12 }}>
               {cat.books.map(b => {
                 const bookLog = readingLog?.[b.id]
                 const chaptersRead = bookLog ? Object.keys(bookLog).length : 0
@@ -293,49 +293,71 @@ function Testament({
   )
 }
 
-/* ─── Book card — flat, modern, accent stripe ─── */
+/* ─── Book card — lomo de libro: letra inicial de fondo, progreso integrado ─── */
 function BookCard({
   book, accent, chaptersRead, s, onClick,
 }: { book: BibleBook; accent: string; chaptersRead: number; s: SelPalette; onClick: () => void }) {
   const pct = Math.min(100, Math.round((chaptersRead / book.chapters) * 100))
+  const complete = pct >= 100
+  const initial = book.name.charAt(0)
   return (
     <button
       onClick={onClick}
-      className="group relative flex flex-col items-start justify-between rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none text-left overflow-hidden"
+      className="group relative flex flex-col justify-end rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 active:scale-[0.97] focus-visible:outline-none text-left overflow-hidden"
       style={{
-        height: 92,
-        padding: '13px 14px 12px',
+        aspectRatio: '3 / 4',
         background: s.cardBg,
         border: `1px solid ${s.cardBorder}`,
-        borderTop: `3px solid ${accent}`,
-        cursor: 'pointer',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
       }}
     >
+      {/* Letra inicial — marca de agua editorial */}
       <span
-        className="relative font-black leading-tight"
-        style={{ fontSize: 13, color: s.text, lineHeight: 1.28, zIndex: 1 }}
+        aria-hidden
+        className="font-display absolute -top-4 -right-1 font-black leading-none select-none pointer-events-none transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5"
+        style={{ fontSize: 72, color: accent, opacity: 0.12 }}
       >
-        {book.name}
-      </span>
-      <span
-        className="relative inline-flex items-center self-start px-1.5 py-0.5 rounded-md font-bold"
-        style={{ fontSize: 9, color: accent, background: `${accent}14`, zIndex: 1 }}
-      >
-        {pct > 0 ? `${chaptersRead}/${book.chapters} leídos` : `${book.chapters} cap.`}
+        {initial}
       </span>
 
-      {/* Hover tint */}
+      {/* Lavado de color al hover */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        style={{ background: `${accent}08` }}
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ background: `linear-gradient(165deg, ${accent}16, transparent 62%)` }}
       />
 
-      {/* Progreso de lectura */}
-      {pct > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ background: `${accent}20` }}>
-          <div className="h-full" style={{ width: `${pct}%`, background: accent }} />
+      {/* Insignia de completado */}
+      {complete && (
+        <div
+          className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full flex items-center justify-center z-[1]"
+          style={{ background: accent, boxShadow: `0 2px 8px -2px ${accent}80` }}
+        >
+          <Check size={11} strokeWidth={3} style={{ color: '#FFFFFF' }} />
         </div>
       )}
+
+      {/* Contenido */}
+      <div className="relative z-[1] px-3.5 pt-3.5 pb-3">
+        <p className="font-display font-black leading-[1.08] mb-1.5" style={{ fontSize: 15, color: s.text }}>
+          {book.name}
+        </p>
+        <p className="font-bold uppercase tracking-wider" style={{ fontSize: 9, letterSpacing: '0.08em', color: pct > 0 ? accent : s.textDim }}>
+          {pct > 0 ? `${chaptersRead} de ${book.chapters} leídos` : `${book.chapters} capítulos`}
+        </p>
+      </div>
+
+      {/* Barra de progreso */}
+      <div className="relative h-[3px]" style={{ background: `${accent}18` }}>
+        {pct > 0 && (
+          <div className="h-full transition-all duration-500 ease-out" style={{ width: `${pct}%`, background: accent }} />
+        )}
+      </div>
+
+      {/* Borde de foco/hover */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{ boxShadow: `inset 0 0 0 1.5px ${accent}55` }}
+      />
     </button>
   )
 }
