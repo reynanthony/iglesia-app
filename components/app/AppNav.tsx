@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Users2, Flame, Home, User,
-  UsersRound, Sprout, MoreHorizontal, X, Book,
+  UsersRound, Sprout, MoreHorizontal, X, GraduationCap, Book,
 } from 'lucide-react'
 import { MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -17,7 +17,7 @@ const INACTIVE = MUTED
 const navItems = [
   { href: '/app/inicio',      icon: Home,       label: 'Inicio',    exact: true,  activeMatch: ['/app/inicio'] },
   { href: '/biblia',          icon: Book,       label: 'Palabra',   exact: false, activeMatch: ['/biblia', '/app/predicas'] },
-  { href: '/app/discipulado', icon: Sprout,     label: 'Crecer',    exact: false, activeMatch: ['/app/discipulado', '/app/ministerios'] },
+  { href: '/app/discipulado', icon: Sprout,     label: 'Crecer',    exact: false, activeMatch: ['/app/discipulado', '/app/mentoria', '/app/ministerios'] },
   { href: '/app/oracion',     icon: Flame,      label: 'Orar',      exact: false, activeMatch: ['/app/oracion'] },
   { href: '/app/grupos',      icon: UsersRound, label: 'Caminar',   exact: false, activeMatch: ['/app/grupos'] },
   { href: '/app/comunidad',   icon: Users2,     label: 'Comunidad', exact: false, activeMatch: ['/app/comunidad', '/app/en-vivo'] },
@@ -63,8 +63,9 @@ const MAIN_ITEMS_STATIC = [
 // Ítems secundarios en la fila expandible — Crecer y Caminar viven aquí
 // (accesibles también desde Inicio) para no saturar la barra principal.
 const MORE_ITEMS = [
-  { href: '/app/discipulado', icon: Sprout,     label: 'Crecer'  },
-  { href: '/app/grupos',      icon: UsersRound, label: 'Caminar' },
+  { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'   },
+  { href: '/app/grupos',      icon: UsersRound,    label: 'Caminar'  },
+  { href: '/app/mentoria',    icon: GraduationCap, label: 'Mentoría' },
 ]
 
 export function AppBottomNav({ profileHref }: Props) {
