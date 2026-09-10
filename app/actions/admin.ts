@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 async function checkAdmin() {
@@ -530,8 +530,22 @@ export async function savePageFields(page: string, fields: Record<string, unknow
     predicas: ['/predicas'], contacto: ['/contacto'], ministerios: ['/ministerios'],
     donaciones: ['/donaciones'], oracion: ['/oracion'], 'en-vivo': ['/en-vivo'],
     educacion: ['/educacion'], publicaciones: ['/publicaciones'], devocionales: ['/devocionales'],
+    biblia: ['/biblia'],
   }
-  ;(pagePathMap[page] ?? ['/']).forEach(p => revalidatePath(p))
+
+  if (page === 'site_settings') {
+    // El nombre de marca se lee desde árboles de rutas totalmente distintos
+    // (layout raíz, público, admin, app, /login, /registro) — un solo tag
+    // invalida todos de una vez, en vez de mantener una lista de paths.
+    // updateTag (no revalidateTag) porque esto corre dentro de un Server Action.
+    updateTag('site-settings')
+    // Respaldo: invalida el árbol completo del layout raíz (todas las rutas
+    // cuelgan de él, incluidas /login y /registro que no comparten padre
+    // con el resto).
+    revalidatePath('/', 'layout')
+  } else {
+    (pagePathMap[page] ?? ['/']).forEach(p => revalidatePath(p))
+  }
   revalidatePath('/admin/paginas')
   return { success: true }
 }
