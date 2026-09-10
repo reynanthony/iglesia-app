@@ -113,7 +113,7 @@ export default async function EnVivoPage() {
 
       ) : (
         /* ─── OFFLINE ───────────────────────────────────── */
-        <section className="relative overflow-hidden min-h-[85svh] md:min-h-[85vh]" style={{ background: heroBg }}>
+        <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh]" style={{ background: heroBg }}>
           {heroImageUrl && !heroVideoUrl && (
             <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
               className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />

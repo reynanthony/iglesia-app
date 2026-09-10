@@ -110,7 +110,7 @@ export default async function EventosPage() {
     <div>
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: heroBg }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh] flex flex-col justify-center" style={{ background: heroBg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />

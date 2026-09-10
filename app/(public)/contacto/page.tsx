@@ -48,7 +48,7 @@ export default async function ContactoPage() {
       {/* ═══════════════════════════════════════
           HERO — conversacional, íntimo
       ═══════════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-[80svh] md:min-h-[80vh] flex flex-col justify-center" style={{ background: hs.bg }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh] flex flex-col justify-center" style={{ background: hs.bg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
         )}

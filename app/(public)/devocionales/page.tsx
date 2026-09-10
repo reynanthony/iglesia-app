@@ -43,7 +43,7 @@ export default async function DevoccionalesPage() {
     <div>
 
       {/* ══ HERO ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: heroBg, minHeight: '60vh' }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh]" style={{ background: heroBg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />
@@ -67,8 +67,7 @@ export default async function DevoccionalesPage() {
           </div>
         )}
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-16 md:pt-40 md:pb-20 flex flex-col justify-end"
-          style={{ minHeight: '60vh' }}>
+        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-16 md:pt-40 md:pb-20 flex flex-col justify-end min-h-[85svh] md:min-h-[90vh]">
           <div className="flex items-center gap-5 mb-12">
             <div className="w-12 h-px" style={{ background: SAGE }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: `${SAGE}80` }}>

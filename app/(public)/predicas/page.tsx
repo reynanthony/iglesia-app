@@ -67,7 +67,7 @@ export default async function PredicasPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden min-h-[72svh] md:min-h-[72vh]" style={{ background: heroBg }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh]" style={{ background: heroBg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />

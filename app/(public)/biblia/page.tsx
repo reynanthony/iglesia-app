@@ -135,7 +135,7 @@ export default async function BibliaPage() {
           todos los estados, incluido el dashboard de usuarios con historial.
           Antes el dashboard usaba un bloque plano sin imagen/overlay y
           perdía la identidad visual que sí tienen el resto de los módulos. ══ */}
-      <section className="relative overflow-hidden flex flex-col justify-end" style={{ background: hs.bg, minHeight: '85vh' }}>
+      <section className="relative overflow-hidden flex flex-col justify-end min-h-[85svh] md:min-h-[90vh]" style={{ background: hs.bg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55 }} />

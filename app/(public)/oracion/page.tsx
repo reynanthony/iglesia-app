@@ -86,8 +86,8 @@ export default async function OracionPublicaPage() {
     <div>
 
       {/* ── Hero oscuro ─────────────────────────────────── */}
-      <section className="relative overflow-hidden flex flex-col justify-center"
-        style={{ background: heroBg, minHeight: '70svh' }}>
+      <section className="relative overflow-hidden flex flex-col justify-center min-h-[85svh] md:min-h-[90vh]"
+        style={{ background: heroBg }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: heroOverlayOpacity }} />

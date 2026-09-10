@@ -52,7 +52,7 @@ export default async function DiscipuladoPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '80vh' }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh]" style={{ background: BG }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
@@ -63,8 +63,7 @@ export default async function DiscipuladoPage() {
             VII
           </span>
         </div>
-        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 md:pt-40 md:pb-24 flex flex-col justify-end"
-          style={{ minHeight: '80vh' }}>
+        <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-20 md:pt-40 md:pb-24 flex flex-col justify-end min-h-[85svh] md:min-h-[90vh]">
           <Link href="/educacion"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] mb-12 transition"
             style={{ color: `${TEAL}60` }}>

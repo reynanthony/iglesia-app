@@ -30,7 +30,7 @@ export default async function EstudioBiblicoPage() {
     <div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '85vh' }}>
+      <section className="relative overflow-hidden min-h-[85svh] md:min-h-[90vh]" style={{ background: BG }}>
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
@@ -41,8 +41,7 @@ export default async function EstudioBiblicoPage() {
             LOGOS
           </span>
         </div>
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-28 flex flex-col justify-end"
-          style={{ minHeight: '85vh' }}>
+        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-28 flex flex-col justify-end min-h-[85svh] md:min-h-[90vh]">
           <Link href="/educacion"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] mb-14 transition"
             style={{ color: `${TEAL}60` }}>
