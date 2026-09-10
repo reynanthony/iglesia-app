@@ -118,19 +118,19 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       >
         <div className="flex items-center justify-between px-4" style={{ height: 56 }}>
           {/* Brand */}
-          <Link href="/app/inicio" className="flex items-center gap-2.5">
+          <Link href="/app/inicio" className="flex items-center gap-2 min-w-0 flex-shrink mr-2">
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}
             >
               <Cross size={14} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
-            <span className="font-logo text-[22px] leading-none" style={{ color: INK }}>{siteName}</span>
+            <span className="font-logo text-[18px] leading-none truncate" style={{ color: INK }}>{siteName}</span>
           </Link>
 
           {/* Acciones */}
           <div
-            className="flex items-center gap-0.5 rounded-full pl-1 pr-1 py-1"
+            className="flex items-center gap-0.5 rounded-full pl-1 pr-1 py-1 flex-shrink-0"
             style={{ background: '#181A22', border: `1px solid ${BORDER}` }}
           >
             <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Sitio público">
