@@ -155,7 +155,7 @@ export default async function PublicLayout({ children }: { children: React.React
 
           {/* Bottom bar */}
           <div className="border-t border-[#FFFFFF]/[0.06] pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <p className="text-[11px] text-[#FFFFFF]/40" suppressHydrationWarning>© {new Date().getFullYear()} Iglesia {siteName}. Todos los derechos reservados.</p>
+            <p className="text-[11px] text-[#FFFFFF]/40" suppressHydrationWarning>© {new Date().getFullYear()} {siteName}. Todos los derechos reservados.</p>
             <p className="text-[11px] text-[#FFFFFF]/30 uppercase tracking-widest">Hecho con fe</p>
           </div>
         </div>
