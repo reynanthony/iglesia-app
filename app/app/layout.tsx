@@ -58,7 +58,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Cross size={15} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
             <div>
-              <p className="font-black text-[14px] leading-tight tracking-tight" style={{ color: INK }}>{siteName}</p>
+              <p className="font-logo text-[19px] leading-tight" style={{ color: INK }}>{siteName}</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: MUTED }}>Comunidad</p>
             </div>
           </Link>
@@ -125,7 +125,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             >
               <Cross size={14} strokeWidth={2.5} style={{ color: GOLD_INK }} />
             </div>
-            <span className="font-black text-[16px] tracking-tight" style={{ color: INK }}>{siteName}</span>
+            <span className="font-logo text-[22px] leading-none" style={{ color: INK }}>{siteName}</span>
           </Link>
 
           {/* Acciones */}
