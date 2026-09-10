@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, FileText, Shield, ShieldAlert,
   Globe, ArrowLeft, LogOut, Mail, Mic, UsersRound, BookOpen, Radio, ScrollText, Bell, UserCheck, Cross, Megaphone, Newspaper, Building2,
-  Layers, Church, Calendar, Video, Quote, CalendarDays,
+  Layers, Church, Calendar, Video, Quote, CalendarDays, Files,
 } from 'lucide-react'
 import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -39,6 +39,7 @@ const FULL_ADMIN_SECTIONS: NavSection[] = [
   {
     label: 'Contenido comunitario',
     items: [
+      { href: '/admin/contenido',     icon: Files,     label: 'Contenido de ministerios' },
       { href: '/admin/posts',         icon: FileText,  label: 'Posts' },
       { href: '/admin/publicaciones', icon: Newspaper, label: 'Publicaciones' },
       { href: '/admin/campanas',      icon: Megaphone, label: 'Anuncios' },
