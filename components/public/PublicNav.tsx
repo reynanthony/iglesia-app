@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Calendar, Flame, Newspaper, Book, Quote, HeartHandshake } from 'lucide-react'
 import { CARD, MUTED, GOLD } from '@/lib/gold-theme'
 
 const PRIMARY_LINKS = [
@@ -16,12 +16,12 @@ const PRIMARY_LINKS = [
 ]
 
 const MORE_LINKS = [
-  { href: '/eventos',        label: 'Eventos' },
-  { href: '/oracion',        label: 'Oración' },
-  { href: '/publicaciones',  label: 'Publicaciones' },
-  { href: '/biblia',         label: 'Biblia' },
-  { href: '/devocionales',   label: 'Devocionales' },
-  { href: '/donaciones',     label: 'Donaciones' },
+  { href: '/biblia',         label: 'Biblia',        desc: 'Lee y sigue tu progreso',   icon: Book },
+  { href: '/oracion',        label: 'Oración',       desc: 'Comparte una petición',     icon: Flame },
+  { href: '/eventos',        label: 'Eventos',       desc: 'Agenda de la comunidad',    icon: Calendar },
+  { href: '/devocionales',   label: 'Devocionales',  desc: 'Reflexión del día',         icon: Quote },
+  { href: '/publicaciones',  label: 'Publicaciones', desc: 'Artículos y novedades',     icon: Newspaper },
+  { href: '/donaciones',     label: 'Donaciones',    desc: 'Apoya la misión',           icon: HeartHandshake },
 ]
 
 export default function PublicNav() {
@@ -61,27 +61,52 @@ export default function PublicNav() {
         )
       })}
 
-      {/* Más dropdown */}
+      {/* Más — mega-menu */}
       <div ref={ref} className="relative">
         <button
           onClick={() => setOpen(v => !v)}
           aria-expanded={open}
           aria-haspopup="true"
-          className={`public-nav-link flex items-center gap-1${moreActive ? ' active' : ''}`}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] rounded-full pl-3.5 pr-3 py-1.5 transition-colors"
+          style={{
+            color: moreActive || open ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
+            background: open ? 'rgba(246,243,235,0.08)' : 'transparent',
+            border: `1px solid ${open ? 'rgba(246,243,235,0.16)' : 'transparent'}`,
+            cursor: 'pointer',
+          }}
         >
-          Más <span aria-hidden="true" className="motion-reduce:transition-none" style={{ opacity: 0.6, display: 'inline-flex', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}><ChevronDown size={11} /></span>
+          Más
+          <ChevronDown
+            size={12}
+            aria-hidden="true"
+            style={{ opacity: 0.7, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+          />
         </button>
         {open && (
-          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 rounded-xl overflow-hidden z-50"
-            style={{ background: CARD, border: '1px solid rgba(199,154,42,0.15)', minWidth: 160 }}>
-            {MORE_LINKS.map(({ href, label }) => {
+          <div
+            className="absolute top-full right-0 mt-3 rounded-2xl overflow-hidden z-50 grid grid-cols-2 gap-1 p-2"
+            style={{ background: CARD, border: '1px solid rgba(199,154,42,0.18)', width: 380, boxShadow: '0 20px 40px -12px rgba(0,0,0,0.5)' }}
+          >
+            {MORE_LINKS.map(({ href, label, desc, icon: Icon }) => {
               const active = pathname === href || pathname.startsWith(href + '/')
               return (
                 <Link key={href} href={href} onClick={() => setOpen(false)}
-                  className="block px-5 py-3 text-[11px] font-bold uppercase tracking-[0.15em] transition hover:bg-white/5"
-                  style={{ color: active ? GOLD : MUTED }}>
-                  {label}
+                  className="group flex items-start gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.06]"
+                  style={{ background: active ? 'rgba(199,154,42,0.10)' : 'transparent' }}>
+                  <span
+                    className="flex items-center justify-center rounded-lg flex-shrink-0 transition-transform group-hover:scale-105"
+                    style={{ width: 32, height: 32, background: active ? 'rgba(199,154,42,0.18)' : 'rgba(246,243,235,0.06)' }}
+                  >
+                    <Icon size={15} style={{ color: active ? GOLD : '#F6F3EB' }} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[11.5px] font-bold uppercase tracking-[0.08em]" style={{ color: active ? GOLD : '#F6F3EB' }}>
+                      {label}
+                    </span>
+                    <span className="block text-[11px] mt-0.5 leading-snug" style={{ color: MUTED }}>
+                      {desc}
+                    </span>
+                  </span>
                 </Link>
               )
             })}
