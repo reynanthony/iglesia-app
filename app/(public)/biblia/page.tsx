@@ -3,6 +3,8 @@ import { ArrowRight, BookOpen, CalendarDays, Flame, Search, Bookmark } from 'luc
 import BibleVerseOfDay from '@/components/public/BibleVerseOfDay'
 import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
+import { HeroVideo } from '@/components/public/HeroVideo'
+import { HeroTitle } from '@/components/public/HeroTitle'
 import { findBook, ALL_BOOKS } from '@/lib/bible'
 import { formatDayReference } from '@/lib/bible-reading-plans'
 import { createClient } from '@/lib/supabase/server'
@@ -33,7 +35,17 @@ function computeStreak(dates: Set<string>): number {
 
 export default async function BibliaPage() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const [{ data: { user } }, { data: pageData }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from('page_content').select('content').eq('page', 'biblia').single(),
+  ])
+  const c = (pageData?.content ?? {}) as Record<string, string>
+  const heroEyebrow    = c.hero_eyebrow ?? 'La Palabra · RVR1960'
+  const heroTitleRaw   = c.hero_title ?? 'La Palabra\nque transforma.'
+  const heroSubtitle   = c.hero_subtitle ?? 'Lee la Biblia completa en Reina Valera 1960 con marcadores, notas y lectura continua.'
+  const heroImageUrl   = c.hero_image_url || null
+  const heroVideoUrl   = c.hero_video_url || null
+  const heroTitleLines = heroTitleRaw.split('\n')
 
   let initialLastRead: { bookId: string; chapterNum: number; bookName: string } | null = null
   let initialBookmarks: Array<{
@@ -181,6 +193,15 @@ export default async function BibliaPage() {
         </section>
       ) : (
       <section className="relative overflow-hidden" style={{ background: BG, minHeight: '72vh' }}>
+        {heroImageUrl && !heroVideoUrl && (
+          <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
+            className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55 }} />
+        )}
+        {heroVideoUrl && <HeroVideo url={heroVideoUrl} opacity={0.55} fallbackUrl={heroImageUrl ?? undefined} />}
+        {(heroImageUrl || heroVideoUrl) && (
+          <div className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(160deg, rgba(16,18,23,0.55) 0%, rgba(16,18,23,0.35) 100%)' }} />
+        )}
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: `repeating-linear-gradient(90deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px), repeating-linear-gradient(0deg, ${TEAL} 0px, ${TEAL} 1px, transparent 1px, transparent 90px)` }} />
         <div className="pointer-events-none absolute inset-0"
@@ -196,17 +217,25 @@ export default async function BibliaPage() {
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: MUTED }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
-              La Palabra · RVR1960
+              {heroEyebrow}
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <h1 className="font-display font-black tracking-tighter text-white"
-              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85 }}>
-              La Palabra<br /><em style={{ color: TEAL }}>que transforma.</em>
-            </h1>
+            <HeroTitle
+              color="#FFFFFF"
+              accentColor={TEAL}
+              className="font-display font-black tracking-tighter"
+              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85, color: '#FFFFFF' }}>
+              {heroTitleLines.map((line, i) => (
+                <span key={i}>
+                  {i === heroTitleLines.length - 1 ? <em style={{ color: TEAL }}>{line}</em> : line}
+                  {i < heroTitleLines.length - 1 && <br />}
+                </span>
+              ))}
+            </HeroTitle>
             <div>
               <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: MUTED }}>
-                Lee la Biblia completa en Reina Valera 1960 con marcadores, notas y lectura continua.
+                {heroSubtitle}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/biblia/lectura/JHN/1"

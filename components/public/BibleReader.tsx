@@ -127,15 +127,14 @@ function walkVerseText(vSpan: HTMLElement): string {
   return text.replace(/\s+/g, ' ').trim()
 }
 
-// Texto del capítulo listo para leer en voz alta: cada versículo vive en su
-// propio <p>, así que un .textContent plano del contenedor pega el punto
-// final de un verso directo con el número del siguiente ("...tierra.2 Y la
-// tierra...") sin espacio de por medio — el sintetizador de voz deja de
-// reconocer esos puntos como fin de oración. Aquí se recorre verso por
-// verso (sin incluir el número) y se unen con un espacio real.
-function getReadableChapterText(container: HTMLElement): string {
+// Texto del capítulo listo para leer en voz alta, un string por versículo
+// (sin el número). Antes se unía todo en un solo string larguísimo — el
+// sintetizador lo atropellaba sin pausas reales. Ahora cada verso es su
+// propia utterance, encadenada con una pausa entre una y otra (ver
+// handleAudio), lo que se lee mucho más despacio y entendible.
+function getReadableChapterVerses(container: HTMLElement): string[] {
   const verses = Array.from(container.querySelectorAll<HTMLElement>('.v[data-number]'))
-  return verses.map(walkVerseText).join(' ')
+  return verses.map(walkVerseText).filter(t => t.length > 0)
 }
 
 function buildHighlightCSS(hl: Highlights): string {
@@ -324,6 +323,7 @@ export function BibleReader({
   // ── Audio TTS: escuchar el capítulo con la voz del dispositivo ──
   const [audioPlaying, setAudioPlaying] = useState(false)
   const [audioSupported, setAudioSupported] = useState(false)
+  const audioCancelRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     setAudioSupported(typeof window !== 'undefined' && 'speechSynthesis' in window)
@@ -332,24 +332,47 @@ export function BibleReader({
   const handleAudio = useCallback(() => {
     if (!content || typeof window === 'undefined' || !('speechSynthesis' in window)) return
     if (audioPlaying) {
+      audioCancelRef.current?.()
       window.speechSynthesis.cancel()
       setAudioPlaying(false)
       return
     }
-    const text = contentRef.current ? getReadableChapterText(contentRef.current) : ''
-    if (!text.trim()) return
+    const verses = contentRef.current ? getReadableChapterVerses(contentRef.current) : []
+    if (verses.length === 0) return
+
     const speak = () => {
-      const utter = new SpeechSynthesisUtterance(text)
-      utter.lang = 'es-419'
-      utter.rate = 0.92
       const voices = window.speechSynthesis.getVoices()
-      const spanish = voices.find(v => v.lang.startsWith('es'))
-      if (spanish) utter.voice = spanish
-      utter.onend = () => setAudioPlaying(false)
-      utter.onerror = () => setAudioPlaying(false)
-      window.speechSynthesis.cancel()
-      window.speechSynthesis.speak(utter)
+      // Preferir una voz "de red" (localService: false) sobre la del sistema
+      // operativo — suenan mucho más naturales — y el dialecto es-419 antes
+      // que cualquier otro español disponible.
+      const voice =
+        voices.find(v => v.lang === 'es-419' && !v.localService) ||
+        voices.find(v => v.lang.startsWith('es') && !v.localService) ||
+        voices.find(v => v.lang === 'es-419') ||
+        voices.find(v => v.lang.startsWith('es'))
+
+      let i = 0
+      let cancelled = false
+      const speakNext = () => {
+        if (cancelled) return
+        if (i >= verses.length) { setAudioPlaying(false); return }
+        const utter = new SpeechSynthesisUtterance(verses[i])
+        utter.lang = 'es-419'
+        utter.rate = 0.82
+        utter.pitch = 1
+        if (voice) utter.voice = voice
+        i++
+        utter.onend = () => {
+          if (cancelled) return
+          // Pausa breve entre versos, como una respiración natural al leer.
+          setTimeout(speakNext, 380)
+        }
+        utter.onerror = () => setAudioPlaying(false)
+        window.speechSynthesis.speak(utter)
+      }
+      audioCancelRef.current = () => { cancelled = true }
       setAudioPlaying(true)
+      speakNext()
     }
     // Algunos navegadores cargan las voces de forma asíncrona la primera vez.
     if (window.speechSynthesis.getVoices().length === 0) {
@@ -361,11 +384,13 @@ export function BibleReader({
 
   // Detener el audio al cambiar de capítulo o salir del lector.
   useEffect(() => {
+    audioCancelRef.current?.()
     setAudioPlaying(false)
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
   }, [bookId, chapterNum])
 
   useEffect(() => () => {
+    audioCancelRef.current?.()
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
   }, [])
 

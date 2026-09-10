@@ -567,6 +567,19 @@ const SCHEMAS: Record<string, SectionDef[]> = {
       ],
     },
   ],
+
+  biblia: [
+    {
+      title: 'Hero — sección principal',
+      fields: [
+        { key: 'hero_eyebrow', label: 'Texto pequeño encima del título', type: 'text', placeholder: 'La Palabra · RVR1960' },
+        { key: 'hero_title', label: 'Título (↵ para nueva línea)', type: 'textarea', rows: 2, placeholder: 'La Palabra\nque transforma.' },
+        { key: 'hero_subtitle', label: 'Subtítulo', type: 'textarea', rows: 2, placeholder: 'Lee la Biblia completa en Reina Valera 1960 con marcadores, notas y lectura continua.' },
+        { key: 'hero_image_url', label: 'Imagen de fondo del hero', type: 'upload-image' },
+        { key: 'hero_video_url', label: 'Video de fondo del hero (.mp4)', type: 'upload-video' },
+      ],
+    },
+  ],
 }
 
 interface Props {

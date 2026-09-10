@@ -1,6 +1,6 @@
 ﻿import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers, HandHeart, Radio, GraduationCap, Newspaper, Quote } from 'lucide-react'
+import { Globe, ChevronRight, Home, Users, Mail, Calendar, Mic, Church, Smartphone, Layers, HandHeart, Radio, GraduationCap, Newspaper, Quote, BookOpen } from 'lucide-react'
 import ResetPageButton from './ResetPageButton'
 import { CARD, BORDER, MUTED, GOLD } from '@/lib/gold-theme'
 
@@ -87,6 +87,13 @@ const pagesMeta = [
     label: 'Devocionales',
     desc: 'Cabecera de la sección de devocionales',
     Icon: Quote,
+    group: 'Sitio web público',
+  },
+  {
+    key: 'biblia',
+    label: 'Biblia',
+    desc: 'Hero de la sección de Biblia — texto, imagen o video de fondo',
+    Icon: BookOpen,
     group: 'Sitio web público',
   },
   {

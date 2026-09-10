@@ -16,6 +16,7 @@ const pagesMeta: Record<string, { label: string; previewPath: string }> = {
   educacion:    { label: 'Educación',               previewPath: '/educacion'   },
   publicaciones:{ label: 'Publicaciones',           previewPath: '/publicaciones' },
   devocionales: { label: 'Devocionales',            previewPath: '/devocionales' },
+  biblia:       { label: 'Biblia',                  previewPath: '/biblia'       },
   'app-feed':  { label: 'App — Banner del feed',   previewPath: '/app/feed'   },
 }
 
