@@ -8,7 +8,7 @@ import { PublicAuthNav } from '@/components/public/PublicAuthNav'
 import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
 import PublicAnnouncementGate from '@/components/public/PublicAnnouncementGate'
 import { getSiteSettings } from '@/lib/site-settings'
-import { BG, CARD, BORDER, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, GOLD, INK } from '@/lib/gold-theme'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -52,9 +52,9 @@ export default async function PublicLayout({ children }: { children: React.React
           <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
             <div
               className="w-10 h-10 flex items-center justify-center rounded-2xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
-              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})`, boxShadow: `0 6px 16px -6px ${GOLD}90` }}
+              style={{ background: BORDER }}
             >
-              <Cross size={17} strokeWidth={2.5} style={{ color: GOLD_INK }} />
+              <Cross size={17} strokeWidth={2.5} style={{ color: INK }} />
             </div>
             <span className="font-black text-[19px] tracking-tight leading-none" style={{ color: INK }}>
               {siteName}
