@@ -41,9 +41,9 @@ export default async function PublicLayout({ children }: { children: React.React
 
       {/* ── HEADER ─────────────────────────────────────── */}
       <header
-        className="sticky top-0 z-50 backdrop-blur-md"
+        className="sticky top-0 z-50"
         style={{
-          background: 'rgba(16,18,23,0.55)',
+          background: 'transparent',
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
