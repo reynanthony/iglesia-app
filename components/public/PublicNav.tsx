@@ -47,7 +47,10 @@ export default function PublicNav() {
   const moreActive = MORE_LINKS.some(l => pathname === l.href || pathname.startsWith(l.href + '/'))
 
   return (
-    <nav className="hidden md:flex items-center gap-6 flex-1 justify-center">
+    <nav
+      className="hidden md:flex items-center gap-0.5 flex-1 justify-center px-1.5 py-1.5 rounded-full"
+      style={{ background: 'rgba(246,243,235,0.03)', border: '1px solid rgba(246,243,235,0.07)' }}
+    >
       {PRIMARY_LINKS.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(href + '/')
         return (
