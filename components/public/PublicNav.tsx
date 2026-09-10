@@ -48,7 +48,7 @@ export default function PublicNav() {
 
   return (
     <nav
-      className="hidden md:flex items-center gap-1 flex-1 justify-center"
+      className="hidden md:flex items-center gap-8 flex-1 justify-center"
     >
       {PRIMARY_LINKS.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(href + '/')
@@ -69,12 +69,12 @@ export default function PublicNav() {
           onClick={() => setOpen(v => !v)}
           aria-expanded={open}
           aria-haspopup="true"
-          className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] rounded-full pl-4 pr-3.5 py-2 transition-all hover:-translate-y-px"
+          className="flex items-center gap-1 text-[14px] font-medium transition-colors"
           style={{
-            color: moreActive ? '#0A2426' : (open ? '#F6F3EB' : 'rgba(246,243,235,0.72)'),
-            background: moreActive ? '#76ABAE' : (open ? 'rgba(246,243,235,0.13)' : 'transparent'),
-            border: `1px solid ${moreActive ? '#8FC0C3' : (open ? 'rgba(246,243,235,0.2)' : 'transparent')}`,
-            boxShadow: moreActive ? '0 6px 18px -6px rgba(118,171,174,0.65)' : 'none',
+            color: moreActive || open ? '#F6F3EB' : 'rgba(246,243,235,0.72)',
+            fontWeight: moreActive ? 600 : 500,
+            background: 'transparent',
+            border: 'none',
             cursor: 'pointer',
           }}
         >

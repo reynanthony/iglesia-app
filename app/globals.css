@@ -235,31 +235,22 @@ body.card-fullscreen .app-content-height {
 }
 .elm-phone-tilt { animation: elm-phone-tilt 2.8s ease-in-out infinite; display: inline-block; }
 
-/* ── Public nav links — píldoras dentro de un track ──── */
+/* ── Public nav links — texto plano, sin píldora ───── */
 .public-nav-link {
-  font-size: 11.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  font-size: 14px;
+  font-weight: 500;
   color: rgba(246,243,235,0.72);
   text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid transparent;
   white-space: nowrap;
   display: inline-block;
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: color 0.2s ease;
 }
 .public-nav-link:hover {
   color: #F6F3EB;
-  background: rgba(246,243,235,0.13);
-  transform: translateY(-1px);
 }
 .public-nav-link.active {
-  color: #0A2426;
-  background: #76ABAE;
-  border-color: #8FC0C3;
-  box-shadow: 0 6px 18px -6px rgba(118,171,174,0.65), inset 0 1px 0 rgba(255,255,255,0.25);
+  color: #F6F3EB;
+  font-weight: 600;
 }
 .public-nav-link.active:hover {
   transform: none;
