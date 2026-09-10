@@ -68,6 +68,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
             <Globe size={16} /><span>Página principal</span>
           </Link>
+          <Link href="/app/pastoral" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
+            <Cross size={16} /><span>Pastoral</span>
+          </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
             <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
               <ShieldCheck size={16} /><span>Panel Admin</span>
@@ -132,6 +135,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           >
             <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Sitio público">
               <Globe size={18} />
+            </Link>
+            <Link href="/app/pastoral" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Pastoral">
+              <Cross size={18} />
             </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
               <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }}>
