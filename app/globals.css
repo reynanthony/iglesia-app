@@ -96,6 +96,11 @@ summary, [tabindex]:not([tabindex="-1"]) {
   font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
 }
 
+/* ── Logo wordmark (Lobster) ────────────────────────── */
+.font-logo {
+  font-family: var(--font-lobster), cursive;
+}
+
 /* ── Hero: animated navy-teal gradient ─────────────── */
 @keyframes mesh-shift {
   0%, 100% { background-position: 0% 50%; }

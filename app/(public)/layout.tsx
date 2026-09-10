@@ -54,7 +54,7 @@ export default async function PublicLayout({ children }: { children: React.React
                 <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: BORDER }}>
                   <Cross size={13} strokeWidth={2.5} style={{ color: INK }} />
                 </div>
-                <span className="font-black text-base tracking-tight">{siteName}</span>
+                <span className="font-logo text-xl">{siteName}</span>
               </div>
               <p className="text-[#FFFFFF]/68 text-sm leading-relaxed max-w-xs mb-8">
                 Una comunidad de fe comprometida con el crecimiento espiritual y el servicio a nuestra ciudad.

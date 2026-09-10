@@ -20,7 +20,7 @@ export function PublicHeader({ siteName }: { siteName: string }) {
           >
             <Cross size={17} strokeWidth={2.5} style={{ color: INK }} />
           </div>
-          <span className="font-black text-[19px] tracking-tight leading-none" style={{ color: INK }}>
+          <span className="font-logo text-[26px] leading-none" style={{ color: INK }}>
             {siteName}
           </span>
         </Link>
