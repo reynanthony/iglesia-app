@@ -4,35 +4,36 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  Users2, Flame, User, Bell,
-  UsersRound, BookOpen, Radio, MoreHorizontal, X, GraduationCap, Cross, Book,
+  Users2, Flame, Home, User,
+  UsersRound, Sprout, MoreHorizontal, X, GraduationCap, Cross, Book,
 } from 'lucide-react'
 import { MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
 const INACTIVE = MUTED
 
+// Los 6 grupos de la reestructuración Maranatha (ver manifiesto, sección 6).
+// activeMatch cubre las rutas que cada grupo absorbe aunque el link apunte
+// solo a la principal — así el ítem se resalta también en sus sub-rutas.
 const navItems = [
-  { href: '/app/comunidad',       icon: Users2,     label: 'Comunidad',      exact: false },
-  { href: '/app/grupos',          icon: UsersRound, label: 'Grupos',         exact: false },
-  { href: '/app/oracion',         icon: Flame,      label: 'Oración',        exact: false },
-  { href: '/app/en-vivo',         icon: Radio,      label: 'En Vivo',        exact: false },
-  { href: '/app/discipulado',     icon: BookOpen,   label: 'Discipulado',    exact: true  },
-  { href: '/biblia',              icon: Book,       label: 'Biblia',         exact: false },
-  { href: '/app/pastoral',        icon: Cross,      label: 'Pastoral',       exact: false },
-  { href: '/app/notificaciones',  icon: Bell,       label: 'Notificaciones', exact: true  },
+  { href: '/app/inicio',      icon: Home,       label: 'Inicio',    exact: true,  activeMatch: ['/app/inicio'] },
+  { href: '/biblia',          icon: Book,       label: 'Palabra',   exact: false, activeMatch: ['/biblia', '/app/predicas'] },
+  { href: '/app/discipulado', icon: Sprout,     label: 'Crecer',    exact: false, activeMatch: ['/app/discipulado', '/app/mentoria', '/app/ministerios'] },
+  { href: '/app/oracion',     icon: Flame,      label: 'Orar',      exact: false, activeMatch: ['/app/oracion', '/app/en-vivo'] },
+  { href: '/app/grupos',      icon: UsersRound, label: 'Caminar',   exact: false, activeMatch: ['/app/grupos'] },
+  { href: '/app/comunidad',   icon: Users2,     label: 'Comunidad', exact: false, activeMatch: ['/app/comunidad'] },
 ]
 
 interface Props { profileHref: string }
 
 export default function AppNav({ profileHref }: Props) {
   const pathname = usePathname()
-  const isActive = (href: string, exact: boolean) =>
-    exact ? pathname === href : pathname.startsWith(href)
+  const isActive = (matches: string[], exact: boolean) =>
+    exact ? matches.includes(pathname) : matches.some(m => pathname.startsWith(m))
 
   return (
     <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-      {navItems.map(({ href, icon: Icon, label, exact }) => {
-        const active = isActive(href, exact)
+      {navItems.map(({ href, icon: Icon, label, exact, activeMatch }) => {
+        const active = isActive(activeMatch, exact)
         return (
           <Link key={href} href={href}
             className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
@@ -53,18 +54,18 @@ export default function AppNav({ profileHref }: Props) {
 
 // 4 ítems primarios siempre visibles
 const MAIN_ITEMS = [
-  { href: '/app/comunidad',   icon: Users2,   label: 'Comunidad',   exact: false },
-  { href: '/app/discipulado', icon: BookOpen, label: 'Discipulado', exact: true  },
-  { href: '/app/oracion',     icon: Flame,    label: 'Oración',     exact: false },
-  { href: '/app/en-vivo',     icon: Radio,    label: 'En Vivo',     exact: false },
+  { href: '/app/inicio',      icon: Home,       label: 'Inicio',  exact: true  },
+  { href: '/biblia',          icon: Book,       label: 'Palabra', exact: false },
+  { href: '/app/oracion',     icon: Flame,      label: 'Orar',    exact: false },
+  { href: '/app/grupos',      icon: UsersRound, label: 'Caminar', exact: false },
 ]
 
 // Ítems secundarios en la fila expandible
 const MORE_ITEMS = [
-  { href: '/app/pastoral', icon: Cross,         label: 'Pastoral' },
-  { href: '/app/grupos',   icon: UsersRound,    label: 'Grupos'   },
-  { href: '/app/mentoria', icon: GraduationCap, label: 'Mentoría' },
-  { href: '/biblia',       icon: Book,          label: 'Biblia'   },
+  { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'    },
+  { href: '/app/comunidad',   icon: Users2,        label: 'Comunidad' },
+  { href: '/app/pastoral',    icon: Cross,         label: 'Pastoral'  },
+  { href: '/app/mentoria',    icon: GraduationCap, label: 'Mentoría'  },
 ]
 
 export function AppBottomNav({ profileHref }: Props) {

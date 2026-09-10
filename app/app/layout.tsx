@@ -52,7 +52,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         style={{ background: BG, borderRight: `1px solid ${BORDER}` }}
       >
         <div className="px-5 py-6" style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <Link href="/app/comunidad" className="flex items-center gap-3">
+          <Link href="/app/inicio" className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
               style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}>
               <Cross size={15} strokeWidth={2.5} style={{ color: GOLD_INK }} />
@@ -67,6 +67,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="px-3 pb-5" style={{ borderTop: `1px solid ${BORDER}`, paddingTop: '1rem' }}>
           <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
             <Globe size={16} /><span>Página principal</span>
+          </Link>
+          <Link href="/app/pastoral" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
+            <Cross size={16} /><span>Pastoral</span>
           </Link>
           {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
             <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition hover:bg-[#181A22]" style={{ color: MUTED }}>
@@ -115,7 +118,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       >
         <div className="flex items-center justify-between px-4" style={{ height: 56 }}>
           {/* Brand */}
-          <Link href="/app/comunidad" className="flex items-center gap-2.5">
+          <Link href="/app/inicio" className="flex items-center gap-2.5">
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}
@@ -132,6 +135,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           >
             <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Sitio público">
               <Globe size={18} />
+            </Link>
+            <Link href="/app/pastoral" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Pastoral">
+              <Cross size={18} />
             </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
               <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }}>
