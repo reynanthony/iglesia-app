@@ -48,14 +48,7 @@ export default function PublicNav() {
 
   return (
     <nav
-      className="hidden md:flex items-center gap-1 flex-1 justify-center px-2 py-2 rounded-full"
-      style={{
-        background: 'rgba(246,243,235,0.07)',
-        border: '1px solid rgba(246,243,235,0.14)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 12px 32px -16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
-      }}
+      className="hidden md:flex items-center gap-1 flex-1 justify-center"
     >
       {PRIMARY_LINKS.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(href + '/')
