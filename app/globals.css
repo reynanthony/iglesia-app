@@ -242,6 +242,7 @@ body.card-fullscreen .app-content-height {
 
 /* ── Public nav links — texto plano, sin píldora ───── */
 .public-nav-link {
+  font-family: var(--font-poppins), var(--font-geist-sans), system-ui, sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: rgba(246,243,235,0.72);

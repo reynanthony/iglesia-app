@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono, Playfair_Display, Plus_Jakarta_Sans, Lobster } from 'next/font/google'
+import { Geist, Geist_Mono, Playfair_Display, Plus_Jakarta_Sans, Lobster, Poppins } from 'next/font/google'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -26,6 +26,12 @@ const lobster = Lobster({
   variable: '--font-lobster',
   subsets: ['latin'],
   weight: '400',
+})
+// Nav del sitio público — pareja más cálida para el logo en Lobster
+const poppins = Poppins({
+  variable: '--font-poppins',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
 })
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${plusJakarta.variable} ${lobster.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${plusJakarta.variable} ${lobster.variable} ${poppins.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-surface text-ink">

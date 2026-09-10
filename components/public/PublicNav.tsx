@@ -71,6 +71,7 @@ export default function PublicNav() {
           aria-haspopup="true"
           className="flex items-center gap-1 text-[14px] font-medium transition-colors"
           style={{
+            fontFamily: 'var(--font-poppins), var(--font-geist-sans), system-ui, sans-serif',
             color: moreActive || open ? '#F6F3EB' : 'rgba(246,243,235,0.72)',
             fontWeight: moreActive ? 600 : 500,
             background: 'transparent',
