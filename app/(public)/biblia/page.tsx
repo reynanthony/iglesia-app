@@ -131,69 +131,10 @@ export default async function BibliaPage() {
   return (
     <div>
 
-      {/* ══ DASHBOARD (usuarios con historial) ══════════════ */}
-      {showDashboard ? (
-        <section style={{ background: BG }}>
-          <div className="max-w-6xl mx-auto px-6 pt-28 pb-10 md:pt-36">
-            <div className="flex flex-wrap items-center gap-3 mb-8">
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                <Flame size={14} style={{ color: streak > 0 ? TEAL : MUTED }} />
-                <span className="text-[12px] font-black" style={{ color: streak > 0 ? TEAL : MUTED }}>
-                  {streak > 0 ? `${streak} día${streak !== 1 ? 's' : ''} seguidos` : 'Empieza tu racha'}
-                </span>
-              </div>
-              {readPercent > 0 && (
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                  <BookOpen size={14} style={{ color: TEAL }} />
-                  <span className="text-[12px] font-black" style={{ color: TEAL }}>
-                    {readPercent}% de la Biblia leída
-                  </span>
-                </div>
-              )}
-              <Link href="/biblia/buscar"
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
-                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                <Search size={14} style={{ color: MUTED }} />
-                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Buscar</span>
-              </Link>
-              <Link href="/biblia/planes"
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
-                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                <CalendarDays size={14} style={{ color: MUTED }} />
-                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Planes</span>
-              </Link>
-              <Link href="#selector"
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
-                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                <Bookmark size={14} style={{ color: MUTED }} />
-                <span className="text-[12px] font-bold" style={{ color: MUTED }}>Explorar</span>
-              </Link>
-            </div>
-
-            <h1 className="font-display font-black tracking-tighter text-white mb-8"
-              style={{ fontSize: 'clamp(2.2rem, 6vw, 4rem)', lineHeight: 0.9 }}>
-              Bienvenido de vuelta.
-            </h1>
-
-            {activePlan && (
-              <Link href={`/biblia/planes/${activePlan.slug}/dia/${activePlan.dayNumber}`}
-                className="group flex items-center gap-4 rounded-2xl p-5 mb-4 transition hover:brightness-110"
-                style={{ background: CARD, border: `1px solid ${BORDER}` }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${GOLD}18` }}>
-                  <CalendarDays size={18} style={{ color: GOLD }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[9px] font-black uppercase tracking-[0.25em] mb-1" style={{ color: `${GOLD}99` }}>
-                    {activePlan.title} · Día {activePlan.dayNumber} de {activePlan.duration}
-                  </p>
-                  <p className="font-black text-base" style={{ color: INK }}>Hoy toca: {activePlan.reference}</p>
-                </div>
-                <ArrowRight size={16} style={{ color: GOLD, flexShrink: 0 }} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            )}
-          </div>
-        </section>
-      ) : (
+      {/* ══ HERO — mismo tratamiento visual (fondo, overlay, patrón) para
+          todos los estados, incluido el dashboard de usuarios con historial.
+          Antes el dashboard usaba un bloque plano sin imagen/overlay y
+          perdía la identidad visual que sí tienen el resto de los módulos. ══ */}
       <section className="relative overflow-hidden flex flex-col justify-end" style={{ background: hs.bg, minHeight: '85vh' }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
@@ -221,45 +162,108 @@ export default async function BibliaPage() {
               {heroEyebrow}
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <HeroTitle
-              color="#FFFFFF"
-              accentColor={TEAL}
-              className="font-display font-black tracking-tighter"
-              style={{ fontSize: hs.titleFontSize, lineHeight: 0.85, color: '#FFFFFF' }}>
-              {heroTitleLines.map((line, i) => (
-                <span key={i}>
-                  {i === heroTitleLines.length - 1 ? <em style={{ color: TEAL }}>{line}</em> : line}
-                  {i < heroTitleLines.length - 1 && <br />}
-                </span>
-              ))}
-            </HeroTitle>
-            <div>
-              <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: MUTED }}>
-                {heroSubtitle}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/biblia/lectura/JHN/1"
-                  className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
-                  style={{ background: CREAM, color: NAVY }}>
-                  <BookOpen size={12} /> Comenzar a leer
+
+          {showDashboard ? (
+            <>
+              <div className="flex flex-wrap items-center gap-3 mb-8">
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <Flame size={14} style={{ color: streak > 0 ? TEAL : MUTED }} />
+                  <span className="text-[12px] font-black" style={{ color: streak > 0 ? TEAL : MUTED }}>
+                    {streak > 0 ? `${streak} día${streak !== 1 ? 's' : ''} seguidos` : 'Empieza tu racha'}
+                  </span>
+                </div>
+                {readPercent > 0 && (
+                  <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                    <BookOpen size={14} style={{ color: TEAL }} />
+                    <span className="text-[12px] font-black" style={{ color: TEAL }}>
+                      {readPercent}% de la Biblia leída
+                    </span>
+                  </div>
+                )}
+                <Link href="/biblia/buscar"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <Search size={14} style={{ color: MUTED }} />
+                  <span className="text-[12px] font-bold" style={{ color: MUTED }}>Buscar</span>
                 </Link>
                 <Link href="/biblia/planes"
-                  className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
-                  style={{ background: `${TEAL}14`, color: TEAL, border: `1px solid ${TEAL}30` }}>
-                  <CalendarDays size={12} /> Planes de lectura
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <CalendarDays size={14} style={{ color: MUTED }} />
+                  <span className="text-[12px] font-bold" style={{ color: MUTED }}>Planes</span>
                 </Link>
-                <Link href="/devocionales"
-                  className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
-                  style={{ background: 'rgba(134,155,126,0.12)', color: '#869B7E', border: '1px solid rgba(134,155,126,0.30)' }}>
-                  Devocionales
+                <Link href="#selector"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl transition hover:opacity-80"
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <Bookmark size={14} style={{ color: MUTED }} />
+                  <span className="text-[12px] font-bold" style={{ color: MUTED }}>Explorar</span>
                 </Link>
               </div>
+
+              <HeroTitle
+                color="#FFFFFF"
+                className="font-display font-black tracking-tighter mb-8"
+                style={{ fontSize: hs.titleFontSize, lineHeight: 0.9, color: '#FFFFFF' }}>
+                Bienvenido de vuelta.
+              </HeroTitle>
+
+              {activePlan && (
+                <Link href={`/biblia/planes/${activePlan.slug}/dia/${activePlan.dayNumber}`}
+                  className="group flex items-center gap-4 rounded-2xl p-5 max-w-xl transition hover:brightness-110"
+                  style={{ background: CARD, border: `1px solid ${BORDER}` }}>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${GOLD}18` }}>
+                    <CalendarDays size={18} style={{ color: GOLD }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[9px] font-black uppercase tracking-[0.25em] mb-1" style={{ color: `${GOLD}99` }}>
+                      {activePlan.title} · Día {activePlan.dayNumber} de {activePlan.duration}
+                    </p>
+                    <p className="font-black text-base" style={{ color: INK }}>Hoy toca: {activePlan.reference}</p>
+                  </div>
+                  <ArrowRight size={16} style={{ color: GOLD, flexShrink: 0 }} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              )}
+            </>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <HeroTitle
+                color="#FFFFFF"
+                accentColor={TEAL}
+                className="font-display font-black tracking-tighter"
+                style={{ fontSize: hs.titleFontSize, lineHeight: 0.85, color: '#FFFFFF' }}>
+                {heroTitleLines.map((line, i) => (
+                  <span key={i}>
+                    {i === heroTitleLines.length - 1 ? <em style={{ color: TEAL }}>{line}</em> : line}
+                    {i < heroTitleLines.length - 1 && <br />}
+                  </span>
+                ))}
+              </HeroTitle>
+              <div>
+                <p className="text-base leading-relaxed max-w-sm mb-6" style={{ color: MUTED }}>
+                  {heroSubtitle}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/biblia/lectura/JHN/1"
+                    className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl"
+                    style={{ background: CREAM, color: NAVY }}>
+                    <BookOpen size={12} /> Comenzar a leer
+                  </Link>
+                  <Link href="/biblia/planes"
+                    className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
+                    style={{ background: `${TEAL}14`, color: TEAL, border: `1px solid ${TEAL}30` }}>
+                    <CalendarDays size={12} /> Planes de lectura
+                  </Link>
+                  <Link href="/devocionales"
+                    className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl transition hover:opacity-80"
+                    style={{ background: 'rgba(134,155,126,0.12)', color: '#869B7E', border: '1px solid rgba(134,155,126,0.30)' }}>
+                    Devocionales
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
-      )}
 
       {/* ══ VERSO DEL DÍA — visible para todos, incluso primera visita ══ */}
       <BibleVerseOfDay />
