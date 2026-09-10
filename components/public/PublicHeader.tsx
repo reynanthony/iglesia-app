@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Cross } from 'lucide-react'
 import MobileMenu from '@/components/public/MobileMenu'
@@ -9,58 +9,59 @@ import { PublicAuthNav } from '@/components/public/PublicAuthNav'
 import { BORDER, INK } from '@/lib/gold-theme'
 
 export function PublicHeader({ siteName }: { siteName: string }) {
-  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastY = useRef(0)
 
   useEffect(() => {
+    lastY.current = window.scrollY
+
     function onScroll() {
-      setScrolled(window.scrollY > 32)
+      const y = window.scrollY
+      const diff = y - lastY.current
+
+      if (y < 80) {
+        setHidden(false)
+      } else if (diff > 6) {
+        setHidden(true)
+      } else if (diff < -6) {
+        setHidden(false)
+      }
+      lastY.current = y
     }
-    onScroll()
+
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50"
-      style={{ background: 'transparent', paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      className="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-out"
+      style={{
+        background: 'transparent',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        transform: hidden ? 'translateY(-130%)' : 'translateY(0)',
+      }}
     >
-      <div
-        className="flex items-center h-16 transition-[max-width,padding] duration-300 ease-out"
-        style={scrolled
-          ? { maxWidth: '100%', padding: '0 20px' }
-          : { maxWidth: '72rem', margin: '0 auto', padding: '0 24px' }}
-      >
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
+
         <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
           <div
-            className="flex items-center justify-center rounded-2xl flex-shrink-0 transition-all duration-300 group-hover:scale-105"
-            style={{ background: BORDER, width: scrolled ? 46 : 40, height: scrolled ? 46 : 40 }}
+            className="w-10 h-10 flex items-center justify-center rounded-2xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
+            style={{ background: BORDER }}
           >
-            <Cross size={scrolled ? 19 : 17} strokeWidth={2.5} style={{ color: INK, transition: 'all 0.3s ease' }} />
+            <Cross size={17} strokeWidth={2.5} style={{ color: INK }} />
           </div>
-          <span
-            className="font-black tracking-tight leading-none transition-all duration-300"
-            style={{ color: INK, fontSize: scrolled ? 22 : 19 }}
-          >
+          <span className="font-black text-[19px] tracking-tight leading-none" style={{ color: INK }}>
             {siteName}
           </span>
         </Link>
 
-        <div
-          className="flex items-center flex-1 justify-between gap-8 transition-[opacity,transform] duration-300 ease-out"
-          style={{
-            opacity: scrolled ? 0 : 1,
-            transform: scrolled ? 'translateY(-6px)' : 'translateY(0)',
-            pointerEvents: scrolled ? 'none' : 'auto',
-          }}
-        >
-          <PublicNav />
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <PublicAuthNav />
-          </div>
-        </div>
+        <PublicNav />
 
-        <MobileMenu />
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <PublicAuthNav />
+          <MobileMenu />
+        </div>
       </div>
     </header>
   )
