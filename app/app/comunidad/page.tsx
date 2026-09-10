@@ -46,7 +46,7 @@ export default async function ComunidadPage() {
           <p className="text-[11px] font-medium mb-4" style={{ color: MUTED }}>{dateLabel}</p>
 
           <h1 className="font-extrabold tracking-tight mb-5" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', lineHeight: 1.1, color: INK }}>
-            Tu comunidad,<br /><span style={{ color: GOLD }}>en un solo lugar.</span>
+            Comparte lo que<br /><span style={{ color: GOLD }}>te edifica.</span>
           </h1>
 
           <Link

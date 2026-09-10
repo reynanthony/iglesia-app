@@ -81,7 +81,7 @@ export default async function OracionPage({
                 Peticiones de<br /><span style={{ color: GOLD }}>Oración.</span>
               </h1>
               <p className="text-sm mt-3 max-w-xs leading-relaxed" style={{ color: MUTED }}>
-                Comparte tu petición y deja que la comunidad ore contigo.
+                Lleva tus cargas delante de Dios y deja que la comunidad ore contigo.
               </p>
             </div>
             <Link href="/app/oracion/nueva"

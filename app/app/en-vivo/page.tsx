@@ -106,10 +106,10 @@ export default async function EnVivoPage() {
           </div>
           <h1 className="font-black tracking-tighter"
             style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', lineHeight: 0.9, color: INK }}>
-            Iglesia<br /><span style={{ color: GOLD }}>en Vivo.</span>
+            En<br /><span style={{ color: GOLD }}>Vivo.</span>
           </h1>
           <p className="text-sm mt-3 leading-relaxed max-w-sm" style={{ color: MUTED }}>
-            No hay transmisión activa en este momento. Te avisamos cada domingo.
+            Ahora mismo no hay transmisión — y no hace falta para encontrarte con Dios. Mientras tanto, aquí tienes la Palabra y las últimas prédicas.
           </p>
         </div>
       </div>
