@@ -31,27 +31,33 @@ export default function AppNav({ profileHref }: Props) {
     exact ? matches.includes(pathname) : matches.some(m => pathname.startsWith(m))
 
   return (
-    <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <nav className="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
       {navItems.map(({ href, icon: Icon, label, exact, activeMatch }) => {
         const active = isActive(activeMatch, exact)
         return (
           <Link key={href} href={href}
-            className="group relative flex items-center gap-3 pl-4 pr-3 py-2 rounded-2xl text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50 hover:bg-white/[0.035]"
-            style={active ? { background: `${GOLD}12`, color: INK } : { color: INACTIVE }}
+            className="group relative flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-2xl text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+            style={active
+              ? { background: `${GOLD}14`, border: `1px solid ${GOLD}35`, color: INK }
+              : { border: '1px solid transparent', color: INACTIVE }}
           >
             {/* Indicador lateral de sección activa */}
             <span
               className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full transition-all duration-200"
-              style={{ width: 3, height: active ? 20 : 0, background: GOLD }}
+              style={{ width: 3, height: active ? 22 : 0, background: GOLD }}
               aria-hidden="true"
             />
             <span
               className="flex items-center justify-center rounded-xl flex-shrink-0 transition-all duration-200 group-hover:scale-105"
-              style={{ width: 32, height: 32, background: active ? `${GOLD}22` : 'transparent' }}
+              style={{
+                width: 36, height: 36,
+                background: active ? `${GOLD}24` : CARD,
+                border: `1px solid ${active ? `${GOLD}40` : BORDER}`,
+              }}
             >
-              <Icon size={17} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE }} strokeWidth={active ? 2.4 : 1.9} />
+              <Icon size={18} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE }} strokeWidth={active ? 2.4 : 1.9} />
             </span>
-            <span className={active ? 'font-bold' : 'font-medium'}>{label}</span>
+            <span className={active ? 'font-bold' : 'font-semibold'}>{label}</span>
             {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: GOLD }} />}
           </Link>
         )
