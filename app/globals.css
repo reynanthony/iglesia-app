@@ -240,7 +240,7 @@ body.card-fullscreen .app-content-height {
 }
 .elm-phone-tilt { animation: elm-phone-tilt 2.8s ease-in-out infinite; display: inline-block; }
 
-/* ── Public nav links — texto plano, sin píldora ───── */
+/* ── Public nav links — texto plano en reposo, chip visible al hover ── */
 .public-nav-link {
   font-family: var(--font-poppins), var(--font-geist-sans), system-ui, sans-serif;
   font-size: 14px;
@@ -249,14 +249,20 @@ body.card-fullscreen .app-content-height {
   text-decoration: none;
   white-space: nowrap;
   display: inline-block;
-  transition: color 0.2s ease;
+  padding: 6px 12px;
+  margin: 0 -12px;
+  border-radius: 999px;
+  background: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 .public-nav-link:hover {
   color: #F6F3EB;
+  background: rgba(246,243,235,0.14);
 }
 .public-nav-link.active {
   color: #F6F3EB;
   font-weight: 600;
+  background: rgba(246,243,235,0.09);
 }
 .public-nav-link.active:hover {
   transform: none;
