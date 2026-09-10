@@ -43,7 +43,7 @@ export default async function PublicLayout({ children }: { children: React.React
       <header
         className="sticky top-0 z-50 backdrop-blur-md"
         style={{
-          background: BG,
+          background: 'rgba(16,18,23,0.55)',
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
