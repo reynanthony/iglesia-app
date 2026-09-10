@@ -5,6 +5,7 @@ import BibleContinue from '@/components/public/BibleContinue'
 import BibleSelector from '@/components/public/BibleSelector'
 import { HeroVideo } from '@/components/public/HeroVideo'
 import { HeroTitle } from '@/components/public/HeroTitle'
+import { heroStyle } from '@/lib/hero-style'
 import { findBook, ALL_BOOKS } from '@/lib/bible'
 import { formatDayReference } from '@/lib/bible-reading-plans'
 import { createClient } from '@/lib/supabase/server'
@@ -43,9 +44,10 @@ export default async function BibliaPage() {
   const heroEyebrow    = c.hero_eyebrow ?? 'La Palabra · RVR1960'
   const heroTitleRaw   = c.hero_title ?? 'La Palabra\nque transforma.'
   const heroSubtitle   = c.hero_subtitle ?? 'Lee la Biblia completa en Reina Valera 1960 con marcadores, notas y lectura continua.'
-  const heroImageUrl   = c.hero_image_url || null
+  const heroImageUrl   = c.hero_image_url || '/api/og/biblia-hero'
   const heroVideoUrl   = c.hero_video_url || null
   const heroTitleLines = heroTitleRaw.split('\n')
+  const hs = heroStyle({ defaultBg: BG, defaultTitleSize: 'xl' })
 
   let initialLastRead: { bookId: string; chapterNum: number; bookName: string } | null = null
   let initialBookmarks: Array<{
@@ -192,7 +194,7 @@ export default async function BibliaPage() {
           </div>
         </section>
       ) : (
-      <section className="relative overflow-hidden" style={{ background: BG, minHeight: '72vh' }}>
+      <section className="relative overflow-hidden flex flex-col justify-end" style={{ background: hs.bg, minHeight: '85vh' }}>
         {heroImageUrl && !heroVideoUrl && (
           <img src={heroImageUrl} alt="" aria-hidden fetchPriority="high" loading="eager"
             className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.55 }} />
@@ -212,8 +214,7 @@ export default async function BibliaPage() {
           </span>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-44 md:pb-20 flex flex-col justify-end"
-          style={{ minHeight: '72vh' }}>
+        <div className="relative max-w-6xl mx-auto w-full px-6 pt-32 pb-16 md:pt-44 md:pb-20">
           <div className="flex items-center gap-5 mb-14">
             <div className="w-12 h-px" style={{ background: MUTED }} />
             <p className="text-[10px] font-bold uppercase tracking-[0.45em]" style={{ color: MUTED }}>
@@ -225,7 +226,7 @@ export default async function BibliaPage() {
               color="#FFFFFF"
               accentColor={TEAL}
               className="font-display font-black tracking-tighter"
-              style={{ fontSize: 'clamp(3.5rem, 10vw, 9rem)', lineHeight: 0.85, color: '#FFFFFF' }}>
+              style={{ fontSize: hs.titleFontSize, lineHeight: 0.85, color: '#FFFFFF' }}>
               {heroTitleLines.map((line, i) => (
                 <span key={i}>
                   {i === heroTitleLines.length - 1 ? <em style={{ color: TEAL }}>{line}</em> : line}
