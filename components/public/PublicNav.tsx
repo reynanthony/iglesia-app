@@ -48,8 +48,14 @@ export default function PublicNav() {
 
   return (
     <nav
-      className="hidden md:flex items-center gap-0.5 flex-1 justify-center px-1.5 py-1.5 rounded-full"
-      style={{ background: 'rgba(246,243,235,0.03)', border: '1px solid rgba(246,243,235,0.07)' }}
+      className="hidden md:flex items-center gap-1 flex-1 justify-center px-2 py-2 rounded-full"
+      style={{
+        background: 'rgba(246,243,235,0.07)',
+        border: '1px solid rgba(246,243,235,0.14)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 12px 32px -16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
+      }}
     >
       {PRIMARY_LINKS.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(href + '/')
@@ -70,11 +76,12 @@ export default function PublicNav() {
           onClick={() => setOpen(v => !v)}
           aria-expanded={open}
           aria-haspopup="true"
-          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] rounded-full pl-3.5 pr-3 py-1.5 transition-colors"
+          className="flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] rounded-full pl-4 pr-3.5 py-2 transition-all hover:-translate-y-px"
           style={{
-            color: moreActive || open ? '#F6F3EB' : 'rgba(246,243,235,0.68)',
-            background: open ? 'rgba(246,243,235,0.08)' : 'transparent',
-            border: `1px solid ${open ? 'rgba(246,243,235,0.16)' : 'transparent'}`,
+            color: moreActive ? '#0A2426' : (open ? '#F6F3EB' : 'rgba(246,243,235,0.72)'),
+            background: moreActive ? '#76ABAE' : (open ? 'rgba(246,243,235,0.13)' : 'transparent'),
+            border: `1px solid ${moreActive ? '#8FC0C3' : (open ? 'rgba(246,243,235,0.2)' : 'transparent')}`,
+            boxShadow: moreActive ? '0 6px 18px -6px rgba(118,171,174,0.65)' : 'none',
             cursor: 'pointer',
           }}
         >
