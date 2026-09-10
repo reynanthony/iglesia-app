@@ -7,7 +7,7 @@ import {
   Users2, Flame, Home, User,
   UsersRound, Sprout, MoreHorizontal, X, GraduationCap, Cross, Book,
 } from 'lucide-react'
-import { MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
+import { MUTED, GOLD, GOLD_INK, INK, CARD, BORDER, BG } from '@/lib/gold-theme'
 
 const INACTIVE = MUTED
 
@@ -31,17 +31,27 @@ export default function AppNav({ profileHref }: Props) {
     exact ? matches.includes(pathname) : matches.some(m => pathname.startsWith(m))
 
   return (
-    <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+    <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
       {navItems.map(({ href, icon: Icon, label, exact, activeMatch }) => {
         const active = isActive(activeMatch, exact)
         return (
           <Link key={href} href={href}
-            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
-            style={active
-              ? { background: `${GOLD}1E`, border: `1px solid ${GOLD}55`, color: INK }
-              : { border: '1px solid transparent', color: INACTIVE }}>
-            <Icon size={18} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE, flexShrink: 0 }} strokeWidth={active ? 2.5 : 2} />
-            <span className={active ? 'font-bold' : ''}>{label}</span>
+            className="group relative flex items-center gap-3 pl-4 pr-3 py-2 rounded-2xl text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50 hover:bg-white/[0.035]"
+            style={active ? { background: `${GOLD}12`, color: INK } : { color: INACTIVE }}
+          >
+            {/* Indicador lateral de sección activa */}
+            <span
+              className="absolute left-0 top-1/2 -translate-y-1/2 rounded-r-full transition-all duration-200"
+              style={{ width: 3, height: active ? 20 : 0, background: GOLD }}
+              aria-hidden="true"
+            />
+            <span
+              className="flex items-center justify-center rounded-xl flex-shrink-0 transition-all duration-200 group-hover:scale-105"
+              style={{ width: 32, height: 32, background: active ? `${GOLD}22` : 'transparent' }}
+            >
+              <Icon size={17} aria-hidden="true" style={{ color: active ? GOLD : INACTIVE }} strokeWidth={active ? 2.4 : 1.9} />
+            </span>
+            <span className={active ? 'font-bold' : 'font-medium'}>{label}</span>
             {active && <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" aria-hidden="true" style={{ background: GOLD }} />}
           </Link>
         )
@@ -60,7 +70,7 @@ const MAIN_ITEMS_STATIC = [
   { href: '/app/comunidad', icon: Users2, label: 'Comunidad', exact: false },
 ]
 
-// Ítems secundarios en la fila expandible — Crecer y Caminar viven aquí
+// Ítems secundarios en el panel expandible — Crecer y Caminar viven aquí
 // (accesibles también desde Inicio) para no saturar la barra principal.
 const MORE_ITEMS = [
   { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'   },
@@ -81,37 +91,48 @@ export function AppBottomNav({ profileHref }: Props) {
 
   return (
     <div>
-      {/* Fila secundaria — se expande hacia arriba */}
+      {/* Panel expandible — tipo bottom-sheet, con mango y tarjetas */}
       {open && (
         <div
-          className="flex items-center"
-          style={{ height: 56, borderBottom: '1px solid #292E3B', background: 'rgba(16,18,23,0.6)' }}
+          className="px-3 pt-3"
+          style={{
+            borderBottom: `1px solid ${BORDER}`,
+            background: 'rgba(16,18,23,0.94)',
+            backdropFilter: 'blur(22px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+          }}
         >
-          {MORE_ITEMS.map(({ href, icon: Icon, label }) => {
-            const active = isActive(href)
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className="flex-1 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
-                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
-              >
-                <Icon
-                  size={20}
-                  aria-hidden="true"
-                  strokeWidth={active ? 2.5 : 1.8}
-                  style={{ color: active ? GOLD : INACTIVE }}
-                />
-                <span
-                  className="font-semibold text-center w-full truncate"
-                  style={{ color: active ? GOLD : INACTIVE, fontSize: 11, lineHeight: 1.2 }}
+          <div className="w-9 h-1 rounded-full mx-auto mb-3" style={{ background: BORDER }} aria-hidden="true" />
+          <div className="grid grid-cols-4 gap-2 pb-3">
+            {MORE_ITEMS.map(({ href, icon: Icon, label }) => {
+              const active = isActive(href)
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="flex flex-col items-center justify-center gap-2 py-3 rounded-2xl transition-all duration-150 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C79A2A]/50"
+                  style={{
+                    background: active ? `${GOLD}14` : CARD,
+                    border: `1px solid ${active ? `${GOLD}45` : BORDER}`,
+                  }}
                 >
-                  {label}
-                </span>
-              </Link>
-            )
-          })}
+                  <span
+                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{ background: active ? `${GOLD}22` : BG }}
+                  >
+                    <Icon size={17} aria-hidden="true" strokeWidth={active ? 2.4 : 1.8} style={{ color: active ? GOLD : INACTIVE }} />
+                  </span>
+                  <span
+                    className="font-bold text-center leading-tight"
+                    style={{ color: active ? GOLD : INACTIVE, fontSize: 10.5 }}
+                  >
+                    {label}
+                  </span>
+                </Link>
+              )
+            })}
+          </div>
         </div>
       )}
 
@@ -128,7 +149,7 @@ export function AppBottomNav({ profileHref }: Props) {
               style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', minWidth: 0 }}
             >
               <span
-                className="flex items-center justify-center rounded-full transition-all"
+                className="flex items-center justify-center rounded-full transition-all duration-200"
                 style={active
                   ? { width: 44, height: 28, background: GOLD, boxShadow: '0 4px 12px -4px rgba(255,204,0,0.6)' }
                   : { width: 44, height: 28 }}
@@ -165,15 +186,22 @@ export function AppBottomNav({ profileHref }: Props) {
             cursor: 'pointer',
           }}
         >
-          {open
-            ? <X size={22} strokeWidth={2.5} aria-hidden="true" style={{ color: GOLD }} />
-            : <MoreHorizontal
-                size={22}
-                aria-hidden="true"
-                strokeWidth={anyMoreActive ? 2.5 : 1.8}
-                style={{ color: anyMoreActive ? GOLD : INACTIVE }}
-              />
-          }
+          <span
+            className="flex items-center justify-center rounded-full transition-all duration-200"
+            style={open || anyMoreActive
+              ? { width: 44, height: 28, background: `${GOLD}1E`, border: `1px solid ${GOLD}55` }
+              : { width: 44, height: 28 }}
+          >
+            {open
+              ? <X size={19} strokeWidth={2.5} aria-hidden="true" style={{ color: GOLD }} />
+              : <MoreHorizontal
+                  size={19}
+                  aria-hidden="true"
+                  strokeWidth={anyMoreActive ? 2.5 : 1.8}
+                  style={{ color: anyMoreActive ? GOLD : INACTIVE }}
+                />
+            }
+          </span>
           <span
             className="font-semibold"
             style={{ color: anyMoreActive || open ? GOLD : INACTIVE, fontSize: 12, lineHeight: 1.2 }}
