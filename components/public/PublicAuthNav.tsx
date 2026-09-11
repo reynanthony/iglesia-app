@@ -42,11 +42,11 @@ export function PublicAuthNav() {
   return (
     <div className="hidden md:flex items-center gap-2">
       <Link
-        href="/app/feed"
+        href="/app/inicio"
         className="inline-flex items-center gap-2 font-black text-[11px] uppercase tracking-[0.15em] px-5 py-2.5 rounded-full transition hover:opacity-90"
         style={{ background: INK, color: CARD }}
       >
-        <LayoutDashboard size={13} /> Mi comunidad
+        <LayoutDashboard size={13} /> Ir a la app
       </Link>
       <form action={logout}>
         <button

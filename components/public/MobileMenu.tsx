@@ -203,7 +203,7 @@ export default function MobileMenu() {
               {isLoggedIn ? (
                 <>
                   <Link
-                    href="/app/feed"
+                    href="/app/inicio"
                     onClick={() => setOpen(false)}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
@@ -212,7 +212,7 @@ export default function MobileMenu() {
                       minHeight: '3.25rem',
                     }}
                   >
-                    <LayoutDashboard size={15} /> Mi comunidad
+                    <LayoutDashboard size={15} /> Ir a la app
                   </Link>
                   <form action={logout} style={{ width: '100%' }}>
                     <button
