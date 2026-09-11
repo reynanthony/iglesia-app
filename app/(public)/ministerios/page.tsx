@@ -42,7 +42,7 @@ export default async function MinisteriosPage() {
   const heroEyebrow      = c.hero_eyebrow      ?? 'Ministerios · Un lugar para todos'
   const heroTitleMain    = c.hero_title_main   ?? 'Un lugar\npara'
   const heroTitleAccent  = c.hero_title_accent ?? 'todos.'
-  const heroSubtitle     = c.hero_subtitle     ?? 'Cada ministerio es una comunidad viva donde crecer en fe, servir y conectar con otros creyentes.'
+  const heroSubtitle     = c.hero_subtitle     ?? 'Cada ministerio es una red viva donde crecer en fe, servir y conectar con otros creyentes.'
   const heroImageUrl     = c.hero_image_url || null
   const heroVideoUrl     = c.hero_video_url || null
   const ctaEyebrow       = c.min_cta_eyebrow ?? '— Sírvenos'
