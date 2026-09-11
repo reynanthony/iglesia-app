@@ -1,12 +1,11 @@
 import type { Viewport } from 'next'
 import Link from 'next/link'
-import { Cross } from 'lucide-react'
 import { PublicHeader } from '@/components/public/PublicHeader'
 import { PublicStatusBar } from '@/components/public/PublicStatusBar'
 import { NativeAppRedirect } from '@/components/public/NativeAppRedirect'
 import PublicAnnouncementGate from '@/components/public/PublicAnnouncementGate'
 import { getSiteSettings } from '@/lib/site-settings'
-import { BG, CARD, BORDER, GOLD, INK } from '@/lib/gold-theme'
+import { BG, CARD, GOLD, INK } from '@/lib/gold-theme'
 
 const navLinks = [
   { href: '/nosotros',    label: 'Nosotros' },
@@ -31,7 +30,7 @@ export const viewport: Viewport = {
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const { siteName } = await getSiteSettings()
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
 
       <PublicStatusBar />
       <NativeAppRedirect />
@@ -51,8 +50,8 @@ export default async function PublicLayout({ children }: { children: React.React
             {/* Brand */}
             <div className="md:col-span-5">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-7 h-7 flex items-center justify-center rounded-lg" style={{ background: BORDER }}>
-                  <Cross size={13} strokeWidth={2.5} style={{ color: INK }} />
+                <div className="w-7 h-7 flex items-center justify-center rounded-full" style={{ background: '#FFFFFF' }}>
+                  <img src="/logo-icon.png" alt="" width={18} height={18} className="w-[18px] h-[18px] object-contain" />
                 </div>
                 <span className="font-logo text-xl">{siteName}</span>
               </div>

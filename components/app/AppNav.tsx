@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Users2, Flame, Home, User,
-  UsersRound, Sprout, MoreHorizontal, X, GraduationCap, Book,
+  UsersRound, Sprout, MoreHorizontal, X, GraduationCap, Cross, Book,
 } from 'lucide-react'
 import { MUTED, GOLD, GOLD_INK, INK, CARD, BORDER, BG } from '@/lib/gold-theme'
 
@@ -81,6 +81,7 @@ const MAIN_ITEMS_STATIC = [
 const MORE_ITEMS = [
   { href: '/app/discipulado', icon: Sprout,        label: 'Crecer'   },
   { href: '/app/grupos',      icon: UsersRound,    label: 'Caminar'  },
+  { href: '/app/pastoral',    icon: Cross,         label: 'Pastoral' },
   { href: '/app/mentoria',    icon: GraduationCap, label: 'Mentoría' },
 ]
 

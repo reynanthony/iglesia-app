@@ -9,7 +9,7 @@ import { getUser, getProfile } from '@/lib/supabase/cached-user'
 import AnnouncementGate from '@/components/app/AnnouncementEngine/AnnouncementGate'
 import { createClient } from '@/lib/supabase/server'
 import { getSiteSettings } from '@/lib/site-settings'
-import { BG, CARD, BORDER, MUTED, GOLD, GOLD_LIGHT, GOLD_INK, INK } from '@/lib/gold-theme'
+import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser()
@@ -53,9 +53,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       >
         <div className="px-5 py-6" style={{ borderBottom: `1px solid ${BORDER}` }}>
           <Link href="/app/inicio" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}>
-              <Cross size={15} strokeWidth={2.5} style={{ color: GOLD_INK }} />
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: '#FFFFFF' }}>
+              <img src="/logo-icon.png" alt="" width={21} height={21} className="w-[21px] h-[21px] object-contain" />
             </div>
             <div>
               <p className="font-logo text-[19px] leading-tight" style={{ color: INK }}>{siteName}</p>
@@ -120,10 +120,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {/* Brand */}
           <Link href="/app/inicio" className="flex items-center gap-2 min-w-0 flex-shrink mr-2">
             <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: `linear-gradient(140deg, ${GOLD_LIGHT}, ${GOLD})` }}
+              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{ background: '#FFFFFF' }}
             >
-              <Cross size={14} strokeWidth={2.5} style={{ color: GOLD_INK }} />
+              <img src="/logo-icon.png" alt="" width={20} height={20} className="w-5 h-5 object-contain" />
             </div>
             <span className="font-logo text-[18px] leading-none truncate" style={{ color: INK }}>{siteName}</span>
           </Link>
@@ -135,9 +135,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           >
             <Link href="/" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Sitio público">
               <Globe size={18} />
-            </Link>
-            <Link href="/app/pastoral" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }} title="Pastoral">
-              <Cross size={18} />
             </Link>
             {['admin', 'pastor', 'moderador'].includes(profile?.role ?? '') && (
               <Link href="/admin" className="w-9 h-9 flex items-center justify-center rounded-full transition hover:bg-white/10" style={{ color: MUTED }}>
