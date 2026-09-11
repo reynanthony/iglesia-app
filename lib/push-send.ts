@@ -16,7 +16,7 @@ function ensureVapid() {
 export async function sendPush({
   title,
   body,
-  url = '/app/comunidad',
+  url = '/app/inicio',
   targetUserId,
   sentBy,
 }: {

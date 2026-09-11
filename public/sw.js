@@ -57,7 +57,7 @@ self.addEventListener('fetch', (event) => {
 // ── Push notifications ───────────────────────────────────────
 self.addEventListener('push', (event) => {
   if (!event.data) return
-  let payload = { title: 'El Manantial', body: '', url: '/app/comunidad', icon: '/api/pwa-icon?size=192' }
+  let payload = { title: 'El Manantial', body: '', url: '/app/inicio', icon: '/api/pwa-icon?size=192' }
   try { payload = { ...payload, ...event.data.json() } } catch {}
 
   event.waitUntil(
@@ -72,7 +72,7 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
-  const url = event.notification.data?.url ?? '/app/comunidad'
+  const url = event.notification.data?.url ?? '/app/inicio'
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
       const existing = list.find((c) => c.url.includes(self.location.origin))
