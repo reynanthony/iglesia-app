@@ -14,10 +14,10 @@ export function PublicHeader({ siteName }: { siteName: string }) {
 
         <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
           <div
-            className="w-10 h-10 flex items-center justify-center rounded-full flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
+            className="w-14 h-14 flex items-center justify-center rounded-full flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
             style={{ background: '#FFFFFF' }}
           >
-            <img src="/logo-icon.png" alt="" width={26} height={26} className="w-[26px] h-[26px] object-contain" />
+            <img src="/logo-icon.png" alt="" width={44} height={44} className="w-11 h-11 object-contain" />
           </div>
           <span className="font-logo text-[26px] leading-none" style={{ color: INK }}>
             {siteName}

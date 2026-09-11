@@ -53,9 +53,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       >
         <div className="px-5 py-6" style={{ borderBottom: `1px solid ${BORDER}` }}>
           <Link href="/app/inicio" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+            <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: '#FFFFFF' }}>
-              <img src="/logo-icon.png" alt="" width={21} height={21} className="w-[21px] h-[21px] object-contain" />
+              <img src="/logo-icon.png" alt="" width={34} height={34} className="w-[34px] h-[34px] object-contain" />
             </div>
             <div>
               <p className="font-logo text-[19px] leading-tight" style={{ color: INK }}>{siteName}</p>
@@ -120,10 +120,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {/* Brand */}
           <Link href="/app/inicio" className="flex items-center gap-2 min-w-0 flex-shrink mr-2">
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+              className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
               style={{ background: '#FFFFFF' }}
             >
-              <img src="/logo-icon.png" alt="" width={20} height={20} className="w-5 h-5 object-contain" />
+              <img src="/logo-icon.png" alt="" width={28} height={28} className="w-7 h-7 object-contain" />
             </div>
             <span className="font-logo text-[18px] leading-none truncate" style={{ color: INK }}>{siteName}</span>
           </Link>
