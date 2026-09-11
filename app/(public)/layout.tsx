@@ -50,8 +50,8 @@ export default async function PublicLayout({ children }: { children: React.React
             {/* Brand */}
             <div className="md:col-span-5">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-11 h-11 flex items-center justify-center rounded-full flex-shrink-0" style={{ background: '#FFFFFF' }}>
-                  <img src="/logo-icon.png" alt="" width={38} height={38} className="w-[38px] h-[38px] object-contain" />
+                <div className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0" style={{ background: '#FFFFFF' }}>
+                  <img src="/logo-icon.png" alt="" width={24} height={24} className="w-6 h-6 object-contain" />
                 </div>
                 <span className="font-logo text-xl">{siteName}</span>
               </div>
