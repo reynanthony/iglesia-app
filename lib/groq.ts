@@ -35,8 +35,17 @@ const QUIZ_SCHEMA = {
 
 function buildPrompt(bookName: string, chapterNum: number, plainText: string): string {
   return [
-    `Genera exactamente 5 preguntas de opción múltiple (4 opciones cada una, 1 sola correcta) sobre el`,
-    `siguiente capítulo de la Biblia (Reina Valera 1960), para que un lector refresque lo que acaba de leer.`,
+    `Genera exactamente 10 preguntas de opción múltiple (4 opciones cada una, 1 sola correcta) sobre el`,
+    `siguiente capítulo de la Biblia (Reina Valera 1960). El objetivo NO es solo comprobar que el lector`,
+    `recuerda datos sueltos — es reforzar la enseñanza del capítulo: qué revela sobre Dios, qué le pide o`,
+    `muestra a las personas involucradas, qué principio o llamado queda para quien lo lee hoy.`,
+    ``,
+    `Mezcla de tipos de pregunta (no las etiquetes, solo variá el enfoque):`,
+    `- Algunas sobre hechos y eventos clave del capítulo (quién, qué pasó, en qué orden).`,
+    `- La mayoría sobre el sentido de lo que pasó: por qué actuó así un personaje, qué enseña ese pasaje,`,
+    `  qué consecuencia o promesa se desprende del texto.`,
+    `- Al menos una o dos de aplicación: cómo se conecta la enseñanza del capítulo con la vida de quien lee,`,
+    `  siempre ligada a algo concreto que el texto realmente dice — no generalidades vagas.`,
     ``,
     `Reglas estrictas:`,
     `- Basa cada pregunta SOLO en el texto dado abajo. No inventes datos, nombres ni eventos que no estén en el texto.`,

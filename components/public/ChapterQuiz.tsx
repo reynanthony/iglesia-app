@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, X } from 'lucide-react'
-import { saveQuizResult } from '@/app/actions/bible-quiz'
+import Link from 'next/link'
+import { Check, X, ArrowRight, RotateCcw } from 'lucide-react'
+import { saveQuizResult, type SavedQuizResult } from '@/app/actions/bible-quiz'
 import type { QuizQuestion } from '@/lib/groq'
 import { CARD, BORDER, MUTED, GOLD, GOLD_INK, INK } from '@/lib/gold-theme'
 
@@ -10,18 +11,25 @@ interface ChapterQuizProps {
   bookId: string
   chapter: number
   questions: QuizQuestion[]
+  savedResult: SavedQuizResult | null
+  nextChapterHref: string | null
 }
 
-export default function ChapterQuiz({ bookId, chapter, questions }: ChapterQuizProps) {
-  const [answers, setAnswers]   = useState<Record<number, number>>({})
-  const [submitted, setSubmitted] = useState(false)
+export default function ChapterQuiz({ bookId, chapter, questions, savedResult, nextChapterHref }: ChapterQuizProps) {
+  const [answers, setAnswers]     = useState<Record<number, number>>(savedResult?.answers ?? {})
+  const [submitted, setSubmitted] = useState(!!savedResult)
 
   const allAnswered = questions.every((_, i) => answers[i] !== undefined)
   const correctCount = questions.filter((q, i) => answers[i] === q.correct_index).length
 
   function handleSubmit() {
     setSubmitted(true)
-    saveQuizResult(bookId, chapter, correctCount, questions.length)
+    saveQuizResult(bookId, chapter, correctCount, questions.length, answers)
+  }
+
+  function retry() {
+    setAnswers({})
+    setSubmitted(false)
   }
 
   if (submitted) {
@@ -69,6 +77,21 @@ export default function ChapterQuiz({ bookId, chapter, questions }: ChapterQuizP
             </div>
           )
         })}
+
+        <div className="flex gap-3">
+          <button onClick={retry}
+            className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold transition"
+            style={{ background: CARD, border: `1px solid ${BORDER}`, color: MUTED }}>
+            <RotateCcw size={14} /> Reintentar
+          </button>
+          {nextChapterHref && (
+            <Link href={nextChapterHref}
+              className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-black transition"
+              style={{ background: GOLD, color: GOLD_INK }}>
+              Siguiente capítulo <ArrowRight size={14} />
+            </Link>
+          )}
+        </div>
       </div>
     )
   }

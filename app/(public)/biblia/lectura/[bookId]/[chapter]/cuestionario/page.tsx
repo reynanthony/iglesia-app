@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, RefreshCw } from 'lucide-react'
-import { findBook } from '@/lib/bible'
+import { findBook, nextChapter } from '@/lib/bible'
 import { createClient } from '@/lib/supabase/server'
-import { getChapterQuiz, regenerateChapterQuiz } from '@/app/actions/bible-quiz'
+import { getChapterQuiz, regenerateChapterQuiz, getSavedQuizResult } from '@/app/actions/bible-quiz'
 import ChapterQuiz from '@/components/public/ChapterQuiz'
 import { BG, CARD, BORDER, MUTED, GOLD, INK } from '@/lib/gold-theme'
 
@@ -35,6 +35,10 @@ export default async function ChapterQuizPage({
     error = e instanceof Error ? e.message : 'No se pudo generar el cuestionario.'
   }
 
+  const savedResult = await getSavedQuizResult(book.id, chapterNum)
+  const next = nextChapter(book.id, chapterNum)
+  const nextChapterHref = next ? `/biblia/lectura/${next.bookId}/${next.chapter}` : null
+
   const regenerateAction = regenerateChapterQuiz.bind(null, book.id, chapterNum)
 
   return (
@@ -60,7 +64,15 @@ export default async function ChapterQuizPage({
           </div>
         )}
 
-        {questions && <ChapterQuiz bookId={book.id} chapter={chapterNum} questions={questions} />}
+        {questions && (
+          <ChapterQuiz
+            bookId={book.id}
+            chapter={chapterNum}
+            questions={questions}
+            savedResult={savedResult}
+            nextChapterHref={nextChapterHref}
+          />
+        )}
 
         {isAdmin && !error && (
           <form action={regenerateAction} className="mt-6">

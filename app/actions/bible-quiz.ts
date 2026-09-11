@@ -50,6 +50,7 @@ export async function getChapterQuiz(bookId: string, chapter: number): Promise<Q
 
 export async function saveQuizResult(
   bookId: string, chapter: number, correct: number, total: number,
+  answers: Record<number, number>,
 ): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -59,9 +60,29 @@ export async function saveQuizResult(
       user_id: user.id, book_id: bookId, chapter,
       last_read_at: new Date().toISOString(),
       quiz_correct: correct, quiz_total: total, quiz_done_at: new Date().toISOString(),
+      quiz_answers: answers,
     },
     { onConflict: 'user_id,book_id,chapter' },
   )
+}
+
+export interface SavedQuizResult {
+  correct: number
+  total: number
+  answers: Record<number, number>
+}
+
+export async function getSavedQuizResult(bookId: string, chapter: number): Promise<SavedQuizResult | null> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+  const { data } = await supabase
+    .from('bible_reading_log')
+    .select('quiz_correct, quiz_total, quiz_answers, quiz_done_at')
+    .eq('user_id', user.id).eq('book_id', bookId).eq('chapter', chapter)
+    .maybeSingle()
+  if (!data?.quiz_done_at || !data.quiz_answers) return null
+  return { correct: data.quiz_correct ?? 0, total: data.quiz_total ?? 0, answers: data.quiz_answers }
 }
 
 export async function regenerateChapterQuiz(bookId: string, chapter: number): Promise<void> {
