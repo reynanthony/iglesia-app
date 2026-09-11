@@ -16,7 +16,7 @@ export async function login(formData: FormData) {
   }
 
   const next = formData.get('next') as string | null
-  const dest = next && next.startsWith('/') && !next.startsWith('//') ? next : '/app/feed'
+  const dest = next && next.startsWith('/') && !next.startsWith('//') ? next : '/app/inicio'
   redirect(dest)
 }
 
@@ -45,9 +45,9 @@ export async function register(formData: FormData) {
     }
   }
 
-  // If session exists, email confirmation is disabled — go straight to feed
+  // If session exists, email confirmation is disabled — go straight to Inicio
   if (data.session) {
-    redirect('/app/feed')
+    redirect('/app/inicio')
   }
 
   // Email confirmation required — tell the user to check their inbox
